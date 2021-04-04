@@ -34,7 +34,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="正在使用外部配置(/data/powercfg.sh)\n如需换回Scene3自带配置，或通过Scene导入配置，请点右侧删除按钮"
+                    android:text="Using external configuration (/data/powercfg.sh)\nIf you need to change back to Scene3's own configuration, or import the configuration through Scene, please click the delete button on the right"
                     android:textSize="13dp" />
 
                 <ImageButton
@@ -70,7 +70,7 @@
                         android:layout_weight="1"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="配置源/作者：" />
+                        android:text = "Configuration Source / Author:" />
 
                     <TextView
                         android:id="@+id/config_author"
@@ -136,7 +136,7 @@
                                 android:textColor="@android:color/white"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="老年人直呼内行" />
+                                android:text="Elderly people call the experts" />
                         </LinearLayout>
 
                     </LinearLayout>
@@ -178,7 +178,7 @@
                                 android:textColor="@android:color/white"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="慢点 世界赏心悦目" />
+                                android:text="Slow down, the world is pleasing to the eye" />
                         </LinearLayout>
 
                     </LinearLayout>
@@ -226,7 +226,7 @@
                                 android:textColor="@android:color/white"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="玩把游戏压压惊" />
+                                android:text="Play and suppress the game" />
                         </LinearLayout>
 
                     </LinearLayout>
@@ -268,7 +268,7 @@
                                 android:textColor="@android:color/white"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="快乐总是短暂的" />
+                                android:text="happiness is always short" />
                         </LinearLayout>
 
                     </LinearLayout>
@@ -286,13 +286,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="4dp"
-                    android:text="快捷切换" />
+                    android:text="Quick switch" />
 
                 <TextView
                     style="@style/textSmall"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="在应用(Scene)首页显示四个模式的切换按钮" />
+                    android:text="Display the four mode switch buttons on the home page of the application (Scene)" />
             </LinearLayout>
 
             <LinearLayout
@@ -308,13 +308,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="4dp"
-                        android:text="动态响应" />
+                        android:text="dynamic response" />
 
                     <TextView
                         style="@style/textSmall"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="激活[场景模式]后，可根据前台应用，自动切换模式" />
+                        android:text="After activating [Scene Mode], the mode can be automatically switched according to the foreground application" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -332,7 +332,7 @@
                         <com.omarea.ui.HelpIcon
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            app:text="没有单独设置模式的应用，将默认使用此模式。\n\n如需为某个应用单独设置模式，请返回上一级页面进入“应用场景”。" />
+                            app:text="Apps that do not have a separate setting mode will use this mode by default.\n\nIf you need to set a mode for an application separately, please return to the previous page and enter the 'application scenario'." />
 
                         <TextView
                             style="@style/textTitle"
@@ -340,7 +340,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:layout_weight="1"
-                            android:text="全局默认" />
+                            android:text="global default" />
 
                         <Spinner
                             android:id="@+id/first_mode"
@@ -362,7 +362,7 @@
                         <com.omarea.ui.HelpIcon
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            app:text="正常情况下，Scene会尽可能的减少模式切换\n\n例如：在几个同为“省电模式”的应用之前来回切换，是不会重复运行模式切换代码的\n\n除非是你发现每次切换应用，调度参数就会被系统重置，那才需要开启这个选项~" />
+                            app:text="Under normal circumstances, Scene will minimize mode switching as much as possible.\n\nFor example: Switching back and forth before several applications that are also in the ~power saving mode~ will not repeat the mode switching code\n \nUnless you find that every time you switch applications, the scheduling parameters will be reset by the system, then you need to turn on this option~" />
 
                         <Switch
                             android:id="@+id/strict_mode"
@@ -371,7 +371,7 @@
                             android:layout_weight="1"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:text="重复执行" />
+                            android:text="repeated execution" />
 
                     </LinearLayout>
 
@@ -385,7 +385,7 @@
                         <com.omarea.ui.HelpIcon
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            app:text="前台应用发生变化后，延迟5s再执行调度模式切换" />
+                            app:text="After the foreground application changes, delay 5s before performing the scheduling mode switch" />
 
                         <Switch
                             android:id="@+id/delay_switch"
@@ -394,7 +394,7 @@
                             android:layout_weight="1"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:text="延迟切换" />
+                            android:text="Delayed switching" />
 
                     </LinearLayout>
                 </LinearLayout>

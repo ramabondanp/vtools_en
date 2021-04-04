@@ -29,7 +29,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="@dimen/activity_vertical_margin"
-                    android:text="启用任务 " />
+                    android:text="Enable Tasks " />
 
                 <LinearLayout
                     style="@style/ListCardItem"
@@ -44,7 +44,7 @@
                         android:layout_width="60dp"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                        android:text="执行时间" />
+                        android:text="Execution time" />
 
                     <RadioGroup
                         android:layout_width="0dp"
@@ -57,14 +57,14 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="一次" />
+                            android:text="Once" />
 
                         <RadioButton
                             android:id="@+id/taks_repeat"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="每天" />
+                            android:text="Daily" />
                     </RadioGroup>
 
                     <TextView
@@ -91,14 +91,14 @@
                         android:layout_width="60dp"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                        android:text="额外条件" />
+                        android:text="Additional conditions" />
 
                     <RadioButton
                         android:id="@+id/task_after_screen_off"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/activity_vertical_margin"
-                        android:text="如果当时正在使用手机，推迟到锁屏后执行"
+                        android:text="If the phone is in use at the time, postpone execution until after the lock screen"
                         android:textColor="?android:textColorPrimary" />
 
                     <RadioButton
@@ -106,7 +106,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:enabled="false"
-                        android:text="执行前提示确认"
+                        android:text="Prompt for confirmation before execution"
                         android:textColor="?android:textColorPrimary"
                         android:visibility="gone" />
 
@@ -122,7 +122,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:enabled="false"
-                            android:text="电量高于"
+                            android:text="Electricity above"
                             android:textColor="?android:textColorPrimary" />
 
                         <TextView
@@ -139,7 +139,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="%，或正在充电"
+                            android:text="%，or being charged"
                             android:textColor="?android:textColorPrimary" />
                     </LinearLayout>
 
@@ -147,7 +147,7 @@
                         android:id="@+id/task_charge_only"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="只在充电状态下执行"
+                        android:text="Execute only in charging state"
                         android:textColor="?android:textColorPrimary" />
                 </LinearLayout>
 
@@ -162,7 +162,7 @@
                         android:layout_width="60dp"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                        android:text="内置命令" />
+                        android:text="Built-in commands" />
 
                     <LinearLayout
                         android:id="@+id/task_standby_mode"
@@ -177,20 +177,20 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:paddingStart="7dp"
-                            android:text="待机模式"
+                            android:text="Standby mode"
                             android:textColor="?android:textColorPrimary" />
 
                         <RadioButton
                             android:id="@+id/task_standby_on"
                             android:layout_width="110dp"
                             android:layout_height="wrap_content"
-                            android:text="开启" />
+                            android:text="Open" />
 
                         <RadioButton
                             android:id="@+id/task_standby_off"
                             android:layout_width="110dp"
                             android:layout_height="wrap_content"
-                            android:text="关闭" />
+                            android:text="Close" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -205,7 +205,7 @@
                             android:textColor="@android:color/holo_red_dark"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="待机模式是Scene设计的一项功能，进入待机模式时会禁用所有冻结名单中的应用从而减少后台活动。应用冻结状态下图标将显示为灰色，点击时提示“此应用由ROOT管理”。" />
+                            android:text="Standby mode is a feature designed by Scene to reduce background activity by disabling all apps in the frozen list when entering standby mode. When the app is frozen, the icon will be grayed out and when you click on it, it will say 'This app is managed by ROOT'." />
 
                     </LinearLayout>
 
@@ -223,20 +223,20 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:paddingStart="7dp"
-                            android:text="勿扰模式"
+                            android:text="Do not disturb mode"
                             android:textColor="?android:textColorPrimary" />
 
                         <RadioButton
                             android:id="@+id/task_zen_mode_on"
                             android:layout_width="110dp"
                             android:layout_height="wrap_content"
-                            android:text="开" />
+                            android:text="Open" />
 
                         <RadioButton
                             android:id="@+id/task_zen_mode_off"
                             android:layout_width="110dp"
                             android:layout_height="wrap_content"
-                            android:text="关" />
+                            android:text="Off" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -256,7 +256,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                            android:text="自定义命令" />
+                            android:text="Customized commands" />
 
                         <ImageButton
                             android:id="@+id/task_custom_edit"

@@ -436,7 +436,7 @@
                     <TextView
                         android:layout_marginTop="2dp"
                         android:alpha="0.5"
-                        android:text="*数据仅供参考"
+                        android:text="*The data is for reference only"
                         style="@style/textSmall"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
@@ -461,7 +461,7 @@
                     <com.omarea.ui.HelpIcon
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:text="伪装数据并不会获得相应的续航能力，自欺欺人而已" />
+                        app:text="Disguising data will not get the corresponding battery life, just deceive yourself and others" />
 
                     <TextView
                         style="@style/textTitle"

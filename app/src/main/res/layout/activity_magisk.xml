@@ -62,13 +62,13 @@
                             android:layout_marginEnd="@dimen/activity_horizontal_margin"
                             style="@style/SceneButton"
                             android:layout_width="wrap_content"
-                            android:text="撤销更改" />
+                            android:text="Undo changes" />
 
                         <Button
                             android:id="@+id/magisk_props_save"
                             style="@style/SceneButton"
                             android:layout_width="wrap_content"
-                            android:text="保存" />
+                            android:text="Save" />
                     </LinearLayout>
                 </FrameLayout>
 
@@ -112,13 +112,13 @@
                             android:layout_marginEnd="@dimen/activity_horizontal_margin"
                             style="@style/SceneButton"
                             android:layout_width="wrap_content"
-                            android:text="撤销更改" />
+                            android:text="Undo changes" />
 
                         <Button
                             android:id="@+id/magisk_beforestart_save"
                             style="@style/SceneButton"
                             android:layout_width="wrap_content"
-                            android:text="保存" />
+                            android:text="Save" />
                     </LinearLayout>
                 </FrameLayout>
 
@@ -151,13 +151,13 @@
                             style="@style/SceneButton"
                             android:layout_marginEnd="@dimen/activity_horizontal_margin"
                             android:layout_width="wrap_content"
-                            android:text="撤销更改" />
+                            android:text="Undo changes" />
 
                         <Button
                             android:id="@+id/magisk_afterstart_save"
                             style="@style/SceneButton"
                             android:layout_width="wrap_content"
-                            android:text="保存" />
+                            android:text="Save" />
                     </LinearLayout>
                 </FrameLayout>
             </FrameLayout>

@@ -48,7 +48,7 @@
                                 style="@style/textSmall"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="小提示"
+                                android:text="tips"
                                 android:textColor="?android:colorAccent" />
 
                             <TextView
@@ -56,7 +56,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="5dp"
-                                android:text="应用偏见功能需要激活场景模式(辅助服务)，才能自动冻结应用" />
+                                android:text="The application bias function needs to activate the scene mode (auxiliary service) to automatically freeze the application" />
                         </LinearLayout>
 
                         <ImageButton
@@ -103,7 +103,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@android:color/transparent"
-                            android:hint="搜索应用名"
+                            android:hint="Search application name"
                             android:inputType="textFilter"
                             android:maxLength="10"
                             android:padding="@dimen/activity_horizontal_margin"
@@ -140,14 +140,14 @@
                                 <com.omarea.ui.HelpIcon
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    app:text="冻结应用时不隐藏桌面图标，而仅仅将其置灰（与应用管理中的[暂停使用]效果相同），从而避免冻结应用时破坏桌面布局，此功能需要Android P+" />
+                                    app:text="Do not hide the desktop icon when freezing the application, but only gray it (same effect as [Pause] in the application management), so as to avoid destroying the desktop layout when the application is frozen. This feature requires Android P+" />
 
                                 <Switch
                                     android:id="@+id/freeze_suspend_mode"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:text="保留应用图标" />
+                                    android:text="Keep application icons" />
 
                             </LinearLayout>
 
@@ -161,14 +161,14 @@
                                 <com.omarea.ui.HelpIcon
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    app:text="Scene作为Xposed模块激活[且被允许自启动]后，以下桌面可直接打开冻结的应用：\n一加桌面、一加Hydrogen桌面、一加氢桌面\nLawnchair测试版、Lawnchair魔趣版\nMIUI桌面、POCO桌面、MIUI全局搜索\nLineageOS Trebuchet\n系统设置、Pixel 启动器\n\n开启授权通融后，则所有应用都可以打开冻结的应用" />
+                                    app:text="Scene is activated as an Xposed module [and allowed to start automatically], the following desktops can directly open frozen applications:\nOnePlus Desktop, OnePlus Hydrogen Desktop, OneHydrogen Desktop\nLawnchair Beta, Lawnchair Magic Fun Edition\nMIUI Desktop, POCO Desktop, MIUI Global Search\nLineageOS Trebuchet\nSystem Settings, Pixel Launcher\n\nAfter enabling authorization and accommodation, all applications can open frozen applications" />
 
                                 <Switch
                                     android:id="@+id/freeze_any_unfreeze"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:text="Xposed授权通融" />
+                                    android:text="Xposed authorization accommodation" />
                             </LinearLayout>
 
                         </LinearLayout>
@@ -184,14 +184,14 @@
                                 <com.omarea.ui.HelpIcon
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    app:text="点击偏见列表中的应用时打开应用，而不是切换冻结状态" />
+                                    app:text="Open the application when you click the application in the bias list, instead of switching the frozen state" />
 
                                 <Switch
                                     android:id="@+id/freeze_click_open"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:text="单击启动应用" />
+                                    android:text="click to start the application" />
                             </LinearLayout>
 
                             <LinearLayout
@@ -204,14 +204,14 @@
                                 <com.omarea.ui.HelpIcon
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    app:text="有未添加快捷方式到桌面的偏见应用时，弹出添加快捷方式提示" />
+                                    app:text="When there is a biased application that has not added a shortcut to the desktop, a prompt to add a shortcut pops up" />
 
                                 <Switch
                                     android:id="@+id/freeze_shortcut_suggest"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:text="提示创建快捷方式" />
+                                    android:text="Prompt to create a shortcut" />
                             </LinearLayout>
                         </LinearLayout>
 
@@ -226,14 +226,14 @@
                                 <com.omarea.ui.HelpIcon
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    app:text="离开应用界面超过此时间后冻结，0表示不限制。锁屏1分钟后自动冻结所有偏见应用，不受此设置影响！" />
+                                    app:text="Freeze after leaving the application interface for more than this time, 0 means no limit. All biased applications will be automatically frozen after the screen is locked for 1 minute, and will not be affected by this setting!" />
 
                                 <TextView
                                     style="@style/textTitle"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:text="活动时间限制（分）" />
+                                    android:text="Activity time limit (minutes)" />
                             </LinearLayout>
 
                             <LinearLayout
@@ -273,14 +273,14 @@
                                 <com.omarea.ui.HelpIcon
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    app:text="能同时处于解冻状态的偏见应用最大数量，0表示不限制" />
+                                    app:text="Maximum number of bias applications that can be unfrozen at the same time, 0 means no limit" />
 
                                 <TextView
                                     style="@style/textTitle"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:text="活动数量限制（个）" />
+                                    android:text="Limit on the number of activities (a)" />
                             </LinearLayout>
 
                             <LinearLayout
@@ -321,14 +321,14 @@
                                 <com.omarea.ui.HelpIcon
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    app:text="息屏后冻结偏见应用的延迟时间" />
+                                    app:text="The delay time of freezing the bias application after the screen is off" />
 
                                 <TextView
                                     style="@style/textTitle"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:text="息屏处理延迟（分）" />
+                                    android:text="Interactive screen processing delay (minutes)" />
                             </LinearLayout>
 
                             <LinearLayout
@@ -371,14 +371,14 @@
                                 <com.omarea.ui.HelpIcon
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    app:text="在桌面显示“应用偏见”管理界面快捷入口" />
+                                    app:text="Display the shortcut entry of the ~application bias~ management interface on the desktop" />
 
                                 <Switch
                                     android:id="@+id/freeze_quick_entry"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:text="桌面快捷入口" />
+                                    android:text="Desktop shortcut entry" />
 
                             </LinearLayout>
 

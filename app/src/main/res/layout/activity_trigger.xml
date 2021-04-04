@@ -29,7 +29,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="@dimen/activity_vertical_margin"
-                    android:text="启用触发器 " />
+                    android:text="Enable Trigger " />
 
                 <LinearLayout
                     style="@style/ListCardItem"
@@ -43,7 +43,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="触发条件" />
+                        android:text="Trigger conditions" />
 
                     <GridLayout
                         android:layout_width="220dp"
@@ -55,42 +55,42 @@
                             android:layout_height="wrap_content"
                             android:layout_column="0"
                             android:layout_columnWeight="1"
-                            android:text="开机完成" />
+                            android:text="Boot up completed" />
 
                         <CheckBox
                             android:id="@+id/trigger_battery_low"
                             android:layout_height="wrap_content"
                             android:layout_column="1"
                             android:layout_columnWeight="1"
-                            android:text="电量不足" />
+                            android:text="Insufficient power" />
 
                         <RadioButton
                             android:id="@+id/trigger_screen_on"
                             android:layout_height="wrap_content"
                             android:layout_column="0"
                             android:layout_columnWeight="1"
-                            android:text="屏幕点亮" />
+                            android:text="Screen lit up" />
 
                         <RadioButton
                             android:id="@+id/trigger_screen_off"
                             android:layout_height="wrap_content"
                             android:layout_column="1"
                             android:layout_columnWeight="1"
-                            android:text="屏幕关闭" />
+                            android:text="Screen off" />
 
                         <RadioButton
                             android:id="@+id/trigger_power_connected"
                             android:layout_height="wrap_content"
                             android:layout_column="0"
                             android:layout_columnWeight="1"
-                            android:text="插充电器" />
+                            android:text="Plug in charger" />
 
                         <RadioButton
                             android:id="@+id/trigger_power_disconnected"
                             android:layout_height="wrap_content"
                             android:layout_column="1"
                             android:layout_columnWeight="1"
-                            android:text="拔充电器" />
+                            android:text="Unplug the charger" />
                     </GridLayout>
 
                 </LinearLayout>
@@ -107,7 +107,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="时段限制" />
+                        android:text="Time limit" />
 
                     <LinearLayout
                         android:layout_width="220dp"
@@ -129,7 +129,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="至"
+                            android:text="To"
                             android:textAlignment="center"
                             android:textSize="16sp"
                             android:textStyle="bold"
@@ -160,7 +160,7 @@
                         android:layout_width="60dp"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                        android:text="内置命令" />
+                        android:text="Built-in commands" />
 
                     <LinearLayout
                         android:id="@+id/task_standby_mode"
@@ -175,20 +175,20 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:paddingStart="7dp"
-                            android:text="待机模式"
+                            android:text="Standby mode"
                             android:textColor="?android:textColorPrimary" />
 
                         <RadioButton
                             android:id="@+id/task_standby_on"
                             android:layout_width="110dp"
                             android:layout_height="wrap_content"
-                            android:text="开启" />
+                            android:text="Open" />
 
                         <RadioButton
                             android:id="@+id/task_standby_off"
                             android:layout_width="110dp"
                             android:layout_height="wrap_content"
-                            android:text="关闭" />
+                            android:text="Close" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -203,7 +203,7 @@
                             android:textColor="@android:color/holo_red_dark"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="待机模式是Scene设计的一项功能，进入待机模式时会禁用所有冻结名单中的应用从而减少后台活动。应用冻结状态下图标将显示为灰色，点击时提示“此应用由ROOT管理”。" />
+                            android:text="Standby mode is a feature designed by Scene to reduce background activity by disabling all apps in the frozen list when entering standby mode. When the app is frozen, the icon will be grayed out and when you click on it, it will say 'This app is managed by ROOT'." />
 
                     </LinearLayout>
 
@@ -221,20 +221,20 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:paddingStart="7dp"
-                            android:text="勿扰模式"
+                            android:text="Do not disturb mode"
                             android:textColor="?android:textColorPrimary" />
 
                         <RadioButton
                             android:id="@+id/task_zen_mode_on"
                             android:layout_width="110dp"
                             android:layout_height="wrap_content"
-                            android:text="开" />
+                            android:text="On" />
 
                         <RadioButton
                             android:id="@+id/task_zen_mode_off"
                             android:layout_width="110dp"
                             android:layout_height="wrap_content"
-                            android:text="关" />
+                            android:text="Off" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -257,7 +257,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:paddingStart="7dp"
-                            android:text="性能调节"
+                            android:text="Performance Adjustment"
                             android:textColor="?android:textColorPrimary" />
 
                         <RadioGroup
@@ -268,25 +268,25 @@
                                 android:id="@+id/task_mode_powersave"
                                 android:layout_width="110dp"
                                 android:layout_height="wrap_content"
-                                android:text="省电模式" />
+                                android:text="Power saving mode" />
 
                             <RadioButton
                                 android:id="@+id/task_mode_balance"
                                 android:layout_width="110dp"
                                 android:layout_height="wrap_content"
-                                android:text="均衡模式" />
+                                android:text="Balanced mode" />
 
                             <RadioButton
                                 android:id="@+id/task_mode_performance"
                                 android:layout_width="110dp"
                                 android:layout_height="wrap_content"
-                                android:text="性能模式" />
+                                android:text="Performance Mode" />
 
                             <RadioButton
                                 android:id="@+id/task_mode_fast"
                                 android:layout_width="110dp"
                                 android:layout_height="wrap_content"
-                                android:text="极速模式" />
+                                android:text="Extreme Mode" />
                         </RadioGroup>
                     </LinearLayout>
                 </LinearLayout>
@@ -306,7 +306,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                            android:text="自定义命令" />
+                            android:text="Customized commands" />
 
                         <ImageButton
                             android:id="@+id/task_custom_edit"

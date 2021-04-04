@@ -103,7 +103,7 @@
                             style="@style/textSecondary"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="重启后失效" />
+                            android:text="Disabled after reboot" />
                     </LinearLayout>
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -215,7 +215,7 @@
                             style="@style/textSecondary"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="重启后失效" />
+                            android:text="Disabled after reboot" />
                     </LinearLayout>
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -318,7 +318,7 @@
 
                     </LinearLayout>
 
-                    <Button style="@style/SceneButton" android:id="@+id/swappiness_adj" android:text="调整" android:layout_gravity="center_vertical" />
+                    <Button style="@style/SceneButton" android:id="@+id/swappiness_adj" android:text="Adjustment" android:layout_gravity="center_vertical" />
                 </LinearLayout>
             </TableLayout>
 
@@ -385,7 +385,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/activity_vertical_margin"
                     style="@style/textTitle"
-                    android:text="已开启的SWAP" />
+                    android:text="Enabled SWAP" />
 
                 <ListView
                     android:id="@+id/list_swaps"

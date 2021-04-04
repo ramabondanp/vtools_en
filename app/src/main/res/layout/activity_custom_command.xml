@@ -22,7 +22,7 @@
             android:orientation="vertical">
 
             <EditText
-                android:hint="名称（不可重复，不可修改）"
+                android:hint="Name (non-repeatable, non-modifiable)"
                 android:maxLength="20"
                 android:id="@+id/command_title"
                 style="@style/ListCardItem"
@@ -33,7 +33,7 @@
 
             <EditText
                 android:minLines="8"
-                android:hint="再次粘贴要执行的sh脚本"
+                android:hint="Paste the sh script to be executed again"
                 android:gravity="top"
                 android:id="@+id/command_script"
                 style="@style/ListCardItem"
@@ -54,12 +54,12 @@
                     android:id="@+id/btn_run"
                     style="@style/dialogCancelBtn"
                     android:layout_marginEnd="8dp"
-                    android:text="测试运行">
+                    android:text="Test runs">
                 </Button>
                 <Button
                     android:id="@+id/btn_confirm"
                     style="@style/dialogConfirmBtn"
-                    android:text="保存命令">
+                    android:text="Save instruction">
                 </Button>
             </LinearLayout>
 

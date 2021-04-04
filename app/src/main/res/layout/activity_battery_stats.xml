@@ -26,7 +26,7 @@
                 style="@style/textTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="峰值统计" />
+                android:text="Peak Statistics" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -51,7 +51,7 @@
                         android:layout_height="70dp"
                         android:layout_alignTop="@id/battery_max_temperature"
                         android:gravity="center_vertical"
-                        android:text="温度"
+                        android:text="temperature"
                         android:textAlignment="center"
                         android:textColor="#77888888"
                         android:textSize="15dp" />
@@ -84,7 +84,7 @@
                         android:layout_height="70dp"
                         android:layout_alignTop="@id/battery_max_output"
                         android:gravity="center_vertical"
-                        android:text="耗电"
+                        android:text="power consumption"
                         android:textAlignment="center"
                         android:textColor="#77888888"
                         android:textSize="15dp" />
@@ -116,7 +116,7 @@
                         android:layout_height="70dp"
                         android:layout_alignTop="@id/battery_max_intput"
                         android:gravity="center_vertical"
-                        android:text="充电"
+                        android:text="charging"
                         android:textAlignment="center"
                         android:textColor="#77888888"
                         android:textSize="15dp" />
@@ -153,13 +153,13 @@
                 <com.omarea.ui.HelpIcon
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:text="这里统计的只是每个应用在前台显示时的整机耗电，而电流和温度显示的是所有检测记录的平均值。这意味着此数值数值会受其它后台应用耗电影响！\n\n此数据由Scene的场景模式后台运行过程中自行统计，如果你已经保持场景模式后台运行一段时间，却一直得不到数据，请检查概览界面的电流显示是否正确，如果错误请手动校准电流单位。" />
+                    app:text="The statistics here are only the power consumption of the whole machine when each application is displayed in the foreground, and the current and temperature display are the average of all detection records. This means that this value will be affected by the power consumption of other background applications !\N\nThis data is calculated by the scene mode background running process. If you have kept the scene mode running in the background for a period of time, but have not been able to get the data, please check whether the current display in the overview interface is correct. If it is wrong, please Manually calibrate the current unit." />
                 <TextView
                     style="@style/textTitle"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:text="应用使用记录" />
+                    android:text="application usage record" />
             </LinearLayout>
 
 

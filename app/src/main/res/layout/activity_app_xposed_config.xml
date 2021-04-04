@@ -31,7 +31,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
-                android:hint="搜索应用名"
+                android:hint="Search application name"
                 android:imeOptions="actionSearch"
                 android:inputType="textFilter"
                 android:padding="8dp"

@@ -62,7 +62,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:switchPadding="6dp"
-                android:text="打开应用自动执行操作" />
+                android:text="Open the application to perform operations automatically" />
 
             <LinearLayout
                 android:id="@+id/scene_mode_config"
@@ -79,7 +79,7 @@
                         style="@style/scene_config_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="性能调节" />
+                        android:text="performance adjustment" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -89,7 +89,7 @@
                             style="@style/scene_config_item"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="调节性能至" />
+                            android:text="Adjust performance to" />
 
                         <TextView
                             android:id="@+id/app_details_dynamic"
@@ -110,7 +110,7 @@
                             style="@style/scene_config_item"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="内存(cgroup) 前台时" />
+                            android:text="Memory (cgroup) in the foreground" />
 
                         <TextView
                             android:id="@+id/app_details_cgroup_mem"
@@ -131,7 +131,7 @@
                             style="@style/scene_config_item"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="内存(cgroup) 离开后" />
+                            android:text="After the memory (cgroup) leaves" />
 
                         <TextView
                             android:id="@+id/app_details_cgroup_mem2"
@@ -152,7 +152,7 @@
                             style="@style/scene_config_item"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="自动加速(memory)" />
+                            android:text="Automatic acceleration (memory)" />
 
                         <TextView
                             android:id="@+id/app_details_boost_mem"
@@ -175,7 +175,7 @@
                         style="@style/scene_config_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="基本设置" />
+                        android:text="Basic Settings" />
                     <LinearLayout
                         android:gravity="center_vertical"
                         android:minHeight="40dp"
@@ -186,7 +186,7 @@
                             style="@style/scene_config_item"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="关闭自动亮度" />
+                            android:text="Turn off automatic brightness" />
                         <Switch
                             android:id="@+id/app_details_aloowlight"
                             style="@style/scene_config_item"
@@ -205,7 +205,7 @@
                             style="@style/scene_config_item"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="打开GPS（离开后还原）" />
+                            android:text="Turn on GPS (restore after leaving)" />
                         <Switch
                             android:id="@+id/app_details_gps"
                             style="@style/scene_config_item"
@@ -224,7 +224,7 @@
                             style="@style/scene_config_item"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="旋转屏幕" />
+                            android:text="Rotate screen" />
 
                         <TextView
                             android:id="@+id/scene_orientation"
@@ -245,7 +245,7 @@
                         style="@style/scene_config_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="沉浸体验" />
+                        android:text="immersive experience" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -257,7 +257,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="隐藏导航栏" />
+                            android:text="hide the navigation bar" />
 
                         <Switch
                             android:id="@+id/app_details_hidestatus"
@@ -266,7 +266,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="50dp"
                             android:layout_weight="1"
-                            android:text="隐藏状态栏" />
+                            android:text="hide the status bar" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -279,7 +279,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="屏蔽通知" />
+                            android:text="Block notifications" />
 
                         <Switch
                             android:id="@+id/app_details_hidebtn"
@@ -288,14 +288,14 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="50dp"
                             android:layout_weight="1"
-                            android:text="屏蔽按键" />
+                            android:text="Block button" />
                     </LinearLayout>
 
                     <TextView
                         style="@style/textSmall"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="屏蔽通知时Scene会自动清除新通知，可能错失消息。按键屏蔽状态下，将使用长按替代短按操作" />
+                        android:text="When the notification is blocked, Scene will automatically clear the new notification, and the message may be missed. When the button is blocked, a long press will be used instead of a short press" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -304,20 +304,20 @@
                         style="@style/scene_config_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Scene功能" />
+                        android:text="Scene function" />
 
                     <Switch
                         android:id="@+id/app_monitor"
                         style="@style/scene_config_item"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="性能监视器" />
+                        android:text="Performance Monitor" />
 
                     <TextView
                         style="@style/textSmall"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="显示Scene的迷你性能监视器(OLED设备小心烧屏哦~)" />
+                        android:text="Mini performance monitor that displays Scene (Caution burn screen on OLED device~)" />
 
                 </LinearLayout>
 
@@ -327,20 +327,20 @@
                         style="@style/scene_config_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="应用偏见" />
+                        android:text="application bias" />
 
                     <Switch
                         android:id="@+id/app_details_freeze"
                         style="@style/scene_config_item"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="自动冻结" />
+                        android:text="Auto freeze" />
 
                     <TextView
                         style="@style/textSmall"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="锁屏之后，将此应用冻结(禁用)，适用于后台非常耗电但又偶尔需要打开的应用" />
+                        android:text="After the screen is locked, freeze (disable) this application, suitable for applications that consume a lot of power in the background but occasionally need to be opened" />
 
                 </LinearLayout>
             </LinearLayout>

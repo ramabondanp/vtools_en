@@ -27,21 +27,21 @@
                     style="@style/textTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="功能介绍" />
+                    android:text="function introduction" />
 
                 <TextView
                     style="@style/textSmall"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/activity_vertical_margin"
-                    android:text="本界面显示的是，你上次充电时，电量、温度、充电速度的变化过程" />
+                    android:text="This interface shows the change process of power, temperature, and charging speed when you last charged." />
 
                 <TextView
                     style="@style/textSmall"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/activity_vertical_margin"
-                    android:text="你需要在充电时让本应用保持运行状态，才能获得数据" />
+                    android:text="You need to keep this application running while charging to get data" />
             </LinearLayout>
 
             <TextView
@@ -62,7 +62,7 @@
                     style="@style/textTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="电池电流/电量" />
+                    android:text="battery current/power" />
 
                 <com.omarea.ui.charge.ChargeCurveView
                     android:id="@+id/view_speed"
@@ -79,7 +79,7 @@
                     style="@style/textTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="电量/时间" />
+                    android:text="battery/time" />
 
                 <com.omarea.ui.charge.ChargeTimeView
                     android:id="@+id/view_time"
@@ -96,7 +96,7 @@
                     style="@style/textTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="温度/电量" />
+                    android:text="Temperature/Power" />
 
                 <com.omarea.ui.charge.ChargeTempView
                     android:id="@+id/view_temperature"
@@ -112,42 +112,42 @@
                     style="@style/textTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="使用方法" />
+                    android:text="How to use" />
 
                 <TextView
                     style="@style/textSmall"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="① 启动本应用" />
+                    android:text="① Start this application" />
 
                 <TextView
                     style="@style/textSmall"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="② 连接充电器" />
+                    android:text="② Connect the charger" />
 
                 <TextView
                     style="@style/textSmall"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="③ 熄灭屏幕，直至充电完成" />
+                    android:text="③ Turn off the screen until charging is complete" />
 
                 <TextView
                     style="@style/textSmall"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="④ 查看曲线" />
+                    android:text="④ View curve" />
 
                 <TextView
                     style="@style/textSmall"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="你需要让本应用保持后台运行，才能获得统计数据！" />
+                    android:text="You need to keep this application running in the background to get statistics!" />
 
             </LinearLayout>
 
@@ -156,7 +156,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
-                android:text="电流单位校准"
+                android:text="Current unit calibration"
                 android:textColor="?android:colorAccent"
                 android:textSize="12sp" />
 

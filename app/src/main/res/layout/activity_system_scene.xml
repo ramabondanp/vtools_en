@@ -217,14 +217,14 @@
                                     style="@style/textTitle"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="待机模式名单" />
+                                    android:text="Standby mode list" />
 
                                 <TextView
                                     style="@style/textSmall"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="4dp"
-                                    android:text="设置待机模式要休眠的应用" />
+                                    android:text="Set the standby mode to hibernate the application" />
                             </LinearLayout>
 
                             <ImageView
@@ -254,14 +254,14 @@
                                     style="@style/textTitle"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="添加自定义命令" />
+                                    android:text="Adding custom commands" />
 
                                 <TextView
                                     style="@style/textSmall"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="4dp"
-                                    android:text="通过自定义脚本内容拓展系统场景功能" />
+                                    android:text="Extend system scenario functionality with custom script content" />
                             </LinearLayout>
 
                             <ImageView
@@ -277,7 +277,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:padding="20dp"
-                            android:text="更多功能，敬请期待"
+                            android:text="Stay tuned for more features!"
                             android:textAlignment="center" />
                     </LinearLayout>
                 </com.omarea.common.ui.OverScrollView>

@@ -32,7 +32,7 @@
                 android:layout_weight="1"
                 android:imeOptions="actionSearch"
                 android:background="@android:color/transparent"
-                android:hint="搜索进程名"
+                android:hint="Search process name"
                 android:inputType="textFilter"
                 android:padding="8dp"
                 android:singleLine="true"
@@ -114,7 +114,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/layout_app_bar"
         android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:text="该功能暂不支持你的手机系统\n你也可以去试试具有相似功能的3C Toolbox"
+        android:text="This feature is not supported by your mobile system at the moment \n you can also try 3C Toolbox which has similar features"
         android:textAlignment="center"
         android:visibility="gone" />
 </RelativeLayout>
