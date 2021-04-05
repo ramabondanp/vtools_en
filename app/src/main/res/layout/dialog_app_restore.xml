@@ -22,7 +22,7 @@
             style="@style/textTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="选择操作" />
+            android:text="Select Operation" />
         <TextView
             android:id="@+id/confirm_message"
             android:visibility="gone"
@@ -64,13 +64,13 @@
                     android:layout_marginBottom="4dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="还原应用" />
+                    android:text="Restore Applications" />
 
                 <TextView
                     style="@style/textSmall"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="重新安装此应用" />
+                    android:text="Reinstall this application" />
             </LinearLayout>
 
         </LinearLayout>
@@ -107,13 +107,13 @@
                     android:layout_marginBottom="4dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="还原应用&amp;数据" />
+                    android:text="Restore applications &amp; data" />
 
                 <TextView
                     style="@style/textSmall"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="重新安装应用并恢复备份的数据" />
+                    android:text="Reinstall the application and restore the backed up data" />
             </LinearLayout>
 
         </LinearLayout>
@@ -150,13 +150,13 @@
                     android:layout_marginBottom="4dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="还原数据" />
+                    android:text="Restore data" />
 
                 <TextView
                     style="@style/textSmall"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="还原此应用的备份数据" />
+                    android:text="Restore the backup data of this application" />
             </LinearLayout>
 
         </LinearLayout>
@@ -193,13 +193,13 @@
                     android:layout_marginBottom="4dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="复制包名" />
+                    android:text="Copy package name" />
 
                 <TextView
                     style="@style/textSmall"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="复制此应用的PackageName" />
+                    android:text="Copy the PackageName of this application" />
             </LinearLayout>
 
         </LinearLayout>
@@ -236,13 +236,13 @@
                     android:layout_marginBottom="4dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="在应用商店查看" />
+                    android:text="View in the app store" />
 
                 <TextView
                     style="@style/textSmall"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="在应用商店寻找并查看此应用" />
+                    android:text="Find and view this app in the app store" />
             </LinearLayout>
 
         </LinearLayout>
@@ -279,13 +279,13 @@
                     android:layout_marginBottom="4dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="删除备份" />
+                    android:text="Delete Backup" />
 
                 <TextView
                     style="@style/textSmall"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="删除此应用的备份数据" />
+                    android:text="Delete the backup data of this application" />
             </LinearLayout>
 
         </LinearLayout>

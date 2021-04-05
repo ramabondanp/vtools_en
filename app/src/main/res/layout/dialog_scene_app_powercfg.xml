@@ -22,7 +22,7 @@
             style="@style/textTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="选择性能调节策略" />
+            android:text="Selecting a performance tuning strategy" />
         <TextView
             android:id="@+id/confirm_message"
             android:visibility="gone"
@@ -69,7 +69,7 @@
                     style="@style/textSmall"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="打开此应用时，切换到省电模式" />
+                    android:text="Switch to power saving mode when opening this application" />
             </LinearLayout>
 
         </LinearLayout>
@@ -111,7 +111,7 @@
                     style="@style/textSmall"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="打开此应用时，切换到均衡模式" />
+                    android:text="When opening this application, switch to balanced mode" />
             </LinearLayout>
 
         </LinearLayout>
@@ -153,7 +153,7 @@
                     style="@style/textSmall"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="打开此应用时，切换到性能模式" />
+                    android:text="When opening this application, switch to performance mode" />
             </LinearLayout>
 
         </LinearLayout>
@@ -195,7 +195,7 @@
                     style="@style/textSmall"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="打开此应用时，切换到极速模式" />
+                    android:text="Switch to extreme mode when opening this application" />
             </LinearLayout>
 
         </LinearLayout>
@@ -232,13 +232,13 @@
                     android:layout_marginBottom="4dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="全局默认" />
+                    android:text="Global Default" />
 
                 <TextView
                     style="@style/textSmall"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="此应用的性能调节模式跟随“全局默认”的设置" />
+                    android:text="The performance tuning mode of this application follows the 'global default' setting" />
             </LinearLayout>
 
         </LinearLayout>
@@ -275,13 +275,13 @@
                     android:layout_marginBottom="4dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="保持状态" />
+                    android:text="Maintain status" />
 
                 <TextView
                     style="@style/textSmall"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="打开应用时保持当前性能调节状态" />
+                    android:text="Keep current performance tuning when opening applications" />
             </LinearLayout>
 
         </LinearLayout>

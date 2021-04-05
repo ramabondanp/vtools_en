@@ -111,7 +111,7 @@
             android:id="@+id/btn_confirm"
             android:layout_marginStart="0dp"
             style="@style/dialogConfirmBtn"
-            android:text="确定">
+            android:text="Confirm">
         </Button>
     </LinearLayout>
 

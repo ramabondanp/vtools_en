@@ -18,12 +18,12 @@
         <TextView
             android:id="@+id/confirm_title"
             style="@style/dialogTitle"
-            android:text="Xposed全局配置" />
+            android:text="Xposed Global Configuration" />
         <TextView
             android:id="@+id/confirm_message"
             android:layout_marginBottom="@dimen/activity_vertical_margin"
             style="@style/dialogDesc"
-            android:text="对所有应用都生效的配置选项" />
+            android:text="Configuration options that work for all applications" />
 
         <FrameLayout
             android:visibility="gone"
@@ -85,13 +85,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="弹性缓慢滚动" />
+                        android:text="Elastic slow rolling" />
                     <TextView
                         style="@style/textSecondary"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="调整滚动速度和惯性阻尼、长按与短按触发时长等参数，使触控体验更佳" />
+                        android:text="Adjust scroll speed and inertia damping, long press and short press trigger duration and other parameters to make the touch experience better" />
                 </LinearLayout>
 
                 <Switch
@@ -131,13 +131,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="隐藏ROOT图标" />
+                        android:text="Hide ROOT icon" />
                     <TextView
                         style="@style/textSecondary"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="隐藏CM、LineageOS集成ROOT的状态栏提示图标" />
+                        android:text="Hide CM, LineageOS integrated ROOT status bar alert icon" />
                 </LinearLayout>
 
                 <Switch
@@ -176,13 +176,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="禁止前台服务" />
+                        android:text="Prohibition of front desk services" />
                     <TextView
                         style="@style/textSecondary"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="禁止应用创建前台(foreground)服务，有助于消除“**正在后台运行”通知" />
+                        android:text="Disabling applications from creating foreground services helps eliminate the '**running in the background' notification" />
                 </LinearLayout>
 
                 <Switch
@@ -221,13 +221,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="全局负优化" />
+                        android:text="Global negative optimization" />
                     <TextView
                         style="@style/textSecondary"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="禁用硬件加速，并减少UI缓存大小，这将卡到怀疑人生" />
+                        android:text="Disable hardware acceleration and reduce the UI cache size, which will get stuck to the point of doubt" />
                 </LinearLayout>
 
                 <Switch
@@ -251,13 +251,13 @@
         <Button
             android:id="@+id/btn_cancel"
             style="@style/dialogCancelBtn"
-            android:text="取消" />
+            android:text="Cancel" />
 
         <Button
             android:layout_marginStart="8dp"
             android:id="@+id/btn_confirm"
             style="@style/dialogConfirmBtn"
-            android:text="确定" />
+            android:text="Confirm" />
     </LinearLayout>
 
 </LinearLayout>

@@ -70,13 +70,13 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="接受风险" />
+                            android:text="Risk Acceptance" />
                         <TextView
                             style="@style/textSecondary"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="我已了解并愿意承担风险" />
+                            android:text="I understand and am willing to take risks" />
                     </LinearLayout>
 
                     <Switch
@@ -101,12 +101,12 @@
                 android:id="@+id/btn_cancel"
                 style="@style/dialogCancelBtn"
                 android:layout_marginEnd="8dp"
-                android:text="还是算了">
+                android:text="Cancel">
             </Button>
             <Button
                 android:id="@+id/btn_confirm"
                 style="@style/dialogConfirmBtn"
-                android:text="继续使用">
+                android:text="Confirm">
             </Button>
         </LinearLayout>
 

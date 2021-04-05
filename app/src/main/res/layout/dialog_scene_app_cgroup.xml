@@ -22,7 +22,7 @@
             style="@style/textTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="设定应用cgroup(memory)" />
+            android:text="Set application cgroup(memory)" />
         <TextView
             android:id="@+id/confirm_message"
             android:visibility="gone"
@@ -64,13 +64,13 @@
                     android:layout_marginBottom="4dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="系统默认" />
+                    android:text="System default" />
 
                 <TextView
                     style="@style/textSmall"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="SWAP使用策略遵循系统全局配置" />
+                    android:text="SWAP usage policy follows the system global configuration" />
             </LinearLayout>
 
         </LinearLayout>
@@ -107,13 +107,13 @@
                     android:layout_marginBottom="4dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="普通应用" />
+                    android:text="General Applications" />
 
                 <TextView
                     style="@style/textSmall"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="允许积极的将(此应用的)内存交换到SWAP" />
+                    android:text="Allow active memory swapping (of this application) to SWAP" />
             </LinearLayout>
 
         </LinearLayout>
@@ -150,13 +150,13 @@
                     android:layout_marginBottom="4dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="优先内存" />
+                    android:text="Priority Memory" />
 
                 <TextView
                     style="@style/textSmall"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="尽量避免将(此应用的)内存交换到SWAP" />
+                    android:text="Try to avoid swapping memory (of this application) to SWAP" />
             </LinearLayout>
 
         </LinearLayout>
@@ -192,13 +192,13 @@
                     android:layout_marginBottom="4dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="重要进程" />
+                    android:text="Important Processes" />
 
                 <TextView
                     style="@style/textSmall"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="禁止将(此应用的)内存交换到SWAP" />
+                    android:text="Disable memory swapping (of this application) to SWAP" />
             </LinearLayout>
 
         </LinearLayout>
@@ -235,13 +235,13 @@
                     android:layout_marginBottom="4dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="受限后台" />
+                    android:text="Restricted backend" />
 
                 <TextView
                     style="@style/textSmall"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="限制物理内存使用量，允许积极的将(此应用的)内存交换到SWAP" />
+                    android:text="Limit physical memory usage to allow aggressive swapping of (this application\'s) memory to SWAP" />
             </LinearLayout>
 
         </LinearLayout>
@@ -278,13 +278,13 @@
                     android:layout_marginBottom="4dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="回收内存" />
+                    android:text="Recycle Memory" />
 
                 <TextView
                     style="@style/textSmall"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="只允许占用极少的物理内存，允许积极的将(此应用的)内存交换到SWAP" />
+                    android:text="Allow only a very small amount of physical memory to be occupied, allowing an aggressive swap of (this application's) memory to SWAP" />
             </LinearLayout>
 
         </LinearLayout>

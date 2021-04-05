@@ -37,14 +37,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="冻结全部" />
+                android:text="Freeze All" />
 
             <TextView
                 style="@style/textSecondary"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="将偏见列表中的所有应用设为冻结状态" />
+                android:text="Set all applications in the bias list to frozen" />
         </LinearLayout>
     </LinearLayout>
 
@@ -79,14 +79,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="解冻全部" />
+                android:text="Unfreeze all" />
 
             <TextView
                 style="@style/textSecondary"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="将偏见列表中的所有应用解冻，置于可启动状态" />
+                android:text="Unfreeze all apps in the bias list and put them in a launchable state" />
         </LinearLayout>
     </LinearLayout>
 
@@ -122,14 +122,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="添加快捷方式" />
+                android:text="Adding shortcuts" />
 
             <TextView
                 style="@style/textSecondary"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="向桌面批量添加快捷方式" />
+                android:text="Add bulk shortcuts to the desktop" />
         </LinearLayout>
     </LinearLayout>
 
@@ -164,14 +164,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="清空列表" />
+                android:text="Clear list" />
 
             <TextView
                 style="@style/textSecondary"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="解冻所有应用，并清空应用偏见列表" />
+                android:text="Unfreeze all apps and clear the app bias list" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

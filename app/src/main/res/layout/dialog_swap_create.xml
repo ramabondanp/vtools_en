@@ -22,12 +22,12 @@
             style="@style/textTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="创建Swapfile" />
+            android:text="Create Swapfile" />
         <TextView
             android:id="@+id/confirm_message"
             android:layout_marginStart="@dimen/activity_horizontal_margin"
             android:paddingTop="8dp"
-            android:text="现在，拖动滑块调整Swapfile大小"
+            android:text="Now, drag the slider to resize the Swapfile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -100,13 +100,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="在/data下创建" />
+                        android:text="Create under /data" />
                     <TextView
                         style="@style/textSecondary"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="默认位置为/data/swapfile，不可更改" />
+                        android:text="The default location is /data/swapfile, which cannot be changed." />
                 </LinearLayout>
 
                 <Switch
@@ -130,13 +130,13 @@
         <Button
             android:id="@+id/btn_cancel"
             style="@style/dialogCancelBtn"
-            android:text="取消" />
+            android:text="Cancel" />
 
         <Button
             android:layout_marginStart="8dp"
             android:id="@+id/btn_confirm"
             style="@style/dialogConfirmBtn"
-            android:text="下一步" />
+            android:text="Next step" />
     </LinearLayout>
 
 </LinearLayout>

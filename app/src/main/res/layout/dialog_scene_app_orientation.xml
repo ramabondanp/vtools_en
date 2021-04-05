@@ -22,14 +22,14 @@
             style="@style/textTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="屏幕显示方式" />
+            android:text="Screen display mode" />
         <TextView
             android:id="@+id/confirm_message"
             android:layout_marginStart="@dimen/activity_horizontal_margin"
             android:paddingEnd="@dimen/activity_horizontal_margin"
             android:paddingTop="8dp"
             android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:text="指定此应用运行期间，屏幕显示方向"
+            android:text="Specify the screen display direction during the operation of this application"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -93,13 +93,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="默认" />
+                        android:text="Default" />
                     <TextView
                         style="@style/textSecondary"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="保持应用程序清单声明的显示方式" />
+                        android:text="Maintain the display of application manifest statements" />
                 </LinearLayout>
 
                 <Switch
@@ -137,13 +137,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="自动旋转" />
+                        android:text="Auto-rotation" />
                     <TextView
                         style="@style/textSecondary"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="根据传感器自动旋转屏幕方向" />
+                        android:text="Automatic rotation of the screen orientation according to the sensor" />
                 </LinearLayout>
 
                 <Switch
@@ -181,13 +181,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="强制旋转" />
+                        android:text="Force rotation" />
                     <TextView
                         style="@style/textSecondary"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="根据传感器自动旋转屏幕方向" />
+                        android:text="Automatic rotation of the screen orientation according to the sensor" />
                 </LinearLayout>
 
                 <Switch
@@ -225,13 +225,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="强制横屏" />
+                        android:text="Force landscape" />
                     <TextView
                         style="@style/textSecondary"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="强制横屏显示此应用" />
+                        android:text="Force this application to be displayed in landscape" />
                 </LinearLayout>
 
                 <Switch
@@ -269,13 +269,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="强制竖屏" />
+                        android:text="Force vertical screen" />
                     <TextView
                         style="@style/textSecondary"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="强制此应用竖屏显示" />
+                        android:text="Force this app to be displayed vertically" />
                 </LinearLayout>
 
                 <Switch
@@ -299,13 +299,13 @@
         <Button
             android:id="@+id/btn_cancel"
             style="@style/dialogCancelBtn"
-            android:text="取消" />
+            android:text="Cancel" />
 
         <Button
             android:layout_marginStart="8dp"
             android:id="@+id/btn_confirm"
             style="@style/dialogConfirmBtn"
-            android:text="确定" />
+            android:text="Confirm" />
     </LinearLayout>
 
 </LinearLayout>

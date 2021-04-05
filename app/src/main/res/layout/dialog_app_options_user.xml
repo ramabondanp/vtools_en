@@ -38,7 +38,7 @@
                         style="@style/textTitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="应用名称" />
+                        android:text="Application Name" />
                     <TextView
                         android:id="@+id/app_version_name"
                         style="@style/textSecondary"
@@ -76,7 +76,7 @@
                         style="@style/textSecondary"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="应用包名" />
+                        android:text="Application Package Name" />
                     <LinearLayout
                         android:orientation="horizontal"
                         android:layout_width="match_parent"
@@ -113,7 +113,7 @@
                         style="@style/textSecondary"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="安装路径" />
+                        android:text="Installation path" />
                     <LinearLayout
                         android:orientation="horizontal"
                         android:layout_width="match_parent"
@@ -267,13 +267,13 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="转为系统应用" />
+                            android:text="Conversion to system applications" />
                         <TextView
                             style="@style/textSecondary"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="将应用复制到系统目录\n如果有Magisk则会自动创建模块，免于直接修改系统" />
+                            android:text="Copy the application to the system directory \n if there is Magisk will automatically create the module, without directly modifying the system" />
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
@@ -316,13 +316,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="备份应用" />
+                        android:text="Backup Applications" />
                     <TextView
                         style="@style/textSecondary"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="备份应用安装包文件，及应用数据" />
+                        android:text="Backup application installation package files, and application data" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -357,13 +357,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="清除数据" />
+                        android:text="Clear data" />
                     <TextView
                         style="@style/textSecondary"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="清空应用数据，回收存储空间" />
+                        android:text="Empty application data and reclaim storage space" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -398,13 +398,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="卸载" />
+                        android:text="Uninstallation" />
                     <TextView
                         style="@style/textSecondary"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="卸载选中的应用" />
+                        android:text="Uninstall the selected application" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -438,13 +438,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="冻结/解冻" />
+                        android:text="Freeze/unfreeze" />
                     <TextView
                         style="@style/textSecondary"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="更改应用的禁用、隐藏状态" />
+                        android:text="Change the disabled and hidden status of the application" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -488,7 +488,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="对此应用进行dex2oat处理" />
+                    android:text="Perform dex2oat processing on this application" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

@@ -24,13 +24,13 @@
                 style="@style/textTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="确认清除" />
+                android:text="Confirm Clear" />
             <TextView
                 android:id="@+id/confirm_message"
                 android:paddingStart="@dimen/activity_horizontal_margin"
                 android:paddingTop="8dp"
                 android:paddingBottom="@dimen/activity_vertical_margin"
-                android:text="确定清除${apps.size}个应用的数据？"
+                android:text="Sure to clear the data of ${apps.size} apps?"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
@@ -71,13 +71,13 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="仅限当前用户" />
+                            android:text="Current users only" />
                         <TextView
                             style="@style/textSecondary"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="清空应用在当前用户的数据，不影响其它用户\n多用户指：主用户、访客模式、手机分身" />
+                            android:text="Clear the application data in the current user, does not affect other users \n multiple users refers to: the main user, guest mode, cell phone split" />
                     </LinearLayout>
                     <Switch
                         android:id="@+id/clear_user_only"
@@ -101,12 +101,12 @@
                 android:id="@+id/btn_cancel"
                 style="@style/dialogCancelBtn"
                 android:layout_marginEnd="8dp"
-                android:text="取消">
+                android:text="Cancel">
             </Button>
             <Button
                 android:id="@+id/btn_confirm"
                 style="@style/dialogConfirmBtn"
-                android:text="确定">
+                android:text="Confirm">
             </Button>
         </LinearLayout>
 

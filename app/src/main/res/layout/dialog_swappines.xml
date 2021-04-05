@@ -24,13 +24,13 @@
                 style="@style/textTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="VM参数" />
+                android:text="VM Parameters" />
             <TextView
                 android:id="@+id/confirm_message"
                 android:paddingStart="@dimen/activity_horizontal_margin"
                 android:paddingTop="8dp"
                 android:paddingBottom="@dimen/activity_vertical_margin"
-                android:text="这是一些关于SWAP积极性、内存水位线的调整"
+                android:text="Here are some tweaks on SWAP aggressiveness, memory waterline"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
@@ -183,13 +183,13 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="开机自启" />
+                            android:text="Self-booting" />
                         <TextView
                             style="@style/textSecondary"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="手机重新启动后，自动应用当前设置\n(需要允许Scene自启动)" />
+                            android:text="Automatically apply the current settings after the phone restarts \n (need to allow Scene to start itself)" />
                     </LinearLayout>
 
                     <Switch
@@ -215,12 +215,12 @@
                 android:id="@+id/btn_cancel"
                 style="@style/dialogCancelBtn"
                 android:layout_marginEnd="8dp"
-                android:text="取消">
+                android:text="Cancel">
             </Button>
             <Button
                 android:id="@+id/btn_confirm"
                 style="@style/dialogConfirmBtn"
-                android:text="确定">
+                android:text="Confirm">
             </Button>
         </LinearLayout>
 

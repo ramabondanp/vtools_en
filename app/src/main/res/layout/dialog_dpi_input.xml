@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:hint="DPI不可低于96，0表示默认"
+        android:hint="DPI must not be lower than 96, 0 means default"
         android:paddingLeft="5dp"
         android:paddingTop="10dp"
         android:paddingRight="5dp"

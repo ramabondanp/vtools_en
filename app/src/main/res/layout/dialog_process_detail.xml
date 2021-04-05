@@ -135,7 +135,7 @@
                     style="@style/textSmallTitle"
                     android:layout_width="65dp"
                     android:layout_height="wrap_content"
-                    android:text="应用名" />
+                    android:text="Application Name" />
 
                 <TextView
                     android:id="@+id/ProcessFriendlyName"
@@ -155,7 +155,7 @@
                     style="@style/textSmallTitle"
                     android:layout_width="65dp"
                     android:layout_height="wrap_content"
-                    android:text="命令" />
+                    android:text="Command" />
 
                 <TextView
                     android:id="@+id/ProcessCommand"
@@ -175,7 +175,7 @@
                     style="@style/textSmallTitle"
                     android:layout_width="65dp"
                     android:layout_height="wrap_content"
-                    android:text="命令行" />
+                    android:text="Command Lines" />
 
                 <TextView
                     android:id="@+id/ProcessCmdline"
@@ -196,7 +196,7 @@
                     style="@style/textSmallTitle"
                     android:layout_width="65dp"
                     android:layout_height="wrap_content"
-                    android:text="运行状态" />
+                    android:text="Operation Status" />
 
                 <TextView
                     android:id="@+id/ProcessState"
@@ -294,13 +294,13 @@
                     android:layout_marginEnd="10dp"
                     android:paddingLeft="6dp"
                     android:paddingRight="6dp"
-                    android:text="杀死安卓应用"
+                    android:text="Kill Android App"
                     android:visibility="gone" />
 
                 <Button
                     android:id="@+id/ProcessKill"
                     style="@style/SceneButton"
-                    android:text="停止" />
+                    android:text="Stop" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

@@ -19,7 +19,7 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             style="@style/textDefault"
-            android:text="选择配置源"
+            android:text="Select configuration source"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -54,13 +54,13 @@
                     android:layout_marginBottom="4dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="经典配置" />
+                    android:text="Classic configuration" />
 
                 <TextView
                     style="@style/textSmall"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Scene提供的预设，各个模式泾渭分明" />
+                    android:text="The presets provided by Scene, each mode is clearly distinguished" />
             </LinearLayout>
 
         </LinearLayout>
@@ -96,13 +96,13 @@
                     android:layout_marginBottom="4dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="偏重性能" />
+                    android:text="Performance bias" />
 
                 <TextView
                     style="@style/textSmall"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Scene提供的预设，整体上更关注性能释放" />
+                    android:text="Scene provides presets that are more focused on performance release overall" />
             </LinearLayout>
 
         </LinearLayout>
@@ -138,13 +138,13 @@
                     android:layout_marginBottom="4dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="选取配置文件" />
+                    android:text="Select profile" />
 
                 <TextView
                     style="@style/textSmall"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="选取你自行编写或从别处下载的配置脚本" />
+                    android:text="Select the configuration script you have written or downloaded from elsewhere" />
             </LinearLayout>
 
         </LinearLayout>
@@ -180,13 +180,13 @@
                     android:layout_marginBottom="4dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="在线下载" />
+                    android:text="Download Online" />
 
                 <TextView
                     style="@style/textSmall"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="访问互联网获取更多机型的配置脚本" />
+                    android:text="Visit the Internet for configuration scripts for more models" />
             </LinearLayout>
 
         </LinearLayout>
@@ -222,13 +222,13 @@
                     android:layout_marginBottom="4dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="自定义" />
+                    android:text="Custom" />
 
                 <TextView
                     style="@style/textSmall"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="通过图形界面自己设定各个模式的参数" />
+                    android:text="Set the parameters for each mode yourself via the graphical interface" />
             </LinearLayout>
 
         </LinearLayout>

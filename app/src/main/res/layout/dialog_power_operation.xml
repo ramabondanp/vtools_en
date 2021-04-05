@@ -19,7 +19,7 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             style="@style/textDefault"
-            android:text="选择操作"
+            android:text="Select Operation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -60,13 +60,13 @@
                         android:layout_marginBottom="4dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="关机" />
+                        android:text="Shutdown" />
 
                     <TextView
                         style="@style/textSmall"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="正常关机" />
+                        android:text="Normal shutdown" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -103,13 +103,13 @@
                         android:layout_marginBottom="4dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="重启" />
+                        android:text="Reboot" />
 
                     <TextView
                         style="@style/textSmall"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="正常重启" />
+                        android:text="Normal reboot" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -147,13 +147,13 @@
                     android:layout_marginBottom="4dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="热重启" />
+                    android:text="Hot restart" />
 
                 <TextView
                     style="@style/textSmall"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="只重启系界面而不重新引导系统（可能引发Bug）" />
+                    android:text="Reboot only the system interface without rebooting (may cause bugs)）" />
             </LinearLayout>
 
         </LinearLayout>
@@ -196,7 +196,7 @@
                     style="@style/textSmall"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="重启到Recovery模式（俗称卡刷模式）" />
+                    android:text="Reboot to Recovery mode (commonly known as card brushing mode)" />
             </LinearLayout>
 
         </LinearLayout>
@@ -239,7 +239,7 @@
                     style="@style/textSmall"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="重启到Fastboot模式（俗称USB线刷模式）" />
+                    android:text="Reboot to Fastboot mode (commonly known as USB wire brush mode)）" />
             </LinearLayout>
 
         </LinearLayout>

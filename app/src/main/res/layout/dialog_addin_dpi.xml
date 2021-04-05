@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:text="警告：修改分辨率、DPI可能导致触摸失灵，或界面错位无法正常操作！"
+        android:text="Warning: Modifying the resolution, DPI may lead to touch failure, or interface misalignment can not operate properly!"
         android:textColor="@android:color/holo_red_dark" />
 
     <LinearLayout
@@ -44,7 +44,7 @@
             style="@style/textDefault"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
-            android:text="分辨率" />
+            android:text="Resolution" />
 
         <EditText
             android:id="@+id/dialog_addin_dpi_height"
@@ -76,7 +76,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="快速更改（Android7.0+）" />
+        android:text="Quick Change（Android7.0+）" />
 
     <TextView
         android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
@@ -135,7 +135,7 @@
             android:layout_width="50dp"
             android:layout_height="32dp"
             android:layout_marginRight="6dp"
-            android:text="重置"
+            android:text="Reset"
             android:textSize="12dp" />
     </LinearLayout>
 

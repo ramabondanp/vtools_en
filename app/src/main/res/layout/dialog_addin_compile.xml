@@ -22,7 +22,7 @@
             style="@style/textTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="选择dex2oat编译方式" />
+            android:text="Select the dex2oat compilation method" />
         <TextView
             android:id="@+id/confirm_message"
             android:visibility="gone"
@@ -69,7 +69,7 @@
                     style="@style/textSmall"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="对配置文件中列出的(热点)函数进行 AOT 编译" />
+                    android:text="AOT compilation of the (hot) functions listed in the configuration file" />
             </LinearLayout>
 
         </LinearLayout>
@@ -111,7 +111,7 @@
                     style="@style/textSmall"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="对所有函数进行 AOT 编译" />
+                    android:text="AOT compilation of all functions" />
             </LinearLayout>
 
         </LinearLayout>
@@ -153,7 +153,7 @@
                     style="@style/textSmall"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="编译一切可以被编译的内容" />
+                    android:text="Compile everything that can be compiled" />
             </LinearLayout>
 
         </LinearLayout>
@@ -190,13 +190,13 @@
                     android:layout_marginBottom="4dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="重置编译" />
+                    android:text="Reset Compilation" />
 
                 <TextView
                     style="@style/textSmall"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="重置编译的内容，还原刚安装时的状态" />
+                    android:text="Resetting the compiled content to restore the state when it was first installed" />
             </LinearLayout>
 
         </LinearLayout>
@@ -207,7 +207,7 @@
             android:layout_marginTop="@dimen/activity_vertical_margin"
             style="@style/SceneButton"
             android:layout_width="120dp"
-            android:text="了解工作原理" />
+            android:text="Understanding how it works" />
     </LinearLayout>
 
 </com.omarea.common.ui.OverScrollView>

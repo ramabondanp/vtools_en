@@ -37,7 +37,7 @@
                         style="@style/textTitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="请选择操作" />
+                        android:text="Please select the operation" />
                     <TextView
                         android:id="@+id/app_version_name"
                         style="@style/textSecondary"
@@ -74,7 +74,7 @@
                         style="@style/textSecondary"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="应用包名" />
+                        android:text="Application Package Name" />
                     <LinearLayout
                         android:orientation="horizontal"
                         android:layout_width="match_parent"
@@ -111,7 +111,7 @@
                         style="@style/textSecondary"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="安装路径" />
+                        android:text="Installation path" />
                     <LinearLayout
                         android:orientation="horizontal"
                         android:layout_width="match_parent"
@@ -258,13 +258,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="备份应用" />
+                        android:text="Backup Applications" />
                     <TextView
                         style="@style/textSecondary"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="备份应用安装包文件，及应用数据" />
+                        android:text="Backup application installation package files, and application data" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
@@ -306,13 +306,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="清除数据" />
+                        android:text="Clear data" />
                     <TextView
                         style="@style/textSecondary"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="清空应用数据，回收存储空间" />
+                        android:text="Empty application data and reclaim storage space" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -347,13 +347,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="卸载更新" />
+                        android:text="Uninstall updates" />
                     <TextView
                         style="@style/textSecondary"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="回退为系统自带版本" />
+                        android:text="Fallback to the version that came with the system" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -388,13 +388,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="从当前用户卸载" />
+                        android:text="Uninstall from current user" />
                     <TextView
                         style="@style/textSecondary"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="只从当前用户卸载，其它用户可以继续使用" />
+                        android:text="Uninstall from current user only, other users can continue to use" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -429,13 +429,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="删除应用" />
+                        android:text="Delete Application" />
                     <TextView
                         style="@style/textSecondary"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="删除该系统应用的安装包" />
+                        android:text="Delete the installation package of this system application" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -468,13 +468,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="冻结/解冻" />
+                        android:text="Freeze/unfreeze" />
                     <TextView
                         style="@style/textSecondary"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="更改应用的禁用、隐藏状态" />
+                        android:text="Change the disabled and hidden status of the application" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -518,7 +518,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="对此应用进行dex2oat处理" />
+                    android:text="Perform dex2oat processing on this application" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

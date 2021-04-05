@@ -22,13 +22,13 @@
             style="@style/textTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="使用监视器" />
+            android:text="Using the monitor" />
         <TextView
             android:id="@+id/confirm_message"
             android:layout_marginStart="@dimen/activity_horizontal_margin"
             android:layout_marginBottom="@dimen/activity_vertical_margin"
             android:paddingTop="8dp"
-            android:text="选择要显示的监视器悬浮窗"
+            android:text="Select the monitor hover window to be displayed"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -38,7 +38,7 @@
             android:padding="@dimen/activity_vertical_margin"
             android:layout_marginBottom="@dimen/activity_vertical_margin"
             style="@style/textSmall"
-            android:text="说明：负载监视器窗口可单击[展开/折叠]详情，双击关闭"
+            android:text="Note: The Load Monitor window can be closed by clicking [Expand/Collapse] for details and double-clicking"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -78,13 +78,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="负载监视器" />
+                        android:text="Load Monitor" />
                     <TextView
                         style="@style/textSecondary"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="显示CPU、GPU、RAM和电池状态" />
+                        android:text="Display CPU, GPU, RAM and battery status" />
                 </LinearLayout>
 
                 <Switch
@@ -123,13 +123,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="进程监视器" />
+                        android:text="Process Monitor" />
                     <TextView
                         style="@style/textSecondary"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="显示运行中的进程，按CPU占用排序" />
+                        android:text="Show running processes, sorted by CPU usage" />
                 </LinearLayout>
 
                 <Switch
@@ -168,13 +168,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="迷你监视器" />
+                        android:text="Mini Monitor" />
                     <TextView
                         style="@style/textSecondary"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="显示CPU、GPU负载和电池温度" />
+                        android:text="Display CPU, GPU load and battery temperature" />
                 </LinearLayout>
 
                 <Switch

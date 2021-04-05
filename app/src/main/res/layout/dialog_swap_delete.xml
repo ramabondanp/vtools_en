@@ -22,13 +22,13 @@
             style="@style/textTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="关闭Swapfile" />
+            android:text="Close Swapfile" />
         <TextView
             android:id="@+id/confirm_message"
             android:layout_marginStart="@dimen/activity_horizontal_margin"
             android:layout_marginBottom="@dimen/activity_vertical_margin"
             android:paddingTop="8dp"
-            android:text="请确认操作"
+            android:text="Please confirm the operation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -38,7 +38,7 @@
             android:padding="@dimen/activity_vertical_margin"
             android:layout_marginBottom="@dimen/activity_vertical_margin"
             style="@style/textSmall"
-            android:text="说明：Android手机回收SWAP(包括ZRAM)的速度非常慢(1~5MB/s)，建议清空后台以减少SWAP占用，节省回收时间"
+            android:text="Note: Android phones recycle SWAP (including ZRAM) very slowly (1~5MB/s), it is recommended to empty the background to reduce SWAP occupation and save recycling time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -78,13 +78,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="删除文件" />
+                        android:text="Delete file" />
                     <TextView
                         style="@style/textSecondary"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="关闭Swapfile后，删除/data/swapfile文件" />
+                        android:text="After closing Swapfile, delete the /data/swapfile file" />
                 </LinearLayout>
 
                 <Switch
@@ -109,13 +109,13 @@
         <Button
             android:id="@+id/btn_cancel"
             style="@style/dialogCancelBtn"
-            android:text="取消" />
+            android:text="Cancel" />
 
         <Button
             android:layout_marginStart="8dp"
             android:id="@+id/btn_confirm"
             style="@style/dialogConfirmBtn"
-            android:text="确定" />
+            android:text="Confirm" />
     </LinearLayout>
 
 </LinearLayout>

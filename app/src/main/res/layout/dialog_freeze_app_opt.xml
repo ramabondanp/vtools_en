@@ -37,14 +37,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="打开应用" />
+                android:text="Open the application" />
 
             <TextView
                 style="@style/textSecondary"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="自动解冻并启动此应用" />
+                android:text="Automatically unfreeze and launch this application" />
         </LinearLayout>
     </LinearLayout>
 
@@ -79,14 +79,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="取消偏见" />
+                android:text="Eliminate bias" />
 
             <TextView
                 style="@style/textSecondary"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="从偏见列表移除此应用并将其解冻" />
+                android:text="Remove this app from the bias list and unfreeze it" />
         </LinearLayout>
     </LinearLayout>
 
@@ -121,14 +121,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="卸载应用" />
+                android:text="Uninstalling Applications" />
 
             <TextView
                 style="@style/textSecondary"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="卸载此应用(如果可以卸载的话)" />
+                android:text="Uninstall this application (if it can be uninstalled)" />
         </LinearLayout>
     </LinearLayout>
 
@@ -163,14 +163,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="冻结/解冻" />
+                android:text="Freeze/unfreeze" />
 
             <TextView
                 style="@style/textSecondary"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="切换此应用的冻结状态" />
+                android:text="Toggle the freeze state of this application" />
         </LinearLayout>
     </LinearLayout>
 
@@ -206,14 +206,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="添加快捷方式" />
+                android:text="Adding shortcuts" />
 
             <TextView
                 style="@style/textSecondary"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="添加此应用的快捷方式到桌面" />
+                android:text="Add a shortcut of this application to the desktop" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>
