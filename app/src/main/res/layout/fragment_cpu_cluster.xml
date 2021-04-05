@@ -15,7 +15,7 @@
             <com.omarea.ui.HelpIcon
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:text="Cpuset用于设定不同状态的进程可使用的CPU核心，给后台进程分配较少的CPU核心，可以保证后台过多时前台进程仍然能流畅运行，但也会导致单个核心持续满载，或下载工具后台时下载速度显著变慢。" />
+                app:text="Cpuset is used to set the CPU cores available to processes in different states. Assigning fewer CPU cores to background processes ensures that foreground processes can still run smoothly when there are too many in the background, but it can also cause a single core to be constantly full, or download speed to slow down significantly when downloading tools are in the background." />
 
             <TextView
                 android:id="@+id/cluster_title"
@@ -30,7 +30,7 @@
             android:layout_column="0"
             android:layout_gravity="fill"
             android:gravity="center_vertical"
-            android:text="最小频率" />
+            android:text="Minimum frequency" />
 
         <TextView
             android:id="@+id/cluster_min_freq"
@@ -48,7 +48,7 @@
             android:layout_column="0"
             android:layout_gravity="fill"
             android:gravity="center_vertical"
-            android:text="最大频率" />
+            android:text="Maximum frequency" />
 
         <TextView
             android:id="@+id/cluster_max_freq"
@@ -66,7 +66,7 @@
             android:layout_column="0"
             android:layout_gravity="fill"
             android:gravity="center_vertical"
-            android:text="调度模式" />
+            android:text="Scheduling Mode" />
 
         <TextView
             android:id="@+id/cluster_governor"
@@ -82,7 +82,7 @@
             android:layout_column="0"
             android:layout_gravity="fill"
             android:gravity="center_vertical"
-            android:text="微调参数" />
+            android:text="Fine-tuning parameters" />
 
         <TextView
             android:id="@+id/cluster_governor_params"
@@ -90,7 +90,7 @@
             android:layout_row="4"
             android:layout_column="1"
             android:padding="5dp"
-            android:text="点击查看"
+            android:text="Click to view"
             android:textAlignment="textEnd" />
 
     </GridLayout>

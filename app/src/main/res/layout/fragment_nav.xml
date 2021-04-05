@@ -42,7 +42,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
                     android:layout_weight="1"
-                    android:text="请先点击此处，去激活辅助服务" />
+                    android:text="Please click here to activate the supplementary service first" />
             </LinearLayout>
 
             <TextView
@@ -50,7 +50,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="场景模式需要辅助服务提供支持。放心，Scene不会窃取界面上的内容，只会分析界面层次和显示大小并用于判断前台应用状态。" />
+                android:text="Scene mode requires support from auxiliary services. Rest assured that Scene does not steal content from the interface, but only analyzes the interface hierarchy and display size and uses it to determine the foreground application state." />
         </LinearLayout>
 
         <GridLayout
@@ -104,7 +104,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:text="Xposed功能" />
+            android:text="Xposed Features" />
 
         <GridLayout
             android:layout_width="match_parent"
@@ -130,7 +130,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:text="辅助功能" />
+            android:text="Auxiliary Functions" />
 
         <GridLayout
             android:layout_width="match_parent"
@@ -157,7 +157,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:text="系统管理" />
+            android:text="System Administration" />
 
         <GridLayout
             android:layout_width="match_parent"
@@ -205,7 +205,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:text="进阶功能" />
+            android:text="Advanced Features" />
 
         <GridLayout
             android:layout_width="match_parent"
@@ -261,7 +261,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:text="交流反馈" />
+            android:text="Communication Feedback" />
 
         <GridLayout
             android:layout_width="match_parent"

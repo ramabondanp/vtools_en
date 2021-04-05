@@ -31,7 +31,7 @@
                 style="@style/textTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="支付宝"
+                android:text="Alipay"
                 android:textColor="?android:colorAccent" />
         </LinearLayout>
 
@@ -43,7 +43,7 @@
                 style="@style/textTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="微信"
+                android:text="WeChat"
                 android:textColor="?android:colorAccent" />
         </LinearLayout>
 
@@ -54,7 +54,7 @@
                 style="@style/textTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="免费捐赠（支付宝红包）"
+                android:text="Free Donation (Alipay Red Packet)"
                 android:textColor="?android:colorAccent" />
 
             <TextView
@@ -63,7 +63,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:text="支付宝首页搜索“511531087”领取红包并使用，我便能获得支付宝的少量奖赏。（点击复制红包码）" />
+                android:text="Alipay home page search '511531087' to receive the red packet and use, I will be able to get a small amount of Alipay rewards. (Click to copy the red packet code)" />
 
             <TextView
                 android:id="@+id/pay_alipay_command"
@@ -71,7 +71,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:text="或点击此处复制吱口令，打开支付宝领取红包并使用，我便能获得支付宝的少量奖赏。"
+                android:text="Or click here to copy the zee password, open Alipay to receive the red packet and use it, I will be able to get a small amount of rewards from Alipay."
                 android:visibility="gone" />
         </LinearLayout>
 
@@ -82,20 +82,20 @@
                 style="@style/textSmall"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="捐赠说明：\n"
+                android:text="Donation Instructions：\n"
                 android:textColor="?android:colorAccent" />
 
             <TextView
                 style="@style/textSmall"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="如果你喜欢我的软件，可以通过以上支付方式向我捐赠，捐赠金额不限，￥0.01也是爱\n" />
+                android:text="If you like my software, you can donate to me through the above payment method, the donation amount is unlimited, ¥ 0.01 is also love \n" />
 
             <TextView
                 style="@style/textSmall"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="你知道的，你的捐赠是对开发者辛勤劳动的肯定。在我们凌晨熬夜修Bug或绞尽脑汁探索新功能时，会有你们的鼓励化为动力\n" />
+                android:text="You know, your donations are a testament to the hard work of our developers. When we stay up late in the morning fixing bugs or racking our brains to explore new features, we'll have your encouragement to turn into motivation \n" />
         </LinearLayout>
     </LinearLayout>
 </com.omarea.common.ui.OverScrollView>

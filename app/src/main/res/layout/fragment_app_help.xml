@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:text="警告" />
+            android:text="Warning" />
 
         <TextView
             style="@style/textSmall"
@@ -32,5 +32,5 @@
         style="@style/SceneButton"
         android:layout_width="wrap_content"
         android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:text="找回[隐藏]的应用" />
+        android:text="Retrieve [hidden] applications" />
 </LinearLayout>
