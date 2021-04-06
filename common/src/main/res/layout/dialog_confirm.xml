@@ -26,14 +26,14 @@
                 style="@style/textTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="提示信息" />
+                android:text="Tip Message" />
             <TextView
                 android:id="@+id/confirm_message"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
                 android:paddingTop="8dp"
                 android:paddingBottom="16dp"
-                android:text="提示内容"
+                android:text="Tip content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
@@ -53,12 +53,12 @@
                 android:id="@+id/btn_cancel"
                 style="@style/dialogCancelBtn"
                 android:layout_marginEnd="8dp"
-                android:text="取消">
+                android:text="Cancel">
             </Button>
             <Button
                 android:id="@+id/btn_confirm"
                 style="@style/dialogConfirmBtn"
-                android:text="确定">
+                android:text="Confirm">
             </Button>
         </LinearLayout>
 
