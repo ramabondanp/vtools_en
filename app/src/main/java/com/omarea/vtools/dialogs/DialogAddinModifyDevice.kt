@@ -64,7 +64,7 @@ class DialogAddinModifyDevice(var context: ActivityBase) {
         (dialog.findViewById(R.id.dialog_chooser) as Button).setOnClickListener {
             templateChooser()
         }
-        DialogHelper.confirm(context, "", "", dialog, DialogHelper.DialogButton("保存重启", {
+        DialogHelper.confirm(context, "", "", dialog, DialogHelper.DialogButton("Save Reboot", {
             val model = editModel.text.trim()
             val brand = editBrand.text.trim()
             val product = editProductName.text.trim()
@@ -89,7 +89,7 @@ class DialogAddinModifyDevice(var context: ActivityBase) {
                             MagiskExtend.replaceSystemFile("/system/etc/device_features/${product}.xml", "/system/etc/device_features/${android.os.Build.PRODUCT}.xml")
                         }
                     }
-                    Toast.makeText(context, "已通过Magisk更改参数，请重启手机~", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Parameters have been changed by Magisk, please restart your phone~", Toast.LENGTH_SHORT).show()
                 } else {
                     val sb = StringBuilder()
                     sb.append(CommonCmds.MountSystemRW)
@@ -124,10 +124,10 @@ class DialogAddinModifyDevice(var context: ActivityBase) {
                     KeepShellPublic.doCmdSync(sb.toString())
                 }
             } else {
-                Toast.makeText(context, "什么也没有修改！", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Nothing has been modified!", Toast.LENGTH_SHORT).show()
             }
-        }), DialogHelper.DialogButton("使用帮助", {
-            DialogHelper.alert(context, "使用帮助", context.getString(R.string.dialog_addin_device_desc))
+        }), DialogHelper.DialogButton("Using help", {
+            DialogHelper.alert(context, "Using help", context.getString(R.string.dialog_addin_device_desc))
         }, false))
         loadCurrent()
 
@@ -140,8 +140,8 @@ class DialogAddinModifyDevice(var context: ActivityBase) {
                 val copyData = String(Base64.decode(content.toString().trim(), Base64.DEFAULT))
                 if (Regex("^.*@.*@.*@.*@.*\$").matches(copyData)) {
                     DialogHelper.confirm(context,
-                            "可用的模板",
-                            "检测到已复制的机型信息：\n\n$copyData\n\n是否立即使用？",
+                            "Available templates",
+                            "Information on copied models detected: \n\n$copyData\n\n Is it used immediately?",
                             {
                                 splitCodeStr(copyData)
                             })

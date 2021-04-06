@@ -29,8 +29,8 @@ class DialogAddinWIFI(private var context: Context) {
             wifiInfo = sb.toString()
                     .replace(Regex("[\\s\\t]{0,}network=\\{"), "\n")
                     .replace(Regex("[\\s\\t]{0,}bssid=.*"), "") //bssid
-                    .replace(Regex("[\\s\\t]{0,}ssid="), "\n网络：") //SSID
-                    .replace(Regex("[\\s\\t]{0,}psk="), "\n密码：") //密码
+                    .replace(Regex("[\\s\\t]{0,}ssid="), "\nNetwork：") //SSID
+                    .replace(Regex("[\\s\\t]{0,}psk="), "\nPassword：") //密码
                     .replace(Regex("[\\s\\t]{0,}priority=.*"), "") //优先级
                     .replace(Regex("[\\s\\t]{0,}priority=.*"), "") //优先级
                     .replace(Regex("[\\s\\t]{0,}key_mgmt=.*"), "") //加密方式
@@ -40,9 +40,9 @@ class DialogAddinWIFI(private var context: Context) {
                     .replace("\"", "")
                     .trim()
 
-            DialogHelper.alert(context, "已保存的WIFI记录", wifiInfo)
+            DialogHelper.alert(context, "Saved WIFI records", wifiInfo)
         } else {
-            Toast.makeText(context, "没有读取到这个文件，也许不支持您的设备吧！", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, "If this file is not read, your device may not be supported!", Toast.LENGTH_LONG).show()
         }
     }
 
@@ -73,11 +73,11 @@ class DialogAddinWIFI(private var context: Context) {
                         }
                         val node = wifi.item(j).attributes.getNamedItem("name") ?: continue
                         if (node.nodeValue == "SSID") {
-                            stringBuild.append("网络：")
+                            stringBuild.append("Network：")
                             stringBuild.append(wifi.item(j).textContent)
                             stringBuild.append("\n")
                         } else if (node.nodeValue == "PreSharedKey") {
-                            stringBuild.append("密码：")
+                            stringBuild.append("Password：")
                             stringBuild.append(wifi.item(j).textContent)
                             stringBuild.append("\n")
                         }
@@ -85,7 +85,7 @@ class DialogAddinWIFI(private var context: Context) {
                     stringBuild.append("\n\n")
                 }
 
-                DialogHelper.alert(context, "已保存的WIFI记录", stringBuild.toString().trim())
+                DialogHelper.alert(context, "Saved WIFI records", stringBuild.toString().trim())
             } else {
                 showOld()
             }

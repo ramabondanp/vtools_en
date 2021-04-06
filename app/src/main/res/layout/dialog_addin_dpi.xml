@@ -21,7 +21,7 @@
 
         <TextView
             style="@style/textDefault"
-            android:layout_width="50dp"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:text="DPI" />
 
@@ -42,7 +42,7 @@
 
         <TextView
             style="@style/textDefault"
-            android:layout_width="50dp"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:text="Resolution" />
 
@@ -132,7 +132,7 @@
         <Button
             android:id="@+id/dialog_dpi_reset"
             style="@style/SceneButton"
-            android:layout_width="50dp"
+            android:layout_width="70dp"
             android:layout_height="32dp"
             android:layout_marginRight="6dp"
             android:text="Reset"

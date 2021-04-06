@@ -101,14 +101,14 @@ class FragmentHome : androidx.fragment.app.Fragment() {
             home_raminfo_text.text = getString(R.string.please_wait)
             GlobalScope.launch(Dispatchers.Main) {
                 dropCaches()
-                Scene.toast("缓存已清理...", Toast.LENGTH_SHORT)
+                Scene.toast("The cache has been cleared...", Toast.LENGTH_SHORT)
             }
         }
 
         home_clear_swap.setOnClickListener {
             home_zramsize_text.text = getText(R.string.please_wait)
             GlobalScope.launch(Dispatchers.Main) {
-                Scene.toast("开始回收少量内存(长按回收更多~)", Toast.LENGTH_SHORT)
+                Scene.toast("Start reclaiming a small amount of memory (long press to reclaim more~)", Toast.LENGTH_SHORT)
                 val result = forceKSWAPD(1)
                 Scene.toast(result, Toast.LENGTH_SHORT)
             }
@@ -129,7 +129,7 @@ class FragmentHome : androidx.fragment.app.Fragment() {
                 val intent = Intent(Intent.ACTION_VIEW, uri)
                 startActivity(intent)
             } catch (ex: Exception) {
-                Toast.makeText(context!!, "启动在线页面失败！", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context!!, "Failed to launch online page!", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -148,7 +148,7 @@ class FragmentHome : androidx.fragment.app.Fragment() {
                     msg.append(param.value)
                     msg.append("\n")
                 }
-                DialogHelper.alert(activity!!, "调度器参数", msg.toString())
+                DialogHelper.alert(activity!!, "Scheduler parameters", msg.toString())
             }
         }
 
@@ -267,7 +267,7 @@ class FragmentHome : androidx.fragment.app.Fragment() {
             coreCount = CpuFrequencyUtil.getCoreCount()
             myHandler.post {
                 try {
-                    cpu_core_count.text = "$coreCount 核心"
+                    cpu_core_count.text = "$coreCount Core"
                 } catch (ex: Exception) {
                 }
             }
@@ -316,12 +316,12 @@ class FragmentHome : androidx.fragment.app.Fragment() {
                 home_battery_temperature.text = "${GlobalStatus.batteryTemperature}°C"
 
                 home_gpu_freq.text = gpuFreq
-                home_gpu_load.text = "负载：$gpuLoad%"
+                home_gpu_load.text = "Load：$gpuLoad%"
                 if (gpuLoad > -1) {
                     home_gpu_chat.setData(100.toFloat(), (100 - gpuLoad).toFloat())
                 }
                 if (loads.containsKey(-1)) {
-                    cpu_core_total_load.text = "负载：" + loads[-1]!!.toInt().toString() + "%"
+                    cpu_core_total_load.text = "Load：" + loads[-1]!!.toInt().toString() + "%"
                     home_cpu_chat.setData(100.toFloat(), (100 - loads[-1]!!.toInt()).toFloat())
                 }
                 if (cpu_core_list.adapter == null) {
@@ -405,8 +405,8 @@ class FragmentHome : androidx.fragment.app.Fragment() {
             globalSPF.edit().putString(SpfConfig.GLOBAL_SPF_POWERCFG, "").apply()
             myHandler.post {
                 DialogHelper.confirmBlur(this.activity!!,
-                        "提示",
-                        "需要重启手机才能恢复默认调度，是否立即重启？",
+                        "Tips",
+                        "Do I need to reboot my phone to restore the default scheduling, do I reboot immediately?",
                         {
                             KeepShellPublic.doCmdSync("sync\nsleep 1\nsvc power reboot || reboot")
                         },
@@ -429,14 +429,14 @@ class FragmentHome : androidx.fragment.app.Fragment() {
             if (dynamic) {
                 globalSPF.edit().putString(SpfConfig.GLOBAL_SPF_POWERCFG, "").apply()
                 DialogHelper.alert(activity!!,
-                        "提示",
-                        "“场景模式-动态响应”已被激活，你手动选择的模式随时可能被覆盖。\n\n如果你需要长期使用手动控制，请前往“功能”菜单-“性能界面”界面关闭“动态响应”！")
+                        "Tips",
+                        "'Scene Mode - Dynamic Response' has been activated and the mode you selected manually may be overridden at any time. \n\nIf you need to use manual control for a long time, please go to the 'Features' menu - 'Performance Interface' screen to turn off 'Dynamic Response'!")
             } else {
                 globalSPF.edit().putString(SpfConfig.GLOBAL_SPF_POWERCFG, toMode).apply()
                 if (!globalSPF.getBoolean(SpfConfig.GLOBAL_SPF_POWERCFG_FRIST_NOTIFY, false)) {
                     DialogHelper.confirm(activity!!,
-                            "提示",
-                            "如果你已允许Scene自启动，手机重启后，Scene还会自动激活刚刚选择的模式。\n\n如果需要恢复系统默认调度，请再次点击，然后重启手机！",
+                            "Tips",
+                            "If you have allowed Scene to self-boot, Scene will also automatically activate the mode you just selected after your phone reboots. \n\nIf you need to restore the system default scheduling, click again and restart the phone!",
                             DialogHelper.DialogButton(getString(R.string.btn_confirm)),
                             DialogHelper.DialogButton(getString(R.string.btn_dontshow), {
                                 globalSPF.edit().putBoolean(SpfConfig.GLOBAL_SPF_POWERCFG_FRIST_NOTIFY, true).apply()

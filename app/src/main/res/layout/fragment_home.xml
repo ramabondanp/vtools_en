@@ -107,7 +107,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="right"
-                            android:text="Exchange Partition"
+                            android:text="ZRAM/SWAP"
                             android:textSize="12dp" />
 
                         <TextView
@@ -441,7 +441,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
-                            android:text="Turned on"
+                            android:text="Alive"
                             android:textColor="#ff888888" />
 
                         <TextView
@@ -477,7 +477,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
                             android:layout_weight="1"
-                            android:text="Visit Scene official website"
+                            android:text="Official website"
                             android:textColor="#ff888888" />
                     </LinearLayout>
                 </LinearLayout>

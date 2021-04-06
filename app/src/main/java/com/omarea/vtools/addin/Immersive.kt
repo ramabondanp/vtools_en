@@ -14,24 +14,24 @@ class Immersive(private var context: ActivityBase) : AddinBase(context) {
         DialogItemChooser(context.themeMode.isDarkMode, ArrayList<SelectItem>().apply {
             if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q) {
                 add(SelectItem().apply {
-                    title = "全部隐藏"
+                    title = "Hide all"
                     value = "wm overscan reset;settings put global policy_control immersive.full=apps,-android,-com.android.systemui"
                 })
                 add(SelectItem().apply {
-                    title = "隐藏导航栏"
+                    title = "Hide navigation bar"
                     value = "wm overscan reset;settings put global policy_control immersive.navigation=*"
                 })
                 add(SelectItem().apply {
-                    title = "隐藏状态栏"
+                    title = "Hide status bar"
                     value = "wm overscan reset;settings put global policy_control immersive.status=apps,-android,-com.android.systemui"
                 })
             }
             add(SelectItem().apply {
-                title = "恢复默认"
+                title = "Restore default"
                 value = "wm overscan reset;settings put global policy_control null"
             })
             add(SelectItem().apply {
-                title = "移走导航栏(overscan)"
+                title = "Move the navigation bar(overscan)"
                 value = "wm overscan 0,0,0,-${getNavHeight()}"
             })
         }, false, object : DialogItemChooser.Callback {
@@ -40,7 +40,7 @@ class Immersive(private var context: ActivityBase) : AddinBase(context) {
                     value?.run { execShell(this) }
                 }
             }
-        }).setTitle("请选择操作").show(context.supportFragmentManager, "immersive-options")
+        }).setTitle("Please select the operation").show(context.supportFragmentManager, "immersive-options")
     }
 
     fun getNavHeight(): Int {

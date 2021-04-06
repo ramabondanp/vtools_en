@@ -39,10 +39,10 @@ class DialogCustomMAC(private var context: Context) {
             }
         }
 
-        DialogHelper.confirm(context, "自定义WIFI MAC", "", dialog, {
+        DialogHelper.confirm(context, "CUSTOM WIFI MAC", "", dialog, {
             val mac = macInput.text.trim().replace(Regex("-"), ":").toLowerCase()
             if (!Regex("[\\w\\d]{2}:[\\w\\d]{2}:[\\w\\d]{2}:[\\w\\d]{2}:[\\w\\d]{2}:[\\w\\d]{2}$", RegexOption.IGNORE_CASE).matches(mac)) {
-                Toast.makeText(context, "输入的MAC地址无效，格式应如 ec:d0:9f:af:95:01", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "The entered MAC address is invalid, the format should be like ec:d0:9f:af:95:01", Toast.LENGTH_LONG).show()
                 return@confirm
             }
 
@@ -56,9 +56,9 @@ class DialogCustomMAC(private var context: Context) {
             val shell = "mac=\"$mac\"\n" + raw
             val r = KeepShellPublic.doCmdSync(shell)
             if (r == "error") {
-                Toast.makeText(context, "修改失败！", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Failed to edit!", Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(context, "MAC已修改", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "MAC has been modified", Toast.LENGTH_SHORT).show()
                 spf!!.edit().putString(SpfConfig.GLOBAL_SPF_MAC, mac).apply()
             }
         })

@@ -104,7 +104,7 @@ class DialogAddinModifyDPI(var context: Activity) {
             dpiInput.setText(getDpiScaleValue(width).toString())
         }
 
-         val dialogInstance = DialogHelper.confirm(context, "DPI、分辨率", "", dialog, {
+         val dialogInstance = DialogHelper.confirm(context, "DPI, resolution", "", dialog, {
             val dpi = if (dpiInput.text.isNotEmpty()) (dpiInput.text.toString().toInt()) else (0)
             val width = if (widthInput.text.isNotEmpty()) (widthInput.text.toString().toInt()) else (0)
             val height = if (heightInput.text.isNotEmpty()) (heightInput.text.toString().toInt()) else (0)
@@ -124,7 +124,7 @@ class DialogAddinModifyDPI(var context: Activity) {
                         KeepShellPublic.doCmdSync("wm density reset");
                         MagiskExtend.setSystemProp("ro.sf.lcd_density", dpi.toString());
                         MagiskExtend.setSystemProp("vendor.display.lcd_density", dpi.toString());
-                        Toast.makeText(context, "已通过Magisk更改参数，请重启手机~", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Parameters have been changed by Magisk, please restart your phone~", Toast.LENGTH_SHORT).show()
                     } else {
                         cmd.append(CommonCmds.MountSystemRW)
                         cmd.append("wm density reset\n")
