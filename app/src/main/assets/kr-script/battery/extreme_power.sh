@@ -19,11 +19,11 @@ com.google.android.play.games
 com.google.android.syncadapters.contacts
 "
 
-    echo '进入待机模式'
+    echo 'Enter standby mode'
     echo ''
-    echo '此过程可能需要 10~60 秒'
+    echo 'This process may require 10~60 seconds'
     echo ''
-    echo '冻结所有第三方应用'
+    echo 'Freeze all third-party applications'
     echo ''
 
     for app in $apps; do
@@ -42,16 +42,16 @@ com.google.android.syncadapters.contacts
 
     settings put global low_power 1;
 
-    echo "开启应用自动限制 可能需要Android Pie"
+    echo "Enabling automatic application restrictions may require Android Pie"
     settings put global app_auto_restriction_enabled true
 
-    echo "开启应用强制standby"
+    echo "Turn on the application to force standby"
     settings put global forced_app_standby_enabled 1
 
-    echo "开启应用standby"
+    echo "Turn on the application standby"
     settings put global app_standby_enabled 1
 
-    echo "开启安卓原生的省电模式"
+    echo "Turn on Android's native power saving mode"
     settings put global low_power 1
 
     sync
@@ -62,7 +62,7 @@ com.google.android.syncadapters.contacts
     input keyevent 26
     sleep 5
 
-    echo "进入闲置状态"
+    echo "Enter idle status"
     dumpsys deviceidle step
     dumpsys deviceidle step
     dumpsys deviceidle step
@@ -70,8 +70,8 @@ com.google.android.syncadapters.contacts
 }
 
 function off() {
-    echo '退出待机模式'
-    echo '此过程可能需要 10~60 秒'
+    echo 'Exit standby mode'
+    echo 'This process may require 10~60 seconds'
     echo ''
 
     for app in `pm list package | cut -f2 -d ':'`; do
@@ -83,16 +83,16 @@ function off() {
 
     settings put global low_power 0;
 
-    echo "关闭应用自动限制 可能需要Android Pie"
+    echo "Turning off automatic app restrictions may require Android Pie"
     settings put global app_auto_restriction_enabled false
 
-    echo "关闭应用强制standby"
+    echo "Close the application to force standby"
     settings put global forced_app_standby_enabled 0
 
-    echo "开启应用standby"
+    echo "Turn on the application standby"
     settings put global app_standby_enabled 1
 
-    echo "关闭安卓原生的省电模式"
+    echo "Turn off Android's native power saving mode"
     settings put global low_power 0
 
     setprop $prop 0

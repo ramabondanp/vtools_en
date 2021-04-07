@@ -41,22 +41,22 @@ do
 
    case "$property" in
    "CPU temperatures")
-        echo "CPU核心温度：" $value
+        echo "CPU core temperature :" $value
    ;;
    "CPU throttling temperatures")
-        echo "CPU限制温度：" $value
+        echo "CPU limiting temperature :" $value
    ;;
    "CPU shutdown temperatures")
-        echo "CPU关机温度：" $value
+        echo "CPU shutdown temperature :" $value
    ;;
    "GPU temperatures")
-        echo "CPU核心温度：" $value
+        echo "GPU core temperature :" $value
    ;;
    "Battery temperatures")
-        echo "电池温度：" $value
+        echo "Battery temperature :" $value
    ;;
    "Skin temperatures")
-        echo "表面温度：" $value
+        echo "Surface temperature :" $value
    ;;
    esac
 done  < $cache

@@ -23,8 +23,8 @@ then
     ip=`ifconfig eth0 | grep "inet addr" | awk '{ print $2}' | awk -F: '{print $2}'` 2>/dev/null
 fi
 
-echo "在连接了和手机相同网络(局域网)的电脑上"
-echo '通过下面的命令'
+echo "On a computer that is connected to the same network (LAN) as the phone"
+echo 'With the following command'
 echo ''
 
 if [[ -n "$ip" ]]
@@ -34,4 +34,4 @@ else
     echo "adb connect 手机IP:5555"
 fi
 
-echo '来连接手机'
+echo 'to connect the phone'

@@ -8,9 +8,9 @@
             visible="if [[ `getprop persist.vtools.ext_all` != '1' ]]; then echo 1; fi"
             shell="hidden"
             reload="page"
-            warning="使用需要修改系统文件的功能，可能会由于兼容性或异常导致系统损坏，并且无法通过恢复出厂设置还原。确定要继续使用这些功能吗？">
-            <title>显示危险功能</title>
-            <desc>显示需要修改系统文件的功能</desc>
+            warning="Using features that require modification of system files may result in system corruption due to compatibility or exceptions and cannot be restored by restoring factory settings. Sure you want to continue using these features?">
+            <title>Show danger function</title>
+            <desc>Show functions that require modification of system files</desc>
             <set>setprop persist.vtools.ext_all $state</set>
             <get>getprop persist.vtools.ext_all</get>
         </switch>
@@ -18,8 +18,8 @@
             visible="getprop persist.vtools.ext_all"
             shell="hidden"
             reload="page">
-            <title>显示危险功能</title>
-            <desc>显示需要修改系统文件的功能</desc>
+            <title>Show danger function</title>
+            <desc>Show functions that require modification of system files</desc>
             <set>setprop persist.vtools.ext_all $state</set>
             <get>getprop persist.vtools.ext_all</get>
         </switch>
@@ -27,30 +27,30 @@
 
     <group>
         <switch visible="run common/android_n.sh" shell="hidden">
-            <title>强制分屏</title>
-            <desc>适用于Android 7.0+，同开发者设置中的“强制将Activity设为可调整大小”选项。开启此项，从而对声明支持分屏的应用进行分屏操作！</desc>
+            <title>Forced split screen</title>
+            <desc>For Android 7.0+, same as the "Force resizable Activity" option in developer settings. Turn this on to enable split-screen operation for apps that declare split-screen support!</desc>
             <get>run general/force_resize_get.sh</get>
             <set>run general/force_resize_set.sh</set>
         </switch>
 
         <switch visible="getprop persist.vtools.ext_all">
-            <title>虚拟键设备</title>
-            <desc>标识当前设备没有实体按键，MIUI系统可以通过本功能启用全面屏手势，其它系统可以启用虚拟键。重启生效！</desc>
+            <title>Virtual key device</title>
+            <desc>Mark the current device without physical buttons, MIUI system can enable full-screen gestures by this function, other systems can enable virtual keys. Reboot to take effect!</desc>
             <get>run general/mainkey_get.sh</get>
             <set>run general/mainkey_set.sh</set>
         </switch>
 
         <action shell="hidden">
-            <title>过渡动画时长</title>
-            <desc>调整各种动画时长</desc>
+            <title>Transition animation length</title>
+            <desc>Adjust the length of various animations</desc>
             <params>
-                <param name="w" title="弹窗动画时长"
+                <param name="w" title="Duration of pop-up animation"
                     options-sh="run general/animation/options.sh" value="1"
                     value-sh="settings get global window_animation_scale" />
-                <param name="transition" title="界面切换动画时长"
+                <param name="transition" title="Interface switching animation length"
                     options-sh="run general/animation/options.sh" value="1"
                     value-sh="settings get global transition_animation_scale" />
-                <param name="animator" title="动画程序时长"
+                <param name="animator" title="Length of animation program"
                     options-sh="run general/animation/options.sh" value="1"
                     value-sh="settings get global animator_duration_scale" />
             </params>
@@ -62,21 +62,21 @@
         <page
             id="page-xiaomi"
             config="miui/miui.xml"
-            desc="适用于MIUI系统的选项" title="MIUI专属"
+            desc="Options for MIUI system" title="MIUI Exclusive"
             visible="run common/miui_support.sh" />
         <page
             id="page-google"
             config="aosp/aosp.xml"
-            desc="越接近原生的系统越适用" title="AOSP专属" />
+            desc="The closer to the native system the more applicable" title="AOSP Exclusive" />
         <page
             id="page-meizu"
             config="flyme/flyme.xml"
-            desc="适用于Flyme系统的选项" title="Flyme专属"
+            desc="Options for Flyme system" title="Flyme Exclusive"
             visible="run common/flyme_support.sh" />
         <page
             id="page-mtk"
             config-sh="file:///android_asset/kr-script/mtk/mtk.sh"
-            desc="MTK/天玑专属选项" title="MTK/天玑专属"
+            desc="MTK/Tenguiz exclusive option" title="MTK/Tenguiz exclusive"
             visible="run common/mtk_ppm.sh" />
     </group>
 
@@ -84,23 +84,23 @@
         <page
             id="page-performance"
             config="performance/performance.xml"
-            desc="设备性能调节和性能优化" title="运行性能" />
+            desc="Device performance tuning and performance optimization" title="Operational Performance" />
         <page
             id="page-battery"
             config="battery/battery.xml"
-            desc="耗电记录、低电量" title="电池、充电" />
+            desc="Power consumption record, low power" title="Battery, charging" />
         <page
             id="page-apps"
             config="apps/apps.xml"
-            desc="第三方应用程序相关选项" title="应用程序" />
+            desc="Third-party application-related options" title="Applications" />
         <page
             id="page-developer"
             config="developer/developer.xml"
-            desc="适用于开发者的功能" title="开发者工具" />
+            desc="Features for developers" title="Developer Tools" />
         <page
             id="page-other"
             config="other/other.xml"
-            desc="其它杂七杂八的功能" title="杂项" />
+            desc="Other misc functions" title="Misc" />
     </group>
 
     <group>
@@ -108,12 +108,12 @@
             id="page-outdated"
             config="outdated/outdated.xml"
             confirm="true"
-            desc="一些由于效用不佳而被废弃的功能" title="废弃的功能" />
+            desc="Some features that have been deprecated due to lack of usefulness" title="Obsolete functions" />
     </group>
 
     <group>
         <page
             html="https://vtools.oss-cn-beijing.aliyuncs.com/"
-            desc="Scene 官网" title="Scene 官网在线页面" />
+            desc="Scene official website" title="Scene official web online page" />
     </group>
 </pages>

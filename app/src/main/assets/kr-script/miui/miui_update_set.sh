@@ -17,14 +17,14 @@ if [[ "$MAGISK_PATH" != "" ]]; then
     fi
     pm clear com.android.updater 2> /dev/null
 
-    echo '此操作需要重启手机方可生效！'
+    echo 'This operation requires a restart of the phone to take effect!'
 else
     # 非 Magisk 替换
 
     source ./kr-script/common/mount.sh
     mount_all
 
-    echo '屏蔽MIUI在线更新下载地址(需要解锁System分区)...'
+    echo 'Block MIUI online update download address(System partition needs to be unlocked)...'
 
     path="/system/etc/hosts"
     $BUSYBOX sed '/127.0.0.1\ \ \ \ \ \ \ update.miui.com/'d $path > /cache/hosts
@@ -32,7 +32,7 @@ else
     if [[ ! $state = 1 ]]; then
         $BUSYBOX sed -i '$a127.0.0.1\ \ \ \ \ \ \ update.miui.com' /cache/hosts
         pm clear com.android.updater 2> /dev/null
-        echo '已添加“127.0.0.1        update.miui.com”到hosts'
+        echo 'Added "127.0.0.1        update.miui.com" to hosts'
     fi;
 
     cp /cache/hosts $path
@@ -40,6 +40,6 @@ else
     rm /cache/hosts
     sync
 
-    echo '可能需要重启手机才会生效！'
+    echo 'You may need to reboot your phone for this to take effect!'
 fi
 

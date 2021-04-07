@@ -1,9 +1,9 @@
 #!/system/bin/sh
 
-echo '使用本功能，需要解锁system分区，否则修改无效！'
-echo 'MIUI自带的ROOT无法使用本功能'
+echo 'To use this function, you need to unlock the system partition, otherwise the modification is invalid!'
+echo 'MIUI comes with ROOT can not use this function'
 
-echo '挂载/system为读写'
+echo 'Mount/system for rw'
 source ./kr-script/common/mount.sh
 mount_all
 
@@ -11,11 +11,11 @@ model=`getprop ro.product.device`
 for config in `ls "/system/etc/device_features/$model.xml"`
 do
     if [ ! -f "$config.bak" ]; then
-        echo '备份文件...'
+        echo 'Backup files...'
         cp $config $config.bak
     fi;
 
-    echo '修改文件...'
+    echo 'Modify file...'
     $BUSYBOX sed -i '/.*<!--whether round corner-->/'d "$config"
     $BUSYBOX sed -i '/.*<bool name="support_round_corner">.*<\/bool>/'d "$config"
 
@@ -30,6 +30,6 @@ do
     sync
     chmod 755 $config
 
-    echo '操作完成，请重启手机！'
+    echo 'Operation completed, please restart your phone!'
     return
 done

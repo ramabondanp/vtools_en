@@ -23,4 +23,4 @@ else
     echo "persist.camera.eis.enable=${result2}"
 fi
 
-echo '已修改，可能需要重启才能生效！' 1>&2
+echo 'Modified, may require reboot to take effect!' 1>&2

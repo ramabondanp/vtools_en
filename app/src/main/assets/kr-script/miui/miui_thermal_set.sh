@@ -17,6 +17,6 @@ else
 fi
 settings put secure accessibility_enabled 1;
 
-echo '如果没有报错（红色字体），那么现在去“设置 - 电池和性能”看看，是不是已经有温控模式选项了吧！'
+echo 'If no error is reported (red font), then now go to "Settings - Battery and Performance" to see if there is already a temperature control mode option!'
 
 sleep 1

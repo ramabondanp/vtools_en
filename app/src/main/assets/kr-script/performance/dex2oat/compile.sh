@@ -1,7 +1,7 @@
 #!/system/bin/sh
 
-echo '编译模式：' $mode
-echo '开始执行...'
+echo 'Compilation mode：' $mode
+echo 'Start execution...'
 echo ''
 
 for item in `pm list packages $app`

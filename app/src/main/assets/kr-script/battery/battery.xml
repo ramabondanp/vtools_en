@@ -1,10 +1,10 @@
-﻿<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <root>
     <resource dir="file:///android_asset/kr-script/battery" />
     <group>
         <action confirm="true">
-            <title>清理电池优化白名单</title>
-            <desc>适用于Android M+，清理Doze模式白名单应用（某些系统喜欢把一些应用自动添加到白名单，导致这些应用无法被休眠！）</desc>
+            <title>Clean up battery optimization whitelist</title>
+            <desc>For Android M+, clean up Doze mode whitelist applications (some systems like to add some applications to the whitelist automatically, resulting in these applications not being able to be hibernated!</desc>
             <set>run doze_clear.sh</set>
         </action>
 
@@ -12,23 +12,23 @@
             id="HighPowerApplicationsActivity"
             activity="com.android.settings/.Settings$HighPowerApplicationsActivity"
             logo-path="kr-script/battery/power_icon.png">
-            <title>电池优化</title>
-            <desc>进入系统的电池优化设置界面</desc>
+            <title>Battery Optimization</title>
+            <desc>Go to the system's battery optimization settings screen</desc>
         </page>
     </group>
 
     <group>
         <action confirm="true">
-            <title>清空耗电记录</title>
-            <desc>清空应用耗电记录和电池曲线数据，并不是还原电池寿命！</desc>
+            <title>Clear power consumption records</title>
+            <desc>Clearing application power consumption records and battery curve data does not restore battery life!</desc>
             <set>run history_clear.sh</set>
         </action>
     </group>
 
-    <group title="实验性待机模式" visible=". ./kr-script/common/android_p.sh">
+    <group title="Experimental standby mode" visible=". ./kr-script/common/android_p.sh">
         <switch auto-off="true" auto-finish="true" id="extreme_power" logo-path="kr-script/battery/extreme_power.png">
-            <title>待机模式</title>
-            <desc>杀死并冻结所有第三方应用，并进入锁屏状态</desc>
+            <title>Standby mode</title>
+            <desc>Kill and freeze all third-party apps and go to lock screen</desc>
             <get>getprop persist.vtools.suspend</get>
             <set>run extreme_power.sh</set>
         </switch>

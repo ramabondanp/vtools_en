@@ -98,13 +98,13 @@ function modify_vm_params2()
     fi
 }
 
-echo '测试需要2G以上的可用存储空间'
-echo '建议把CPU开到最高性能再测啦！'
-echo '同步写会使缓存增益失效，更能反映存储芯片的的真实性能！'
+echo 'Testing requires more than 2G of available storage space'
+echo 'It is recommended to open the CPU to the highest performance and then test it!'
+echo 'A synchronous write will invalidate the cache gain and better reflect the true performance of the memory chip!'
 echo ''
 
 rm -f $cache 2> /dev/null
-echo '\n缓存写测试...'
+echo '\nCache write test...'
 sync
 echo 3 > /proc/sys/vm/drop_caches
 echo "progress:[-1/5]"
@@ -116,7 +116,7 @@ echo 3 > /proc/sys/vm/drop_caches
 
 modify_vm_params2
 rm -f $cache 2> /dev/null
-echo '\n常规写测试...'
+echo '\nRegular write test...'
 sync
 echo 3 > /proc/sys/vm/drop_caches
 echo "progress:[-1/5]"
@@ -127,7 +127,7 @@ sync
 echo 3 > /proc/sys/vm/drop_caches
 echo "progress:[1/5]"
 
-echo '\n同步写测试...'
+echo '\nSync Write Test...'
 $BUSYBOX dd if=/dev/zero of=$cache bs=1048576 count=1024 conv=fsync 1>&2
 sync
 echo 3 > /proc/sys/vm/drop_caches
@@ -136,22 +136,22 @@ restore_vm_params
 
 if [[ -e /dev/block/sda ]];
 then
-    echo '\n缓存 读测试...'
+    echo '\nCache Read Test...'
     $BUSYBOX hdparm -T /dev/block/sda 1>&2
     echo "progress:[3/5]"
 
-    echo '\n常规 读测试...'
+    echo '\nGeneral Read Test...'
     $BUSYBOX hdparm -t /dev/block/sda 1>&2
     echo "progress:[4/5]"
 elif [[ -e /dev/block/mmcblk0 ]]
 then
-    echo '\n常规 读取测试...'
+    echo '\nGeneral Read Test...'
     $BUSYBOX dd if=/dev/block/mmcblk0 of=/dev/null bs=1048576 count=2048 1>&2
     echo "progress:[4/5]"
 fi
 
 echo ''
-echo '结束，回收缓存'
+echo 'End, recycle cache'
 rm -f $cache 2> /dev/null
 sync
 echo 3 > /proc/sys/vm/drop_caches

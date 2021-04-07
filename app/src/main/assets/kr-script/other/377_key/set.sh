@@ -11,13 +11,13 @@ if [[ "$state" != "" ]] && [[ "$state" != "INFO" ]]; then
 
         busybox sed -i "s/^key 377.*/key 377   $state/" $MAGISK_PATH$file
         echo $state
-        echo '此修改，需要重启手机才能生效！' 1>&2
+        echo 'This modification, need to reboot the phone to take effect!' 1>&2
     else
-        echo '未安装附加模块，无法应用修改~' 1>&2
+        echo 'No add-on module installed, no changes can be applied~' 1>&2
     fi
 else
     if [[ -f $MAGISK_PATH$file ]]; then
         rm $MAGISK_PATH$file
-        echo '此修改，需要重启手机才能生效！' 1>&2
+        echo 'This modification, need to reboot the phone to take effect!' 1>&2
     fi
 fi

@@ -13,7 +13,7 @@ magisk_set_system_prop $prop $value
 
 if [[ "$?" = "1" ]];
 then
-    echo "已通过Magisk更改 $prop，需要重启才能生效！"
+    echo "Changed $prop via Magisk, need to reboot to take effect!"
 else
     set_system_prop $prop $value
 fi

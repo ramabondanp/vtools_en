@@ -3,17 +3,17 @@
 
 if [[ $dirty_background_ratio -gt 30 ]]
 then
-    echo '注意：“最小缓冲容量”似乎被调的有些过大了'
+    echo 'Note: The "minimum buffer size" seems to have been adjusted a bit too large'
 fi
 
 if [[ $dirty_background_ratio -gt $dirty_ratio ]]
 then
-    echo '注意：“最小缓冲容量”大于“最大缓冲容量”可能会出现性能问题' 1>&2
+    echo 'Note: Performance problems may occur if the "minimum buffer size" is larger than the "maximum buffer size".' 1>&2
 fi
 
 if [[ $dirty_writeback_centisecs -gt $dirty_expire_centisecs ]]
 then
-    echo '注意：“缓存刷写频率”大于“缓存失效时间”可能会出现性能问题' 1>&2
+    echo 'Note: Performance problems may occur if the "cache flush frequency" is greater than the "cache expiration time".' 1>&2
 fi
 
 function update_kernel_prop() {
@@ -42,7 +42,7 @@ then
     echo $read_ahead_kb > /sys/block/sda/queue/read_ahead_kb
     if [[ $read_ahead_kb -gt 512 ]]
     then
-        echo '注意：读取缓冲调太大，可能会降低4K随机读取性能' 1>&2
+        echo 'Note: Read buffer tuning is too large, which may reduce 4K random read performance' 1>&2
     fi
 elif [[ -f /sys/block/mmcblk0/queue/read_ahead_kb ]]
 then
@@ -50,6 +50,6 @@ then
     echo $read_ahead_kb > /sys/block/mmcblk0/queue/read_ahead_kb
     if [[ $read_ahead_kb -gt 512 ]]
     then
-        echo '注意：读取缓冲调太大，可能会降低4K随机读取性能' 1>&2
+        echo 'Note: Read buffer tuning is too large, which may reduce 4K random read performance' 1>&2
     fi
 fi

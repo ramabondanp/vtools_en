@@ -9,12 +9,12 @@ filepath=""
 if [[ -n "$MAGISK_PATH" ]];
 then
     filepath="${MAGISK_PATH}/system.prop"
-    echo "你已安装Magisk，本次修改将通过操作进行"
-    echo 'Step1.挂载System为读写（跳过）...'
+    echo "You have already installed Magisk, this modification will be done through the operation"
+    echo 'Step1.Mount System as Read/Write (skip)...'
 else
     filepath="/system/build.prop"
 
-    echo 'Step1.挂载System为读写...'
+    echo 'Step1.Mount System as Read/Write...'
 
     source ./kr-script/common/mount.sh
     mount_all
@@ -25,14 +25,14 @@ else
     fi;
 fi;
 
-echo 'Step2.移除已有配置'
+echo 'Step2.Remove existing configuration'
 $BUSYBOX sed '/dalvik.vm.boot-dex2oat-threads=.*/'d $filepath > "/data/build.prop"
 $BUSYBOX sed -i '/dalvik.vm.dex2oat-threads=.*/'d "/data/build.prop"
 $BUSYBOX sed -i '/dalvik.vm.image-dex2oat-threads=.*/'d "/data/build.prop"
 $BUSYBOX sed -i '/ro.sys.fw.dex2oat_thread_count=.*/'d "/data/build.prop"
 
 
-echo 'Step2.更新配置'
+echo 'Step2.Update configuration'
 if [[ -n $boot ]]; then
     $BUSYBOX sed -i "\$adalvik.vm.boot-dex2oat-threads=$boot" /data/build.prop;
     $BUSYBOX sed -i "\$aro.sys.fw.dex2oat_thread_count=$boot" /data/build.prop;
@@ -50,10 +50,10 @@ if [[ -n $image ]]; then
     setprop dalvik.vm.image-dex2oat-threads $image 2> /dev/null
 fi;
 
-echo 'Step3.写入文件'
+echo 'Step3.Write to file'
 cp /data/build.prop $filepath
 chmod 0755 $filepath
 rm /data/build.prop
 
-echo '操作完成...'
-echo '现在，请重启手机使修改生效！'
+echo 'Operation completed...'
+echo 'Now, please reboot your phone to make the changes take effect!'

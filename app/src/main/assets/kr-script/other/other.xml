@@ -3,8 +3,8 @@
     <resource dir="file:///android_asset/kr-script/other" />
 
     <action id="addin_restart_systemui" shell="hidden">
-        <title>重启SystemUI</title>
-        <desc>结束SystemUI进程，使其重新加载</desc>
+        <title>Restart SystemUI</title>
+        <desc>End the SystemUI process and make it reload</desc>
         <set>
             am kill com.android.systemui 2> /dev/null
             killall -9 com.android.systemui 2> /dev/null
@@ -13,33 +13,33 @@
 
     <group>
         <action>
-            <title>查看已挂载分区</title>
-            <desc>通过简单的命令，查看当前已挂载的分区</desc>
+            <title>View Mounted Partitions</title>
+            <desc>View the currently mounted partitions with the simple command</desc>
             <set>df -h</set>
         </action>
         <action confirm="true">
-            <title>磁盘测速</title>
-            <desc>使用简单的命令检测磁盘连续读写速度，需要好几分钟</desc>
+            <title>Disk Speed Test</title>
+            <desc>Check disk sequential read and write speeds using simple commands that take several minutes</desc>
             <set>run disk_test.sh</set>
         </action>
     </group>
 
     <group>
         <action confirm="false">
-            <title>硬件参数</title>
-            <desc>查看系统提供的硬件参数信息</desc>
+            <title>Hardware Parameters</title>
+            <desc>Check the hardware parameter information provided by the system</desc>
             <set>run hw_properties.sh</set>
         </action>
         <action confirm="false">
-            <title>温度传感器</title>
-            <desc>查看温度传感器当前数值</desc>
+            <title>Temperature Sensor</title>
+            <desc>View the current value of the temperature sensor</desc>
             <set>run sensor_values.sh</set>
         </action>
         <picker
             visible="run 377_key/support.sh"
             options-sh="run 377_key/options.sh"
             shell="hidden">
-            <title>Google键事件</title>
+            <title>Google key events</title>
             <summary sh="run 377_key/summary.sh" />
             <get>run 377_key/get.sh</get>
             <set>run 377_key/set.sh</set>
@@ -48,8 +48,8 @@
 
     <group>
         <switch shell="hidden">
-            <title>高对比度模式</title>
-            <desc>锐化文字，并增强对比度，看容易看清文字</desc>
+            <title>High Contrast Mode</title>
+            <desc>Sharpen text and enhance contrast to make it easy to see the text</desc>
             <get>settings get secure high_text_contrast_enabled</get>
             <set>settings put secure high_text_contrast_enabled $state</set>
         </switch>
@@ -58,7 +58,7 @@
             auto-finish="true"
             shell="hidden"
             id="display_daltonizer">
-            <title>色彩校正</title>
+            <title>Color correction</title>
             <get>settings get secure accessibility_display_daltonizer_enabled</get>
             <set>
                 mode=`settings get secure accessibility_display_daltonizer`
@@ -69,12 +69,12 @@
             </set>
         </switch>
         <picker auto-off="true" shell="hidden">
-            <title>色彩校正模式</title>
+            <title>Color correction mode</title>
             <options>
-                <option value="0">黑白模式</option>
-                <option value="1">红色视弱（红绿不分）</option>
-                <option value="2">绿色视弱（红绿不分）</option>
-                <option value="3">蓝色视弱（蓝黄不分）</option>
+                <option value="0">Black and white mode</option>
+                <option value="1">Red visual weakness (red and green indistinguishable)</option>
+                <option value="2">Green vision weakness (red and green indistinguishable)</option>
+                <option value="3">Blue vision weakness (blue-yellow indistinguishable)</option>
             </options>
             <get>settings get secure accessibility_display_daltonizer</get>
             <set>settings put secure accessibility_display_daltonizer $state</set>
@@ -83,9 +83,9 @@
 
     <group>
         <action id="PixivID" logo="../icons/pixiv.png" shell="hidden" auto-finish="true">
-            <title>查看Pixiv作品</title>
-            <desc>输入Pixiv作品ID，访问其网页地址</desc>
-            <param name="id" label="作品ID" placeholder="如：82661417" desc="天朝网络环境，请自备楼梯" />
+            <title>View Pixiv's work</title>
+            <desc>Enter the Pixiv work ID and visit its web address</desc>
+            <param name="id" label="Work ID" placeholder="For example: 82661417" desc="Please bring your own stairs for the network environment in China" />
             <set>
                 am start -a android.intent.action.VIEW -d https://www.pixiv.net/artworks/$id
             </set>

@@ -75,7 +75,7 @@ function cat_prop_is_0()
 function magisk_set_system_prop() {
     if [[ -d "$MAGISK_PATH" ]];
     then
-        echo "你已安装Magisk，本次修改将通过操作进行"
+        echo "You have already installed Magisk, this modification will be done through the operation"
         $BUSYBOX sed -i "/$1=/"d "$MAGISK_PATH/system.prop"
         $BUSYBOX echo "$1=$2" >> "$MAGISK_PATH/system.prop"
         setprop $1 $2 2> /dev/null
@@ -94,24 +94,24 @@ function set_system_prop() {
         local path="/vendor/build.prop"
     fi
 
-    echo '使用本功能，需要解锁system分区，否则修改无效！'
-    echo '系统自带的ROOT可能无法使用本功能'
+    echo 'To use this function, you need to unlock the system partition, otherwise the modification is invalid!'
+    echo 'The system comes with ROOT may not be able to use this function'
 
-    echo 'Step1.挂载/system为读写'
+    echo 'Step1.Mount/system rw'
     mount_all
 
     $BUSYBOX sed "/$prop=/"d $path > /cache/build.prop
     $BUSYBOX echo "$prop=$state" >> /cache/build.prop
     echo "Step2.修改$prop=$state"
 
-    echo 'Step3.写入文件'
+    echo 'Step3.Write to file'
     cp /cache/build.prop $path
     chmod 0755 $path
 
-    echo 'Step4.删除临时文件'
+    echo 'Step4.Delete temporary files'
     rm /cache/build.prop
     sync
 
     echo ''
-    echo '重启后生效！'
+    echo 'Effective after reboot!'
 }

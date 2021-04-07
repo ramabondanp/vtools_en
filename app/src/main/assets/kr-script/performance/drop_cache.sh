@@ -7,11 +7,11 @@ function display_mb() {
 
 # free -m
 before=`cat /proc/meminfo  | grep MemAvailable | cut -F2`
-echo -n '清理之前： '
+echo -n 'Before cleaning up： '
 display_mb $before
 echo ''
 
-echo -n '清理之后： '
+echo -n 'After the cleanup： '
 
 sync;
 echo 3 > /proc/sys/vm/drop_caches;
@@ -25,7 +25,7 @@ echo ''
 echo ''
 echo '#################'
 echo ''
-echo -n '回收内存： '
+echo -n 'Recovered memory： '
 
 display_mb $(expr $after - $before)
 echo ''

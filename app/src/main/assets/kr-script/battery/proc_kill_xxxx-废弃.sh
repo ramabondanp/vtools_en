@@ -33,6 +33,6 @@ fi
 #stop thermal-engine 2> /dev/null
 #killall -9 magiskd 2> /dev/null
 
-echo '执行完成，立即生效！'
+echo 'Execution complete, effective immediately!'
 
-echo '注意：重启手机后此操作会失效！'
+echo 'Note: This operation will not work after restarting your phone!'

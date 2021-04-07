@@ -1,11 +1,11 @@
 settings put secure ui_night_mode $state
-echo '这得看人品，不一定能切换成功'
+echo 'It depends on the person's character, may not be able to switch successfully'
 if [[ $hotreboot = "1" ]]; then
-  echo '3秒后自动重启'
+  echo 'Automatic restart after 3 seconds'
   sync
   sleep 3
   # busybox killall system_server
   reboot
 else
-  echo '部分系统可能需要重启手机才会生效'
+  echo 'Some systems may require a reboot of the phone to take effect'
 fi

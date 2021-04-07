@@ -1,10 +1,10 @@
 base_dir="/data/user/$ANDROID_UID/com.xiaomi.market/files"
 res_dir=`ls $base_dir | grep web-res- | tail -1`
 if [[ "$res_dir" == "" ]]; then
-    echo '找到资源文件夹' 1>&2
+    echo 'Find the resources folder' 1>&2
     return
 fi
-echo 找到资源文件夹 $res_dir
+echo 'Find the resources folder' $res_dir
 
 function override_file() {
   local page="$1"
@@ -19,47 +19,47 @@ function override_file() {
     chmod 777 $css_override
     chmod 777 "$html_file"
   else
-    echo '未找到' $html_file 1>&2
+    echo 'Not found' $html_file 1>&2
   fi
 
   echo ''
 }
 
-echo '在使用本功能前，请务必打开一次应用商店的各个界面~'
+echo 'Before using this function, please make sure to open each screen of the app store once~'
 echo ''
 
 if [[ "$res_dir" = "" ]];
 then
-  echo '请先启动一次应用商店，并浏览各个界面~' 1>&2
+  echo 'Please start the app store once and navigate through the various screens~' 1>&2
   exit 1
 fi
 
-echo '本功能最佳适配：'
-echo '应用商店20.9.14(4001240)，web-res-1749'
+echo 'This function is best suited for：'
+echo 'App Store 20.9.14(4001240)，web-res-1749'
 echo ''
 
-echo '精简[应用详情]~'
+echo 'Streamline [Application Details]~'
 override_file "detailV2"
 
-echo '精简[必备]~'
+echo 'Streamline [Essential]~'
 override_file "essential"
 
-echo '精简[游戏]~'
+echo 'Streamline [Game]~'
 override_file "g-feature"
 
-echo '精简[首页]~'
+echo 'Streamline [Home]~'
 override_file "index"
 
-echo '精简[我的]~'
+echo 'Streamline [my]~'
 override_file "mine"
 
-echo '精简[排行榜]~'
+echo 'Streamline [Leaderboard]~'
 override_file "rank"
 
-echo '精简[搜索]~'
+echo 'Streamline [search]~'
 override_file "search-guide"
 
-echo '精简[软件]~'
+echo 'Streamline [Software] ~'
 override_file "software"
 
 killall -9 com.xiaomi.market 2>/dev/null
@@ -67,6 +67,6 @@ killall -9 com.xiaomi.market 2>/dev/null
 versionCode=`dumpsys package com.xiaomi.market | grep versionCode | cut -f2 -d '=' | cut -f1 -d ' ' | head -1`
 if [[ $versionCode < 4001102 ]] || [[ $versionCode > 4001240 ]]
 then
-  echo '你的[应用商店]不是本功能最佳适配版本，部分修改可能不生效~'
+  echo 'Your [App Store] is not the best version for this feature, some changes may not be effective~'
   # 最佳适配 4001240，web-res-1749
 fi

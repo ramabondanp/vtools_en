@@ -12,16 +12,16 @@ function _replace_file() {
 
     if [[ "$mg" = 1 ]]
     then
-        echo "通过Magisk替换 $output"
+        echo "Replace by Magisk $output"
         magisk_replace_file $resource $output
         success="$?"
         if [[ "$success" = 1 ]]; then
-            echo '操作成功，请重启手机！'
+            echo 'Operation successful, please restart your phone!'
         else
-            echo '操作失败...' 1>&2
+            echo 'Operation failure...' 1>&2
         fi
     else
-        echo "替换 $output"
+        echo "Replace $output"
         mount_all
 
         # 备份资源
@@ -49,7 +49,7 @@ function _restore_file() {
         local file_in_magisk="$?"
 
         if [[ "$file_in_magisk" = "1" ]]; then
-            echo "从Magisk模块移除 $output"
+            echo "Remove from Magisk module $output"
             magisk_cancel_replace $output
             success="$?"
             if [[ "$success" = 1 ]]; then
@@ -59,18 +59,18 @@ function _restore_file() {
 
                     if [[ "$md5" = "$verify" ]]
                     then
-                        echo '请重启手机使更改生效！' 1>&2
+                        echo 'Please restart your phone to make the changes take effect!' 1>&2
                     else
-                        echo '请重启手机使更改生效！'
+                        echo 'Please restart your phone to make the changes take effect!'
                     fi
                 else
-                    echo '操作完成...'
+                    echo 'Operation completed...'
                 fi
             else
-                echo '操作失败...' 1>&2
+                echo 'Operation failure...' 1>&2
             fi
         else
-            echo "还原 $output"
+            echo "Restore $output"
             # 物理还原文件
             mount_all
             if [[ -f "$output.bak" ]]
@@ -80,7 +80,7 @@ function _restore_file() {
             rm -f $output
         fi
     else
-        echo "还原 $output"
+        echo "Restore $output"
         # 移除副本
         rm -f $output
         # 物理还原文件

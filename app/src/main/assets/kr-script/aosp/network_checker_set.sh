@@ -12,7 +12,7 @@ then
     settings put global captive_portal_use_https 1
     settings put global captive_portal_mode 1
     settings put global captive_portal_detection_enabled 1
-    echo '已将网络校验服务器更改为 https://connect.rom.miui.com/generate_204'
+    echo 'Changed the network validation server to https://connect.rom.miui.com/generate_204'
 else
     settings delete global captive_portal_server
     settings reset global captive_portal_server
@@ -26,9 +26,9 @@ else
     settings reset global captive_portal_mode
     settings delete global captive_portal_detection_enabled
     settings reset global captive_portal_detection_enabled
-    echo '已重置网络校验参数'
+    echo 'Network calibration parameters have been reset'
 fi
 
-echo '重启网络'
+echo 'Rebooting the network'
 settings put global airplane_mode_on 0;
 am broadcast -a android.intent.action.AIRPLANE_MODE --ez state false 2> /dev/null

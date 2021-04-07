@@ -1,7 +1,7 @@
-echo '关闭自动旋转'
+echo 'Turn off auto-rotation'
 # content insert --uri content://settings/system --bind name:s:accelerometer_rotation --bind value:i:0
 settings put system accelerometer_rotation 0
 
-echo '设置屏幕方向'
+echo 'Set screen orientation'
 # content insert --uri content://settings/system --bind name:s:user_rotation --bind value:i:$state
 settings put system user_rotation $state

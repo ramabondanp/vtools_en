@@ -31,7 +31,7 @@ done
 # 切换桌面
 activity="$state"
 if [[ "$activity" != "" ]]; then
-    echo "切换桌面为[$activity]"
+    echo "Switching the desktop to [$activity]"
     pm set-home-activity $activity --user ${ANDROID_UID}
 fi
 

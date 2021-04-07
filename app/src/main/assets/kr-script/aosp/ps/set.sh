@@ -21,35 +21,35 @@ function killproc()
     killall -9 "$1" 2> /dev/null
 }
 
-echo '充电状态下可能无法使用省电模式'
+echo 'Power saving mode may not be available during charging'
 echo '-'
 
 if [[ $state = "1" ]]
 then
-    echo "开启应用自动限制 可能需要Android Pie"
+    echo "Enabling automatic app restrictions may require Android Pie"
     settings put global app_auto_restriction_enabled true
 
-    echo "开启应用强制standby"
+    echo "Turn on the application to force standby"
     settings put global forced_app_standby_enabled 1
 
-    echo "开启应用standby"
+    echo "Turn on the application standby"
     settings put global app_standby_enabled 1
 
-    echo "开启小容量电池设备应用强制standby"
+    echo "Turn on mandatory standby for small capacity battery device applications"
     settings put global forced_app_standby_for_small_battery_enabled 1
 
     ai=`settings get system ai_preload_user_state`
     if [[ ! "$ai" = "null" ]]
     then
-      echo "关闭MIUI10的ai预加载"
+      echo "Turn off ai preload in MIUI10"
       settings put system ai_preload_user_state 0
     fi
 
-    echo "开启安卓原生的省电模式"
+    echo "Turn on Android's native power saving mode"
     settings put global low_power 1
     settings put global low_power_sticky 1
 
-    echo "关闭调试服务和日志进程"
+    echo "Close debugging services and logging processes"
     killproc woodpeckerd
     # killproc debuggerd
     # killproc debuggerd64
@@ -72,8 +72,8 @@ then
     # killproc magiskd
     killproc magisklogd
 
-    echo "清理后台休眠白名单"
-    echo "请稍等..."
+    echo "Clean up background dormant whitelist"
+    echo "Please wait..."
     for item in `dumpsys deviceidle whitelist`
     do
         app=`echo "$item" | cut -f2 -d ','`
@@ -98,28 +98,28 @@ then
     dumpsys deviceidle step
     dumpsys deviceidle step
 
-    echo '注意：开启省电模式后，Scene可能会无法保持后台'
-    echo '并且，可能会收不到后台消息推送！'
+    echo 'Note: Scene may not be able to keep the background after power saving mode is turned on.'
+    echo 'And, you may not receive the background message push!'
     echo ''
 else
-    echo "关闭应用自动限制 可能需要Android Pie"
+    echo "Turning off automatic app restrictions may require Android Pie"
     settings put global app_auto_restriction_enabled false
 
-    echo "关闭应用强制standby"
+    echo "Close the application to force standby"
     settings put global forced_app_standby_enabled 0
 
-    echo "开启应用standby"
+    echo "Turn on the application standby"
     settings put global app_standby_enabled 1
 
-    echo "关闭小容量电池设备应用强制standby"
+    echo "Close the small capacity battery device application forced standby"
     settings put global forced_app_standby_for_small_battery_enabled 0
 
-    echo "关闭安卓原生的省电模式"
+    echo "Turn off Android's native power saving mode"
     settings put global low_power 0
     settings put global low_power_sticky 0
 fi
 
-echo '状态已切换，部分深度定制的系统此操作可能无效！'
+echo 'Status has been switched, some deeply customized systems this operation may not work!'
 echo '-'
 
 

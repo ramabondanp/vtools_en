@@ -3,10 +3,10 @@
 pm_cmd=""
 if [[ "$state" = "1" ]]; then
     pm_cmd="enable"
-    echo '√√  启用  Google服务套件'
+    echo '√√  Enable Google Service Suite'
 else
     pm_cmd="disable"
-    echo '××  停用  Google服务套件'
+    echo '××  Disable Google Service Suite'
 fi
 
 echo ''

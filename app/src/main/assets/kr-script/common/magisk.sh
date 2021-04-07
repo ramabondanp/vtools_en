@@ -25,7 +25,7 @@ function magisk_replace_file() {
         local result="$?"
         return $result
     else
-        echo "$input 不存在，无法复制到模块" 1>&2
+        echo "$input Does not exist and cannot be copied to the module" 1>&2
         return 0
     fi
 }

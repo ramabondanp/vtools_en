@@ -48,7 +48,7 @@ function get_row_state() {
 }
 
 function ppm_render() {
-    switch_hidden "启用PPM" "state=\`cat /proc/ppm/enabled | grep enabled\`; if [[ \$state != '' ]]; then echo 1; fi" "echo \$state > /proc/ppm/enabled"
+    switch_hidden "Enable PPM" "state=\`cat /proc/ppm/enabled | grep enabled\`; if [[ \$state != '' ]]; then echo 1; fi" "echo \$state > /proc/ppm/enabled"
 
     path="/proc/ppm/policy_status"
     cat $path | grep 'PPM_' | while read line
@@ -68,11 +68,11 @@ function ged_render() {
       # echo $line
       local title="$line"
       if [[ "$line" == "gpu_dvfs_enable" ]]; then
-        title="动态调频调压"
+        title="Dynamic frequency and voltage regulation"
       elif [[ "$line" == "ged_force_mdp_enable" ]]; then
-        title="强制使用MDP"
+        title="Forced use of MDP"
       elif [[ "$line" == "gx_game_mode" ]]; then
-        title="游戏模式"
+        title="Game Mode"
       else
         continue # 有些效果不佳的选项，暂时隐藏掉
       fi
@@ -84,9 +84,9 @@ function gpu_render() {
     local freqs=`cat /proc/gpufreq/gpufreq_opp_dump | awk '{printf $4 "\n"}' | cut -f1 -d ","`
     local get_shell="cat /proc/gpufreq/gpufreq_opp_freq | grep freq | awk '{printf \$4 \"\\\\n\"}' | cut -f1 -d ','"
 
-    echo "      <picker title=\"固定频率\" shell=\"hidden\" reload=\"@GPU\">"
+    echo "      <picker title=\"Fixed Frequency\" shell=\"hidden\" reload=\"@GPU\">"
     echo "          <options>"
-    echo "            <option value=\"0\">不固定</option>"
+    echo "            <option value=\"0\">Not fixed</option>"
     for freq in $freqs
     do
       echo "            <option value=\"$freq\">${freq}Khz</option>"
@@ -99,7 +99,7 @@ function gpu_render() {
 
     local dvfs=/proc/mali/dvfs_enable
     if [[ -f $dvfs ]]; then
-      switch_hidden "动态调频调压(DVFS)" "cat $dvfs | cut -f2 -d ' '" "echo \$state > $dvfs"
+      switch_hidden "Dynamic frequency and voltage regulation(DVFS)" "cat $dvfs | cut -f2 -d ' '" "echo \$state > $dvfs"
     fi
 }
 
@@ -155,15 +155,15 @@ group_start 'CPU'
   cpu_render
 group_end
 
-group_start '电池统计'
+group_start 'Battery Statistics'
     if [[ -f /sys/devices/platform/battery/reset_battery_cycle ]]
     then
-      action "清空电池循环计数" "将手机统计的电池循环次数归零（这并不会恢复电池容量）" "echo 1 &gt; /sys/devices/platform/battery/reset_battery_cycle"
+      action "Emptying the battery cycle count" "Zero the number of battery cycles counted by the phone (this does not restore the battery capacity)" "echo 1 &gt; /sys/devices/platform/battery/reset_battery_cycle"
     fi
 
     if [[ -f /sys/devices/platform/battery/reset_aging_factor ]]
     then
-      action "清空电池老化率" "将手机统计的电池老化率数值清空（并不会恢复电池寿命，重置此值可能导致低电量时突然关机！）" "echo 1 &gt; /sys/devices/platform/battery/reset_aging_factor"
+      action "Empty battery aging rate" "Clear the battery aging will clear the phone statistics of the battery aging rate value (does not restore the battery life, reset this value may lead to a sudden shutdown when the battery is low!" "echo 1 &gt; /sys/devices/platform/battery/reset_aging_factor"
     fi
 group_end
 xml_end
