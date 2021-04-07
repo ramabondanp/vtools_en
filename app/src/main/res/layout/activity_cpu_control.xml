@@ -88,7 +88,7 @@
                     android:layout_column="0"
                     android:layout_gravity="fill"
                     android:gravity="center_vertical"
-                    android:text="User's background application" />
+                    android:text="User's bg app" />
 
                 <TextView
                     android:id="@+id/cpuset_bg"
@@ -105,7 +105,7 @@
                     android:layout_column="0"
                     android:layout_gravity="fill"
                     android:gravity="center_vertical"
-                    android:text="system background application" />
+                    android:text="System bg app" />
 
                 <TextView
                     android:id="@+id/cpuset_system_bg"
@@ -122,7 +122,7 @@
                     android:layout_column="0"
                     android:layout_gravity="fill"
                     android:gravity="center_vertical"
-                    android:text="application running in the foreground" />
+                    android:text="Foreground app" />
 
                 <TextView
                     android:id="@+id/cpuset_foreground"
@@ -139,7 +139,7 @@
                     android:layout_column="0"
                     android:layout_gravity="fill"
                     android:gravity="center_vertical"
-                    android:text="Apps displayed on the upper layer" />
+                    android:text="Top app" />
 
                 <TextView
                     android:id="@+id/cpuset_top_app"
@@ -190,7 +190,7 @@
                     android:layout_column="0"
                     android:layout_gravity="fill"
                     android:gravity="center_vertical"
-                    android:text="minimum frequency" />
+                    android:text="Min frequency" />
 
                 <TextView
                     android:id="@+id/gpu_min_freq"
@@ -208,7 +208,7 @@
                     android:layout_column="0"
                     android:layout_gravity="fill"
                     android:gravity="center_vertical"
-                    android:text="Maximum frequency" />
+                    android:text="Max frequency" />
 
                 <TextView
                     android:id="@+id/gpu_max_freq"
@@ -227,7 +227,7 @@
                     android:layout_column="0"
                     android:layout_gravity="fill"
                     android:gravity="center_vertical"
-                    android:text="scheduling mode" />
+                    android:text="Governor Mode" />
 
                 <TextView
                     android:id="@+id/gpu_governor"

@@ -87,31 +87,31 @@
     <string name="menu_home">Overview</string>
     <string name="menu_paypal">Donation</string>
     <string name="menu_scene_mode">Scene Mode</string>
-    <string name="menu_app_scene">Apps</string>
-    <string name="menu_system_scene">System</string>
+    <string name="menu_app_scene">App Scene</string>
+    <string name="menu_system_scene">System Scene</string>
     <string name="menu_auto_click">Auto-click</string>
-    <string name="menu_cpu_modes">Performance</string>
-    <string name="menu_freeze">Apps Bias</string>
-    <string name="menu_battery_stats">Power Stat.</string>
-    <string name="menu_core_control">CPU</string>
+    <string name="menu_cpu_modes">Cpu Mode</string>
+    <string name="menu_freeze">App Freeze</string>
+    <string name="menu_battery_stats">Power Stats</string>
+    <string name="menu_core_control">CPU control</string>
     <string name="menu_sundry">Misc</string>
     <string name="menu_additional">Additional</string>
-    <string name="menu_applictions">App Manag.</string>
-    <string name="menu_swap">SWAP</string>
-    <string name="menu_battery">Charg. Ctrl.</string>
-    <string name="menu_charge">Charg. stats</string>
-    <string name="menu_custom_command">Custom</string>
-    <string name="menu_processes">Process</string>
+    <string name="menu_applictions">App Manager</string>
+    <string name="menu_swap">SWAP Menu</string>
+    <string name="menu_battery">Charging ctrl.</string>
+    <string name="menu_charge">Charging stats</string>
+    <string name="menu_custom_command">Custom cmd</string>
+    <string name="menu_processes">Process mgr</string>
     <string name="menu_app_magisk">Magisk</string>
     <string name="menu_gesture">Gesture</string>
-    <string name="menu_xposed_app">App sett</string>
-    <string name="menu_xposed_global">Global Sett</string>
+    <string name="menu_xposed_app">App setting</string>
+    <string name="menu_xposed_global">Global Setting</string>
     <string name="menu_filter">Screen filters</string>
-    <string name="menu_img">Backup</string>
-    <string name="menu_qq">Copyrights</string>
+    <string name="menu_img">Backup Restore</string>
+    <string name="menu_qq">QQ</string>
     <string name="menu_menu_title">Feedback</string>
     <string name="menu_share">Share App</string>
-    <string name="menu_miui_thermal">MIUI temp</string>
+    <string name="menu_miui_thermal">MIUI thermal</string>
 
     <string name="system">System</string>
 
@@ -219,125 +219,125 @@
     <string name="addin_bpc_desc">Turn off some options in Performance Boost Config to avoid power consumption caused by the CPU being pulled up frequently, but keep the application startup boost, which will slightly reduce the experience. A reboot is required!</string>
     <string name="addin_continue">Continue</string>
 
-    <string name="swap_on_close">Shutting down SWAP, this can be slow</string>
-    <string name="swap_current_state">Current status.</string>
+    <string name="swap_on_close">SWAP is being closed, which can be slow</string>
+    <string name="swap_current_state">Current state:</string>
     <string name="swap_memory_info">Memory Info</string>
     <string name="swap_vmstat">VM Stat</string>
     <string name="swap_io">SWAP IO</string>
-    <string name="swap_swappiness_desc">Description: \n higher value will be more aggressive use of SWAP, this setting on the smoothness of the impact is difficult to perceive, adjust as appropriate ~</string>
-    <string name="swap_swappiness">Description: \n higher value will be more aggressive use of SWAP, this setting on the smoothness of the impact is difficult to perceive, adjust as appropriate ~</string>
-    <string name="swap_zram">Swappiness</string>
-    <string name="swap_zram_adjustment">ZRAM</string>
-    <string name="swap_zram_desc">Adjust</string>
-    <string name="swap_zram_comp_options">Description: ZRAM is an implementation of SWAP. When available memory becomes insufficient, some of the data in memory is compressed. However, the CPU will become busy as a result~</string>
-    <string name="swap_zram_comp_algorithm_wran">Compression algorithm</string>
-    <string name="swap_zram_comp_algorithm_wran_desc">Change has not taken effect</string>
-    <string name="swap_swap">ZRAM is in use, and the compression algorithm cannot be changed now. \n\nTo make the settings take effect, please click the "Adjust" button below</string>
-    <string name="swap_create">Swapfile</string>
-    <string name="swap_start">Create</string>
-    <string name="swap_stop">Start</string>
-    <string name="swap_delete">Shutdown</string>
-    <string name="swap_zram_preferred">Delete</string>
-    <string name="swap_zram_equitable">Use up ZRAM before using</string>
-    <string name="swap_swap_preferred">Use at the same time as ZRAM</string>
-    <string name="swap_use_loop">Use in preference to ZRAM</string>
-    <string name="swap_use_loop_desc">Mount as loopback device</string>
-    <string name="swap_swap_desc">If you can use SWAP normally without turning this on, there is no need to turn it on. \n\nUnless it is impossible to start SWAP, or the phone crashes after starting SWAP, then you need to turn on this option! \n\nFor example: Xiaomi\'s SDM845 model in Android 9.0, you need to check this to use SWAP normally</string>
-    <string name="swap_auto_start">Description: Swapfile is similar to Windows virtual memory, the swap efficiency is limited by the disk performance. Please don\'t use this feature on small capacity or insufficient space phones to prevent the flash memory from aging too fast!</string>
-    <string name="swap_auto_start_desc">Boot Self-boot (to allow Scene to boot)</string>
-    <string name="swap_zram_stat">Note: You need to allow Scene to self boot for the next boot to take effect!</string>
-    <string name="swap_outside_module_installed">ZRAM status</string>
-    <string name="swap_zram_stat_desc">External add-on (Magisk) module is active</string>
-    <string name="swap_zram_stat_format">ZRAM compression ratio is usually between 20~45%</string>
-    <string name="swap_zram_stat_format2">Data compression algorithm: %s\nOriginal data size: %s\nCompressed size: %s\nPhysical memory footprint: %s\nMaximum memory footprint: %s\nMemory footprint limit: %s\nCompression rate : %s</string>
-    <string name="swap_zram_compact_algorithm">Data compression algorithm: %s\nOriginal data size: %s\nCompressed size: %s\nCompression rate : %s</string>
-    <string name="swap_state_undefined">Compression algorithm</string>
-    <string name="swap_state_created">Not created</string>
-    <string name="swap_state_using">Not started</string>
-    <string name="extra_free_kbytes">In use</string>
-    <string name="extra_free_kbytes_desc">extra_free_kbytes(KB)</string>
-    <string name="watermark_scale_factor">This value specifies how much extra physical memory the Linux kernel will reserve, and will immediately start compressing memory to SWAP/ZRAM when it runs low, and the device will become noticeably slower until the available memory comes back up to a reasonable range \n\n Simply put, the larger the extra_free_kbytes setting, the more aggressive the memory recycling/swapping, but it is not recommended to set it too large so as not to The larger the extra_free_kbytes setting, the more aggressive the memory recycling/swapping.</string>
-    <string name="watermark_scale_factor_desc">watermark_scale_factor</string>
+    <string name="swap_swappiness_desc">Description: \n higher value will be more aggressive use of SWAP, this setting has a hard to perceive impact on smoothness, adjust as appropriate~</string>
+    <string name="swap_swappiness">Swappiness</string>
+    <string name="swap_zram">ZRAM</string>
+    <string name="swap_zram_adjustment">Adjustment</string>
+    <string name="swap_zram_desc">Description: ZRAM is an implementation of SWAP. When available memory becomes insufficient, some of the data in memory is compressed. However, the CPU will become busy as a result~</string>
+    <string name="swap_zram_comp_options">Compression algorithms</string>
+    <string name="swap_zram_comp_algorithm_wran">Change did not take effect</string>
+    <string name="swap_zram_comp_algorithm_wran_desc">ZRAM is in use and the compression algorithm cannot be changed right now. \n\nTo make the settings take effect, click the "Adjust" button below</string>
+    <string name="swap_swap">Swapfile</string>
+    <string name="swap_create">Create</string>
+    <string name="swap_start">Start</string>
+    <string name="swap_stop">Shutdown</string>
+    <string name="swap_delete">delete</string>
+    <string name="swap_zram_preferred">Use up ZRAM before using it</string>
+    <string name="swap_zram_equitable">Use with ZRAM</string>
+    <string name="swap_swap_preferred">used before ZRAM</string>
+    <string name="swap_use_loop">Mount as loopback device</string>
+    <string name="swap_use_loop_desc">If you can use SWAP normally without this, there is no need to turn it on. \n\nUnless you can\'t start SWAP, or your phone dies after starting SWAP, you need to turn on this option! \n\nFor example: Xiaomi\'s SDM845 model in Android 9.0, you need to check this to use SWAP normally</string>
+    <string name="swap_swap_desc">Description: Swapfile is similar to Windows virtual memory, swap efficiency is limited by disk performance. Please do not use this feature on small or undersized phones to prevent the flash memory from aging too fast! </string>
+    <string name="swap_auto_start">Power-on self-start (to allow Scene to self-start)</string>
+    <string name="swap_auto_start_desc">Note: You need to allow Scene to self-start for the next boot to take effect! </string>
+    <string name="swap_zram_stat">ZRAM status</string>
+    <string name="swap_outside_module_installed">External add-on (Magisk) module is activated</string>
+    <string name="swap_zram_stat_desc">ZRAM compression typically ranges from 20 to 45%</string>
+    <string name="swap_zram_stat_format">Data compression algorithm: %s\n raw data size: %s\n compressed size: %s\n physical memory footprint: %s\n maximum memory footprint: %s\n memory footprint limit: %s\n compression rate : %s</string>
+    <string name="swap_zram_stat_format2">Data compression algorithm: %s\nOriginal data size: %s\nCompressed size: %s\nCompression rate : %s</string>
+    <string name="swap_zram_compact_algorithm">Compression algorithm</string>
+    <string name="swap_state_undefined">Not created</string>
+    <string name="swap_state_created">Not started</string>
+    <string name="swap_state_using">In use</string>
+    <string name="extra_free_kbytes">extra_free_kbytes(KB)</string>
+    <string name="extra_free_kbytes_desc">This value specifies how much extra physical memory the Linux kernel will reserve, and will immediately start compressing memory to SWAP/ZRAM when it runs low, and the device will become noticeably slower until the available memory comes back up to a reasonable range \n\n simply put extra_free_kbytes The larger the kbytes setting, the more aggressive the memory recycling/swapping, but it is not recommended to set it too large to avoid wasting physical memory and burdening the disk/processor! </string>
+    <string name="watermark_scale_factor">watermark_scale_factor</string>
+    <string name="watermark_scale_factor_desc"> values range from 0 to 1000, where 1000 means 10%, indicating a 10% difference (of physical RAM capacity) between each of the three values of the memory watermark low/min/high. \n\nFor example (my phone): \npageSize=4KB\nmanaged=1951743(pages)\nmin_free_kbytes=10900(KB)\nwatermark_scale_factor=500\n\n\nThe min value at this time is \n10900(KB)/4 (PageSize)=2725(pages)\nnlow value is about \n1951743*5%+2725≈100312(pages)\nhigh value is about \n1951743*10%+2725≈197899(pages)\nNote: The final low and high values may be affected by extra_ free_kbytes may be affected by extra_kbytes and be large \n\n this example, \nmin=2725=10MB\nlow=100312≈392MB\nhigh=197899≈773MB\n\n means that memory below 392M will start recycling memory until the available memory is higher than 773MB\n\n if you pursue the ultimate background capability and don\'t really care about performance and power consumption, you can turn the value up (but it\'s not recommended to exceed 500), while if you\'re concerned about smoothness it\'s recommended to set it to 100 or less~</string>
 
-    <string name="on_execute_please_wait">The value ranges from 0 to 1000, where 1000 means 10%, indicating that the difference between the three values of memory watermark low/min/high is 10% of each (physical RAM capacity). \n\nFor example (my phone): \npageSize=4KB\nmanaged=1951743(pages)\nmin_free_kbytes=10900(KB)\nwatermark_scale_factor=500\n\nThe min value at this time is \n10900(KB)/4 (PageSize)=2725(pages)\nnlow value is about \n1951743*5%+2725≈100312(pages)\nhigh value is about \n1951743*10%+2725≈197899(pages)\nNote: The final low and high values may be affected by extra_free_kbytes may be affected by extra_kbytes and be large \n\n this example, \nmin=2725=10MB\nlow=100312≈392MB\nhigh=197899≈773MB\n\n means that memory below 392M will start recycling memory until the available memory is higher than 773MB\n\n if you pursue the ultimate background If you are looking for the ultimate background capability and don\'t really care about performance and power consumption, you can turn the value up (but it is not recommended to exceed 500), while if you are concerned about smoothness it is recommended to set it to 100 or less~</string>
-    <string name="please_wait">Executing operation, please wait...</string>
-    <string name="executed">Please wait...</string>
-    <string name="file_creating">The operation has been completed!</string>
-    <string name="zram_resizing">File creation in progress</string>
-    <string name="priority">Adjusting, please be patient...</string>
-    <string name="order">Priority</string>
-    <string name="used">Order</string>
-    <string name="size">Used</string>
-    <string name="type">Size</string>
-    <string name="path">Type</string>
-    <string name="battery_low">Path</string>
-    <string name="sorry">Battery is low, please charge in time!</string>
-    <string name="powersave">Sorry</string>
-    <string name="balance">Power saving mode</string>
-    <string name="performance">Balance mode</string>
-    <string name="fast">Performance mode</string>
-    <string name="powersave_short">Speed mode</string>
-    <string name="balance_short">Power Saving</string>
-    <string name="performance_short">Balanced</string>
-    <string name="fast_short">Performance</string>
-    <string name="app_selected_none">Extreme</string>
-    <string name="help">Not a single app selected!</string>
-    <string name="warn">Help</string>
-    <string name="more">Warning</string>
-    <string name="not_support_config">Learn more</string>
-    <string name="not_support_config_desc">No available mode configuration script found</string>
-    <string name="first_start_select_config">The app does not come with a performance configuration script for your phone. You can choose "Get Scripts Online" to see if there are any available for your phone, or "Learn More" for a custom configuration tutorial!</string>
-    <string name="config_online_options">First time user, select configuration preferences first</string>
-    <string name="online_config_v1">Select the online script library</string>
-    <string name="online_config_v2">yc9559 Customization v</string>
+    <string name="on_execute_please_wait">Executing operation, please wait...</string>
+    <string name="please_wait">Please wait...</string>
+    <string name="executed">The operation has been completed! </string>
+    <string name="file_creating">Creating file in progress</string>
+    <string name="zram_resizing">Resizing, please be patient...</string>
+    <string name="priority">priority</string>
+    <string name="order">Order</string>
+    <string name="used">used</string>
+    <string name="size">size</string>
+    <string name="type">type</string>
+    <string name="path">path</string>
+    <string name="battery_low">The battery is low, please charge it! </string>
+    <string name="sorry">Sorry</string>
+    <string name="powersave">Power saving</string>
+    <string name="balance">Balance</string>
+    <string name="performance">Performance</string>
+    <string name="fast">Extreme speed</string>
+    <string name="powersave_short">Power saving</string>
+    <string name="balance_short">Balance</string>
+    <string name="performance_short">Performance</string>
+    <string name="fast_short">Extreme speed</string>
+    <string name="app_selected_none">None of the apps are selected! </string>
+    <string name="help">help</string>
+    <string name="warn">Warning</string>
+    <string name="more">Learn more</string>
+    <string name="not_support_config">No available schema configuration script found</string>
+    <string name="not_support_config_desc">The app does not come with a performance configuration script for your phone. You can choose "Get scripts online" to see if there is one available for your phone, or "Learn more" for a custom configuration tutorial! </string>
+    <string name="first_start_select_config">First time user, select configuration preferences first</string>
+    <string name="config_online_options">Select online script library</string>
+    <string name="online_config_v1">yc9559 customization v1</string>
+    <string name="online_config_v2">yc9559 custom v2</string>
 
-    <string name="config_installed">yc9559 Custom v</string>
-    <string name="ro_product_model">Configure and install successfully!</string>
-    <string name="ro_product_brand">ro.product.model=</string>
-    <string name="ro_product_name">ro.product.brand=</string>
-    <string name="ro_product_device">ro.product.name=</string>
-    <string name="ro_product_manufacturer">ro.product.device=</string>
-    <string name="auto_start">ro.product.manufacturer=</string>
-    <string name="boot_after_auto_modify">self-start</string>
-    <string name="core_control_helpinfo">Auto-modify after boot</string>
-    <string name="shell_executor">Some phones have a dynamic adjustment mechanism for CPU parameters, which will cause the custom parameters to fail soon, in addition, the temperature control will also restrict you from turning up the CPU frequency.</string>
+    <string name="config_installed">Configuration installed successfully! </string>
+    <string name="ro_product_model">ro.product.model=</string>
+    <string name="ro_product_brand">ro.product.brand=</string>
+    <string name="ro_product_name">ro.product.name=</string>
+    <string name="ro_product_device">ro.product.device=</string>
+    <string name="ro_product_manufacturer">ro.product.manufacturer=</string>
+    <string name="auto_start">self-start</string>
+    <string name="boot_after_auto_modify">Automatically modify after boot</string>
+    <string name="core_control_helpinfo">Some phones have a dynamic adjustment mechanism for CPU parameters, which can cause custom parameters to fail quickly, and temperature control can also limit you from cranking up the CPU frequency. </string>
+    <string name="shell_executor">script execution</string>
     <string-array name="default_powercfg_mode_options">
-        <item>Script execution</item>
         <item>Power saving mode</item>
-        <item>Balanced mode</item>
+        <item>General mode</item>
         <item>Performance mode</item>
+        <item>Extreme speed mode</item>
     </string-array>
     <string-array name="powercfg_modes_filter">
-        <item>Extreme mode</item>
         <item>All</item>
-        <item>Power Saving</item>
-        <item>Balanced</item>
+        <item>Power saving</item>
+        <item>Balance</item>
         <item>Performance</item>
         <item>Extreme Speed</item>
-        <item>Global Defaults</item>
+        <item>Global Default</item>
+        <item>Hold state</item>
     </string-array>
     <string-array name="powercfg_apptype_filter">
-        <item>Keep state</item>
         <item>Users</item>
         <item>System</item>
+        <item>All</item>
     </string-array>
 
-    <string name="cgroup_mem_title">all</string>
+    <string name="cgroup_mem_title">cgroup</string>
     <string-array name="cgroup_mem_options">
-        <item>cgroup</item>
-        <item>system defaults</item>
-        <item>General applications</item>
-        <item>Priority memory</item>
-        <item>Important processes</item>
-        <item>Restricted background</item>
+        <item>System default</item>
+        <item>General Application</item>
+        <item>Priority Memory</item>
+        <item>Important Processes</item>
+        <item>Constrained background</item>
+        <item>Reclaimed Memory</item>
     </string-array>
     <string-array name="cgroup_mem_values">
-        <item>Reclaimed Memory</item>
+        <item></item>
         <item>scene_lock</item>
         <item>scene_perf</item>
         <item>scene_sys</item>
         <item>scene_limit</item>
-        <item>scene_limit</item>
+        <item>scene_limit2</item>
     </string-array>
 
     <string name="title_activity_timing_task">Timed Tasks</string>

@@ -139,9 +139,9 @@ xml_start
         ppm_render
     group_end
 
-    # group_start 'GED'
-    #     ged_render
-    # group_end
+    group_start 'GED'
+         ged_render
+    group_end
 
 if [[ -f /proc/gpufreq/gpufreq_opp_freq ]]
 then
