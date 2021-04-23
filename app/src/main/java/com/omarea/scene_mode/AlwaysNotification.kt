@@ -10,6 +10,7 @@ import android.os.Build
 import android.os.SystemClock
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
+import com.omarea.Scene
 import com.omarea.data.EventType
 import com.omarea.data.GlobalStatus
 import com.omarea.data.IEventReceiver
@@ -21,7 +22,10 @@ import com.omarea.vtools.R
 /**
  * 常驻通知
  */
-internal class AlwaysNotification(private var context: Context, notify: Boolean = false, override val isAsync: Boolean = false) : ModeSwitcher(), IEventReceiver {
+internal class AlwaysNotification(
+        private var context: Context,
+        notify: Boolean = false,
+        override val isAsync: Boolean = false) : ModeSwitcher(), IEventReceiver {
     override fun eventFilter(eventType: EventType): Boolean {
         return eventType == EventType.SCENE_MODE_ACTION
     }
@@ -134,15 +138,16 @@ internal class AlwaysNotification(private var context: Context, notify: Boolean 
         } catch (ex: Exception) {
         }
 
-        val remoteViews = RemoteViews(context.packageName, R.layout.layout_notification)
-        remoteViews.setTextViewText(R.id.notify_title, getAppName(packageName))
-        remoteViews.setTextViewText(R.id.notify_text, getModName(mode))
-        remoteViews.setTextViewText(R.id.notify_battery_text, "$batteryIO ${GlobalStatus.batteryCapacity}% $batteryTemp")
-        if (modeImage != null) {
-            remoteViews.setImageViewBitmap(R.id.notify_mode, modeImage)
-        }
-        if (batteryImage != null) {
-            remoteViews.setImageViewBitmap(R.id.notify_battery_icon, batteryImage)
+        val remoteViews = this.getRemoteViews().apply {
+            setTextViewText(R.id.notify_title, getAppName(packageName))
+            setTextViewText(R.id.notify_text, getModName(mode))
+            setTextViewText(R.id.notify_battery_text, "$batteryIO ${GlobalStatus.batteryCapacity}% $batteryTemp")
+            if (modeImage != null) {
+                setImageViewBitmap(R.id.notify_mode, modeImage)
+            }
+            if (batteryImage != null) {
+                setImageViewBitmap(R.id.notify_battery_icon, batteryImage)
+            }
         }
 
         val clickIntent = PendingIntent.getBroadcast(
@@ -173,6 +178,15 @@ internal class AlwaysNotification(private var context: Context, notify: Boolean 
 
         notification!!.flags = Notification.FLAG_NO_CLEAR or Notification.FLAG_ONGOING_EVENT or Notification.FLAG_FOREGROUND_SERVICE
         notificationManager?.notify(0x100, notification)
+    }
+
+    private fun getRemoteViews(): RemoteViews {
+        val layout = (if (Scene.isNightMode && globalSPF.getBoolean(SpfConfig.GLOBAL_NIGHT_BLACK_NOTIFICATION, false)) {
+            R.layout.layout_notification_dark
+        } else {
+            R.layout.layout_notification
+        })
+        return RemoteViews(context.packageName, layout)
     }
 
     //隐藏通知

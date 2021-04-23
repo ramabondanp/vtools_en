@@ -34,7 +34,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Using external configuration (/data/powercfg.sh)\nIf you need to change back to Scene3's own configuration, or import the configuration through Scene, please click the delete button on the right"
+                    android:text="External configuration (/data/powercfg.sh)\n If you want to switch back to Scene's own configuration or import configuration through Scene, please click the delete button on the right side."
                     android:textSize="13dp" />
 
                 <ImageButton
@@ -362,7 +362,7 @@
                         <com.omarea.ui.HelpIcon
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            app:text="Under normal circumstances, Scene will minimize mode switching as much as possible.\n\nFor example: Switching back and forth before several applications that are also in the ~power saving mode~ will not repeat the mode switching code\n \nUnless you find that every time you switch applications, the scheduling parameters will be reset by the system, then you need to turn on this option~" />
+                            app:text="Under normal circumstances, Scene will try to minimize mode switching \n\nFor example, if you switch back and forth between several applications in the same 'power saving mode', you will not run the mode switching code repeatedly \n\n, while when strict mode is enabled, whenever the foreground application changes, the scheduling switch will be executed (and the scheduling script will be informed of the application being opened)" />
 
                         <Switch
                             android:id="@+id/strict_mode"
@@ -371,7 +371,7 @@
                             android:layout_weight="1"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:text="repeated execution" />
+                            android:text="Strict Mode" />
 
                     </LinearLayout>
 

@@ -174,7 +174,7 @@
                     <com.omarea.ui.HelpIcon
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:text="Generally speaking, the default scheduler is the best and does not need to be replaced, unless the kernel you use has special optimizations or you have special needs.\n\nMaximum and minimum frequencies, it is recommended to cooperate with the function Consumption level (if you see it) don’t change the settings" />
+                        app:text="In general, the default scheduler is the best and does not need to be replaced unless the kernel you are using has special optimizations, or you have special needs. The \n\n max \n min frequency option is recommended to be used in conjunction with the power level option (if you have seen it)" />
 
                     <TextView
                         style="@style/textTitle"

@@ -30,8 +30,8 @@
     <string name="share_link">You should try Scene too, I think it\'s not bad, download address: \n http://vtools.omarea.com/</string>
     
 
-    <string name="app_name">Scene</string>
-    <string name="app_name_short">Scene</string>
+    <string name="app_name">Scene4 Beta</string>
+    <string name="app_name_short">Scene4</string>
     <string name="app_name_mode_switch">Scene-Quick switch mode</string>
 
     <string name="accessibility_service_description">Scene enhancement service \nYou need to activate this service to use the following features: \n\n1. Dynamic response (automatically adjusts performance according to the foreground application). \n\n2. Automatic behavior (switch networks when switching screens or recycle processes when switching applications). \n\n3. Automatic installation (automatically click next when installing third-party applications)</string>
@@ -83,6 +83,8 @@
     <string name="settings_auto_exit_desc">Automatically end the process when an exception occurs during operation to avoid white screen jamming</string>
     <string name="settings_logcat_title">Error log</string>
     <string name="settings_logcat_desc">When Scene flickers with errors, click the button below to grab the log via logcat and send it to the developer to solve the problem.</string>
+    <string name="settings_black_notification">Black notification background</string>
+    <string name="settings_black_notification_desc">Show Scene\'s resident notifications as black background when the system is in night mode (no need to turn on this option under normal conditions)</string>
 
     <string name="menu_home">Overview</string>
     <string name="menu_paypal">Donation</string>
@@ -246,7 +248,12 @@
     <string name="swap_auto_start">Power-on self-start (to allow Scene to self-start)</string>
     <string name="swap_auto_start_desc">Note: You need to allow Scene to self-start for the next boot to take effect! </string>
     <string name="swap_zram_stat">ZRAM status</string>
-    <string name="swap_outside_module_installed">External add-on (Magisk) module is activated</string>
+    <string name="swap_outside_module">External add-on (Magisk) module</string>
+    <string name="swap_outside_module_desc">You have already installed Magisk framework, it is recommended to use the latest version of the add-on module to enhance the reliability of SWAP control, the main role of the add-on is as follows.</string>
+    <string name="swap_outside_effect1">1.Improve the speed of restoring ZRAM, Swapfile settings after phone reboot</string>
+    <string name="swap_outside_effect2">2.Adjust LMK parameters according to device RAM capacity to enhance background retention</string>
+    <string name="swap_outside_effect3">3.Tune VM parameters to improve active ZRAM, Swapfile usage</string>
+    <string name="swap_module_install_desc">After downloading the module, please refresh it in Magisk Manager and reboot your phone!</string>
     <string name="swap_zram_stat_desc">ZRAM compression typically ranges from 20 to 45%</string>
     <string name="swap_zram_stat_format">Data compression algorithm: %s\n raw data size: %s\n compressed size: %s\n physical memory footprint: %s\n maximum memory footprint: %s\n memory footprint limit: %s\n compression rate : %s</string>
     <string name="swap_zram_stat_format2">Data compression algorithm: %s\nOriginal data size: %s\nCompressed size: %s\nCompression rate : %s</string>

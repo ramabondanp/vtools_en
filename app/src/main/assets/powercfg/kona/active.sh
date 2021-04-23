@@ -1,5 +1,3 @@
-#!/system/bin/sh
-
 # CPU 0
 # 300000 403200 518400 614400 691200 787200 883200 979200 1075200 1171200 1248000 1344000 1420800 1516800 1612800 1708800 1804800
 
@@ -196,6 +194,29 @@ sched_limit() {
   echo $6 > /sys/devices/system/cpu/cpufreq/policy7/schedutil/up_rate_limit_us
 }
 
+surfaceflinger_top_app()
+{
+  pgrep -f surfaceflinger | while read pid; do
+    echo $pid > /dev/cpuset/top-app/tasks
+    # echo $pid > /dev/stune/top-app/tasks
+  done
+  pgrep -f system_server | while read pid; do
+    echo $pid > /dev/cpuset/top-app/tasks
+    echo $pid > /dev/stune/top-app/tasks
+  done
+}
+surfaceflinger_bg_app()
+{
+  pgrep -f surfaceflinger | while read pid; do
+    echo $pid > /dev/cpuset/system-background/tasks
+    # echo $pid > /dev/stune/foreground/tasks
+  done
+  pgrep -f system_server | while read pid; do
+    echo $pid > /dev/cpuset/system-background/tasks
+    echo $pid > /dev/stune/background/tasks
+  done
+}
+
 if [[ "$action" = "powersave" ]]; then
   echo 1 > /sys/devices/system/cpu/cpu4/core_ctl/enable
   echo 1 > /sys/devices/system/cpu/cpu7/core_ctl/enable
@@ -207,9 +228,9 @@ if [[ "$action" = "powersave" ]]; then
   echo $gpu_min_pl > /sys/class/kgsl/kgsl-3d0/min_pwrlevel
   echo 0 > /proc/sys/kernel/sched_boost
 
-  echo 1248000 > /sys/devices/system/cpu/cpufreq/policy0/schedutil/hispeed_freq
-  echo 710400 > /sys/devices/system/cpu/cpufreq/policy4/schedutil/hispeed_freq
-  echo 844800 > /sys/devices/system/cpu/cpufreq/policy7/schedutil/hispeed_freq
+  echo 1612800 > /sys/devices/system/cpu/cpufreq/policy0/schedutil/hispeed_freq
+  echo 1056000 > /sys/devices/system/cpu/cpufreq/policy4/schedutil/hispeed_freq
+  echo 1305600 > /sys/devices/system/cpu/cpufreq/policy7/schedutil/hispeed_freq
 
   echo 0-2 > /dev/cpuset/background/cpus
   echo 0-3 > /dev/cpuset/system-background/cpus
@@ -217,6 +238,9 @@ if [[ "$action" = "powersave" ]]; then
   sched_config "85 85" "96 96" "150" "400"
 
   sched_limit 0 0 0 10000 0 1000
+
+  surfaceflinger_bg_app
+  echo 0-3 > /dev/cpuset/foreground/cpus
 
   exit 0
 fi
@@ -232,7 +256,7 @@ if [[ "$action" = "balance" ]]; then
   echo $gpu_min_pl > /sys/class/kgsl/kgsl-3d0/min_pwrlevel
   echo 0 > /proc/sys/kernel/sched_boost
 
-  echo 1420800 > /sys/devices/system/cpu/cpufreq/policy0/schedutil/hispeed_freq
+  echo 1612800 > /sys/devices/system/cpu/cpufreq/policy0/schedutil/hispeed_freq
   echo 1056000 > /sys/devices/system/cpu/cpufreq/policy4/schedutil/hispeed_freq
   echo 1305600 > /sys/devices/system/cpu/cpufreq/policy7/schedutil/hispeed_freq
 
@@ -242,6 +266,9 @@ if [[ "$action" = "balance" ]]; then
   sched_config "78 85" "89 96" "150" "400"
 
   sched_limit 0 0 0 500 0 500
+
+  surfaceflinger_top_app
+  echo 0-6 > /dev/cpuset/foreground/cpus
 
   exit 0
 fi
@@ -268,6 +295,9 @@ if [[ "$action" = "performance" ]]; then
 
   sched_limit 0 0 0 0 0 0
 
+  surfaceflinger_top_app
+  echo 0-2,4-7 > /dev/cpuset/foreground/cpus
+
   exit 0
 fi
 
@@ -292,6 +322,9 @@ if [[ "$action" = "fast" ]]; then
   sched_config "62 75" "70 80" "300" "400"
 
   sched_limit 5000 0 2000 0 2000 0
+
+  surfaceflinger_top_app
+  echo 0-2,4-7 > /dev/cpuset/foreground/cpus
 
   exit 0
 fi

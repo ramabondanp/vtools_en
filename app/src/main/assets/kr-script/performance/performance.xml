@@ -41,8 +41,8 @@
 
         <action visible=". ./kr-script/common/android_n.sh">
             <title>Perform dex2oat compilation</title>
-            <desc>For Android N+, using Speed mode for dex2oat compilation</desc>
-            <param name="app" value="1" title="App to compile" desc="If it is performed for the first time, it may take several minutes and will not be repeated for applications that have already been processed. This operation is disabled after a system update and the application update also needs to be processed~~">
+            <desc>For Android N+, dex2oat compilation for specified apps</desc>
+            <param name="app" value="1" title="Applications to be compiled" desc="If it is executed for the first time, it may take a few minutes and will not be repeated for applications that have already been processed. This operation is disabled after the system update, and the application update also needs to be processed ~~">
                 <option value=" ">All</option>
                 <option value="-s">System only</option>
                 <option value="-3">Third party only</option>
