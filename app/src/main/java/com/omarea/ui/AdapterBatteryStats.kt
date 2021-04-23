@@ -73,7 +73,7 @@ class AdapterBatteryStats(private var context: Context, private var list: List<B
         convertView.findViewById<TextView>(R.id.itemTemperature).text = "Avg:${batteryStats.avgTemperature}°C Max:${batteryStats.maxTemperature}°C"
         val time = (batteryStats.count * timerRate / 60.0).toInt()
         val total = batteryStats.count * batteryStats.io * timerRate / 3600.0
-        convertView.findViewById<TextView>(R.id.itemCounts).text = "🕓 ${time}分钟"
+        convertView.findViewById<TextView>(R.id.itemCounts).text = "🕓 ${time}Minutes"
 
         GlobalScope.launch(Dispatchers.Main) {
             val icon = appInfoLoader.loadAppBasicInfo(batteryStats.packageName).await()

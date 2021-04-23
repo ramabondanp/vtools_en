@@ -44,28 +44,28 @@ open class ModeSwitcher {
             val source = getCurrentSource()
             return (when (source) {
                 "SOURCE_OUTSIDE" -> {
-                    "外部来源"
+                    "External Sources"
                 }
                 "SOURCE_SCENE_CONSERVATIVE" -> {
-                    "Scene-经典"
+                    "Scene-Classic"
                 }
                 "SOURCE_SCENE_ACTIVE" -> {
-                    "Scene-性能"
+                    "Scene-Performance"
                 }
                 "SOURCE_SCENE_CUSTOM" -> {
-                    "自定义"
+                    "Custom"
                 }
                 "SOURCE_SCENE_IMPORT" -> {
-                    "文件导入"
+                    "File Import"
                 }
                 "SOURCE_SCENE_ONLINE" -> {
-                    "在线下载"
+                    "Online Download"
                 }
                 "SOURCE_NONE" -> {
-                    "未定义"
+                    "Undefined"
                 }
                 else -> {
-                    "未知"
+                    "Unknown"
                 }
             })
         }
@@ -86,13 +86,13 @@ open class ModeSwitcher {
 
         internal fun getModName(mode: String): String {
             when (mode) {
-                POWERSAVE -> return "省电模式"
-                PERFORMANCE -> return "性能模式"
-                FAST -> return "极速模式"
-                BALANCE -> return "均衡模式"
-                IGONED -> return "保持状态"
-                "" -> return "全局默认"
-                else -> return "未知模式"
+                POWERSAVE -> return "Power Save"
+                PERFORMANCE -> return "Performance"
+                FAST -> return "Speed Mode"
+                BALANCE -> return "Balanced"
+                IGONED -> return "Maintain status"
+                "" -> return "Global Default"
+                else -> return "Unknown"
             }
         }
 

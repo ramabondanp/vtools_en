@@ -357,7 +357,7 @@ class SceneMode private constructor(private val context: Context, private var st
                             // Scene.toast(sceneConfigInfo.packageName!! + "退出，cgroup调为[/]\n(Scene试验性功能)")
                         }
                     } else {
-                        Scene.toast("你的内核不支持cgroup设置！\n(Scene试验性功能)")
+                        Scene.toast("Your kernel doesn't support cgroup settings! \n(Scene experimental feature)")
                     }
                 }
         }
@@ -441,7 +441,7 @@ class SceneMode private constructor(private val context: Context, private var st
                                 setGroup(currentSceneConfig!!.packageName!!, currentSceneConfig!!.fgCGroupMem)
                                 // Scene.toast("进入" + currentSceneConfig!!.packageName!! + "，cgroup调为[${currentSceneConfig!!.fgCGroupMem}]\n(Scene试验性功能)")
                             } else {
-                                Scene.toast("你的内核不支持cgroup设置！\n(Scene试验性功能)")
+                                Scene.toast("Your kernel doesn't support cgroup settings! \n(Scene experimental feature)")
                             }
                         }
                     }

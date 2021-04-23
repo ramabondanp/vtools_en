@@ -57,50 +57,50 @@ class TaskActionsExecutor(
             try {
                 when (it) {
                     TaskAction.FSTRIM -> {
-                        updateNotification("执行fstrim")
+                        updateNotification("Executing fstrim")
                         FstrimUtils(keepShell).run()
                     }
                     TaskAction.STANDBY_MODE_OFF -> {
-                        updateNotification("关闭待机模式")
+                        updateNotification("Turn off standby mode")
                         SceneStandbyMode(context, keepShell).off()
                     }
                     TaskAction.STANDBY_MODE_ON -> {
-                        updateNotification("打开待机模式")
+                        updateNotification("Turn on standby mode")
                         SceneStandbyMode(context, keepShell).on()
                     }
                     TaskAction.ZEN_MODE_ON -> {
-                        updateNotification("打开勿扰模式")
+                        updateNotification("Turn on Do Not Disturb mode")
                         ZenModeUtils(context).on()
                     }
                     TaskAction.ZEN_MODE_OFF -> {
-                        updateNotification("关闭勿扰模式")
+                        updateNotification("Turn off Do Not Disturb mode")
                         ZenModeUtils(context).off()
                     }
                     TaskAction.MODE_POWERSAVE -> {
-                        updateNotification("切换省电模式")
+                        updateNotification("Switch to power saving mode")
                         ModeSwitcher().executePowercfgMode(ModeSwitcher.POWERSAVE)
                     }
                     TaskAction.MODE_BALANCE -> {
-                        updateNotification("切换均衡模式")
+                        updateNotification("Switch to balanced mode")
                         ModeSwitcher().executePowercfgMode(ModeSwitcher.BALANCE)
                     }
                     TaskAction.MODE_PERFORMANCE -> {
-                        updateNotification("切换性能模式")
+                        updateNotification("Switch to performance mode")
                         ModeSwitcher().executePowercfgMode(ModeSwitcher.PERFORMANCE)
                     }
                     TaskAction.MODE_FAST -> {
-                        updateNotification("切换极速模式")
+                        updateNotification("Switch to speed mode")
                         ModeSwitcher().executePowercfgMode(ModeSwitcher.FAST)
                     }
                     TaskAction.FROZEN_APPS -> {
-                        updateNotification("冻结偏见应用")
+                        updateNotification("Freeze bias application")
                         SceneMode.getCurrentInstance()?.clearFreezeApp()
                     }
                     else -> {
                     }
                 }
             } catch (ex: Exception) {
-                Toast.makeText(context, "定时任务出错：" + ex.message, Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "Timed task error：" + ex.message, Toast.LENGTH_LONG).show()
             }
         }
 

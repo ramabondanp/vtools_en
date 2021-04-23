@@ -34,9 +34,9 @@ class SceneTaskIntentService : IntentService("SceneTaskIntentService") {
             }
 
             if (chargeOnly && GlobalStatus.batteryStatus == BatteryManager.BATTERY_STATUS_DISCHARGING) {
-                Toast.makeText(context, "未在充电状态，跳过定时任务", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "Not in charging state, skip timing task", Toast.LENGTH_LONG).show()
             } else if (batteryCapacityRequire > 0 && GlobalStatus.batteryStatus == BatteryManager.BATTERY_STATUS_DISCHARGING && GlobalStatus.batteryCapacity < batteryCapacityRequire) {
-                Toast.makeText(context, "电量低于" + batteryCapacityRequire + "%，跳过定时任务", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "Power level below" + batteryCapacityRequire + "%，Skip Timed Tasks", Toast.LENGTH_LONG).show()
             } else if (afterScreenOff && ScreenState(context).isScreenOn()) {
                 // 如果是个要求屏幕关闭后执行的任务，且现在屏幕还在点亮状态，放到息屏事件观测队列中
                 EventBus.subscibe(ScreenDelayTaskReceiver(taskId, context.applicationContext))

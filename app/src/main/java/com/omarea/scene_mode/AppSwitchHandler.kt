@@ -170,7 +170,7 @@ class AppSwitchHandler(private var context: Context, override val isAsync: Boole
                 triggerTimeMinutes = (currentMinutes + delay) % 1440
                 expireDate = GetUpTime(triggerTimeMinutes).nextGetUpTime
                 taskId = "SCENE_FROZEN_APPS"
-                taskName = "偏见应用清理"
+                taskName = "Frozen apps cleanup"
                 enabled = true
                 taskActions = ArrayList<TaskAction>().apply {
                     add(TaskAction.FROZEN_APPS)
@@ -338,7 +338,7 @@ class AppSwitchHandler(private var context: Context, override val isAsync: Boole
                 val pendingResult = goAsync()
 
                 updateConfig()
-                Scene.toast("性能调节配置参数已更新，将在下次切换应用时生效！", Toast.LENGTH_SHORT)
+                Scene.toast("Performance tuning configuration parameters have been updated and will take effect the next time you switch applications!", Toast.LENGTH_SHORT)
 
                 pendingResult.finish()
             }
