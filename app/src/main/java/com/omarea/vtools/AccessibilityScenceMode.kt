@@ -9,7 +9,6 @@ import android.graphics.Rect
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.KeyEvent
 import android.view.WindowManager
 import android.view.accessibility.AccessibilityEvent
@@ -19,6 +18,8 @@ import com.omarea.Scene
 import com.omarea.data.EventBus
 import com.omarea.data.EventType
 import com.omarea.data.GlobalStatus
+import com.omarea.library.basic.InputMethodApp
+import com.omarea.library.basic.LauncherApps
 import com.omarea.library.calculator.Flags
 import com.omarea.scene_mode.AppSwitchHandler
 import com.omarea.scene_mode.AutoClickInstall
@@ -54,6 +55,11 @@ public class AccessibilityScenceMode : AccessibilityService() {
     private var classicModel = false
 
     private lateinit var spf: SharedPreferences
+
+    // 跳过广告功能需要忽略的App
+    private var skipAdIgnoredApps = ArrayList<String>().apply {
+        add("com.android.systemui")
+    }
 
     /**
      * 屏幕配置改变（旋转、分辨率更改、DPI更改等）
@@ -94,6 +100,7 @@ public class AccessibilityScenceMode : AccessibilityService() {
         if (spf.getBoolean(SpfConfig.GLOBAL_SPF_AUTO_INSTALL, false) || spf.getBoolean(SpfConfig.GLOBAL_SPF_SKIP_AD, false)) {
             info.eventTypes = Flags(info.eventTypes).addFlag(AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED)
             if (spf.getBoolean(SpfConfig.GLOBAL_SPF_SKIP_AD, false)) {
+                // 仅用于调试时捕获广告按钮，发布时硬移除此flag
                 // info.eventTypes = Flags(info.eventTypes).addFlag(AccessibilityEvent.TYPE_VIEW_CLICKED)
             }
         }
@@ -143,6 +150,12 @@ public class AccessibilityScenceMode : AccessibilityService() {
         }
         if (spf.getBoolean(SpfConfig.GLOBAL_SPF_SKIP_AD, false) && spf.getBoolean(SpfConfig.GLOBAL_SPF_SKIP_AD_PRECISE, false)) {
             AutoSkipCloudData().updateConfig(this, false)
+        }
+
+        // 获取输入法
+        GlobalScope.launch(Dispatchers.IO) {
+            skipAdIgnoredApps.addAll(LauncherApps(applicationContext).launcherApps)
+            skipAdIgnoredApps.addAll(InputMethodApp(applicationContext).getInputMethods())
         }
     }
 
@@ -250,6 +263,12 @@ public class AccessibilityScenceMode : AccessibilityService() {
     }
 
     override fun onAccessibilityEvent(event: AccessibilityEvent) {
+        /* // 开发过程中用于分析界面点击（捕获广告按钮）
+        if (event.eventType == AccessibilityEvent.TYPE_VIEW_CLICKED || event.eventType == AccessibilityEvent.TYPE_VIEW_FOCUSED) {
+            val viewId = event.source?.viewIdResourceName // 有些跳过按钮不是文字来的 // if (event.text?.contains("跳过") == true) event.source?.viewIdResourceName else null
+            Log.d("@Scene", "点击了[$viewId]，在 ${event.className}")
+        }
+        */
 
         if (!classicModel) {
             /*
@@ -272,6 +291,11 @@ public class AccessibilityScenceMode : AccessibilityService() {
             val packageName = event.packageName
             if (packageName != null) {
                 when {
+                    /*
+                    packageName == "com.android.systemui" -> {
+                        return
+                    }
+                    */
                     // packageName == "com.omarea.vtools" -> return
                     packageName.contains("packageinstaller") -> {
                         if (event.className == "com.android.packageinstaller.permission.ui.GrantPermissionsActivity") // MIUI权限控制器
@@ -313,17 +337,22 @@ public class AccessibilityScenceMode : AccessibilityService() {
         }
     }
 
-
     private var lastWindowChanged = 0L
     private var lastOriginEventTime = 0L
     private var autoSkipAd: AutoSkipAd? = null
     private fun trySkipAD(event: AccessibilityEvent) {
-        if (autoSkipAd == null) {
-            autoSkipAd = AutoSkipAd(this)
-        }
+        // 只在窗口界面发生变化后的3秒内自动跳过广告，可以降低性能消耗，并降低误点几率
+        if (System.currentTimeMillis() - lastWindowChanged < 3000) {
+            if (autoSkipAd == null) {
+                autoSkipAd = AutoSkipAd(this)
+            }
 
-        // 只在窗口界面发生变化后的5秒内自动跳过广告，可以降低性能消耗，并降低误点几率
-        if (System.currentTimeMillis() - lastWindowChanged < 5000) {
+            val packageName = event.packageName
+            if (packageName == null || skipAdIgnoredApps.contains(packageName) || event.className === "android.widget.EditText") {
+                // Log.d("@Scene", "SkipAD -> ignore")
+                return
+            }
+
             autoSkipAd?.skipAd(event, spf.getBoolean(SpfConfig.GLOBAL_SPF_SKIP_AD_PRECISE, false), displayWidth, displayHeight)
         }
     }

@@ -378,7 +378,7 @@
     <string name="scene_install_autoclick">Installation click</string>
     <string name="scene_install_autoclick_desc">When installing third-party applications, it automatically helps you to click "Next" and "Install".</string>
     <string name="scene_install_skip_ad">Skip ads</string>
-    <string name="scene_install_skip_ad_desc">Automatically click the "Skip" button, it can help you automatically skip some opening ads, but there may be a wrong click phenomenon</string>
+    <string name="scene_install_skip_ad_desc">Automatically click the "Skip" button, which can help you automatically skip some opening screen ads, but it will reduce system performance and there is a false click phenomenon</string>
     <string name="scene_install_skip_ad_precise">Skip Ads+</string>
     <string name="scene_install_skip_ad_precise_desc">Use some button data recorded in the cloud to click the special skip button</string>
     <string name="scene_install_skip_ad_warn">Ad traffic is an important source of income for some software developers/vendors, if you are not very pressed for time, then it is recommended that you browse and click on the ad content you like ^_^</string>

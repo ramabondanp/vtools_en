@@ -1,19 +1,23 @@
 package com.omarea.store;
 
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.omarea.model.SceneConfigInfo;
+import com.omarea.vtools.R;
 
 import java.util.ArrayList;
 
 public class SceneConfigStore extends SQLiteOpenHelper {
     private static final int DB_VERSION = 6;
+    private Context context;
 
     public SceneConfigStore(Context context) {
         super(context, "scene3_config", null, DB_VERSION);
+        this.context = context;
     }
 
     @Override
@@ -35,6 +39,14 @@ public class SceneConfigStore extends SQLiteOpenHelper {
                     "show_monitor int default(0)" + //
                 ")");
         } catch (Exception ignored) {
+        }
+
+        // 初始化默认配置
+        String[] gpsOnApps = this.context.getResources().getStringArray(R.array.scene_gps_on);
+        for (String app: gpsOnApps) {
+            SceneConfigInfo sceneConfigInfo = getAppConfig(app);
+            sceneConfigInfo.gpsOn = true;
+            setAppConfig(sceneConfigInfo);
         }
     }
 
@@ -102,7 +114,7 @@ public class SceneConfigStore extends SQLiteOpenHelper {
         SQLiteDatabase database = getWritableDatabase();
         getWritableDatabase().beginTransaction();
         try {
-            database.execSQL("delete from  scene_config3 where id = ?", new String[]{sceneConfigInfo.packageName});
+            database.execSQL("delete from scene_config3 where id = ?", new String[]{sceneConfigInfo.packageName});
             database.execSQL("insert into scene_config3(id, alone_light, light, dis_notice, dis_button, gps_on, freeze, screen_orientation, fg_cgroup_mem, bg_cgroup_mem, dynamic_boost_mem, show_monitor) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", new Object[]{
                     sceneConfigInfo.packageName,
                     sceneConfigInfo.aloneLight ? 1 : 0,
@@ -127,10 +139,23 @@ public class SceneConfigStore extends SQLiteOpenHelper {
     }
 
 
+    public boolean resetAll() {
+        try {
+            SQLiteDatabase database = getWritableDatabase();
+            database.execSQL("update scene_config3 set alone_light = 0, fg_cgroup_mem = '', screen_orientation = ?, bg_cgroup_mem = '', dynamic_boost_mem = 0, show_monitor = 0", new Object[]{
+                ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+            });
+            return true;
+        } catch (Exception ex) {
+            return false;
+        }
+    }
+
+
     public boolean removeAppConfig(String packageName) {
         try {
             SQLiteDatabase database = getWritableDatabase();
-            database.execSQL("delete from  scene_config3 where id = ?", new String[]{packageName});
+            database.execSQL("delete from scene_config3 where id = ?", new String[]{packageName});
             return true;
         } catch (Exception ex) {
             return false;
