@@ -107,8 +107,8 @@ class AppSwitchHandler(private var context: AccessibilityScenceMode, override va
     /**
      * 屏幕关闭时执行
      */
-    private fun _onScreenOff() {
-        if (screenOn == false)
+    private fun onScreenOff() {
+        if (!screenOn)
             return
 
         screenOn = false
@@ -123,7 +123,12 @@ class AppSwitchHandler(private var context: AccessibilityScenceMode, override va
             if (!screenOn) {
                 notifyHelper.hideNotify()
                 stopTimer()
-                setTimingTask();
+                setTimingTask()
+
+                // 息屏后自动切换为省电模式
+                if (dyamicCore && lastMode.isNotEmpty()) {
+                    toggleConfig(POWERSAVE, context.packageName)
+                }
             }
         }, 10000)
     }
@@ -143,12 +148,17 @@ class AppSwitchHandler(private var context: AccessibilityScenceMode, override va
     /**
      * 点亮屏幕且解锁后执行
      */
-    private fun _onScreenOn() {
+    private fun onScreenOn() {
         lastScreenOnOff = System.currentTimeMillis()
 
-        if (dyamicCore && lastMode.isNotEmpty()) {
-            toggleConfig(lastMode, context.packageName)
-        }
+        handler.postDelayed({
+            if (dyamicCore && lastMode.isNotEmpty()) {
+                lastPackage = null
+                lastModePackage = null
+                context.notifyScreenOn()
+                // toggleConfig(lastMode, context.packageName)
+            }
+        }, 1000)
         sceneMode.onScreenOn()
 
         if (!screenOn) {
@@ -238,11 +248,11 @@ class AppSwitchHandler(private var context: AccessibilityScenceMode, override va
             EventType.APP_SWITCH ->
                 onFocusAppChanged(GlobalStatus.lastPackageName)
             EventType.SCREEN_ON -> {
-                _onScreenOn()
+                onScreenOn()
             }
             EventType.SCREEN_OFF -> {
                 if (ScreenState(context).isScreenLocked()) {
-                    _onScreenOff()
+                    onScreenOff()
                 }
             }
             else -> return
@@ -261,7 +271,7 @@ class AppSwitchHandler(private var context: AccessibilityScenceMode, override va
      */
     fun onFocusAppChanged(packageName: String) {
         if (!screenOn && screenState.isScreenOn()) {
-            _onScreenOn() // 如果切换应用时发现屏幕出于开启状态 而记录的状态是关闭，通知开启
+            onScreenOn() // 如果切换应用时发现屏幕出于开启状态 而记录的状态是关闭，通知开启
         }
 
         if (lastPackage == packageName || ignoredList.contains(packageName) || sceneBlackList.contains(packageName)) return
@@ -288,7 +298,7 @@ class AppSwitchHandler(private var context: AccessibilityScenceMode, override va
             context.unregisterReceiver(sceneAppChanged)
             sceneAppChanged = null
         }
-        EventBus.subscibe(notifyHelper)
+        EventBus.unsubscibe(notifyHelper)
         EventBus.unsubscibe(this)
     }
 
@@ -380,5 +390,6 @@ class AppSwitchHandler(private var context: AccessibilityScenceMode, override va
         context.registerReceiver(sceneAppChanged, IntentFilter(context.getString(R.string.scene_appchange_action)))
 
         EventBus.subscibe(notifyHelper)
+        EventBus.subscibe(this)
     }
 }

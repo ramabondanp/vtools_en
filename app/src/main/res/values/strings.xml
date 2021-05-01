@@ -74,11 +74,6 @@
     <string name="settings_debug_layer_desc">Show the log of Scene\'s foreground application process (need to restart auxiliary services)</string>
     <string name="settings_help_icon">Tip icon</string>
     <string name="settings_help_icon_desc">Show function description hint (question mark) icon next to function item</string>
-    <string name="settings_delay_detection">Delay detection</string>
-    <string name="settings_delay_detection_desc">Delayed (instead of immediate) detection of top-level applications when the application interface changes</string>
-    <string name="settings_delay_detection_disabled">Delay detection is not available when classic mode is on!</string>
-    <string name="settings_classic_mode">Classic mode</string>
-    <string name="settings_classic_mode_desc">Scene mode uses old Scene (before 3.2) foreground application detection logic (requires restarting auxiliary services)</string>
     <string name="settings_auto_exit">Auto-quit on exception</string>
     <string name="settings_auto_exit_desc">Automatically end the process when an exception occurs during operation to avoid white screen jamming</string>
     <string name="settings_logcat_title">Error log</string>
