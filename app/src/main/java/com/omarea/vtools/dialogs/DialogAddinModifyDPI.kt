@@ -77,6 +77,13 @@ class DialogAddinModifyDPI(var context: Activity) {
         }
 
         val rate = dm.heightPixels / 1.0 / dm.widthPixels
+        dialog.findViewById<Button>(R.id.dialog_dpi_540).setOnClickListener {
+            val width = 540
+            widthInput.setText(width.toString())
+            val height = getHeightScaleValue(width)
+            heightInput.setText(height.toString())
+            dpiInput.setText((dm.densityDpi.toFloat() * width / point.x).toInt().toString())
+        }
         dialog.findViewById<Button>(R.id.dialog_dpi_720).setOnClickListener {
             val width = 720
             widthInput.setText(width.toString())

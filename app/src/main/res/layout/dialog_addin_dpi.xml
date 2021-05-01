@@ -94,6 +94,15 @@
         android:orientation="horizontal">
 
         <Button
+            android:id="@+id/dialog_dpi_540"
+            style="@style/SceneButton"
+            android:layout_width="50dp"
+            android:layout_height="32dp"
+            android:layout_marginRight="6dp"
+            android:text="540"
+            android:textSize="12dp" />
+
+        <Button
             android:id="@+id/dialog_dpi_720"
             style="@style/SceneButton"
             android:layout_width="50dp"
