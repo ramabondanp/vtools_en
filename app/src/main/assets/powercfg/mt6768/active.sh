@@ -162,23 +162,19 @@ elif [[ "$action" = "performance" ]]; then
   exit 0
 elif [[ "$action" = "fast" ]]; then
   #fast
-  ppm enabled 1
-
-  ppm policy_status "1 0"
-  ppm policy_status "2 1"
-  ppm policy_status "3 0"
-  ppm policy_status "4 0"
-  ppm policy_status "7 0"
-  ppm policy_status "9 1"
+  ppm enabled 0
 
   min_freq 1500000 1800000
   max_freq 1800000 2000000
 
-  gpu_dvfs 0 925000
+  export GpuMaxFreq=$(cat /proc/gpufreq/gpufreq_opp_dump | awk '{printf $4 "\n"}' | cut -f1 -d "," | sed -n '1p')
+
+  gpu_dvfs 0 $GpuMaxFreq
 
   cpuset 0 0-3 0-7 0-7 0-3
 
   echo 0 > /proc/cpuidle/enable
+  echo EAS > /sys/devices/system/cpu/eas/enable
   eas 50 0
   cpufreq 3 1
 
