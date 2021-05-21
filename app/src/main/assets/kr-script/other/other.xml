@@ -22,6 +22,12 @@
             <desc>Check disk sequential read and write speeds using simple commands that take several minutes</desc>
             <set>run disk_test.sh</set>
         </action>
+        <action>
+            <title>UFS存储寿命</title>
+            <summary sh="run ufs/ufs_summary.sh" />
+            <set>run ufs/ufs_detail.sh</set>
+            <desc>*数据仅供参考</desc>
+        </action>
     </group>
 
     <group>

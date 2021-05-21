@@ -9,6 +9,8 @@
     <string name="btn_delete">Delete</string>
     <string name="btn_dontshow">No longer show</string>
     <string name="btn_confirm">OK</string>
+    <string name="btn_no">No</string>
+    <string name="btn_yes">Yes</string>
     <string name="btn_continue">Continue</string>
     <string name="btn_modify_confirm">Confirm changes</string>
     <string name="btn_help">Help</string>
@@ -18,6 +20,7 @@
     <string name="btn_resume">Resume</string>
     <string name="btn_skip">Skip</string>
     <string name="btn_retry">Retry</string>
+    <string name="btn_apply">Apply</string>
     <string name="btn_reboot">Restart</string>
     <string name="btn_resume_selected">Restore selected</string>
     <string name="error_su_timeout">Wait for timeout, please make sure your Root Manager is running in the background and try again! \n\nPlease make sure you have not prevented "Authorization Manager (SuperSu, Magisk Manager, etc.)" from starting itself and allowing background pop-ups, hover windows, and other permissions. If the authorization dialog box never pops up, we suggest restarting the phone and trying again! \n</string>

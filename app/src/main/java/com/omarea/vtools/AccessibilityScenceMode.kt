@@ -184,6 +184,9 @@ public class AccessibilityScenceMode : AccessibilityService() {
         val packageName = event.packageName
         if (packageName != null) {
             when {
+                packageName == "com.omarea.gesture" || packageName == "com.omarea.filter" -> {
+                    return
+                }
                 /*
                 packageName == "com.android.systemui" -> {
                     return
@@ -315,9 +318,6 @@ public class AccessibilityScenceMode : AccessibilityService() {
                 var lastWindowSize = 0
                 var lastWindowFocus = false
                 for (window in effectiveWindows) {
-                    val outBounds = Rect()
-                    window.getBoundsInScreen(outBounds)
-
                     /*
                     val wp = window.root?.packageName
                     // 获取窗口 root节点 会有性能问题，因此去掉此判断逻辑
@@ -326,6 +326,9 @@ public class AccessibilityScenceMode : AccessibilityService() {
                     }
                     */
                     if (isLandscap) {
+                        val outBounds = Rect()
+                        window.getBoundsInScreen(outBounds)
+
                         logs?.run {
                             val wp = try {
                                 window.root?.packageName
@@ -344,6 +347,9 @@ public class AccessibilityScenceMode : AccessibilityService() {
                         val windowFocused = (window.isActive || window.isFocused)
 
                         logs?.run {
+                            val outBounds = Rect()
+                            window.getBoundsInScreen(outBounds)
+
                             val wp = try {
                                 window.root?.packageName
                             } catch (ex: java.lang.Exception) {
@@ -356,6 +362,8 @@ public class AccessibilityScenceMode : AccessibilityService() {
                             continue
                         }
 
+                        val outBounds = Rect()
+                        window.getBoundsInScreen(outBounds)
                         val size = (outBounds.right - outBounds.left) * (outBounds.bottom - outBounds.top)
                         if (size >= lastWindowSize || (windowFocused && !lastWindowFocus)) {
                             lastWindow = window
