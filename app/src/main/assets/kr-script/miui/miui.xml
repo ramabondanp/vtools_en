@@ -120,15 +120,16 @@
     <group title="Temp control">
         <picker
             visible="run thermal_conf/support.sh"
-            title="Temp control config switch" desc="Switching and restarting takes effect, currently only for Snapdragon Snapdragon 710, 730, 835, 845, 855 and Tiangui 820 series models"
+            title="Temp ctrl config switch" desc="Replace the temperature control to the system directory by Magisk module (need to reboot the phone to take effect), suitable for 710|730(g)|835|845|855(plus), Tiangui 820 series models"
             options-sh="run thermal_conf/options.sh">
             <summary sh="run thermal_conf/summary.sh" />
             <get>run thermal_conf/current.sh</get>
             <set>run thermal_conf/config.sh</set>
         </picker>
         <picker
+            id="mi-thermal"
             visible="run thermal_conf2/support.sh"
-            title="Temp control config switch (2)" desc="No need to reboot immediately after switching, currently only for 855, 865, 870, 888 models"
+            title="Temp ctrl config switch（2）" desc="Replace the temperature control to /data/vendor/thermal, it may take effect immediately without restarting the phone, suitable for Snapdragon 865, 870, 888 models）"
             options-sh="run thermal_conf2/options.sh">
             <summary sh="run thermal_conf2/summary.sh" />
             <get>run thermal_conf2/current.sh</get>

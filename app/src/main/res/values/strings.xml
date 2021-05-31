@@ -102,6 +102,7 @@
     <string name="menu_charge">Charging stats</string>
     <string name="menu_custom_command">Custom cmd</string>
     <string name="menu_processes">Process mgr</string>
+    <string name="menu_fps_chart">Fps record</string>
     <string name="menu_app_magisk">Magisk</string>
     <string name="menu_gesture">Gesture</string>
     <string name="menu_xposed_app">App setting</string>
@@ -311,6 +312,12 @@
         <item>General mode</item>
         <item>Performance mode</item>
         <item>Extreme speed mode</item>
+    </string-array>
+    <string-array name="sleep_powercfg_mode_options">
+        <item>Power saving mode</item>
+        <item>Equalization mode</item>
+        <item>Performance mode</item>
+        <item>Hold state</item>
     </string-array>
     <string-array name="powercfg_modes_filter">
         <item>All</item>

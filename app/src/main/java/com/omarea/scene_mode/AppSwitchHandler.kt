@@ -127,7 +127,10 @@ class AppSwitchHandler(private var context: AccessibilityScenceMode, override va
 
                 // 息屏后自动切换为省电模式
                 if (dyamicCore && lastMode.isNotEmpty()) {
-                    toggleConfig(POWERSAVE, context.packageName)
+                    val sleepMode = spfGlobal.getString(SpfConfig.GLOBAL_SPF_POWERCFG_SLEEP_MODE, POWERSAVE)
+                    if (sleepMode != null && sleepMode != IGONED) {
+                        toggleConfig(sleepMode, context.packageName)
+                    }
                 }
             }
         }, 10000)
@@ -246,7 +249,7 @@ class AppSwitchHandler(private var context: AccessibilityScenceMode, override va
     override fun onReceive(eventType: EventType) {
         when (eventType) {
             EventType.APP_SWITCH ->
-                onFocusAppChanged(GlobalStatus.lastPackageName)
+                onFocusedAppChanged(GlobalStatus.lastPackageName)
             EventType.SCREEN_ON -> {
                 onScreenOn()
             }
@@ -269,7 +272,7 @@ class AppSwitchHandler(private var context: AccessibilityScenceMode, override va
     /**
      * 焦点应用改变
      */
-    fun onFocusAppChanged(packageName: String) {
+    private fun onFocusedAppChanged(packageName: String) {
         if (!screenOn && screenState.isScreenOn()) {
             onScreenOn() // 如果切换应用时发现屏幕出于开启状态 而记录的状态是关闭，通知开启
         }

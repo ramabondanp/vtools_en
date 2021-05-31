@@ -340,7 +340,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:layout_weight="1"
-                            android:text="global default" />
+                            android:text="Global default (bright screen state)" />
 
                         <Spinner
                             android:id="@+id/first_mode"
@@ -349,6 +349,34 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical|right"
                             android:entries="@array/default_powercfg_mode_options"
+                            android:paddingRight="0dp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_marginTop="@dimen/activity_vertical_margin"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <com.omarea.ui.HelpIcon
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:text="手机进入待机状态后，将切换至选定的模式" />
+
+                        <TextView
+                            style="@style/textTitle"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:text="待机时切换" />
+
+                        <Spinner
+                            android:id="@+id/sleep_mode"
+                            style="@style/SceneSpinner"
+                            android:layout_width="110dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical|right"
+                            android:entries="@array/sleep_powercfg_mode_options"
                             android:paddingRight="0dp" />
                     </LinearLayout>
 
@@ -362,7 +390,7 @@
                         <com.omarea.ui.HelpIcon
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            app:text="Under normal circumstances, Scene will try to minimize mode switching \n\nFor example, if you switch back and forth between several applications in the same 'power saving mode', you will not run the mode switching code repeatedly \n\n, while when strict mode is enabled, whenever the foreground application changes, the scheduling switch will be executed (and the scheduling script will be informed of the application being opened)" />
+                            app:text="In normal mode, Scene will only execute the scheduling profile when it needs to change gears, e.g., when switching between multiple applications set to [power saving mode], the scheduling profile will only be executed once. In \n\n strict mode, Scene executes the scheduling profile every time the foreground application changes, and informs the application (package name) that is switched to the foreground run. Scheduling configuration authors can take advantage of this feature to design separate scheduling parameters for different applications, instead of being limited to only four gears. \n\n Snapdragon 855 and 865 models using [classic configuration] [performance biased] configuration sources can turn on strict mode to experience exclusive optimization in the following applications:\nOriginal God (Official, B-Service, Xiaomi Service)\nIdle Fish, Taobao, Jingdong, Tmall, Baidu Post \nDual Life View \nBeeping Beeping, Jitterbug \n\nOther processor models, unless an external configuration source is being used (and configuration author has indicated support for this feature), there is no need to enable this option!" />
 
                         <Switch
                             android:id="@+id/strict_mode"
