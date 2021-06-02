@@ -129,7 +129,7 @@
         <picker
             id="mi-thermal"
             visible="run thermal_conf2/support.sh"
-            title="Temp ctrl config switch（2）" desc="Replace the temperature control to /data/vendor/thermal, it may take effect immediately without restarting the phone, suitable for Snapdragon 865, 870, 888 models）"
+            title="Temp ctrl config switch（2）" desc="(Replace the temperature control to /data/vendor/thermal, no need to reboot the phone to take effect, suitable for Snapdragon 855, 865(plus), 870, 888 models)"
             options-sh="run thermal_conf2/options.sh">
             <summary sh="run thermal_conf2/summary.sh" />
             <get>run thermal_conf2/current.sh</get>

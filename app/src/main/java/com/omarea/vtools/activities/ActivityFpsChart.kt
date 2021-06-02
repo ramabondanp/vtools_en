@@ -17,6 +17,7 @@ import com.omarea.common.ui.DialogHelper
 import com.omarea.common.ui.ProgressBarDialog
 import com.omarea.library.basic.AppInfoLoader
 import com.omarea.library.calculator.Flags
+import com.omarea.library.shell.PlatformUtils
 import com.omarea.store.FpsWatchStore
 import com.omarea.vtools.R
 import kotlinx.android.synthetic.main.activity_addin_online.*
@@ -138,6 +139,21 @@ class ActivityFpsChart : ActivityBase() {
             }
 
             @JavascriptInterface
+            public fun deleteSession(sessionId: Long) {
+                fpsWatchStore.deleteSession(sessionId);
+            }
+
+            @JavascriptInterface
+            public fun getDeviceInfo(): String {
+                val obj = JSONObject()
+                obj.put("soc", PlatformUtils().getCPUName())
+                obj.put("model", Build.MODEL)
+                obj.put("sdk", Build.VERSION.SDK_INT)
+
+                return obj.toString(2)
+            }
+
+            @JavascriptInterface
             public fun getSessions(): String {
                 val sessions = fpsWatchStore.sessions()
                 val obj = JSONArray()
@@ -154,19 +170,21 @@ class ActivityFpsChart : ActivityBase() {
 
             @JavascriptInterface
             public fun getSessionData(sessionId: Long): String {
-                val obj = JSONObject().apply {
-                    val ticks = JSONArray()
-                    fpsWatchStore.sessionDetail(sessionId).forEach {
-                        ticks.put(it)
-                    }
-
-                    put("data", ticks)
+                return JSONObject().apply {
+                    put("fps", JSONArray().apply {
+                        fpsWatchStore.sessionFpsData(sessionId).forEach {
+                            put(it)
+                        }
+                    })
+                    put("temperature", JSONArray().apply {
+                        fpsWatchStore.sessionTemperatureData(sessionId).forEach {
+                            put(it)
+                        }
+                    })
                     put("min", fpsWatchStore.sessionMinFps(sessionId))
                     put("max", fpsWatchStore.sessionMaxFps(sessionId))
                     put("avg", fpsWatchStore.sessionAvgFps(sessionId))
-                }
-
-                return obj.toString(2)
+                }.toString(2)
             }
 
             @JavascriptInterface

@@ -1,15 +1,14 @@
 # /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_frequencies
-# 300000 403200 499200 576000 672000 768000 844800 940800 1036800 1113600 1209600 1305600 1382400 1478400 1555200 1632000 1708800 1785600
+# 300000 403200 499200 595200 691200 806400 902400 998400 1094400 1209600 1305600 1401600 1497600 1612800 1708800 1804800
 
 # /sys/devices/system/cpu/cpu4/cpufreq/scaling_available_frequencies
-# 710400 825600 940800 1056000 1171200 1286400 1401600 1497600 1612800 1708800 1804800 1920000 2016000 2131200 2227200 2323200 2419200
+# 710400 844800 960000 1075200 1209600 1324800 1440000 1555200 1670400 1766400 1881600 1996800 2112000 2227200 2342400 2419200
 
 # /sys/devices/system/cpu/cpu7/cpufreq/scaling_available_frequencies
-# 825600 940800 1056000 1171200 1286400 1401600 1497600 1612800 1708800 1804800 1920000 2016000 2131200 2227200 2323200 2419200 2534400 2649600 2745600 2841600
+# 844800 960000 1075200 1190400 1305600 1420800 1555200 1670400 1785600 1900800 2035200 2150400 2265600 2380800 2496000 2592000 2688000 2764800 2841600
 
-# GPU
-# 257000000 345000000 427000000 499200000 585000000 675000000 810000000
-
+# /sys/class/kgsl/kgsl-3d0/devfreq/available_frequencies
+# 840000000 778000000 738000000 676000000 608000000 540000000 491000000 443000000 379000000 315000000
 
 throttle() {
 hint_group=""
@@ -43,7 +42,6 @@ setprop vtools.powercfg_hint "$hint_mode"
 }
 
 # throttle
-
 
 # GPU频率表
 gpu_freqs=`cat /sys/class/kgsl/kgsl-3d0/devfreq/available_frequencies`
@@ -97,7 +95,7 @@ reset_basic_governor() {
   if [[ ! "$gpu_governor" = "msm-adreno-tz" ]]; then
     echo 'msm-adreno-tz' > /sys/class/kgsl/kgsl-3d0/devfreq/governor
   fi
-  echo $gpu_max_freq > /sys/class/kgsl/kgsl-3d0/devfreq/max_freq
+  # echo $gpu_max_freq > /sys/class/kgsl/kgsl-3d0/devfreq/max_freq
   echo $gpu_min_freq > /sys/class/kgsl/kgsl-3d0/devfreq/min_freq
   echo $gpu_min_pl > /sys/class/kgsl/kgsl-3d0/min_pwrlevel
   echo $gpu_max_pl > /sys/class/kgsl/kgsl-3d0/max_pwrlevel
@@ -311,24 +309,24 @@ adjustment_by_top_app() {
           sched_boost 0 0
           stune_top_app 0 0
           sched_config "50 80" "67 95" "300" "400"
-          gpu_pl_down 3
-          set_cpu_freq 1036800 1785600 1497600 1804800 1056000 2227200
-          set_hispeed_freq 1708800 1708800 2016000
+          gpu_pl_down 4
+          set_cpu_freq 1036800 1804800 1478400 1766400 1075200 2265600
+          set_hispeed_freq 1708800 1766400 2073600
           sched_limit 5000 0 5000 0 5000 0
         elif [[ "$action" = "balance" ]]; then
           sched_boost 1 0
           stune_top_app 1 10
           sched_config "50 68" "67 80" "300" "400"
           gpu_pl_down 1
-          set_cpu_freq 1036800 1785600 1056000 2016000 1056000 2419200
-          set_hispeed_freq 1708800 1056000 1056000
+          set_cpu_freq 1036800 1804800 1056000 2054400 1075200 2457600
+          set_hispeed_freq 1708800 1056000 1075200
           sched_limit 5000 0 5000 0 5000 0
         elif [[ "$action" = "performance" ]]; then
           sched_boost 1 0
           stune_top_app 1 10
           gpu_pl_down 1
-          set_cpu_freq 1036800 1478400 1056000 2419200 1056000 2841600
-          set_hispeed_freq 1708800 1708800 1708800
+          set_cpu_freq 1036800 1420800 1056000 2419200 1075200 2841600
+          set_hispeed_freq 1708800 1766400 1747200
           sched_limit 5000 0 5000 0 5000 0
         elif [[ "$action" = "fast" ]]; then
           sched_boost 1 1
@@ -342,7 +340,7 @@ adjustment_by_top_app() {
     # ShuangShengShiJie
     "com.bilibili.gcg2.bili")
         if [[ "$action" = "powersave" ]]; then
-          gpu_pl_down 4
+          gpu_pl_down 5
         elif [[ "$action" = "balance" ]]; then
           gpu_pl_down 3
         elif [[ "$action" = "performance" ]]; then

@@ -34,6 +34,14 @@ public class FloatFpsWatch(private val mContext: Context) {
     private var sessionApp: String? = null
 
     /**
+     * dp转换成px
+     */
+    private fun dp2px(context: Context, dpValue: Float): Int {
+        val scale = context.resources.displayMetrics.density
+        return (dpValue * scale + 0.5f).toInt()
+    }
+
+    /**
      * 显示弹出框
      * @param context
      */
@@ -56,7 +64,6 @@ public class FloatFpsWatch(private val mContext: Context) {
         mView = setUpView(mContext)
 
         val params = LayoutParams()
-        val monitorStorage = mContext.getSharedPreferences("float_monitor2_storage", Context.MODE_PRIVATE)
 
         // 类型
         params.type = LayoutParams.TYPE_SYSTEM_ALERT
@@ -77,8 +84,8 @@ public class FloatFpsWatch(private val mContext: Context) {
         params.height = LayoutParams.WRAP_CONTENT
 
         params.gravity = Gravity.TOP or Gravity.RIGHT
-        params.x = monitorStorage.getInt("x", 0)
-        params.y = monitorStorage.getInt("y", 0)
+        // params.x = 0
+        params.y = dp2px(mContext, 40f)
 
         params.flags = LayoutParams.FLAG_NOT_TOUCH_MODAL or LayoutParams.FLAG_NOT_FOCUSABLE or LayoutParams.FLAG_FULLSCREEN
 
@@ -97,30 +104,32 @@ public class FloatFpsWatch(private val mContext: Context) {
         mWindowManager!!.addView(mView, params)
 
         startTimer()
-        EventBus.subscibe(object : IEventReceiver{
-            override fun eventFilter(eventType: EventType): Boolean {
-                return (eventType == EventType.APP_SWITCH)
-            }
+        EventBus.subscibe(appWatch)
 
-            override fun onReceive(eventType: EventType) {
-                if (sessionId > 0) {
-                    val app = GlobalStatus.lastPackageName
-                    if (app != sessionApp) {
-                        sessionId = -1
-                        Toast.makeText(mContext, "前台应用发生变化，帧率录制结束", Toast.LENGTH_SHORT).show()
-                        recordBtn?.run {
-                            setImageResource(R.drawable.play)
-                            view?.alpha = 1f
-                        }
+        return true
+    }
+
+    private val appWatch = object : IEventReceiver{
+        override fun eventFilter(eventType: EventType): Boolean {
+            return (eventType == EventType.APP_SWITCH)
+        }
+
+        override fun onReceive(eventType: EventType) {
+            if (sessionId > 0) {
+                val app = GlobalStatus.lastPackageName
+                if (app != sessionApp) {
+                    sessionId = -1
+                    Toast.makeText(mContext, "前台应用发生变化，帧率录制结束", Toast.LENGTH_SHORT).show()
+                    recordBtn?.run {
+                        setImageResource(R.drawable.play)
+                        view?.alpha = 1f
                     }
                 }
             }
+        }
 
-            override val isAsync: Boolean
-                get() = false
-        })
-
-        return true
+        override val isAsync: Boolean
+            get() = false
     }
 
     private fun stopTimer() {
@@ -141,7 +150,12 @@ public class FloatFpsWatch(private val mContext: Context) {
     private fun updateInfo() {
         val fps = fpsUtils.getFps()
         if (sessionId > 0) {
-            fpsWatchStore.addHistory(sessionId, fps, ModeSwitcher.DEFAULT)
+            fpsWatchStore.addHistory(
+                sessionId,
+                fps,
+                GlobalStatus.batteryTemperature,
+                ModeSwitcher.DEFAULT
+            )
         }
 
         myHandler.post {
@@ -171,6 +185,7 @@ public class FloatFpsWatch(private val mContext: Context) {
             show = false
         }
         sessionId = -1
+        EventBus.unsubscibe(appWatch)
     }
 
     @SuppressLint("ApplySharedPref", "ClickableViewAccessibility")
