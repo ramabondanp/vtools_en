@@ -22,7 +22,7 @@ import com.omarea.data.EventBus
 import com.omarea.data.EventType
 import com.omarea.data.GlobalStatus
 import com.omarea.data.IEventReceiver
-import com.omarea.library.shell.FpsUtils
+import com.omarea.library.shell.SurfaceFlingerFpsUtils2
 import com.omarea.scene_mode.ModeSwitcher
 import com.omarea.store.FpsWatchStore
 import com.omarea.vtools.R
@@ -151,10 +151,10 @@ public class FloatFpsWatch(private val mContext: Context) {
 
     private var myHandler = Handler(Looper.getMainLooper())
 
-    private val fpsUtils = FpsUtils(KeepShellPublic.getInstance("fps-recorder", true))
+    private val fpsUtils = SurfaceFlingerFpsUtils2()
 
     private fun updateInfo() {
-        val fps = fpsUtils.fps
+        val fps = fpsUtils.getFps()
         if (sessionId > 0) {
             fpsWatchStore.addHistory(
                 sessionId,
