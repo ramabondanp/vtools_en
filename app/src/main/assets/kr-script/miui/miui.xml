@@ -90,7 +90,7 @@
                 title="Area size(%)"
                 desc="The adjustable range in the system settings is 20%~100%"
                 min="0" max="200" name="level" value-sh="run edge/get.sh" type="seekbar" />
-            <set>run haptic/set.sh</set>
+            <set>run edge/set.sh</set>
         </action>
     </group>
 

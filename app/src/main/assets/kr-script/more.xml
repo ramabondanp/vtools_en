@@ -102,18 +102,4 @@
             config="other/other.xml"
             desc="Other misc functions" title="Misc" />
     </group>
-
-    <group>
-        <page
-            id="page-outdated"
-            config="outdated/outdated.xml"
-            confirm="true"
-            desc="Some features that have been deprecated due to lack of usefulness" title="Obsolete functions" />
-    </group>
-
-    <group>
-        <page
-            html="https://vtools.oss-cn-beijing.aliyuncs.com/"
-            desc="Scene official website" title="Scene official web online page" />
-    </group>
 </pages>

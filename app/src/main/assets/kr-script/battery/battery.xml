@@ -10,8 +10,7 @@
 
         <page
             id="HighPowerApplicationsActivity"
-            activity="com.android.settings/.Settings$HighPowerApplicationsActivity"
-            logo-path="kr-script/battery/power_icon.png">
+            activity="com.android.settings/.Settings$HighPowerApplicationsActivity">
             <title>Battery Optimization</title>
             <desc>Go to the system's battery optimization settings screen</desc>
         </page>
@@ -23,14 +22,5 @@
             <desc>Clearing application power consumption records and battery curve data does not restore battery life!</desc>
             <set>run history_clear.sh</set>
         </action>
-    </group>
-
-    <group title="Experimental standby mode" visible=". ./kr-script/common/android_p.sh">
-        <switch auto-off="true" auto-finish="true" id="extreme_power" logo-path="kr-script/battery/extreme_power.png">
-            <title>Standby mode</title>
-            <desc>Kill and freeze all third-party apps and go to lock screen</desc>
-            <get>getprop persist.vtools.suspend</get>
-            <set>run extreme_power.sh</set>
-        </switch>
     </group>
 </root>

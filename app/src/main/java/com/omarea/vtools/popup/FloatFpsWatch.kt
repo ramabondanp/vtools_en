@@ -17,11 +17,12 @@ import android.view.WindowManager.LayoutParams
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
+import com.omarea.common.shell.KeepShellPublic
 import com.omarea.data.EventBus
 import com.omarea.data.EventType
 import com.omarea.data.GlobalStatus
 import com.omarea.data.IEventReceiver
-import com.omarea.library.shell.SurfaceFlingerFpsUtils2
+import com.omarea.library.shell.FpsUtils
 import com.omarea.scene_mode.ModeSwitcher
 import com.omarea.store.FpsWatchStore
 import com.omarea.vtools.R
@@ -85,7 +86,7 @@ public class FloatFpsWatch(private val mContext: Context) {
 
         params.gravity = Gravity.TOP or Gravity.RIGHT
         // params.x = 0
-        params.y = dp2px(mContext, 40f)
+        params.y = dp2px(mContext, 55f)
 
         params.flags = LayoutParams.FLAG_NOT_TOUCH_MODAL or LayoutParams.FLAG_NOT_FOCUSABLE or LayoutParams.FLAG_FULLSCREEN
 
@@ -111,18 +112,23 @@ public class FloatFpsWatch(private val mContext: Context) {
 
     private val appWatch = object : IEventReceiver{
         override fun eventFilter(eventType: EventType): Boolean {
-            return (eventType == EventType.APP_SWITCH)
+            return (eventType == EventType.APP_SWITCH || eventType == EventType.SCREEN_OFF || eventType == EventType.SCREEN_ON)
         }
 
         override fun onReceive(eventType: EventType) {
             if (sessionId > 0) {
-                val app = GlobalStatus.lastPackageName
-                if (app != sessionApp) {
+                if ((eventType == EventType.SCREEN_OFF || eventType == EventType.SCREEN_ON) || (GlobalStatus.lastPackageName != sessionApp)) {
                     sessionId = -1
-                    Toast.makeText(mContext, "前台应用发生变化，帧率录制结束", Toast.LENGTH_SHORT).show()
-                    recordBtn?.run {
-                        setImageResource(R.drawable.play)
-                        view?.alpha = 1f
+                    myHandler.post {
+                        if (eventType == EventType.SCREEN_OFF) {
+                            Toast.makeText(mContext, "屏幕显示状态变化，帧率录制结束", Toast.LENGTH_SHORT).show()
+                        } else {
+                            Toast.makeText(mContext, "前台应用发生变化，帧率录制结束", Toast.LENGTH_SHORT).show()
+                        }
+                        recordBtn?.run {
+                            setImageResource(R.drawable.play)
+                            view?.alpha = 1f
+                        }
                     }
                 }
             }
@@ -145,10 +151,10 @@ public class FloatFpsWatch(private val mContext: Context) {
 
     private var myHandler = Handler(Looper.getMainLooper())
 
-    private val fpsUtils = SurfaceFlingerFpsUtils2()
+    private val fpsUtils = FpsUtils(KeepShellPublic.getInstance("fps-recorder", true))
 
     private fun updateInfo() {
-        val fps = fpsUtils.getFps()
+        val fps = fpsUtils.fps
         if (sessionId > 0) {
             fpsWatchStore.addHistory(
                 sessionId,
@@ -199,6 +205,7 @@ public class FloatFpsWatch(private val mContext: Context) {
                     sessionId = -1
                     setImageResource(R.drawable.play)
                     view?.alpha = 1f
+                    Toast.makeText(mContext, "帧率录制结束！", Toast.LENGTH_SHORT).show()
                 } else {
                     val app = if (GlobalStatus.lastPackageName.isNullOrEmpty()) "android" else GlobalStatus.lastPackageName
                     sessionId = fpsWatchStore.createSession(app)
