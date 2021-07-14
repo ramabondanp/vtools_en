@@ -180,7 +180,7 @@ class FloatTaskManager(private val context: Context) {
             val adapter = (process_list.adapter as FloatProcessAdapter)
             val processInfo = adapter.getItem(position) as ProcessInfo
             if (processInfo.name.equals(context.packageName)) {
-                Toast.makeText(context, "自杀是不行的", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Suicide is not an option", Toast.LENGTH_SHORT).show()
                 return@setOnItemLongClickListener true
             }
             processUtils.killProcess(processInfo)
@@ -189,7 +189,7 @@ class FloatTaskManager(private val context: Context) {
             true
         }
         process_list.setOnItemClickListener { _, _, _, _ ->
-            Toast.makeText(context, "如需结束进程，请长按它~", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "To end the process, press and hold it ~", Toast.LENGTH_SHORT).show()
         }
 
         // 锁定位置
@@ -197,7 +197,7 @@ class FloatTaskManager(private val context: Context) {
             locked = !locked
             if (locked) {
                 it.alpha = 1f
-                Toast.makeText(context, "已锁定悬浮窗位置，你也可以 [长按] 此图标，使悬浮窗不可操作", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "You can also [long-press] this icon to make the hover window inoperable, as the hover window position is locked", Toast.LENGTH_LONG).show()
             } else {
                 it.alpha = 0.3f
             }

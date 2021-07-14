@@ -166,7 +166,7 @@ var app = new Vue({
           return '' + (minutes < 10 ? '0' : '') + minutes + ':' + (seconds < 10 ? '0' : '') + seconds
         }),
         datasets: [{
-          label: '温度变化',
+          label: 'Temp change',
           steppedLine: false,
           yAxisID: 'yB',
           data: temperatureData,
@@ -176,7 +176,7 @@ var app = new Vue({
           borderWidth: 1,
           pointRadius: 0
         }, {
-          label: '帧率变化',
+          label: 'FPS change',
           steppedLine: true,
           yAxisID: 'yA',
           data: fpsData,

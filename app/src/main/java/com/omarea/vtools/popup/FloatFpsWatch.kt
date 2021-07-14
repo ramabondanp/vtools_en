@@ -121,9 +121,9 @@ public class FloatFpsWatch(private val mContext: Context) {
                     sessionId = -1
                     myHandler.post {
                         if (eventType == EventType.SCREEN_OFF) {
-                            Toast.makeText(mContext, "屏幕显示状态变化，帧率录制结束", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(mContext, "The screen display status changes, and the frame rate recording ends", Toast.LENGTH_SHORT).show()
                         } else {
-                            Toast.makeText(mContext, "前台应用发生变化，帧率录制结束", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(mContext, "The foreground application changes and the frame rate recording ends", Toast.LENGTH_SHORT).show()
                         }
                         recordBtn?.run {
                             setImageResource(R.drawable.play)
@@ -205,14 +205,14 @@ public class FloatFpsWatch(private val mContext: Context) {
                     sessionId = -1
                     setImageResource(R.drawable.play)
                     view?.alpha = 1f
-                    Toast.makeText(mContext, "帧率录制结束！", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(mContext, "Frame rate recording is over!", Toast.LENGTH_SHORT).show()
                 } else {
                     val app = if (GlobalStatus.lastPackageName.isNullOrEmpty()) "android" else GlobalStatus.lastPackageName
                     sessionId = fpsWatchStore.createSession(app)
                     sessionApp = GlobalStatus.lastPackageName
                     setImageResource(R.drawable.stop)
                     view?.alpha = 0.6f
-                    Toast.makeText(mContext, "帧率录制开始，请勿使用游戏工具箱或离开当前应用！", Toast.LENGTH_LONG).show()
+                    Toast.makeText(mContext, "Frame rate recording starts, please do not use the game toolbox or leave the current application!", Toast.LENGTH_LONG).show()
                 }
             }
         }

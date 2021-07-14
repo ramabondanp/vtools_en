@@ -221,10 +221,10 @@ class FloatPowercfgSelector(context: Context) {
                     if (selectedMode != ModeSwitcher.IGONED) {
                         selectedMode = ModeSwitcher.IGONED
                         switchMode.run()
-                        Toast.makeText(context, "请返回桌面后重新打开当前活动应用，以便使配置生效~", Toast.LENGTH_LONG).show()
+                        Toast.makeText(context, "Please return to the desktop and reopen the currently active application to make the configuration effective~", Toast.LENGTH_LONG).show()
                     }
                 } else {
-                    Toast.makeText(context, "此选项只能在开启【动态响应】时，对单个应用设置~", Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, "This option can only be set for a single application when [Dynamic Response] is turned on~", Toast.LENGTH_LONG).show()
                 }
             }
         }

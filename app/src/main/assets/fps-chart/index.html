@@ -9,7 +9,7 @@
     <meta name="format-detection" content="telephone=no" />
     <meta name="format-detection" content="address=no" />
     <!--<title><%= htmlWebpackPlugin.options.title %></title>-->
-    <title>帧率统计图表</title>
+    <title>Frame rate statistics chart</title>
     <script source="https://chartjs.bootcss.com/dist/Chart.bundle.js" src="./Chart.bundle.2.7.2.js"></script>
     <script source="https://lib.baomitu.com/vue/2.6.12/vue.min.js" src="./vue.min.js"></script>
     <link rel="stylesheet" type="text/css" href="./styles.css">
@@ -57,7 +57,7 @@
                 </div>
             </div>
             <div v-else class="sessions empty">
-                <div>尚无应用帧率记录</div>
+                <div>No application frame rate recorded yet</div>
             </div>
             <div class="start-icon" @click="toggleFpsToolbar" :state-on="toolbarOn"></div>
         </div>
