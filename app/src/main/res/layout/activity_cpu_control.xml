@@ -331,7 +331,7 @@
                     <com.omarea.ui.HelpIcon
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:text="Some heat control modules used by Qualcomm on old SOCs that were turned off before the Snapdragon 835 have been basically abandoned. Generally speaking, keep the default. If you want the device to achieve the best performance, then it is recommended Don’t check any of them!" />
+                        app:text="Some of the heat control related modules used by Qualcomm on older SOCs have largely been deprecated after the Snapdragon 835. It's generally fine to leave them as default, and if you want the best performance from your device, then it's advisable not to check any of them!" />
 
                     <TextView
                         style="@style/textTitle"

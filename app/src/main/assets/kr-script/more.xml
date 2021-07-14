@@ -69,11 +69,6 @@
             config="aosp/aosp.xml"
             desc="The closer to the native system the more applicable" title="AOSP Exclusive" />
         <page
-            id="page-meizu"
-            config="flyme/flyme.xml"
-            desc="Options for Flyme system" title="Flyme Exclusive"
-            visible="run common/flyme_support.sh" />
-        <page
             id="page-mtk"
             config-sh="file:///android_asset/kr-script/mtk/mtk.sh"
             desc="MTK/Tenguiz exclusive option" title="MTK/Tenguiz exclusive"

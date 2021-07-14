@@ -12,20 +12,18 @@ import com.omarea.vtools.activities.ActivityBase
 class Immersive(private var context: ActivityBase) : AddinBase(context) {
     fun fullScreen() {
         DialogItemChooser(context.themeMode.isDarkMode, ArrayList<SelectItem>().apply {
-            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q) {
-                add(SelectItem().apply {
-                    title = "Hide all"
-                    value = "wm overscan reset;settings put global policy_control immersive.full=apps,-android,-com.android.systemui"
-                })
-                add(SelectItem().apply {
-                    title = "Hide navigation bar"
-                    value = "wm overscan reset;settings put global policy_control immersive.navigation=*"
-                })
-                add(SelectItem().apply {
-                    title = "Hide status bar"
-                    value = "wm overscan reset;settings put global policy_control immersive.status=apps,-android,-com.android.systemui"
-                })
-            }
+            add(SelectItem().apply {
+                title = "Hide all"
+                value = "wm overscan reset;settings put global policy_control immersive.full=apps,-android,-com.android.systemui"
+            })
+            add(SelectItem().apply {
+                title = "Hide navigation bar"
+                value = "wm overscan reset;settings put global policy_control immersive.navigation=*"
+            })
+            add(SelectItem().apply {
+                title = "Hide status bar"
+                value = "wm overscan reset;settings put global policy_control immersive.status=apps,-android,-com.android.systemui"
+            })
             add(SelectItem().apply {
                 title = "Restore default"
                 value = "wm overscan reset;settings put global policy_control null"

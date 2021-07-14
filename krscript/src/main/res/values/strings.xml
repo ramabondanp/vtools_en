@@ -62,4 +62,5 @@
     <string name="kr_sdk_discrepancy">System version does not match</string>
     <string name="kr_sdk_discrepancy_message">This function only works on systems with SDK%d</string>
     <string name="picker_not_item">No option available at this time!</string>
+    <string name="picker_select_none">None checked!</string>
 </resources>

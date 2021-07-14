@@ -5,4 +5,5 @@
      <string name="btn_confirm">OK</string>
      <string name="app_chooser_search_hint">Enter the application name/package name to search </string>
      <string name="item_chooser_search_hint">Search options</string>
+    <string name="select_all">Select All</string>
 </resources>

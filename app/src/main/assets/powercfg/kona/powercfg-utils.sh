@@ -17,6 +17,7 @@ distinct_apps="
 game=com.miHoYo.Yuanshen,com.miHoYo.ys.bilibili,com.miHoYo.ys.mi
 
 mgame=com.bilibili.gcg2.bili
+sgame=com.tencent.tmgp.sgame
 
 heavy=com.taobao.idlefish,com.taobao.taobao,com.miui.home,com.android.browser,com.baidu.tieba_mini,com.baidu.tieba,com.jingdong.app.mall
 
@@ -74,10 +75,46 @@ if [[ "$gpu_min_pl" -lt 0 ]];then
 fi;
 
 
+conservative_mode() {
+  local policy=/sys/devices/system/cpu/cpufreq/policy
+  local down="$1"
+  local up="$2"
+
+  if [[ "$down" == "" ]]; then
+    local down="20"
+  fi
+  if [[ "$up" == "" ]]; then
+    local up="60"
+  fi
+
+  for cluster in 0 4 7; do
+    echo $cluster
+    echo 'conservative' > ${policy}${cluster}/scaling_governor
+    echo $down > ${policy}${cluster}/conservative/down_threshold
+    echo $up > ${policy}${cluster}/conservative/up_threshold
+    echo 0 > ${policy}${cluster}/conservative/ignore_nice_load
+    echo 1000 > ${policy}${cluster}/conservative/sampling_rate # 1000us = 1ms
+    echo 4 > ${policy}${cluster}/conservative/freq_step
+  done
+}
+
+core_online=(1 1 1 1 1 1 1 1)
+set_core_online() {
+  for index in 0 1 2 3 4 5 6 7; do
+    core_online[$index]=`cat /sys/devices/system/cpu/cpu$index/online`
+    echo 1 > /sys/devices/system/cpu/cpu$index/online
+  done
+}
+restore_core_online() {
+  for i in "${!core_online[@]}"; do
+     echo ${core_online[i]} > /sys/devices/system/cpu/cpu$i/online
+  done
+}
+
+
 reset_basic_governor() {
-  echo 1 > /sys/devices/system/cpu/cpu0/online
-  echo 1 > /sys/devices/system/cpu/cpu4/online
-  echo 1 > /sys/devices/system/cpu/cpu7/online
+  set_core_online
+
   # CPU
   governor0=`cat /sys/devices/system/cpu/cpufreq/policy0/scaling_governor`
   governor4=`cat /sys/devices/system/cpu/cpufreq/policy4/scaling_governor`
@@ -110,7 +147,7 @@ devfreq_backup () {
   if [[ ! -f $devfreq_backup ]] || [[ "$backup_state" != "true" ]]; then
     echo '' > $devfreq_backup
     local dir=/sys/class/devfreq
-    for file in `ls $dir`; do
+    for file in `ls $dir | grep -v 'kgsl-3d0'`; do
       if [ -f $dir/$file/governor ]; then
         governor=`cat $dir/$file/governor`
         echo "$file#$governor" >> $devfreq_backup
@@ -128,7 +165,7 @@ devfreq_performance () {
   local backup_state=`getprop vtools.dev_freq_backup`
 
   if [[ -f "$devfreq_backup" ]] && [[ "$backup_state" == "true" ]]; then
-    for file in `ls $dir`; do
+    for file in `ls $dir | grep -v 'kgsl-3d0'`; do
       if [ -f $dir/$file/governor ]; then
         # echo $dir/$file/governor
         echo performance > $dir/$file/governor
@@ -278,6 +315,21 @@ set_gpu_pl(){
   echo $2 > /sys/class/kgsl/kgsl-3d0/${1}_pwrlevel
 }
 
+set_gpu_max_freq () {
+  echo $1 > /sys/class/kgsl/kgsl-3d0/devfreq/max_freq
+  local pl=-1
+
+  for freq in $gpu_freqs; do
+    local pl=$((pl + 1))
+    if [[ $freq -lt $1 ]] || [[ $freq == $1 ]]; then
+      break
+    fi;
+  done
+  if [[ $pl -gt -1 ]]; then
+    echo $pl > /sys/class/kgsl/kgsl-3d0/max_pwrlevel
+  fi
+}
+
 # GPU MinPowerLevel To Up
 gpu_pl_up() {
   local offset="$1"
@@ -300,6 +352,16 @@ gpu_pl_down() {
   else
     echo $gpu_min_pl > /sys/class/kgsl/kgsl-3d0/max_pwrlevel
   fi
+}
+
+# set_task_affinity $pid $use_cores[cpu7~cpu0]
+set_task_affinity() {
+  pid=$1
+  mask=`echo "obase=16;$((num=2#$2))" | bc`
+  for tid in $(ls "/proc/$pid/task/"); do
+    taskset -p "$mask" "$tid" 1>/dev/null
+  done
+  taskset -p "$mask" "$pid" 1>/dev/null
 }
 
 adjustment_by_top_app() {
@@ -340,6 +402,42 @@ adjustment_by_top_app() {
         cpuset '0-1' '0-3' '0-3' '0-7'
     ;;
 
+
+    # Wang Zhe Rong Yao
+    "com.tencent.tmgp.sgame")
+        ctl_off cpu4
+        ctl_on cpu7
+        if [[ "$action" = "powersave" ]]; then
+          # sched_config "55 68" "69 78" "300" "400"
+          sched_config "52 55" "69 67" "300" "400"
+          sched_boost 1 0
+          stune_top_app 0 0
+          cpuset '0-1' '0-1' '0-3' '0-7'
+          set_cpu_freq 300000 1708800 710400 1574400 844800 1747200
+          set_hispeed_freq 1420800 1382400 1305600
+        elif [[ "$action" = "balance" ]]; then
+          # sched_config "48 65" "63 75" "300" "400"
+          sched_config "50 55" "65 65" "300" "400"
+          sched_boost 1 0
+          stune_top_app 0 1
+          cpuset '0-1' '0-1' '0-6' '0-7'
+          set_cpu_freq 300000 1708800 710400 1862400 844800 2073600
+          set_hispeed_freq 1708800 1670400 1305600
+        elif [[ "$action" = "performance" ]]; then
+          sched_config "45 55" "55 65" "300" "400"
+          sched_boost 1 0
+          stune_top_app 1 20
+          cpuset '0-1' '0-1' '0-6' '0-7'
+          set_cpu_freq 300000 1708800 710400 2419200 825600 2841600
+        elif [[ "$action" = "fast" ]]; then
+          sched_config "40 55" "50 63" "300" "400"
+          cpuset '0-1' '0-1' '0-6' '0-7'
+          sched_boost 1 1
+          stune_top_app 1 20
+          set_cpu_freq 1248000 1708800 1478400 2600000 1516800 3200000
+        fi
+    ;;
+
     # ShuangShengShiJie
     "com.bilibili.gcg2.bili")
         if [[ "$action" = "powersave" ]]; then
@@ -357,12 +455,17 @@ adjustment_by_top_app() {
         cpuset '0-1' '0-3' '0-3' '0-7'
     ;;
 
-    # XianYu, TaoBao, MIUI Home, Browser, TieBa Fast, TieBa、JingDong、TianMao
-    "com.taobao.idlefish" | "com.taobao.taobao" | "com.miui.home" | "com.android.browser" | "com.baidu.tieba_mini" | "com.baidu.tieba" | "com.jingdong.app.mall" | "com.tmall.wireless")
-      if [[ "$action" != "powersave" ]]; then
+    # XianYu, TaoBao, MIUI Home, Browser, TieBa Fast, TieBa、JingDong、TianMao、Mei Tuan、RE、ES、PuPuChaoShi
+    "com.taobao.idlefish" | "com.taobao.taobao" | "com.miui.home" | "com.android.browser" | "com.baidu.tieba_mini" | "com.baidu.tieba" | "com.jingdong.app.mall" | "com.tmall.wireless" | "com.sankuai.meituan" | "com.speedsoftware.rootexplorer" | "com.estrongs.android.pop" | "com.pupumall.customer")
+      if [[ "$action" == "balance" ]] && [[ "$top_app" == "com.miui.home" ]]; then
+        sched_boost 1 0
+        stune_top_app 1 1
+        sched_config "45 62" "55 75" "85" "100"
+      elif [[ "$action" != "powersave" ]]; then
         sched_boost 1 1
         stune_top_app 1 1
-        echo 4-6 > /dev/cpuset/top-app/cpus
+        sched_config "45 62" "55 75" "85" "100"
+        # echo 4-6 > /dev/cpuset/top-app/cpus
       fi
     ;;
 
@@ -381,7 +484,6 @@ adjustment_by_top_app() {
 
       sched_boost 0 0
       stune_top_app 0 0
-      set_cpu_pl 0
       echo 0-3 > /dev/cpuset/foreground/cpus
 
       if [[ "$action" = "powersave" ]]; then

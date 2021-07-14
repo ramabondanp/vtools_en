@@ -11,6 +11,11 @@ import com.omarea.common.model.SelectItem
 import java.util.*
 
 class AdapterItemChooser(private val context: Context, private var items: ArrayList<SelectItem>, private val multiple: Boolean) : BaseAdapter(), Filterable {
+    interface SelectStateListener {
+        fun onSelectChange(selected: List<AdapterAppChooser.AppInfo>)
+    }
+
+    private var selectStateListener: SelectStateListener? = null
     private var filter: Filter? = null
     internal var filterItems: ArrayList<SelectItem> = items
     private val mLock = Any()
@@ -131,14 +136,18 @@ class AdapterItemChooser(private val context: Context, private var items: ArrayL
         viewHolder.checkBox = convertView.findViewById(R.id.ItemChecBox)
 
         convertView.setOnClickListener {
-            if (multiple || item.selected) {
+            if (multiple) {
                 item.selected = !item.selected
                 viewHolder.checkBox?.isChecked = item.selected
             } else {
-                val current = items.find { it.selected }
-                current?.selected = false
-                item.selected = true
-                notifyDataSetChanged()
+                if (item.selected) {
+                    return@setOnClickListener
+                } else {
+                    val current = items.find { it.selected }
+                    current?.selected = false
+                    item.selected = true
+                    notifyDataSetChanged()
+                }
             }
         }
 
@@ -151,6 +160,17 @@ class AdapterItemChooser(private val context: Context, private var items: ArrayL
             }
         }
         viewHolder.checkBox?.isChecked = item.selected
+    }
+
+    fun setSelectAllState(allSelected: Boolean) {
+        items.forEach {
+            it.selected = allSelected
+        }
+        notifyDataSetChanged()
+    }
+
+    fun setSelectStateListener(selectStateListener: SelectStateListener?) {
+        this.selectStateListener = selectStateListener
     }
 
     fun getSelectedItems(): List<SelectItem> {

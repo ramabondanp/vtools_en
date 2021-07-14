@@ -33,7 +33,7 @@
     <string name="share_link">You should try Scene too, I think it\'s not bad, download address: \n http://vtools.omarea.com/</string>
     
 
-    <string name="app_name">Scene4 Beta</string>
+    <string name="app_name">Scene4</string>
     <string name="app_name_short">Scene4</string>
     <string name="app_name_mode_switch">Scene-Quick switch mode</string>
 
@@ -373,13 +373,9 @@
 
     <string name="flash_confirm">Confirm refresh?</string>
 
-    <string name="scene_addin_installing">Waiting, installing "Scene - Advanced Settings" plug-in...</string>
-    <string name="scene_addin_miss">The plugin is not integrated into the application package, please download it separately!</string>
-    <string name="scene_inner_addin_invalid">The version of the "Advanced Settings" plugin integrated in Scene is too low, please contact the developer to report the error!</string>
-    <string name="scene_addin_installed">The "Scene - Advanced Settings" plug-in has been installed!</string>
-    <string name="scene_addin_install_fail">Installation of the "Scene - Advanced Settings" plug-in failed!</string>
-    <string name="scene_addin_sync_fail">Failed to sync Xposed settings from "Scene - Advanced Settings" plugin!</string>
-    <string name="scene_addin_version_toolow">The version of "Scene-Advanced Settings" plugin is too low!</string>
+    <string name="scene_addin_miss">Advanced settings miss components</string>
+    <string name="scene_addin_miss_desc">Please download and install "Scene-Advanced Settings" from Scene, and set it to allow background self-start!</string>
+    <string name="scene_addin_sync_fail">Failed to sync Xposed settings from "Scene-Advanced Settings" component!</string>
     <string name="scene_install_autoclick">Installation click</string>
     <string name="scene_install_autoclick_desc">When installing third-party applications, it automatically helps you to click "Next" and "Install".</string>
     <string name="scene_install_skip_ad">Skip ads</string>

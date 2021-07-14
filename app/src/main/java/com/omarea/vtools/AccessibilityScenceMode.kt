@@ -33,6 +33,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * Created by helloklf on 2016/8/27.
@@ -41,6 +42,7 @@ public class AccessibilityScenceMode : AccessibilityService() {
     private var flagRequestKeyEvent = true
     private var sceneConfigChanged: BroadcastReceiver? = null
     private var isLandscap = false
+    private var inputMethods = ArrayList<String>()
 
     private var displayWidth = 1080
     private var displayHeight = 2340
@@ -139,6 +141,7 @@ public class AccessibilityScenceMode : AccessibilityService() {
         if (appSwitchHandler == null) {
             appSwitchHandler = AppSwitchHandler(this)
         }
+
         getDisplaySize()
 
         if (spf.getBoolean(SpfConfig.GLOBAL_SPF_SCENE_LOG, false)) {
@@ -150,8 +153,9 @@ public class AccessibilityScenceMode : AccessibilityService() {
 
         // 获取输入法
         GlobalScope.launch(Dispatchers.IO) {
+            inputMethods = InputMethodApp(applicationContext).getInputMethods()
             skipAdIgnoredApps.addAll(LauncherApps(applicationContext).launcherApps)
-            skipAdIgnoredApps.addAll(InputMethodApp(applicationContext).getInputMethods())
+            skipAdIgnoredApps.addAll(inputMethods)
         }
     }
 
@@ -316,6 +320,12 @@ public class AccessibilityScenceMode : AccessibilityService() {
 
                 var lastWindowSize = 0
                 var lastWindowFocus = false
+
+                // 无焦点窗口（一般处于过渡动画或窗口切换过程中）
+                if (effectiveWindows.find { it.isActive || it.isFocused } == null) {
+                    return
+                }
+
                 for (window in effectiveWindows) {
                     /*
                     val wp = window.root?.packageName
@@ -329,12 +339,14 @@ public class AccessibilityScenceMode : AccessibilityService() {
                         window.getBoundsInScreen(outBounds)
 
                         logs?.run {
+                            val windowFocused = (window.isActive || window.isFocused)
+
                             val wp = try {
                                 window.root?.packageName
                             } catch (ex: java.lang.Exception) {
                                 null
                             }
-                            append("\n层级: ${window.layer} ${wp}\n类型: ${window.type} Rect[${outBounds.left},${outBounds.top},${outBounds.right},${outBounds.bottom}]")
+                            append("\n层级: ${window.layer} ${wp} Focused：${windowFocused}\n类型: ${window.type} Rect[${outBounds.left},${outBounds.top},${outBounds.right},${outBounds.bottom}]")
                         }
 
                         val size = (outBounds.right - outBounds.left) * (outBounds.bottom - outBounds.top)
@@ -379,8 +391,10 @@ public class AccessibilityScenceMode : AccessibilityService() {
                     if (logs == null) {
                         if (eventWindowId == lastWindowId && event.packageName != null) {
                             val pa = event.packageName
-                            GlobalStatus.lastPackageName = pa.toString()
-                            EventBus.publish(EventType.APP_SWITCH)
+                            if (!(isLandscap  && inputMethods.contains(pa))) {
+                                GlobalStatus.lastPackageName = pa.toString()
+                                EventBus.publish(EventType.APP_SWITCH)
+                            }
                         } else {
                             lastAnalyseThread = System.currentTimeMillis()
                             // try {
@@ -417,8 +431,11 @@ public class AccessibilityScenceMode : AccessibilityService() {
                         }
                         if (wp != null) {
                             logs.append("\n此前: ${GlobalStatus.lastPackageName}")
-                            GlobalStatus.lastPackageName = wp.toString()
-                            EventBus.publish(EventType.APP_SWITCH)
+                            val pa = wp.toString()
+                            if (!(isLandscap  && inputMethods.contains(pa))) {
+                                GlobalStatus.lastPackageName = pa
+                                EventBus.publish(EventType.APP_SWITCH)
+                            }
                             if (event != null) {
                                 startActivityPolling()
                             }
@@ -468,6 +485,10 @@ public class AccessibilityScenceMode : AccessibilityService() {
             })
             // MIUI 优化，打开MIUI多任务界面时当做没有发生应用切换
             if (wp?.equals("com.miui.home") == true) {
+                // 手势滑动过程中，桌面面处于非Focused状态
+                if (!windowInfo.isFocused) {
+                    return@launch
+                }
                 /*
                 val node = root?.findAccessibilityNodeInfosByText("小窗应用")?.firstOrNull()
                 Log.d("Scene-MIUI", "" + node?.parent?.viewIdResourceName)
@@ -480,8 +501,11 @@ public class AccessibilityScenceMode : AccessibilityService() {
             }
 
             if (lastAnalyseThread == tid && wp != null) {
-                GlobalStatus.lastPackageName = wp.toString()
-                EventBus.publish(EventType.APP_SWITCH)
+                val pa = wp.toString()
+                if (!(isLandscap  && inputMethods.contains(pa))) {
+                    GlobalStatus.lastPackageName = pa
+                    EventBus.publish(EventType.APP_SWITCH)
+                }
             }
         }
     }
@@ -521,7 +545,7 @@ public class AccessibilityScenceMode : AccessibilityService() {
 
     private var pollingTimer: Timer? = null // 轮询定时器
     private var lastEventTime: Long = 0 // 最后一次触发事件的时间
-    private val pollingTimeout: Long = 10000 // 轮询超时时间
+    private val pollingTimeout: Long = 7000 // 轮询超时时间
     private val pollingInterval: Long = 3000 // 轮询间隔
     private fun startActivityPolling(delay: Long? = null) {
         stopActivityPolling()

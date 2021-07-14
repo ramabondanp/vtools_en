@@ -1,5 +1,3 @@
-#!/system/bin/sh
-
 swapfile=/data/swapfile
 action="$1"     # 操作(脚本中的函数名)
 loop="$2"       # 是否挂载为loop设备
@@ -8,35 +6,33 @@ swapsize="$4"   # SWAP大小MB
 
 loop_save="vtools.swap.loop"
 next_loop_path=""
+
 # 获取下一个loop设备的索引
-function get_next_loop() {
-    local current_loop=`getprop $loop_save`
+get_next_loop() {
+ local current_loop=`getprop $loop_save`
 
-    if [[ "$current_loop" != "" ]]
-    then
-        next_loop_path="$current_loop"
-    fi
+ if [[ "$current_loop" != "" ]]; then
+   next_loop_path="$current_loop"
+ fi
 
-    local loop_index=0
-    # local used=`blkid | grep /dev/block/loop | cut -f1 -d ":"`
-    local used=`blkid | grep /dev/block/loop`
-    for loop in /dev/block/loop*
-    do
-        if [[ "$loop_index" -gt "0" ]]
-        then
-            if [[ `echo $used | grep /dev/block/loop$loop_index` = "" ]]
-            then
-                return $loop_index
-            fi
-        fi
-        local loop_index=`expr $loop_index + 1`
-    done
+ local loop_index=0
+ # local used=`blkid | grep /dev/block/loop | cut -f1 -d ":"`
+ local used=`blkid | grep /dev/block/loop`
+ for loop in /dev/block/loop*
+ do
+   if [[ "$loop_index" -gt "0" ]]; then
+     if [[ `echo $used | grep /dev/block/loop$loop_index` = "" ]]; then
+       return $loop_index
+     fi
+   fi
+   local loop_index=`expr $loop_index + 1`
+ done
 
-    if [[ -e "/dev/block/loop$loop_index" ]]; then
-        next_loop_path="/dev/block/loop$loop_index"
-    else
-        next_loop_path=""
-    fi
+ if [[ -e "/dev/block/loop$loop_index" ]]; then
+   next_loop_path="/dev/block/loop$loop_index"
+ else
+   next_loop_path=""
+ fi
 }
 
 if [[ $loop == "1" ]]; then
@@ -52,20 +48,17 @@ else
 fi
 
 # 关闭swap（如果正在使用，那可不是一般的慢）
-diable_swap() {
-	swapoff $swap_mount >/dev/null 2>&1
-
-    if [[ $loop == "1" ]]; then
-        losetup -d $swap_mount >/dev/null 2>&1
-    fi
-
-	setprop $loop_save ""
+disable_swap() {
+  swapoff $swap_mount >/dev/null 2>&1
+  if [[ $loop == "1" ]]; then
+    losetup -d $swap_mount >/dev/null 2>&1
+  fi
+  setprop $loop_save ""
 }
 
 # 开启SWAP
 enable_swap() {
-  if [[ ! -f $swapfile ]]
-  then
+  if [[ ! -f $swapfile ]]; then
     if [[ "$swapsize" = "" ]]; then
       swapsize=256
     fi
@@ -82,8 +75,8 @@ enable_swap() {
     setprop $loop_save $next_loop_path
   fi
 
-	mkswap $swap_mount >/dev/null 2>&1 # 初始化
-	if [[ "$priority" != "" ]]; then
+  mkswap $swap_mount >/dev/null 2>&1 # 初始化
+  if [[ "$priority" != "" ]]; then
 
     # zram_priority=`cat /proc/swaps | grep /zram0 | sed 's/[ \t][ ]*/,/g' | cut -f5 -d ','`
     zram_info=`cat /proc/swaps | grep /zram0`
@@ -104,14 +97,18 @@ enable_swap() {
       fi
     fi
 
-    swapon $swap_mount -p "$priority" >/dev/null 2>&1   # 开启
+    if [[ "$priority" -lt 0 ]]; then
+      swapon $swap_mount >/dev/null 2>&1                  # 开启
+    else
+      swapon $swap_mount -p "$priority" >/dev/null 2>&1   # 开启
+    fi
   else
     swapon $swap_mount >/dev/null 2>&1                  # 开启
-	fi
+  fi
 
-	echo 100 > /proc/sys/vm/overcommit_ratio
-	echo 100 > /proc/sys/vm/swap_ratio
-	echo 0 > /proc/sys/panic_on_oom
+  echo 100 > /proc/sys/vm/overcommit_ratio
+  echo 100 > /proc/sys/vm/swap_ratio
+  echo 0 > /proc/sys/panic_on_oom
 }
 
 "$action"
