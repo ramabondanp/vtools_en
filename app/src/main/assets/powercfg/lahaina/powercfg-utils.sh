@@ -23,7 +23,7 @@ heavy=com.taobao.idlefish,com.taobao.taobao,com.miui.home,com.android.browser,co
 
 music=com.netease.cloudmusic,com.kugou.android,com.kugou.android.lite
 
-video=com.ss.android.ugc.awem,tv.danmaku.bili
+video=com.ss.android.ugc.aweme,tv.danmaku.bili
 "
 
   hint_group=$(echo -e "$distinct_apps" | grep "$top_app" | cut -f1 -d "=")
@@ -98,8 +98,16 @@ conservative_mode() {
 
   echo $1 > ${policy}0/conservative/down_threshold
   echo $2 > ${policy}0/conservative/up_threshold
+  echo $1 > ${policy}0/conservative/down_threshold
+  echo $2 > ${policy}0/conservative/up_threshold
+
   echo $3 > ${policy}4/conservative/down_threshold
   echo $4 > ${policy}4/conservative/up_threshold
+  echo $3 > ${policy}4/conservative/down_threshold
+  echo $4 > ${policy}4/conservative/up_threshold
+
+  echo $5 > ${policy}7/conservative/down_threshold
+  echo $6 > ${policy}7/conservative/up_threshold
   echo $5 > ${policy}7/conservative/down_threshold
   echo $6 > ${policy}7/conservative/up_threshold
 }
@@ -147,54 +155,11 @@ reset_basic_governor() {
   echo $gpu_max_pl > /sys/class/kgsl/kgsl-3d0/max_pwrlevel
 }
 
-devfreq_backup () {
-  local devfreq_backup=/cache/devfreq_backup.prop
-  local backup_state=`getprop vtools.dev_freq_backup`
-  if [[ ! -f $devfreq_backup ]] || [[ "$backup_state" != "true" ]]; then
-    echo '' > $devfreq_backup
-    local dir=/sys/class/devfreq
-    for file in `ls $dir | grep -v 'kgsl-3d0'`; do
-      if [ -f $dir/$file/governor ]; then
-        governor=`cat $dir/$file/governor`
-        echo "$file#$governor" >> $devfreq_backup
-      fi
-    done
-    setprop vtools.dev_freq_backup true
-  fi
-}
-
 devfreq_performance () {
-  devfreq_backup
-
-  local dir=/sys/class/devfreq
-  local devfreq_backup=/cache/devfreq_backup.prop
-  local backup_state=`getprop vtools.dev_freq_backup`
-
-  if [[ -f "$devfreq_backup" ]] && [[ "$backup_state" == "true" ]]; then
-    for file in `ls $dir | grep -v 'kgsl-3d0'`; do
-      if [ -f $dir/$file/governor ]; then
-        # echo $dir/$file/governor
-        echo performance > $dir/$file/governor
-      fi
-    done
-  fi
-
   bw_max_always
 }
 
 devfreq_restore () {
-  local devfreq_backup=/cache/devfreq_backup.prop
-  local backup_state=`getprop vtools.dev_freq_backup`
-
-  if [[ -f "$devfreq_backup" ]] && [[ "$backup_state" == "true" ]]; then
-    local dir=/sys/class/devfreq
-    while read line; do
-      if [[ "$line" != "" ]]; then
-        echo ${line#*#} > $dir/${line%#*}/governor
-      fi
-    done < $devfreq_backup
-  fi
-
   bw_min
 }
 
@@ -361,8 +326,8 @@ stune_top_app() {
 cpuctl () {
  echo $2 > /dev/cpuctl/$1/cpu.uclamp.sched_boost_no_override
  echo $3 > /dev/cpuctl/$1/cpu.uclamp.latency_sensitive
- echo $4 > /dev/cpuctl/top-app/cpu.uclamp.min
- echo $5 > /dev/cpuctl/top-app/cpu.uclamp.max
+ echo $4 > /dev/cpuctl/$1/cpu.uclamp.min
+ echo $5 > /dev/cpuctl/$1/cpu.uclamp.max
 }
 
 cpuset() {
@@ -415,8 +380,8 @@ adjustment_by_top_app() {
   case "$top_app" in
     # YuanShen
     "com.miHoYo.Yuanshen" | "com.miHoYo.ys.mi" | "com.miHoYo.ys.bilibili")
-        ctl_off cpu4
-        ctl_off cpu7
+        # ctl_off cpu4
+        # ctl_off cpu7
         manufacturer=$(getprop ro.product.manufacturer)
         if [[ "$action" = "powersave" ]]; then
           if [[ "$manufacturer" == "Xiaomi" ]]; then
@@ -465,14 +430,14 @@ adjustment_by_top_app() {
 
     # Wang Zhe Rong Yao
     "com.tencent.tmgp.sgame")
-        ctl_off cpu4
-        ctl_on cpu7
+        # ctl_off cpu4
+        # ctl_on cpu7
         if [[ "$action" = "powersave" ]]; then
-          conservative_mode 55 72 72 8 69 82
+          conservative_mode 60 75 77 91 69 82
           sched_boost 0 0
           stune_top_app 0 0
           sched_config "60 68" "78 80" "300" "400"
-          set_cpu_freq 1036800 1708800 844800 1766400 844800 1670400
+          set_cpu_freq 806400 1708800 844800 1766400 844800 844800
           # set_gpu_max_freq 540000000
           set_gpu_max_freq 491000000
           cpuset '0-1' '0-1' '0-3' '0-6'
@@ -553,30 +518,61 @@ adjustment_by_top_app() {
       echo 0-6 > /dev/cpuset/foreground/cpus
     ;;
 
+    # BaiDuDiTu, TenXunDiTu, GaoDeDiTu
+    "com.baidu.BaiduMap" | "com.tencent.map" | "com.autonavi.minimap")
+      if [[ "$action" != "fast" ]]; then
+        core_online[7]=0
+        cpuset '0' '0-3' '0-3' '0-6'
+        gpu_pl_up 0
+        sched_boost 0 0
+        stune_top_app 0 0
+        sched_limit 0 0 0 2000 0 1000
+        if [[ "$action" = "powersave" ]]; then
+          conservative_mode 60 72 80 98 90 99
+          cpuctl top-app 0 0 0 0.2
+          set_cpu_freq 300000 1708800 710400 1440000 844800 844800
+          set_gpu_max_freq 200000000
+        elif [[ "$action" = "balance" ]]; then
+          conservative_mode 59 70 78 97 90 99
+          cpuctl top-app 0 1 0 0.8
+          set_cpu_freq 300000 1708800 710400 1440000 844800 844800
+          set_gpu_max_freq 300000000
+        elif [[ "$action" = "performance" ]]; then
+          sched_config "85 85" "96 96" "150" "400"
+          cpuctl top-app 0 1 0 max
+          set_cpu_freq 300000 1708800 710400 1555200 844800 1785600
+          set_gpu_max_freq 491000000
+        fi
+      fi
+    ;;
+
     # DouYin, BiliBili
-    "com.ss.android.ugc.awem" | "tv.danmaku.bili")
-      ctl_on cpu4
-      ctl_on cpu7
+    "com.ss.android.ugc.aweme" | "tv.danmaku.bili")
+      # ctl_on cpu4
+      # ctl_on cpu7
 
-      set_ctl cpu4 85 45 0
-      set_ctl cpu7 80 40 0
+      # set_ctl cpu4 85 45 0
+      # set_ctl cpu7 80 40 0
 
-      sched_boost 0 0
       stune_top_app 0 0
       echo 0-3 > /dev/cpuset/foreground/cpus
 
       if [[ "$action" = "powersave" ]]; then
+        sched_boost 0 0
         echo 0-5 > /dev/cpuset/top-app/cpus
-        cpuctl top-app 0 0 0 0.8
+        cpuctl top-app 0 0 0 0.1
       elif [[ "$action" = "balance" ]]; then
+        sched_boost 0 0
         echo 0-6 > /dev/cpuset/top-app/cpus
         set_cpu_freq 300000 1708800 710400 1881600 844800 2035200
-        cpuctl top-app 0 0 0 max
+        cpuctl top-app 0 0 0 0.5
       elif [[ "$action" = "performance" ]]; then
+        sched_boost 1 0
         set_cpu_freq 300000 1804800 710400 1881600 844800 2035200
         echo 0-7 > /dev/cpuset/top-app/cpus
         cpuctl top-app 0 1 0 max
       elif [[ "$action" = "fast" ]]; then
+        sched_boost 1 0
         echo 0-7 > /dev/cpuset/top-app/cpus
         set_cpu_freq 300000 1804800 710400 2419200 825600 2841600
         cpuctl top-app 0 1 0.1 max

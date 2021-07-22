@@ -30,7 +30,7 @@ case "$target" in
     echo 1 > /sys/devices/system/cpu/cpu7/core_ctl/nr_prev_assist_thresh
 
     # Disable Core control on silver
-    echo 0 > /sys/devices/system/cpu/cpu0/core_ctl/enable
+    # echo 0 > /sys/devices/system/cpu/cpu0/core_ctl/enable
 
     # Setting b.L scheduler parameters
     echo 95 95 > /proc/sys/kernel/sched_upmigrate
@@ -83,18 +83,18 @@ case "$target" in
   ;;
 esac
 
-pgrep -f surfaceflinger | while read pid; do
-  echo $pid > /dev/cpuset/top-app/tasks
-  echo $pid > /dev/stune/top-app/tasks
-done
-pgrep -f system_server | while read pid; do
-  echo $pid > /dev/cpuset/top-app/tasks
-  echo $pid > /dev/stune/top-app/tasks
-done
-pgrep -f vendor.qti.hardware.display.composer-service | while read pid; do
-  echo $pid > /dev/cpuset/top-app/tasks
-  echo $pid > /dev/stune/top-app/tasks
-done
+set_cpuset(){
+  pgrep -f $1 | while read pid; do
+    echo $pid > /dev/cpuset/$2/tasks
+    echo $pid > /dev/stune/$2/tasks
+  done
+}
+
+set_cpuset surfaceflinger top-app
+set_cpuset system_server top-app
+set_cpuset vendor.qti.hardware.display.composer-service top-app
+set_cpuset mediaserver background
+set_cpuset media.hwcodec background
 
 cpuctl () {
  echo $2 > /dev/cpuctl/$1/cpu.uclamp.sched_boost_no_override
@@ -104,10 +104,12 @@ cpuctl () {
 }
 
 cpuctl top-app 0 0 0 max
-cpuctl foreground 0 0 0 '0.8'
+# cpuctl foreground 0 0 0 '0.8'
+cpuctl foreground 0 0 0 0
 cpuctl background 0 0 0 0
 
 echo 0 > /dev/stune/nnapi-hal/schedtune.boost
 echo 0 > /dev/stune/nnapi-hal/schedtune.prefer_idle
 
 set_task_affinity `pgrep com.miui.home` 11111111
+set_task_affinity `pgrep com.miui.home` 11110000

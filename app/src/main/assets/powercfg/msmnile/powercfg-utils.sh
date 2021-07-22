@@ -23,7 +23,7 @@ heavy=com.taobao.idlefish,com.taobao.taobao,com.miui.home,com.android.browser,co
 
 music=com.netease.cloudmusic,com.kugou.android,com.kugou.android.lite
 
-video=com.ss.android.ugc.awem,tv.danmaku.bili
+video=com.ss.android.ugc.aweme,tv.danmaku.bili
 "
 
   hint_group=$(echo -e "$distinct_apps" | grep "$top_app" | cut -f1 -d "=")
@@ -76,27 +76,43 @@ if [[ "$gpu_min_pl" -lt 0 ]];then
 fi;
 
 
+
 conservative_mode() {
   local policy=/sys/devices/system/cpu/cpufreq/policy
-  local down="$1"
-  local up="$2"
-
-  if [[ "$down" == "" ]]; then
-    local down="20"
-  fi
-  if [[ "$up" == "" ]]; then
-    local up="60"
-  fi
+  # local down="$1"
+  # local up="$2"
+  #
+  # if [[ "$down" == "" ]]; then
+  #   local down="20"
+  # fi
+  # if [[ "$up" == "" ]]; then
+  #   local up="60"
+  # fi
 
   for cluster in 0 4 7; do
     echo $cluster
     echo 'conservative' > ${policy}${cluster}/scaling_governor
-    echo $down > ${policy}${cluster}/conservative/down_threshold
-    echo $up > ${policy}${cluster}/conservative/up_threshold
+    # echo $down > ${policy}${cluster}/conservative/down_threshold
+    # echo $up > ${policy}${cluster}/conservative/up_threshold
     echo 0 > ${policy}${cluster}/conservative/ignore_nice_load
     echo 1000 > ${policy}${cluster}/conservative/sampling_rate # 1000us = 1ms
-    echo 4 > ${policy}${cluster}/conservative/freq_step
+    echo 2 > ${policy}${cluster}/conservative/freq_step
   done
+
+  echo $1 > ${policy}0/conservative/down_threshold
+  echo $2 > ${policy}0/conservative/up_threshold
+  echo $1 > ${policy}0/conservative/down_threshold
+  echo $2 > ${policy}0/conservative/up_threshold
+
+  echo $3 > ${policy}4/conservative/down_threshold
+  echo $4 > ${policy}4/conservative/up_threshold
+  echo $3 > ${policy}4/conservative/down_threshold
+  echo $4 > ${policy}4/conservative/up_threshold
+
+  echo $5 > ${policy}7/conservative/down_threshold
+  echo $6 > ${policy}7/conservative/up_threshold
+  echo $5 > ${policy}7/conservative/down_threshold
+  echo $6 > ${policy}7/conservative/up_threshold
 }
 
 core_online=(1 1 1 1 1 1 1 1)
@@ -454,7 +470,7 @@ adjustment_by_top_app() {
     ;;
 
     # DouYin, BiliBili
-    "com.ss.android.ugc.awem" | "tv.danmaku.bili")
+    "com.ss.android.ugc.aweme" | "tv.danmaku.bili")
       ctl_on cpu4
       ctl_on cpu7
 
