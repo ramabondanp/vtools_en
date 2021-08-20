@@ -9,10 +9,7 @@ import android.util.Log
 import com.omarea.Scene
 import com.omarea.common.shared.FileWrite
 import com.omarea.common.shell.KeepShellPublic
-import com.omarea.library.shell.CGroupMemoryUtlis
-import com.omarea.library.shell.GAppsUtilis
-import com.omarea.library.shell.LocationHelper
-import com.omarea.library.shell.SwapUtils
+import com.omarea.library.shell.*
 import com.omarea.model.SceneConfigInfo
 import com.omarea.store.SceneConfigStore
 import com.omarea.store.SpfConfig
@@ -50,11 +47,18 @@ class SceneMode private constructor(private val context: AccessibilityScenceMode
 
     private val floatScreenRotation = FloatScreenRotation(context)
 
-    private class FreezeAppThread(private val context: Context) : Thread() {
+    public fun cancelFreezeAppThread() {
+        PropsUtils.setPorp("vtools.freeze_delay", "")
+    }
+
+    public class FreezeAppThread(
+        private val context: Context,
+        private val ignoreState: Boolean = false,
+        private val delaySecond: Int = 0
+    ) : Thread() {
         override fun run() {
-            sleep(5000) // 启动后延迟5秒执行
             val globalConfig = context.getSharedPreferences(SpfConfig.GLOBAL_SPF, Context.MODE_PRIVATE)
-            val launchedFreezeApp = getCurrentInstance()?.getLaunchedFreezeApp()
+            val launchedFreezeApp = if (ignoreState) null else getCurrentInstance()?.getLaunchedFreezeApp()
             val suspendMode = globalConfig.getBoolean(SpfConfig.GLOBAL_SPF_FREEZE_SUSPEND, Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
             val targetApps = ArrayList<String>()
             for (item in SceneConfigStore(context).freezeAppList) {
@@ -78,7 +82,8 @@ class SceneMode private constructor(private val context: AccessibilityScenceMode
                 val executor = FileWrite.writePrivateShellFile("addin/freeze_executor.sh", "freeze_executor.sh", context)
 
                 if (executor != null && apps != null) {
-                    KeepShellPublic.doCmdSync("nohup $executor $mode $apps >/dev/null 2>&1 &")
+                    val delay = if (delaySecond > 0) ("" + delaySecond) else ""
+                    KeepShellPublic.doCmdSync("nohup $executor $mode $apps $delay >/dev/null 2>&1 &")
                 }
             }
         }
@@ -140,7 +145,17 @@ class SceneMode private constructor(private val context: AccessibilityScenceMode
 
 
     fun getLaunchedFreezeApp(): List<String> {
-        return freezList.map { it.packageName }
+        val apps = ArrayList<String>().apply {
+            addAll(freezList.map { it.packageName })
+        }
+        val configList = SceneConfigStore(context).freezeAppList
+        context.getForegroundApps().forEach {
+            if (configList.contains(it) && !apps.contains(it)) {
+                apps.add(it)
+                setFreezeAppStartTime(it)
+            }
+        }
+        return apps
     }
 
     fun setFreezeAppLeaveTime(packageName: String) {
@@ -494,13 +509,13 @@ class SceneMode private constructor(private val context: AccessibilityScenceMode
     }
 
     private fun setGroupAutoDelay(util: CGroupMemoryUtlis, app: String, mode: String) {
-        if (mode == "scene_limit") {
+        if (mode == "scene_bg") {
             Scene.postDelayed({
                 if (currentSceneConfig?.packageName != app) {
                     util.setGroup(app, mode)
                 }
             }, 3000)
-        } else if (mode == "scene_limit2") {
+        } else if (mode == "scene_cache") {
             Scene.postDelayed({
                 if (currentSceneConfig?.packageName != app) {
                     util.setGroup(app, mode)
@@ -573,39 +588,5 @@ class SceneMode private constructor(private val context: AccessibilityScenceMode
 
 
     fun onScreenOffDelay() {
-        if (config.getInt(SpfConfig.GLOBAL_SPF_FREEZE_DELAY, 0) < 1) {
-            clearFreezeApp()
-        }
-    }
-
-    /**
-     * 冻结所有解冻的偏见应用
-     */
-    fun clearFreezeApp() {
-        val suspendMode = this.suspendMode
-
-        currentSceneConfig?.packageName?.run {
-            val config = store.getAppConfig(this)
-            if (config.freeze) {
-                if (suspendMode) {
-                    suspendApp(this)
-                } else {
-                    Companion.freezeApp(this)
-                }
-            }
-        }
-
-        while (freezList.size > 0) {
-            val firstItem = freezList.first()
-            val config = store.getAppConfig(firstItem.packageName)
-            if (config.freeze) {
-                if (suspendMode) {
-                    suspendApp(firstItem.packageName)
-                } else {
-                    freezeApp(firstItem.packageName)
-                }
-            }
-            freezList.remove(firstItem)
-        }
     }
 }

@@ -261,9 +261,9 @@
     <string name="swap_state_created">Not started</string>
     <string name="swap_state_using">In use</string>
     <string name="extra_free_kbytes">extra_free_kbytes(KB)</string>
-    <string name="extra_free_kbytes_desc">This value specifies how much extra physical memory the Linux kernel will reserve, and will immediately start compressing memory to SWAP/ZRAM when it runs low, and the device will become noticeably slower until the available memory comes back up to a reasonable range \n\n simply put extra_free_kbytes The larger the kbytes setting, the more aggressive the memory recycling/swapping, but it is not recommended to set it too large to avoid wasting physical memory and burdening the disk/processor! </string>
+    <string name="extra_free_kbytes_desc">This value specifies how much physical memory the Linux kernel will reserve. When the memory is insufficient, it will immediately begin to compress the memory to SWAP/ZRAM, and the device will obviously become slower before the available memory rises to a reasonable range.\n\nSimply put the extra_free_kbytes setting more Larger, the more aggressive the memory recovery (swap or kill process), but it is not recommended to set too large, so as not to waste physical memory and increase the burden on the disk/processor! </string>
     <string name="watermark_scale_factor">watermark_scale_factor</string>
-    <string name="watermark_scale_factor_desc"> values range from 0 to 1000, where 1000 means 10%, indicating a 10% difference (of physical RAM capacity) between each of the three values of the memory watermark low/min/high. \n\nFor example (my phone): \npageSize=4KB\nmanaged=1951743(pages)\nmin_free_kbytes=10900(KB)\nwatermark_scale_factor=500\n\n\nThe min value at this time is \n10900(KB)/4 (PageSize)=2725(pages)\nnlow value is about \n1951743*5%+2725≈100312(pages)\nhigh value is about \n1951743*10%+2725≈197899(pages)\nNote: The final low and high values may be affected by extra_ free_kbytes may be affected by extra_kbytes and be large \n\n this example, \nmin=2725=10MB\nlow=100312≈392MB\nhigh=197899≈773MB\n\n means that memory below 392M will start recycling memory until the available memory is higher than 773MB\n\n if you pursue the ultimate background capability and don\'t really care about performance and power consumption, you can turn the value up (but it\'s not recommended to exceed 500), while if you\'re concerned about smoothness it\'s recommended to set it to 100 or less~</string>
+    <string name="watermark_scale_factor_desc">The value range is 0~1000, where 1000 means 10%, which means that the difference between the three values of the memory water level line low/min/high (physical RAM capacity) is 10%. \n\nFor example (my phone):\npageSize=4KB\nmanaged=1951743(pages)\nmin_free_kbytes=10900(KB)\nwatermark_scale_factor=500\n\nThe min value is\n10900(KB)/4( PageSize)=2725(pages)\nlow value is approximately\n1951743*5%+2725≈100312(pages)\nhigh value is approximately\n1951743*10%+2725≈197899(pages)\nNote: the final low, high The value may be too large due to extra_free_kbytes.\n\nIn this example,\nmin=2725=10MB\nlow=100312≈392MB\nhigh=197899≈773MB\n\nmeans that the memory will start to be recycled if the memory is lower than 392M RAM, until the available RAM is higher than 773MB~</string>
 
     <string name="on_execute_please_wait">Executing operation, please wait...</string>
     <string name="please_wait">Please wait...</string>
@@ -347,9 +347,9 @@
         <item></item>
         <item>scene_lock</item>
         <item>scene_perf</item>
-        <item>scene_sys</item>
-        <item>scene_limit</item>
-        <item>scene_limit2</item>
+        <item>scene_fg</item>
+        <item>scene_bg</item>
+        <item>scene_cache</item>
     </string-array>
 
     <string name="title_activity_timing_task">Timed Tasks</string>

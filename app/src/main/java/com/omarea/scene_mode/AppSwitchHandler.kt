@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.widget.Toast
 import com.omarea.Scene
 import com.omarea.common.shell.KeepShellPublic
@@ -16,9 +17,6 @@ import com.omarea.data.GlobalStatus
 import com.omarea.data.IEventReceiver
 import com.omarea.library.basic.InputMethodApp
 import com.omarea.library.basic.ScreenState
-import com.omarea.library.calculator.GetUpTime
-import com.omarea.model.TaskAction
-import com.omarea.model.TimingTaskInfo
 import com.omarea.store.SceneConfigStore
 import com.omarea.store.SpfConfig
 import com.omarea.utils.CommonCmds
@@ -123,7 +121,7 @@ class AppSwitchHandler(private var context: AccessibilityScenceMode, override va
             if (!screenOn) {
                 notifyHelper.hideNotify()
                 stopTimer()
-                setTimingTask()
+                setDelyFreezeApps()
 
                 // 息屏后自动切换为省电模式
                 if (dyamicCore && lastMode.isNotEmpty()) {
@@ -160,6 +158,7 @@ class AppSwitchHandler(private var context: AccessibilityScenceMode, override va
                 lastModePackage = null
                 context.notifyScreenOn()
                 // toggleConfig(lastMode, context.packageName)
+                sceneMode.cancelFreezeAppThread()
             }
         }, 1000)
         sceneMode.onScreenOn()
@@ -171,34 +170,9 @@ class AppSwitchHandler(private var context: AccessibilityScenceMode, override va
         }
     }
 
-    private var timingTaskInfo: TimingTaskInfo? = null
-    private fun setTimingTask() {
-        if (timingTaskInfo != null) {
-            cancelTimingTask();
-        }
+    private fun setDelyFreezeApps() {
         val delay = spfGlobal.getInt(SpfConfig.GLOBAL_SPF_FREEZE_DELAY, 0)
-        if (delay > 0) {
-            timingTaskInfo = TimingTaskInfo().apply {
-                val calendar = Calendar.getInstance()
-                val currentMinutes = (calendar.get(Calendar.HOUR_OF_DAY) * 60) + calendar.get(Calendar.MINUTE)  // 当前时间
-                triggerTimeMinutes = (currentMinutes + delay) % 1440
-                expireDate = GetUpTime(triggerTimeMinutes).nextGetUpTime
-                taskId = "SCENE_FROZEN_APPS"
-                taskName = "Frozen apps cleanup"
-                enabled = true
-                taskActions = ArrayList<TaskAction>().apply {
-                    add(TaskAction.FROZEN_APPS)
-                }
-                TimingTaskManager(context).setTask(this)
-            }
-        }
-    }
-
-    private fun cancelTimingTask() {
-        if (timingTaskInfo != null) {
-            TimingTaskManager(this.context).cancelTask(timingTaskInfo!!);
-            timingTaskInfo = null;
-        }
+        SceneMode.FreezeAppThread(context.applicationContext, true, if (delay > 0) (delay * 60) else 0).start()
     }
 
     /**
@@ -213,6 +187,7 @@ class AppSwitchHandler(private var context: AccessibilityScenceMode, override va
     //自动切换模式
     private fun autoToggleMode(packageName: String?) {
         if (packageName != null && packageName != lastModePackage) {
+            lastModePackage = packageName
             if (dyamicCore) {
                 val mode = spfPowercfg.getString(packageName, firstMode)!!
                 if (
@@ -225,15 +200,14 @@ class AppSwitchHandler(private var context: AccessibilityScenceMode, override va
                     }
                 }
             }
-            lastModePackage = packageName
             setCurrentPowercfgApp(packageName)
             updateModeNofity() // 应用改变后更新通知
         }
     }
 
     private fun toggleConfig(mode: String, packageName: String) {
-        executePowercfgMode(mode, packageName)
         lastMode = mode
+        executePowercfgMode(mode, packageName)
     }
 
     private fun delayToggleConfig(mode: String, packageName: String) {
@@ -357,7 +331,7 @@ class AppSwitchHandler(private var context: AccessibilityScenceMode, override va
             KeepShellPublic.doCmdSync(CommonCmds.DisableSELinux)
         }
 
-        GlobalScope.launch (Dispatchers.IO) {
+        GlobalScope.launch(Dispatchers.IO) {
             initConfig()
         }
 

@@ -2,35 +2,38 @@
 
 target=`getprop ro.board.platform`
 
+core_ctl_init() {
+  # Core control parameters for gold
+  echo 2 > /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
+  echo 60 > /sys/devices/system/cpu/cpu4/core_ctl/busy_up_thres
+  echo 30 > /sys/devices/system/cpu/cpu4/core_ctl/busy_down_thres
+  echo 100 > /sys/devices/system/cpu/cpu4/core_ctl/offline_delay_ms
+  echo 3 > /sys/devices/system/cpu/cpu4/core_ctl/task_thres
+
+  # Core control parameters for gold+
+  echo 0 > /sys/devices/system/cpu/cpu7/core_ctl/min_cpus
+  echo 60 > /sys/devices/system/cpu/cpu7/core_ctl/busy_up_thres
+  echo 30 > /sys/devices/system/cpu/cpu7/core_ctl/busy_down_thres
+  echo 100 > /sys/devices/system/cpu/cpu7/core_ctl/offline_delay_ms
+  echo 1 > /sys/devices/system/cpu/cpu7/core_ctl/task_thres
+
+  # Controls how many more tasks should be eligible to run on gold CPUs
+  # w.r.t number of gold CPUs available to trigger assist (max number of
+  # tasks eligible to run on previous cluster minus number of CPUs in
+  # the previous cluster).
+  #
+  # Setting to 1 by default which means there should be at least
+  # 4 tasks eligible to run on gold cluster (tasks running on gold cores
+  # plus misfit tasks on silver cores) to trigger assitance from gold+.
+  echo 1 > /sys/devices/system/cpu/cpu7/core_ctl/nr_prev_assist_thresh
+
+  # Disable Core control on silver
+  echo 0 > /sys/devices/system/cpu/cpu0/core_ctl/enable
+}
+
 case "$target" in
   "kona")
-
-    # Core control parameters for gold
-    echo 2 > /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
-    echo 60 > /sys/devices/system/cpu/cpu4/core_ctl/busy_up_thres
-    echo 30 > /sys/devices/system/cpu/cpu4/core_ctl/busy_down_thres
-    echo 100 > /sys/devices/system/cpu/cpu4/core_ctl/offline_delay_ms
-    echo 3 > /sys/devices/system/cpu/cpu4/core_ctl/task_thres
-
-    # Core control parameters for gold+
-    echo 0 > /sys/devices/system/cpu/cpu7/core_ctl/min_cpus
-    echo 60 > /sys/devices/system/cpu/cpu7/core_ctl/busy_up_thres
-    echo 30 > /sys/devices/system/cpu/cpu7/core_ctl/busy_down_thres
-    echo 100 > /sys/devices/system/cpu/cpu7/core_ctl/offline_delay_ms
-    echo 1 > /sys/devices/system/cpu/cpu7/core_ctl/task_thres
-
-    # Controls how many more tasks should be eligible to run on gold CPUs
-    # w.r.t number of gold CPUs available to trigger assist (max number of
-    # tasks eligible to run on previous cluster minus number of CPUs in
-    # the previous cluster).
-    #
-    # Setting to 1 by default which means there should be at least
-    # 4 tasks eligible to run on gold cluster (tasks running on gold cores
-    # plus misfit tasks on silver cores) to trigger assitance from gold+.
-    echo 1 > /sys/devices/system/cpu/cpu7/core_ctl/nr_prev_assist_thresh
-
-    # Disable Core control on silver
-    echo 0 > /sys/devices/system/cpu/cpu0/core_ctl/enable
+    # core_ctl_init
 
     # Setting b.L scheduler parameters
     echo 95 95 > /proc/sys/kernel/sched_upmigrate
@@ -94,16 +97,20 @@ esac
 
 set_cpuset(){
   pgrep -f $1 | while read pid; do
-    echo $pid > /dev/cpuset/$2/tasks
-    echo $pid > /dev/stune/$2/tasks
+    echo $pid > /dev/cpuset/$2/cgroup.procs
+    echo $pid > /dev/stune/$2/cgroup.procs
   done
 }
 
-set_cpuset surfaceflinger top-app
-set_cpuset system_server top-app
-set_cpuset vendor.qti.hardware.display.composer-service top-app
-set_cpuset mediaserver background
-set_cpuset media.hwcodec background
+process_opt(){
+  set_cpuset surfaceflinger top-app
+  set_cpuset system_server top-app
+  set_cpuset vendor.qti.hardware.display.composer-service top-app
+  # set_cpuset mediaserver background
+  # set_cpuset media.hwcodec background
 
-set_task_affinity `pgrep com.miui.home` 11111111
-set_task_affinity `pgrep com.miui.home` 11110000
+  set_task_affinity `pgrep com.miui.home` 11111111
+  set_task_affinity `pgrep com.miui.home` 11110000
+}
+
+process_opt &

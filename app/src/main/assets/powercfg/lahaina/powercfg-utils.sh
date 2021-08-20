@@ -155,12 +155,14 @@ reset_basic_governor() {
   echo $gpu_max_pl > /sys/class/kgsl/kgsl-3d0/max_pwrlevel
 }
 
-devfreq_performance () {
-  bw_max_always
-}
+bw_down() {
+  local path='/sys/class/devfreq/soc:qcom,cpu-llcc-ddr-bw'
+  local down1="$1"
+  local down2="$2"
+  cat $path/available_frequencies | awk -F ' ' "{print \$(NF-$down1)}" > $path/max_freq
 
-devfreq_restore () {
-  bw_min
+  local path='/sys/class/devfreq/soc:qcom,cpu-cpu-llcc-bw'
+  cat $path/available_frequencies | awk -F ' ' "{print \$(NF-$down2)}" > $path/max_freq
 }
 
 bw_min() {
@@ -324,10 +326,17 @@ stune_top_app() {
 }
 
 cpuctl () {
- echo $2 > /dev/cpuctl/$1/cpu.uclamp.sched_boost_no_override
- echo $3 > /dev/cpuctl/$1/cpu.uclamp.latency_sensitive
- echo $4 > /dev/cpuctl/$1/cpu.uclamp.min
- echo $5 > /dev/cpuctl/$1/cpu.uclamp.max
+  echo $2 > /dev/cpuctl/$1/cpu.uclamp.sched_boost_no_override
+  echo $3 > /dev/cpuctl/$1/cpu.uclamp.latency_sensitive
+  echo $4 > /dev/cpuctl/$1/cpu.uclamp.min
+  echo $5 > /dev/cpuctl/$1/cpu.uclamp.max
+}
+mk_cpuctl () {
+  mkdir -p "/dev/cpuctl/$1"
+  echo $2 > /dev/cpuctl/$1/cpu.uclamp.sched_boost_no_override
+  echo $3 > /dev/cpuctl/$1/cpu.uclamp.latency_sensitive
+  echo $4 > /dev/cpuctl/$1/cpu.uclamp.min
+  echo $5 > /dev/cpuctl/$1/cpu.uclamp.max
 }
 
 cpuset() {
@@ -369,11 +378,128 @@ gpu_pl_down() {
 # set_task_affinity $pid $use_cores[cpu7~cpu0]
 set_task_affinity() {
   pid=$1
-  mask=`echo "obase=16;$((num=2#$2))" | bc`
-  for tid in $(ls "/proc/$pid/task/"); do
-    taskset -p "$mask" "$tid" 1>/dev/null
+  if [[ "$pid" != "" ]]; then
+    mask=`echo "obase=16;$((num=2#$2))" | bc`
+    for tid in $(ls "/proc/$pid/task/"); do
+      taskset -p "$mask" "$tid" 1>/dev/null
+    done
+    taskset -p "$mask" "$pid" 1>/dev/null
+  fi
+}
+
+# HePingJingYing
+pubgmhd_opt_run () {
+  if [[ $(getprop vtools.powercfg_app | grep miHoYo) == "" ]]; then
+    return
+  fi
+
+  pid=$(pgrep -f com.tencent.tmgp.pubgmhd | head -1)
+  # mask=`echo "obase=16;$((num=2#11110000))" | bc` # F0 (cpu 7-4)
+  # mask=`echo "obase=16;$((num=2#10000000))" | bc` # 80 (cpu 7)
+  # mask=`echo "obase=16;$((num=2#01110000))" | bc` # 70 (cpu 6-4)
+  # mask=`echo "obase=16;$((num=2#01111111))" | bc` # 7F (cpu 6-0)
+
+  if [[ "$pid" != "" ]]; then
+    for tid in $(ls "/proc/$pid/task/"); do
+      if [[ -f "/proc/$pid/task/$tid/comm" ]]; then
+        comm=$(cat /proc/$pid/task/$tid/comm)
+
+        case "$comm" in
+         "RenderThread"*)
+           taskset -p "80" "$tid" 2>&1 > /dev/null
+         ;;
+         *)
+           taskset -p "7F" "$tid" 2>&1 > /dev/null
+         ;;
+        esac
+      fi
+    done
+  fi
+}
+
+# YuanShen
+yuan_shen_opt_run() {
+  if [[ $(getprop vtools.powercfg_app | grep miHoYo) == "" ]]; then
+    return
+  fi
+
+  # top -H -p $(pgrep -ef Yuanshen)
+  # pid=$(pgrep -ef Yuanshen)
+  pid=$(pgrep -ef miHoYo)
+  # mask=`echo "obase=16;$((num=2#11110000))" | bc` # F0 (cpu 7-4)
+  # mask=`echo "obase=16;$((num=2#10000000))" | bc` # 80 (cpu 7)
+  # mask=`echo "obase=16;$((num=2#01110000))" | bc` # 70 (cpu 6-4)
+  # mask=`echo "obase=16;$((num=2#01111111))" | bc` # 7F (cpu 6-0)
+
+  if [[ "$pid" != "" ]]; then
+    for tid in $(ls "/proc/$pid/task/"); do
+      if [[ -f "/proc/$pid/task/$tid/comm" ]]; then
+        comm=$(cat /proc/$pid/task/$tid/comm)
+
+        case "$comm" in
+         "UnityMain")
+           echo $tid > /dev/cpuctl/top-app/heavy/tasks
+           taskset -p "F0" "$tid" 2>&1 > /dev/null
+         ;;
+         # "UnityGfxDevice"*|"UnityMultiRende"*|"NativeThread"*|"UnityChoreograp"*)
+         "UnityGfxDevice"*|"UnityMultiRende"*)
+           echo $tid > /dev/cpuctl/top-app/heavy/tasks
+           taskset -p "70" "$tid" 2>&1 > /dev/null
+         ;;
+         *)
+           taskset -p "7F" "$tid" 2>&1 > /dev/null
+         ;;
+        esac
+      fi
+    done
+  fi
+}
+
+# watch_app [on_tick] [on_change]
+watch_app() {
+  local interval=120
+  local on_tick="$1"
+  local on_change="$2"
+  local app=$(getprop vtools.powercfg_app)
+
+  if [[ "$on_tick" == "" ]]; then
+    return
+  fi
+
+  if [[ "$app" == "" ]]; then
+    return
+  fi
+
+  procs=$(pgrep -f com.omarea.*powercfg.sh)
+  last_proc=$(echo "$procs" | tail -n 1)
+  if [[ "$last_proc" != "" ]]; then
+    echo "$procs" | grep -v "$last_proc" | while read pid; do
+      kill -9 $pid 2> /dev/null
+    done
+  fi
+
+  ticks=0
+  while true
+  do
+    if [[ $ticks -gt 3 ]]; then
+      sleep $interval
+    elif [[ $ticks -gt 0 ]]; then
+      sleep 30
+    else
+      sleep 10
+    fi
+    ticks=$((ticks + 1))
+
+    current=$(getprop vtools.powercfg_app)
+    if [[ "$current" == "$app" ]]; then
+      $on_tick $current
+    else
+      if [[ "$on_change" ]]; then
+        $on_change $current
+      fi
+      return
+    fi
   done
-  taskset -p "$mask" "$pid" 1>/dev/null
 }
 
 adjustment_by_top_app() {
@@ -386,7 +512,8 @@ adjustment_by_top_app() {
         if [[ "$action" = "powersave" ]]; then
           if [[ "$manufacturer" == "Xiaomi" ]]; then
             conservative_mode 55 67 70 89 71 89
-            bw_max
+            bw_min
+            bw_down 3 3
           fi
           sched_boost 0 0
           stune_top_app 0 0
@@ -397,7 +524,8 @@ adjustment_by_top_app() {
         elif [[ "$action" = "balance" ]]; then
           if [[ "$manufacturer" == "Xiaomi" ]]; then
             conservative_mode 55 67 70 89 71 89
-            bw_max
+            bw_min
+            bw_down 2 2
           fi
           sched_boost 0 0
           stune_top_app 0 0
@@ -406,7 +534,7 @@ adjustment_by_top_app() {
           set_hispeed_freq 1708800 1440000 1075200
           set_gpu_max_freq 676000000
         elif [[ "$action" = "performance" ]]; then
-          # devfreq_performance
+          # bw_max_always
           if [[ "$manufacturer" == "Xiaomi" ]]; then
             conservative_mode 55 67 70 89 71 89
             bw_max
@@ -416,16 +544,17 @@ adjustment_by_top_app() {
           set_cpu_freq 806400 1708800 710400 2419200 844800 2841600
           set_gpu_max_freq 738000000
         elif [[ "$action" = "fast" ]]; then
-          devfreq_performance
+          bw_max_always
           if [[ "$manufacturer" == "Xiaomi" ]]; then
             conservative_mode 45 60 54 70 59 72
           fi
-          sched_boost 1 1
+          sched_boost 1 0
           stune_top_app 1 55
           # sched_config "40 60" "50 75" "120" "150"
           set_gpu_max_freq 778000000
         fi
-        cpuset '0-1' '0-1' '0-3' '0-7'
+        cpuset '0-1' '0-1' '0-7' '0-7'
+        watch_app yuan_shen_opt_run &
     ;;
 
     # Wang Zhe Rong Yao
@@ -448,21 +577,21 @@ adjustment_by_top_app() {
           sched_config "60 68" "72 78" "300" "400"
           set_cpu_freq 1036800 1708800 960000 1996800 844800 2035200
           set_gpu_max_freq 676000000
-          cpuset '0-1' '0-1' '0-3' '0-7'
+          cpuset '0-1' '0-1' '0-6' '0-7'
         elif [[ "$action" = "performance" ]]; then
           conservative_mode 52 70 70 85 67 82
           sched_boost 1 0
           stune_top_app 0 0
           set_cpu_freq 1036800 1708800 960000 2419200 844800 2841600
           set_gpu_max_freq 738000000
-          cpuset '0-1' '0-1' '0-3' '0-7'
+          cpuset '0-1' '0-1' '0-6' '0-7'
         elif [[ "$action" = "fast" ]]; then
           conservative_mode 42 60 54 70 60 72
           sched_boost 1 1
           stune_top_app 1 55
           # sched_config "40 60" "50 75" "120" "150"
           set_gpu_max_freq 778000000
-          cpuset '0-1' '0-1' '0-3' '0-7'
+          cpuset '0-1' '0-1' '0-6' '0-7'
         fi
     ;;
 
@@ -578,8 +707,8 @@ adjustment_by_top_app() {
         cpuctl top-app 0 1 0.1 max
       fi
       pgrep -f $top_app | while read pid; do
-        # echo $pid > /dev/cpuset/foreground/tasks
-        echo $pid > /dev/stune/background/tasks
+        # echo $pid > /dev/cpuset/foreground/cgroup.procs
+        echo $pid > /dev/stune/background/cgroup.procs
       done
 
       sched_config "85 85" "100 100" "300" "400"

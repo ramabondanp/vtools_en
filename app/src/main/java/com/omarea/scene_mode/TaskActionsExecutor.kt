@@ -76,26 +76,6 @@ class TaskActionsExecutor(
                         updateNotification("Turn off Do Not Disturb mode")
                         ZenModeUtils(context).off()
                     }
-                    TaskAction.MODE_POWERSAVE -> {
-                        updateNotification("Switch to powersave")
-                        ModeSwitcher().executePowercfgMode(ModeSwitcher.POWERSAVE, context.packageName)
-                    }
-                    TaskAction.MODE_BALANCE -> {
-                        updateNotification("Switch to balanced")
-                        ModeSwitcher().executePowercfgMode(ModeSwitcher.BALANCE, context.packageName)
-                    }
-                    TaskAction.MODE_PERFORMANCE -> {
-                        updateNotification("Switch to performance")
-                        ModeSwitcher().executePowercfgMode(ModeSwitcher.PERFORMANCE, context.packageName)
-                    }
-                    TaskAction.MODE_FAST -> {
-                        updateNotification("Switch to speed")
-                        ModeSwitcher().executePowercfgMode(ModeSwitcher.FAST, context.packageName)
-                    }
-                    TaskAction.FROZEN_APPS -> {
-                        updateNotification("Freeze application")
-                        SceneMode.getCurrentInstance()?.clearFreezeApp()
-                    }
                     else -> {
                     }
                 }

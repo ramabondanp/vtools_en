@@ -17,16 +17,11 @@ init () {
   fi
 }
 
-if [[ "$action" = "init" ]]; then
+if [[ "$action" == "init" ]]; then
   init
   exit 0
 fi
 
-if [[ "$action" == "fast" ]]; then
-  devfreq_performance
-else
-  devfreq_restore
-fi
 reset_basic_governor
 
 
@@ -43,7 +38,10 @@ if [[ "$action" = "powersave" ]]; then
   sched_limit 0 0 0 2000 0 1000
   cpuset '0-2' '0-3' '0-3' '0-7'
   stune_top_app 0 0
-  cpuctl top-app 0 1 0 max
+  # cpuctl top-app 0 1 0 max
+  cpuctl top-app 0 1 0.05 max
+  bw_min
+  bw_down 3 3
 
 
 elif [[ "$action" = "balance" ]]; then
@@ -59,7 +57,9 @@ elif [[ "$action" = "balance" ]]; then
   sched_limit 0 0 0 500 0 500
   cpuset '0-2' '0-3' '0-6' '0-7'
   stune_top_app 0 0
-  cpuctl top-app 0 1 0.1 max
+  cpuctl top-app 0 1 0.25 max
+  bw_min
+  bw_down 2 2
 
 
 elif [[ "$action" = "performance" ]]; then
@@ -74,6 +74,8 @@ elif [[ "$action" = "performance" ]]; then
   cpuset '0-1' '0-3' '0-6' '0-7'
   stune_top_app 1 0
   cpuctl top-app 0 1 0.5 max
+  bw_min
+  bw_max
 
 
 elif [[ "$action" = "fast" ]]; then
@@ -88,6 +90,7 @@ elif [[ "$action" = "fast" ]]; then
   cpuset '0' '0-3' '0-6' '0-7'
   stune_top_app 1 50
   cpuctl top-app 0 1 max max
+  bw_max_always
 
 
 fi
