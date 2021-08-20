@@ -1,16 +1,15 @@
 # Scene
 
-> 使用本工具前，请确保你已经ROOT手机，并已安装busybox。你最好是个玩机专家，至少也该会刷机和修复系统。因为应用中部分高级功能可能会影响系统正常启动！！！
-> 在使用【骁龙845/835/821/820】【Exynos8890】处理器的设备上具有最佳体验，其它设备功能将受到限制。
+> Before using this tool, please make sure you have ROOT phone and busybox installed. You'd better be a gaming expert, at least you should also be able to refresh and repair the system. Because some advanced functions in the application may affect the normal startup of the system! ! !
+> It has the best experience on devices using [Snapdragon 845/835/821/820] [Exynos8890] processor, and other device functions will be limited.
 
 ---
 
-暂无详细说明
+No detailed description
 
 ---
 
-**应用界面展示**
-
+**Application interface display**
 
 <img src="https://github.com/helloklf/vtools/raw/master/docs/Screenshot/1.png" width="350" /> <img src="https://github.com/helloklf/vtools/raw/master/docs/Screenshot/2.png" width="350" />
 <img src="https://github.com/helloklf/vtools/raw/master/docs/Screenshot/3.png" width="350" /> <img src="https://github.com/helloklf/vtools/raw/master/docs/Screenshot/4.png" width="350" />
