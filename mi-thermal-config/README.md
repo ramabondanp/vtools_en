@@ -1,16 +1,16 @@
-# 本程序用于解密/加密 MIUI的温控配置文件
+# This program is used to decrypt/encrypt MIUI temperature control configuration files
 
-### 清理
-- 删除 `origin` `decrypted` `encrypted` 目录下的文件
+### Clean up
+-Delete the files in the `origin` `decrypted` `encrypted` directory
 
-### 解密温控
-- 将温控配置原始文件放到`origin`下
-- 运行 `d.sh`，解密后的文件会输出到 `decrypted`目录
+### Decrypt temperature control
+-Put the original temperature control configuration file under `origin`
+-Run `d.sh`, the decrypted file will be output to the `decrypted` directory
 
-### 加密温控
-- 修改完`decrypted`中已解密的温控配置文件后
-- 运行`e.sh`，加密后的文件会输出到`encrypted`下
+### Encrypted temperature control
+-After modifying the decrypted temperature control configuration file in `decrypted`
+-Run `e.sh`, the encrypted file will be output under `encrypted`
 
-### 注意
-- MIUI某些温控配置文件并不是加密的
-- 执行解密操作时，这些文件会被跳过，请留意！
+### Note
+-Some temperature control configuration files of MIUI are not encrypted
+-When performing decryption operations, these files will be skipped, please pay attention!
