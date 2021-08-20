@@ -1,33 +1,33 @@
-在这里，你可以为你的设备配置两套不同风格的模式文件。打包apk运行时，可以在性能配置界面中切换模式文件。
+Here, you can configure two sets of pattern files with different styles for your device. When the packaged apk is running, you can switch the mode file in the performance configuration interface.
 
-# 保守风格的模式文件
-- conservative-base.sh
-- conservative.sh
+# Conservative style pattern file
+-conservative-base.sh
+-conservative.sh
 
-# 调度积极的模式文件
-- active-base.sh
-- active.sh
+# Schedule active mode files
+-active-base.sh
+-active.sh
 
-# 具体说明
-- active-base.sh 和 conservative-base.sh不会经常用到，只会在最开始的时候执行一次，用于还原一些用户已做的修改，如果没有必要可以留空。
-- active.sh 和 conservative.sh作为主要配置脚本，需要在里面定义4种模式要执行的脚本代码。
+# Specific instructions
+-active-base.sh and conservative-base.sh are not frequently used, they will only be executed once at the very beginning to restore some changes that have been made by the user, and they can be left blank if not necessary.
+-active.sh and conservative.sh are the main configuration scripts, which need to define the script codes to be executed in 4 modes.
 
-- 如果你不想通过修改apk的方式来创建配置，也可以直接将写好的powercfg.sh，复制到data目录下【最终配置脚本路径为 /data/powercfg.sh】，并修改权限为0644。
-- 注意配置脚本的编码格式，应为unix，否则无法被命令行识别，也就无法执行模式切换。
+-If you don't want to create the configuration by modifying the apk, you can also directly copy the written powercfg.sh to the data directory [the path of the final configuration script is /data/powercfg.sh], and modify the permissions to 0644.
+-Pay attention to the encoding format of the configuration script, which should be unix, otherwise it cannot be recognized by the command line, and the mode switch cannot be performed.
 
-# 单应用适配
-- 除了最基础的4个性能调节模式以外，Scene 4.3添加了【严格模式】（需要在性能配置界面手动开启）
-- 开启【严格模式】之后，只要前台应用发生变化，Scene就会触发调度切换
-- * 若不开启【严格模式】或使用Scene 4.3以前的版本，只有在需要变更模式时才会触发调度切换
-- 如何知晓刚刚被打开的是应用？你可以在脚本中，通过Scene保存的 `top_app` 变量来获取，示例：
+# Single application adaptation
+-In addition to the most basic 4 performance adjustment modes, Scene 4.3 adds [strict mode] (need to be manually turned on in the performance configuration interface)
+-After turning on [strict mode], as long as the foreground application changes, Scene will trigger the scheduling switch
+-* If you do not enable [strict mode] or use a version earlier than Scene 4.3, the scheduling switch will only be triggered when the mode needs to be changed
+-How do I know that the app was opened just now? You can get it in the script through the `top_app` variable saved in Scene, example:
 
 ```sh
 if [[ "$top_app" != "" ]]; then
-  echo "应用切换到前台 [$top_app]"
+  echo "App switch to the foreground [$top_app]"
 fi
 ```
 
-## 特殊情况
-- 开启【严格模式】模式之后，你依然可能获得空白的`$top_app`
-- 这是因为，调度切换并非动态响应功能触发
-- 例如：用户主动点击、定时任务、息屏亮屏等方式触发的调度切换，以及执行init时，都会得到空白的`top_app`
+## Special circumstances
+-After turning on the [strict mode] mode, you may still get a blank `$top_app`
+-This is because the scheduling switch is not triggered by the dynamic response function
+-For example: the scheduling switch triggered by the user's active click, timed task, screen on and off, etc., and when init is executed, you will get a blank `top_app`
