@@ -1,11 +1,11 @@
-## MIUI温控修改器说明
-- 这里主要说修改MIUI温控的一些技巧
-- 至于温控配置文件的语法格式，可在百度上搜索学习，所有高通机型都通用
-- 此外，已知Redmi 10x虽然是天玑处理器，但也可以使用相似的语法配置温控
+## MIUI temperature control modifier description
+-Here are some tips for modifying MIUI temperature control
+-As for the grammatical format of the temperature control configuration file, you can search and learn it on Baidu, which is common to all Qualcomm models
+-In addition, although it is known that Redmi 10x is a Dimensity processor, it can also use a similar syntax to configure temperature control
 
-### 配置存储
-- 通常，MIUI系统下会有类似如下列表的多个温控配置文件
-- 因SOC和适配的场景数不同，可能会有增有减，文件名称也稍有差异，但均以类似于`thermal-*tgame.conf`这样的名称出现
+### Configure storage
+-Usually, there will be multiple temperature control configuration files similar to the following list under MIUI system
+-Depending on the number of SOC and adapted scenes, there may be an increase or decrease. The file names are also slightly different, but they all appear with names similar to `thermal-*tgame.conf`
   ```
   thermal-engine-sdm845-normal.conf
   thermal-engine-sdm845-nolimits.conf
@@ -14,139 +14,139 @@
   thermal-engine-sdm845-extreme.conf
   thermal-engine-sdm845.conf
   ```
-- 温控配置文件一般存储在 `/vendor/etc` 下，旧版(Android8.0以前)系统可能在`/system/etc`
-- 此外，温控配置文件还可能出现在
-  > `/data/vendor/thermal/config`，通常由云端下发，如果有的话，会优先使用<br />
-  > 我们修改温控的时候，可以直接替换到`/vendor/etc`，也可以放到`/data/vendor/thermal/config`
+-Temperature control configuration files are generally stored under `/vendor/etc`, older versions (before Android 8.0) may be stored under `/system/etc`
+-In addition, the temperature control profile may also appear in
+  > `/data/vendor/thermal/config`, usually issued by the cloud, if available, it will be used first<br />
+  > When we modify the temperature control, we can directly replace it in `/vendor/etc` or put it in `/data/vendor/thermal/config`
   >
 
-### 文件释义
-- 从文件名就不难看出，这每一个配置文件都对应到不同的使用场景
-- 例如`*-normal.conf`表示默认温控，也就是绝大多数普通应用所使用的温控配置
-  > 部分机型是没有`*-normal.conf`这个文件，例如：<br />
-  > sdm845 默认温控是`thermal-engine-sdm845.conf`<br />
-  > sdm710 默认温控是`thermal-engine-sdm710.conf`
+### Document Interpretation
+-It is not difficult to see from the file name that each configuration file corresponds to a different usage scenario
+-For example, `*-normal.conf` means the default temperature control, which is the temperature control configuration used by most common applications
+  > Some models do not have the file `*-normal.conf`, for example:<br />
+  > The default temperature control of sdm845 is `thermal-engine-sdm845.conf`<br />
+  > sdm710 default temperature control is `thermal-engine-sdm710.conf`
 
-- 常见的几个温控配置名称释义
+-Interpretation of several common temperature control configuration names
   ```
-  -normal.conf    # 默认温控
-  -nolimits.conf  # 无限制(跑分)
-  -tgame.conf     # 游戏
-  -sgame.conf     # 王者荣耀
-  -extreme.conf   # 极致省电
-  -pubgmhd.conf   # 刺激战场
+  -normal.conf # Default temperature control
+  -nolimits.conf # Unlimited (run points)
+  -tgame.conf # Game
+  -sgame.conf # King of Glory
+  -extreme.conf # Extreme power saving
+  -pubgmhd.conf # Stimulate the battlefield
   ```
 
-### 说明示例
-#### - 举例 ①
-- 下面这个是米10Pro默认温控的第一个片段
+### Illustrative example
+####-Example ①
+-The following is the first clip of Mi 10 Pro's default temperature control
   ```conf
   [VIRTUAL-SENSOR]
-  algo_type	virtual
-  sensors  cam_therm1  battery  conn_therm  quiet_therm  wireless_therm  xo_therm
-  weight  1149  147  -193  408    -228      -385
-  polling  1000
-  weight_sum	1000
-  compensation	2222
+  algo_type virtual
+  sensors cam_therm1 battery conn_therm quiet_therm wireless_therm xo_therm
+  weight 1149 147 -193 408 -228 -385
+  polling 1000
+  weight_sum 1000
+  compensation 2222
   ```
-- algo_type `virtual` 表示虚拟一个传感器，`[VIRTUAL-SENSOR]`是这组配置的名称
-- 而sensors定义了`cam_therm1`，`battery`，`conn_therm`，`quiet_therm`，`wireless_therm`，`xo_therm` 多达6个传感器， weight 表示各个传感器的数值权重，polling 表示每1000ms轮询一次
-- 简单的说，就是通过读取多个传感器的数值，分别使用不同权重，最终计算得到一个虚拟的温度数值
+-algo_type `virtual` means a virtual sensor, `[VIRTUAL-SENSOR]` is the name of this group of configurations
+-Sensors defines up to 6 sensors in `cam_therm1`, `battery`, `conn_therm`, `quiet_therm`, `wireless_therm`, `xo_therm`, weight represents the numerical weight of each sensor, and polling represents polling every 1000ms
+-Simply put, by reading the values ​​of multiple sensors, using different weights, and finally calculating a virtual temperature value
 
-#### 举例 ②
-- 下面这个是米10Pro的的一段CPU温控配置示例
+#### Example ②
+-The following is an example of a CPU temperature control configuration of Mi 10 Pro
   ```conf
   [SS-CPU4]
-  algo_type	ss
-  sensor  VIRTUAL-SENSOR
-  device  cpu4
-  polling  1000
-  trig  37000  38000  39000  41000  43000  49000
-  clr  35000  37000  38000  39000  41000  47000
-  target  1862400  1766400  1574400  1478400  1286400  710400
+  algo_type ss
+  sensor VIRTUAL-SENSOR
+  device cpu4
+  polling 1000
+  trig 37000 38000 39000 41000 43000 49000
+  clr 35000 37000 38000 39000 41000 47000
+  target 1862400 1766400 1574400 1478400 1286400 710400
   ```
-- 可以看到这里的 sensor 写的是 `VIRTUAL-SENSOR`，也就是上一个片段里定义的虚拟传感器
-- 当然，温控定义所使用的传感器是可以更换的（但不建议），例如：
+-You can see that the sensor here is `VIRTUAL-SENSOR`, which is the virtual sensor defined in the previous clip
+-Of course, the sensors used in the definition of temperature control can be replaced (but not recommended), for example:
   ```conf
   [SS-CPU4]
-  algo_type	ss
-  sensor  battery
-  device  cpu4
-  polling  1000
-  trig  37000  38000  39000  41000  43000  49000
-  clr  35000  37000  38000  39000  41000  47000
-  target  1862400  1766400  1574400  1478400  1286400  710400
+  algo_type ss
+  sensor battery
+  device cpu4
+  polling 1000
+  trig 37000 38000 39000 41000 43000 49000
+  clr 35000 37000 38000 39000 41000 47000
+  target 1862400 1766400 1574400 1478400 1286400 710400
   ```
 
-- `需要注意的是，不同传感器可能出现不同的温度单位，有可能出现37000表示37°C，也有可能是37，甚至可能是370。如果想更换传感器，千万留心！`
+-It should be noted that different sensors may have different temperature units. There may be 37000 indicating 37°C, or 37, or even 370. If you want to replace the sensor, be careful! `
 
-#### 举例 ③
-- 下面这个是米10Pro的的一段低电量关核降频配置示例
+#### Example ③
+-The following is an example of a low-battery core-down frequency reduction configuration of Mi 10 Pro
   ```conf
   [MONITOR-BCL]
-  algo_type	monitor
-  sensor  BAT_SOC
-  device  cpu4+hotplug_cpu6+hotplug_cpu7
-  polling  2000
-  trig  5
-  clr  6
-  target  1286400+1+1
-  reverse  1
+  algo_type monitor
+  sensor BAT_SOC
+  device cpu4+hotplug_cpu6+hotplug_cpu7
+  polling 2000
+  trig 5
+  clr 6
+  target 1286400+1+1
+  reverse 1
   ```
-- 这里的sensor是`BAT_SOC`，依然是一个虚拟传感器，其定义是
+-The sensor here is `BAT_SOC`, which is still a virtual sensor, and its definition is
   ```conf
   [BAT_SOC]
-  algo_type	simulated
-  path  /sys/class/power_supply/battery/capacity
-  polling  10000
+  algo_type simulated
+  path /sys/class/power_supply/battery/capacity
+  polling 10000
   ```
-- trig `5` 表示 `电量 <= 5%` 时触发限制，clr  `6` 表示 `电量 >= 5%` 时清除限制
-- 这段配置表示的是，电量<=5%时，cpu4频率降低到1.2Ghz，并关闭cpu6、cpu7
+-trig `5` means that the limit is triggered when `power <= 5%`, clr `6` means that the limitation is cleared when `power >= 5%`
+-This configuration indicates that when the battery power is <=5%, the frequency of cpu4 is reduced to 1.2Ghz, and cpu6 and cpu7 are turned off
 
-#### 示例 ④
-- 下面这个是米10Pro的的一温度配置示例
+#### Example ④
+-The following is a temperature configuration example of Mi 10 Pro
   ```conf
   [MONITOR-TEMP_STATE]
-  algo_type	monitor
-  sensor  VIRTUAL-SENSOR
-  device  temp_state
-  polling  2000
-  trig  45000  53000
-  clr  44000  51000
-  target  10100000	12400001
+  algo_type monitor
+  sensor VIRTUAL-SENSOR
+  device temp_state
+  polling 2000
+  trig 45000 53000
+  clr 44000 51000
+  target 10100000 12400001
   ```
-- 温度状态表示的是温度达到指定值后触发的一系列限制
-- 例如，温度过高可能会同时禁止使用相机、闪光灯、HBM等
-- 不过由于`target`所指向的数值并不在这里定义，具体会触发何种限制就不得而知了
+-The temperature status represents a series of limits triggered after the temperature reaches a specified value
+-For example, if the temperature is too high, the use of camera, flash, HBM, etc. may be prohibited at the same time
+-However, since the value pointed to by `target` is not defined here, it is not known what kind of restriction will be triggered.
 
-### 其它提示
-- 目前，部分机型的新版MIUI已经支持温控即时替换
-- 只需将修改后的温控配置复制到`/data/vendor/thermal/config`
-- 系统就会自动应用当前命中的场景所对应的配置
-- 最简单的，你可以留意`/data/vendor/thermal/decrypt.txt`是否产生变化来确定温控是否已生效
+### Other tips
+-At present, the new version of MIUI for some models already supports instant replacement of temperature control
+-Just copy the modified temperature control configuration to `/data/vendor/thermal/config`
+-The system will automatically apply the configuration corresponding to the currently hit scene
+-The simplest, you can pay attention to whether `/data/vendor/thermal/decrypt.txt` has changed to determine whether the temperature control has taken effect
 
 
-### 测试和日志
-- 大多数情况下，MIUI会在`/data/vendor/thermal/`下记录温控切换日志和温度限制触发和清除日志，可以直接查看了解温控的运行过程
-- 也可以通过 `thermal-engine -o > /cache/thermal.conf` 获得即时状态
-- 当然，thermal-engine还有其它一些命令，如：
+### Tests and logs
+-In most cases, MIUI will record the temperature control switch log and the temperature limit trigger and clear log under `/data/vendor/thermal/`, and you can directly view and understand the operating process of the temperature control
+-You can also get the real-time status via `thermal-engine -o> /cache/thermal.conf`
+-Of course, thermal-engine has other commands, such as:
 ```sh
 # thermal-engine --help
 Temperature sensor daemon
 Optional arguments:
-  --config-file/-c <file>        config file
-  --debug/-d                     debug output
-  --soc_id/-s <target>           target soc_id
-  --norestorebrightness/-r       disable restore brightness functionality
-  --output-conf/-o               dump config file of active settings
-  --trace/-t                     enable ftrace tracing
-  --dump-bcl/-i                  BCL ibat/imax file
-  --help/-h                      this help screen
+  --config-file/-c <file> config file
+  --debug/-d debug output
+  --soc_id/-s <target> target soc_id
+  --norestorebrightness/-r disable restore brightness functionality
+  --output-conf/-o dump config file of active settings
+  --trace/-t enable ftrace tracing
+  --dump-bcl/-i BCL ibat/imax file
+  --help/-h this help screen
 ```
 
 
-### 相关资料
-- https://blog.csdn.net/LoongEmbedded/article/details/55049975?utm_source=blogxgwz8
-- https://blog.csdn.net/bs66702207/article/details/72782431?utm_source=blogxgwz0
-- https://www.geek-share.com/detail/2700066916.html
-- http://www.mamicode.com/info-detail-2022213.html
+### Related Information
+-https://blog.csdn.net/LoongEmbedded/article/details/55049975?utm_source=blogxgwz8
+-https://blog.csdn.net/bs66702207/article/details/72782431?utm_source=blogxgwz0
+-https://www.geek-share.com/detail/2700066916.html
+-http://www.mamicode.com/info-detail-2022213.html

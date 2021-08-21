@@ -5,17 +5,17 @@
     <item
         android:id="@+id/action_open"
         android:orderInCategory="100"
-        android:title="打开文件" />
+        android:title="Open file" />
     <item
         android:id="@+id/action_apply"
         android:orderInCategory="100"
-        android:title="应用配置" />
+        android:title="Apply config" />
     <item
         android:id="@+id/action_save"
         android:orderInCategory="100"
-        android:title="保存修改" />
+        android:title="Save config" />
     <item
         android:id="@+id/action_hele"
         android:orderInCategory="100"
-        android:title="查看帮助" />
+        android:title="View help" />
 </menu>

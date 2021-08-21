@@ -1,9 +1,9 @@
 dir="${MAGISK_PATH}/system/vendor/etc"
 if [[ -f "$dir/thermal-engine.current.ini" ]]; then
-    # 旧版
+    # Old version
     mode=`cat "$dir/thermal-engine.current.ini" | cut -f1 -d '_'`
 elif [[ -f "$dir/thermal.current.ini" ]]; then
-    # 新版
+    # New edition
     mode=`cat "$dir/thermal.current.ini" | cut -f1 -d '_'`
 else
     mode=''
@@ -42,11 +42,11 @@ case "$mode" in
     modename="游戏模式 (game)"
   ;;
   "")
-    modename="未替换"
+    modename="Not replaced"
   ;;
   *)
-    # modename="未替换"
+    # modename="Not replaced"
   ;;
 esac
 
-echo "当前：$modename"
+echo "Current：$modename"
