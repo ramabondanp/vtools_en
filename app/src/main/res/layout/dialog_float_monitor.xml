@@ -171,13 +171,13 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="线程监视器" />
+                            android:text="Thread monitor" />
                         <TextView
                             style="@style/textSecondary"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="监测当前应用消耗CPU资源最多的线程" />
+                            android:text="Monitor the thread that consumes the most CPU resources in the current application" />
                     </LinearLayout>
 
                     <Switch
