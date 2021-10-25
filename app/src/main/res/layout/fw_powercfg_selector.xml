@@ -18,7 +18,7 @@
 
         <LinearLayout
             android:id="@+id/popup_window"
-            android:layout_width="290dp"
+            android:layout_width="340dp"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
@@ -154,7 +154,7 @@
 
                 <LinearLayout
                     android:id="@+id/fw_other_opt"
-                    android:layout_width="95dp"
+                    android:layout_width="135dp"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
                     <CheckBox
