@@ -1,13 +1,9 @@
 package com.omarea.scene_mode
 
 import android.annotation.SuppressLint
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
+import android.content.*
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.widget.Toast
 import com.omarea.Scene
 import com.omarea.common.shell.KeepShellPublic
@@ -38,9 +34,15 @@ class AppSwitchHandler(private var context: AccessibilityScenceMode, override va
     private var lastMode = ""
     private var spfPowercfg = context.getSharedPreferences(SpfConfig.POWER_CONFIG_SPF, Context.MODE_PRIVATE)
     private var sceneBlackList = context.getSharedPreferences(SpfConfig.SCENE_BLACK_LIST, Context.MODE_PRIVATE)
-    private var spfGlobal = context.getSharedPreferences(SpfConfig.GLOBAL_SPF, Context.MODE_PRIVATE)
+    private val spfGlobal: SharedPreferences
+        get() {
+            return Scene.globalConfig
+        }
     private var ignoredList = ArrayList<String>()
-    private var dyamicCore = false
+    private val dynamicCore: Boolean
+        get() {
+            return spfGlobal.getBoolean(SpfConfig.GLOBAL_SPF_DYNAMIC_CONTROL, SpfConfig.GLOBAL_SPF_DYNAMIC_CONTROL_DEFAULT)
+        }
     private var firstMode = spfGlobal.getString(SpfConfig.GLOBAL_SPF_POWERCFG_FIRST_MODE, BALANCE)
     private var screenOn = false
     private var lastScreenOnOff: Long = 0
@@ -49,7 +51,7 @@ class AppSwitchHandler(private var context: AccessibilityScenceMode, override va
     private val SCREEN_OFF_SWITCH_NETWORK_DELAY: Long = 25000
     private var handler = Handler(Looper.getMainLooper())
     private var notifyHelper = AlwaysNotification(context, true)
-    private val sceneMode = SceneMode.getInstanceOrInit(context, SceneConfigStore(context))!!
+    private val sceneMode = SceneMode.getNewInstance(context, SceneConfigStore(context))!!
     private var timer: Timer? = null
     private var sceneConfigChanged: BroadcastReceiver? = null
     private var sceneAppChanged: BroadcastReceiver? = null
@@ -77,7 +79,7 @@ class AppSwitchHandler(private var context: AccessibilityScenceMode, override va
                     scheduleAtFixedRate(object : TimerTask() {
                         private var ticks = 0
                         override fun run() {
-                            updateModeNofity(true) // 耗电统计 定时更新通知显示
+                            updateModeNoitfy(true) // 耗电统计 定时更新通知显示
 
                             ticks += interval
                             ticks %= 60
@@ -121,10 +123,10 @@ class AppSwitchHandler(private var context: AccessibilityScenceMode, override va
             if (!screenOn) {
                 notifyHelper.hideNotify()
                 stopTimer()
-                setDelyFreezeApps()
+                setDelayFreezeApps()
 
                 // 息屏后自动切换为省电模式
-                if (dyamicCore && lastMode.isNotEmpty()) {
+                if (dynamicCore && lastMode.isNotEmpty()) {
                     val sleepMode = spfGlobal.getString(SpfConfig.GLOBAL_SPF_POWERCFG_SLEEP_MODE, POWERSAVE)
                     if (sleepMode != null && sleepMode != IGONED) {
                         toggleConfig(sleepMode, context.packageName)
@@ -153,7 +155,7 @@ class AppSwitchHandler(private var context: AccessibilityScenceMode, override va
         lastScreenOnOff = System.currentTimeMillis()
 
         handler.postDelayed({
-            if (dyamicCore && lastMode.isNotEmpty()) {
+            if (dynamicCore && lastMode.isNotEmpty()) {
                 lastPackage = null
                 lastModePackage = null
                 context.notifyScreenOn()
@@ -166,11 +168,11 @@ class AppSwitchHandler(private var context: AccessibilityScenceMode, override va
         if (!screenOn) {
             screenOn = true
             startTimer() // 屏幕开启后开始定时更新通知
-            updateModeNofity() // 屏幕点亮后更新通知
+            updateModeNoitfy() // 屏幕点亮后更新通知
         }
     }
 
-    private fun setDelyFreezeApps() {
+    private fun setDelayFreezeApps() {
         val delay = spfGlobal.getInt(SpfConfig.GLOBAL_SPF_FREEZE_DELAY, 0)
         SceneMode.FreezeAppThread(context.applicationContext, true, if (delay > 0) (delay * 60) else 0).start()
     }
@@ -178,7 +180,7 @@ class AppSwitchHandler(private var context: AccessibilityScenceMode, override va
     /**
      * 更新通知
      */
-    private fun updateModeNofity(saveLog: Boolean = false) {
+    private fun updateModeNoitfy(saveLog: Boolean = false) {
         if (screenOn) {
             notifyHelper.notify(saveLog)
         }
@@ -188,7 +190,7 @@ class AppSwitchHandler(private var context: AccessibilityScenceMode, override va
     private fun autoToggleMode(packageName: String?) {
         if (packageName != null && packageName != lastModePackage) {
             lastModePackage = packageName
-            if (dyamicCore) {
+            if (dynamicCore) {
                 val mode = spfPowercfg.getString(packageName, firstMode)!!
                 if (
                         mode != IGONED && (lastMode != mode || spfGlobal.getBoolean(SpfConfig.GLOBAL_SPF_DYNAMIC_CONTROL_STRICT, false))
@@ -201,7 +203,7 @@ class AppSwitchHandler(private var context: AccessibilityScenceMode, override va
                 }
             }
             setCurrentPowercfgApp(packageName)
-            updateModeNofity() // 应用改变后更新通知
+            updateModeNoitfy() // 应用改变后更新通知
         }
     }
 
@@ -305,7 +307,6 @@ class AppSwitchHandler(private var context: AccessibilityScenceMode, override va
         if (spfGlobal.getBoolean(SpfConfig.GLOBAL_SPF_DYNAMIC_CONTROL, SpfConfig.GLOBAL_SPF_DYNAMIC_CONTROL_DEFAULT)) {
             // 是否已经完成性能调节配置安装或自定义
             if (modeConfigCompleted()) {
-                dyamicCore = true
                 val installer = CpuConfigInstaller()
                 if (installer.outsideConfigInstalled()) {
                     installer.configCodeVerify()
@@ -313,18 +314,15 @@ class AppSwitchHandler(private var context: AccessibilityScenceMode, override va
                 initPowerCfg()
             } else {
                 spfGlobal.edit().putBoolean(SpfConfig.GLOBAL_SPF_DYNAMIC_CONTROL, false).apply()
-                dyamicCore = false
             }
             spfGlobal.edit().putString(SpfConfig.GLOBAL_SPF_POWERCFG, "").commit()
-        } else {
-            dyamicCore = false
         }
     }
 
     init {
         screenState = ScreenState(context)
 
-        updateModeNofity() // 服务启动后 更新通知
+        updateModeNoitfy() // 服务启动后 更新通知
 
         // 禁用SeLinux
         if (spfGlobal.getBoolean(SpfConfig.GLOBAL_SPF_DISABLE_ENFORCE, false)) {
@@ -355,7 +353,7 @@ class AppSwitchHandler(private var context: AccessibilityScenceMode, override va
                     if (extras.containsKey("mode")) {
                         val mode = intent.getStringExtra("mode")!!
                         val app = intent.getStringExtra("app")
-                        if (dyamicCore && screenOn && app != null && app == lastModePackage) {
+                        if (dynamicCore && screenOn && app != null && app == lastModePackage) {
                             toggleConfig(mode, app)
                         }
                     }

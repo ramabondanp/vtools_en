@@ -1,6 +1,7 @@
 package com.omarea.scene_mode
 
 import android.content.Context
+import android.os.SystemClock
 import android.util.Log
 import com.omarea.Scene
 import com.omarea.common.shared.FileWrite
@@ -15,7 +16,6 @@ import com.omarea.vtools.R
  */
 
 open class ModeSwitcher {
-
     companion object {
         const val SOURCE_UNKNOWN = "UNKNOWN"
         const val SOURCE_SCENE_ACTIVE = "SOURCE_SCENE_ACTIVE"
@@ -108,6 +108,20 @@ open class ModeSwitcher {
 
         private var currentPowercfg: String = ""
         private var currentPowercfgApp: String = ""
+
+        public fun getCurrentPowerMode(): String {
+            if (!currentPowercfg.isEmpty()) {
+                return currentPowercfg
+            }
+            return PropsUtils.getProp("vtools.powercfg")
+        }
+
+        public fun getCurrentPowermodeApp(): String {
+            if (!currentPowercfgApp.isEmpty()) {
+                return currentPowercfgApp
+            }
+            return PropsUtils.getProp("vtools.powercfg_app")
+        }
     }
 
     internal fun getModIcon(mode: String): Int {
@@ -130,20 +144,6 @@ open class ModeSwitcher {
         }
     }
 
-    fun getCurrentPowerMode(): String {
-        if (!currentPowercfg.isEmpty()) {
-            return currentPowercfg
-        }
-        return PropsUtils.getProp("vtools.powercfg")
-    }
-
-    internal fun getCurrentPowermodeApp(): String {
-        if (!currentPowercfgApp.isEmpty()) {
-            return currentPowercfgApp
-        }
-        return PropsUtils.getProp("vtools.powercfg_app")
-    }
-
     internal fun setCurrent(powerCfg: String, app: String): ModeSwitcher {
         setCurrentPowercfg(powerCfg)
         setCurrentPowercfgApp(app)
@@ -163,7 +163,7 @@ open class ModeSwitcher {
     }
 
     private fun keepShellExec(cmd: String) {
-        KeepShellPublic.doCmdSync(cmd)
+        KeepShellPublic.secondaryKeepShell.doCmdSync(cmd)
     }
 
     // init
@@ -240,9 +240,10 @@ open class ModeSwitcher {
                         val dynamic = Scene.getBoolean(SpfConfig.GLOBAL_SPF_DYNAMIC_CONTROL, SpfConfig.GLOBAL_SPF_DYNAMIC_CONTROL_DEFAULT)
                         val strictMode = Scene.getBoolean(SpfConfig.GLOBAL_SPF_DYNAMIC_CONTROL_STRICT, false)
                         if (dynamic && strictMode) {
+                            val currentTime = SystemClock.elapsedRealtime()
                             keepShellExec(
                                     "export top_app=$packageName\n" +
-                                            "sh $configProvider '$mode' > /dev/null 2>&1"
+                                            "sh $configProvider '$mode' 'task$currentTime' > /dev/null 2>&1"
                             )
                         } else {
                             keepShellExec(

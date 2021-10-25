@@ -7,8 +7,6 @@
 # GPU
 # 180000000 267000000 355000000 430000000 565000000 650000000 700000000
 
-# throttle
-
 # GPU频率表
 gpu_freqs=`cat /sys/class/kgsl/kgsl-3d0/devfreq/available_frequencies`
 # GPU最大频率
@@ -340,11 +338,11 @@ yuan_shen_opt_run() {
         case "$comm" in
          "UnityMain"|"UnityGfxDevice"*|"UnityMultiRende"*)
            # set cpu6-7
-           taskset -p "C0" "$tid" 2>&1 > /dev/null
+           taskset -p "C0" "$tid" > /dev/null 2>&1
          ;;
          *)
            # set cpu0-6
-           taskset -p "3F" "$tid" 2>&1 > /dev/null
+           taskset -p "3F" "$tid" > /dev/null 2>&1
          ;;
         esac
       fi
@@ -354,37 +352,33 @@ yuan_shen_opt_run() {
 
 # WangZheRongYao
 sgame_opt_run() {
-  if [[ $(getprop vtools.powercfg_app | grep miHoYo) == "" ]]; then
+  local game="tmgp.sgame"
+  if [[ $(getprop vtools.powercfg_app | grep $game) == "" ]]; then
     return
   fi
 
   # top -H -p $(pgrep -ef tmgp.sgame)
-  # pid=$(pgrep -ef tmgp.sgame)
-  pid=$(pgrep -ef tmgp.sgame)
-  # mask=`echo "obase=16;$((num=2#11110000))" | bc` # F0 (cpu 7-4)
-  # mask=`echo "obase=16;$((num=2#10000000))" | bc` # 80 (cpu 7)
-  # mask=`echo "obase=16;$((num=2#01110000))" | bc` # 70 (cpu 6-4)
+  # pid=$(pgrep -ef $game)
+  pid=$(pgrep -ef $game)
   # mask=`echo "obase=16;$((num=2#01111111))" | bc` # 7F (cpu 6-0)
 
   if [[ "$pid" != "" ]]; then
-    heavy_tid=$(top -H -b -q -n 1 -m 5 -p $(pgrep -ef tmgp.sgame) | grep 'Thread-' | cut -f1 -d ' ')
+    heavy_tid=$(top -H -b -q -n 1 -m 5 -p $pid | grep 'Thread-' | egrep  -o '[0-9]{1,}' | head -n 1)
     for tid in $(ls "/proc/$pid/task/"); do
-      if [[ -f "/proc/$pid/task/$tid/comm" ]]; then
+      if [[ "$heavy_tid" == "$tid" ]]; then
+        taskset -p "C0" "$tid" > /dev/null 2>&1
+      elif [[ -f "/proc/$pid/task/$tid/comm" ]]; then
         comm=$(cat /proc/$pid/task/$tid/comm)
-        if [[ "$heavy_tid" == "$tid" ]]; then
-          taskset -p "C0" "$tid" 2>&1 > /dev/null
-        else
-          case "$comm" in
-           "UnityMain"|"CoreThread"*|"NativeThread"*)
-             # set cpu6-7
-             taskset -p "C0" "$tid" 2>&1 > /dev/null
-           ;;
-           *)
-             # set cpu0-6
-             taskset -p "3F" "$tid" 2>&1 > /dev/null
-           ;;
-          esac
-        fi
+        case "$comm" in
+         "UnityMain"|"UnityGfx"|"CoreThread"*|"NativeThread")
+           # set cpu6-7
+           taskset -p "C0" "$tid" > /dev/null 2>&1
+         ;;
+         *)
+           # set cpu0-5
+           taskset -p "3F" "$tid" > /dev/null 2>&1
+         ;;
+        esac
       fi
     done
   fi
@@ -441,7 +435,7 @@ adjustment_by_top_app() {
   case "$top_app" in
     # YuanShen
     "com.miHoYo.Yuanshen" | "com.miHoYo.ys.mi" | "com.miHoYo.ys.bilibili")
-        ctl_off cpu4
+        ctl_off cpu0
         ctl_off cpu6
         set_cpu_freq 1708800 2500000 1209600 2750000
         set_hispeed_freq 0 0
@@ -474,7 +468,7 @@ adjustment_by_top_app() {
 
     # Wang Zhe Rong Yao
     "com.tencent.tmgp.sgame")
-        ctl_off cpu4
+        ctl_off cpu0
         ctl_off cpu6
         set_cpu_freq 1708800 2500000 1209600 2750000
         set_hispeed_freq 0 0
@@ -499,16 +493,46 @@ adjustment_by_top_app() {
           stune_top_app 1 100
           cpuset '0-1' '0-1' '0-1' '0-7'
         fi
-        watch_app sgame_opt_run &
+        # 这个策略很好，但是会被系统(游戏)覆盖，甚至互斥产生负面作用
+        # watch_app sgame_opt_run &
     ;;
 
-    # XianYu, TaoBao, MIUI Home, Browser, TieBa Fast, TieBa、JingDong、TianMao、Mei Tuan、RE、ES、PuPuChaoShi
-    "com.taobao.idlefish" | "com.taobao.taobao" | "com.miui.home" | "com.android.browser" | "com.baidu.tieba_mini" | "com.baidu.tieba" | "com.jingdong.app.mall" | "com.tmall.wireless" | "com.sankuai.meituan" | "com.speedsoftware.rootexplorer" | "com.estrongs.android.pop" | "com.pupumall.customer")
-      if [[ "$action" == "balance" ]] && [[ "$top_app" == "com.miui.home" ]]; then
+    # XianYu, TaoBao, Browser, TieBa Fast, TieBa、JingDong、TianMao、Mei Tuan、PuPuChaoShi
+    "com.taobao.idlefish" | "com.taobao.taobao" | "com.android.browser" | "com.baidu.tieba_mini" | "com.baidu.tieba" | "com.jingdong.app.mall" | "com.tmall.wireless" | "com.sankuai.meituan" | "com.pupumall.customer")
+      if [[ "$action" == "powersave" ]]; then
+        sched_config "45 62" "55 75" "85" "100"
+      else
+        sched_boost 1 1
+        stune_top_app 1 1
+        sched_config "45 62" "55 75" "85" "100"
+      fi
+    ;;
+
+    "com.speedsoftware.rootexplorer" | "com.estrongs.android.pop")
+      if [[ "$action" == "powersave" ]]; then
+        sched_config "45 62" "55 75" "85" "100"
+      elif [[ "$action" == "balance" ]]; then
+        sched_config "40 50" "50 65" "85" "100"
+      elif [[ "$action" == "performance" ]]; then
         sched_boost 1 0
         stune_top_app 1 1
+        sched_config "40 50" "50 65" "85" "100"
+      else
+        sched_boost 1 1
+        stune_top_app 1 1
+        sched_config "40 50" "50 65" "85" "100"
+      fi
+    ;;
+
+
+    "com.miui.home")
+      if [[ "$action" == "powersave" ]]; then
+        sched_config "45 62" "55 75" "85" "100"
+      elif [[ "$action" == "balance" ]]; then
+        sched_config "40 50" "50 65" "85" "100"
+      elif [[ "$action" == "performance" ]]; then
         sched_config "35 52" "45 65" "65" "80"
-      elif [[ "$action" != "powersave" ]]; then
+      else
         sched_boost 1 1
         stune_top_app 1 1
         sched_config "45 62" "55 75" "85" "100"
@@ -522,19 +546,25 @@ adjustment_by_top_app() {
 
     # DouYin, BiliBili
     "com.ss.android.ugc.aweme" | "tv.danmaku.bili")
-      ctl_on cpu4
+      ctl_on cpu0
       ctl_on cpu7
-      sched_boost 0 0
-      stune_top_app 0 0
       echo 0-3 > /dev/cpuset/foreground/cpus
 
       if [[ "$action" = "powersave" ]]; then
+        sched_boost 0 0
+        stune_top_app 0 0
         echo 0-5 > /dev/cpuset/top-app/cpus
       elif [[ "$action" = "balance" ]]; then
-        echo 0-6 > /dev/cpuset/top-app/cpus
+        sched_boost 0 0
+        stune_top_app 0 0
+        echo 0-7 > /dev/cpuset/top-app/cpus
       elif [[ "$action" = "performance" ]]; then
-        echo 0-6 > /dev/cpuset/top-app/cpus
+        sched_boost 1 0
+        stune_top_app 1 0
+        echo 0-7 > /dev/cpuset/top-app/cpus
       elif [[ "$action" = "fast" ]]; then
+        sched_boost 1 1
+        stune_top_app 1 10
         echo 0-7 > /dev/cpuset/top-app/cpus
       fi
       pgrep -f $top_app | while read pid; do

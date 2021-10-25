@@ -99,20 +99,18 @@ class SceneMode private constructor(private val context: AccessibilityScenceMode
             return instance
         }
 
-        // 获取当前实例或初始化
-        fun getInstanceOrInit(context: AccessibilityScenceMode, store: SceneConfigStore): SceneMode? {
-            if (instance == null) {
-                synchronized(SceneMode::class) {
-                    instance = SceneMode(context, store)
-                    FreezeAppThread(context.applicationContext).start()
-                }
+        // 创建一个新实例
+        fun getNewInstance(context: AccessibilityScenceMode, store: SceneConfigStore): SceneMode? {
+            if (instance != null) {
+                instance?.clearState()
             }
+            instance = SceneMode(context, store)
             return instance!!
         }
 
         fun suspendApp(app: String) {
             if (app.equals("com.android.vending")) {
-                GAppsUtilis().disable(KeepShellPublic.getDefaultInstance());
+                GAppsUtilis().disable(KeepShellPublic.secondaryKeepShell);
             } else {
                 KeepShellPublic.doCmdSync("pm suspend ${app}\nam force-stop ${app} || am kill current ${app}")
             }
@@ -120,7 +118,7 @@ class SceneMode private constructor(private val context: AccessibilityScenceMode
 
         fun freezeApp(app: String) {
             if (app.equals("com.android.vending")) {
-                GAppsUtilis().disable(KeepShellPublic.getDefaultInstance());
+                GAppsUtilis().disable(KeepShellPublic.secondaryKeepShell);
             } else {
                 KeepShellPublic.doCmdSync("pm disable ${app}")
             }
@@ -130,7 +128,7 @@ class SceneMode private constructor(private val context: AccessibilityScenceMode
             getCurrentInstance()?.setFreezeAppLeaveTime(app)
 
             if (app.equals("com.android.vending")) {
-                GAppsUtilis().enable(KeepShellPublic.getDefaultInstance());
+                GAppsUtilis().enable(KeepShellPublic.secondaryKeepShell);
             } else {
                 KeepShellPublic.doCmdSync("pm unsuspend ${app}\npm enable ${app}")
             }
@@ -574,6 +572,7 @@ class SceneMode private constructor(private val context: AccessibilityScenceMode
         resumeBrightnessState()
         currentSceneConfig = null
         floatScreenRotation.remove()
+        instance = null
     }
 
     fun onScreenOn() {

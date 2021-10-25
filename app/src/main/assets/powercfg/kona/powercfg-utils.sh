@@ -10,40 +10,6 @@
 # GPU
 # 587000000 525000000 490000000 441600000 400000000 305000000
 
-throttle() {
-hint_group=""
-if [[ "$top_app" != "" ]]; then
-distinct_apps="
-game=com.miHoYo.Yuanshen,com.miHoYo.ys.bilibili,com.miHoYo.ys.mi
-
-mgame=com.bilibili.gcg2.bili
-sgame=com.tencent.tmgp.sgame
-
-heavy=com.taobao.idlefish,com.taobao.taobao,com.miui.home,com.android.browser,com.baidu.tieba_mini,com.baidu.tieba,com.jingdong.app.mall
-
-music=com.netease.cloudmusic,com.kugou.android,com.kugou.android.lite
-
-video=com.ss.android.ugc.aweme,tv.danmaku.bili
-"
-
-  hint_group=$(echo -e "$distinct_apps" | grep "$top_app" | cut -f1 -d "=")
-  current_hint=$(getprop vtools.powercfg_hint)
-  hint_mode="${action}:${hint_group}"
-
-  if [[ "$hint_mode" == "$current_hint" ]]; then
-    echo "$top_app [$hint_mode > $current_hint] skip!" >> /cache/powercfg_skip.log
-    exit 0
-  fi
-
-else
-  hint_mode="${action}"
-fi
-
-setprop vtools.powercfg_hint "$hint_mode"
-}
-
-# throttle
-
 # GPU频率表
 gpu_freqs=`cat /sys/class/kgsl/kgsl-3d0/devfreq/available_frequencies`
 # GPU最大频率
@@ -155,6 +121,7 @@ reset_basic_governor() {
   echo $gpu_min_pl > /sys/class/kgsl/kgsl-3d0/min_pwrlevel
   echo $gpu_min_pl > /sys/class/kgsl/kgsl-3d0/def_pwrlevel
   echo $gpu_max_pl > /sys/class/kgsl/kgsl-3d0/max_pwrlevel
+  set_input_boost_freq 0 0 0 0
 }
 
 devfreq_performance () {
@@ -212,8 +179,13 @@ set_input_boost_freq() {
   local c1="$2"
   local c2="$3"
   local ms="$4"
-  echo "0:$c0 1:$c0 2:$c0 3:$c0 4:$c1 5:$c1 6:$c1 7:$c2" > /sys/module/cpu_boost/parameters/input_boost_freq
-  echo $ms > /sys/module/cpu_boost/parameters/input_boost_ms
+  echo "0:$c0 1:$c0 2:$c0 3:$c0 4:$c1 5:$c1 6:$c1 7:$c2" > /sys/devices/system/cpu/cpu_boost/input_boost_freq
+  echo $ms > /sys/devices/system/cpu/cpu_boost/input_boost_ms
+  if [[ "$ms" -gt 0 ]]; then
+    echo 1 > /sys/devices/system/cpu/cpu_boost/sched_boost_on_input
+  else
+    echo 0 > /sys/devices/system/cpu/cpu_boost/sched_boost_on_input
+  fi
 }
 
 set_cpu_freq() {
@@ -373,32 +345,37 @@ set_task_affinity() {
 
 # HePingJingYing
 pubgmhd_opt_run () {
-  if [[ $(getprop vtools.powercfg_app | grep miHoYo) == "" ]]; then
+  local current_app=$top_app
+  if [[ "$current_app" != 'com.tencent.tmgp.pubgmhd' ]] && [[ "$current_app" != 'com.tencent.ig' ]]; then
     return
   fi
 
-  pid=$(pgrep -f com.tencent.tmgp.pubgmhd | head -1)
   # mask=`echo "obase=16;$((num=2#11110000))" | bc` # F0 (cpu 7-4)
   # mask=`echo "obase=16;$((num=2#10000000))" | bc` # 80 (cpu 7)
   # mask=`echo "obase=16;$((num=2#01110000))" | bc` # 70 (cpu 6-4)
   # mask=`echo "obase=16;$((num=2#01111111))" | bc` # 7F (cpu 6-0)
 
-  if [[ "$pid" != "" ]]; then
+  ps -ef -o PID,NAME | grep -e "$current_app$" | egrep -o '[0-9]{1,}' | while read pid; do
     for tid in $(ls "/proc/$pid/task/"); do
+      if [[ "$tid" == "$pid" ]]; then
+        taskset -p "FF" "$tid" > /dev/null 2>&1
+        continue
+      fi
       if [[ -f "/proc/$pid/task/$tid/comm" ]]; then
         comm=$(cat /proc/$pid/task/$tid/comm)
 
         case "$comm" in
          "RenderThread"*)
-           taskset -p "80" "$tid" 2>&1 > /dev/null
+           taskset -p "80" "$tid" > /dev/null 2>&1
+           echo 1
          ;;
          *)
-           taskset -p "7F" "$tid" 2>&1 > /dev/null
+           taskset -p "7F" "$tid" > /dev/null 2>&1
          ;;
         esac
       fi
     done
-  fi
+  done
 }
 
 # YuanShen
@@ -416,25 +393,90 @@ yuan_shen_opt_run() {
   # mask=`echo "obase=16;$((num=2#01111111))" | bc` # 7F (cpu 6-0)
 
   if [[ "$pid" != "" ]]; then
-    for tid in $(ls "/proc/$pid/task/"); do
-      if [[ -f "/proc/$pid/task/$tid/comm" ]]; then
-        comm=$(cat /proc/$pid/task/$tid/comm)
-
-        case "$comm" in
-         "UnityMain")
-           taskset -p "F0" "$tid" 2>&1 > /dev/null
-         ;;
-         # "UnityGfxDevice"*|"UnityMultiRende"*|"NativeThread"*|"UnityChoreograp"*)
-         "UnityGfxDevice"*|"UnityMultiRende"*)
-           taskset -p "70" "$tid" 2>&1 > /dev/null
-         ;;
-         *)
-           taskset -p "7F" "$tid" 2>&1 > /dev/null
-         ;;
-        esac
+    if [[ "$taskset_effective" == "" ]]; then
+      taskset_test ${pid}
+      if [[ "$?" == '1' ]]; then
+        taskset_effective=1
+      else
+        taskset_effective=0
+        exit
       fi
-    done
+    fi
+    local mode=$(getprop vtools.powercfg)
+    if [[ "$mode" == 'powersave' ]]; then
+      for tid in $(ls "/proc/$pid/task/"); do
+        if [[ "$tid" == "$pid" ]]; then
+          taskset -p "FF" "$tid" > /dev/null 2>&1
+          continue
+        fi
+        if [[ -f "/proc/$pid/task/$tid/comm" ]]; then
+          comm=$(cat /proc/$pid/task/$tid/comm)
+
+          case "$comm" in
+           "UnityMain")
+             taskset -p "80" "$tid" > /dev/null 2>&1 || taskset -p "F0" "$tid" > /dev/null 2>&1
+           ;;
+           # "UnityGfxDevice"*|"UnityMultiRende"*|"NativeThread"*|"UnityChoreograp"*)
+           "UnityGfxDevice"*|"UnityMultiRende"*)
+             taskset -p "70" "$tid" > /dev/null 2>&1
+           ;;
+           # "Worker Thread"|"AudioTrack"|"Audio"*)
+           "Worker Thread")
+             taskset -p "E" "$tid" > /dev/null 2>&1
+           ;;
+           *)
+             taskset -p "7F" "$tid" > /dev/null 2>&1
+           ;;
+          esac
+        fi
+      done
+    else
+      for tid in $(ls "/proc/$pid/task/"); do
+        if [[ "$tid" == "$pid" ]]; then
+          taskset -p "FF" "$tid" > /dev/null 2>&1
+          continue
+        fi
+        if [[ -f "/proc/$pid/task/$tid/comm" ]]; then
+          comm=$(cat /proc/$pid/task/$tid/comm)
+
+          case "$comm" in
+           "AudioTrack"|"Audio"*|"tp_schedule"*|"MIHOYO_NETWORK"|"FMOD"*|"NativeThread"|"UnityChoreograp"|"UnityPreload")
+             taskset -p "F" "$tid" > /dev/null 2>&1
+           ;;
+           "UnityMain")
+             taskset -p "80" "$tid" > /dev/null 2>&1 || taskset -p "F0" "$tid" > /dev/null 2>&1
+           ;;
+           # "UnityGfxDevice"*|"UnityMultiRende"*|"NativeThread"*|"UnityChoreograp"*)
+           "UnityGfxDevice"*|"UnityMultiRende"*)
+             taskset -p "70" "$tid" > /dev/null 2>&1
+           ;;
+           *)
+             taskset -p "7F" "$tid" > /dev/null 2>&1
+           ;;
+          esac
+        fi
+      done
+    fi
   fi
+}
+
+# Check whether the taskset command is useful
+taskset_test() {
+  local pid="$1"
+  if [[ "$pid" == "" ]]; then
+    return 2
+  fi
+
+  # Compatibility Test
+  any_tid=$(ls /proc/$pid/task | head -n 1)
+  if [[ "$any_tid" != "" ]]; then
+    test_fail=$(taskset -p ff $any_tid 2>&1 | grep 'Operation not permitted')
+    if [[ "$test_fail" != "" ]]; then
+      echo 'taskset Cannot run on your device!' 1>&2
+      return 0
+    fi
+  fi
+  return 1
 }
 
 # watch_app [on_tick] [on_change]
@@ -442,22 +484,24 @@ watch_app() {
   local interval=120
   local on_tick="$1"
   local on_change="$2"
-  local app=$(getprop vtools.powercfg_app)
+  local app=$top_app
+  local current_pid=$$
 
-  if [[ "$on_tick" == "" ]]; then
+  if [[ "$on_tick" == "" ]] || [[ "$app" == "" ]]; then
     return
   fi
 
-  if [[ "$app" == "" ]]; then
-    return
-  fi
-
-  procs=$(pgrep -f com.omarea.*powercfg.sh)
-  last_proc=$(echo "$procs" | tail -n 1)
-  if [[ "$last_proc" != "" ]]; then
-    echo "$procs" | grep -v "$last_proc" | while read pid; do
-      kill -9 $pid 2> /dev/null
+  if [[ "$task" != "" ]]; then
+    pgrep -f com.omarea.*powercfg.sh | grep -v $current_pid | while read pid; do
+      local cmdline=$(cat /proc/$pid/cmdline | grep -a task)
+      if [[ "$cmdline" != '' ]] && [[ $(echo $cmdline | grep $task) == '' ]];then
+        kill -9 $pid 2> /dev/null
+      fi
     done
+  fi
+
+  if [[ $(getprop vtools.powercfg_app) == "$app" ]]; then
+      $on_tick
   fi
 
   ticks=0
@@ -474,7 +518,7 @@ watch_app() {
 
     current=$(getprop vtools.powercfg_app)
     if [[ "$current" == "$app" ]]; then
-      $on_tick $current
+      $on_tick
     else
       if [[ "$on_change" ]]; then
         $on_change $current
@@ -486,54 +530,55 @@ watch_app() {
 
 adjustment_by_top_app() {
   case "$top_app" in
-    # YuanShen
-    "com.miHoYo.Yuanshen" | "com.miHoYo.ys.mi" | "com.miHoYo.ys.bilibili")
-        ctl_off cpu4
-        ctl_off cpu7
+    # GenshinImpact
+    "com.miHoYo.Yuanshen" | "com.miHoYo.ys.mi" | "com.miHoYo.ys.bilibili" | "com.miHoYo.GenshinImpact")
+        # ctl_off cpu4
+        # ctl_off cpu7
+        set_hispeed_freq 0 0 0
         if [[ "$action" = "powersave" ]]; then
           sched_boost 0 0
           stune_top_app 0 0
-          sched_config "50 80" "67 95" "300" "400"
+          sched_config "65 57" "87 72" "300" "400"
           gpu_pl_down 4
-          set_cpu_freq 1036800 1804800 1478400 1766400 1075200 2265600
-          sched_limit 5000 0 5000 0 5000 0
+          set_cpu_freq 1612800 1804800 825600 1766400 1075200 2457600
+          sched_limit 10000 0 0 5000 0 1000
+          cpuset '0' '0' '0-7' '0-7'
         elif [[ "$action" = "balance" ]]; then
-          sched_boost 1 0
-          stune_top_app 1 10
-          sched_config "50 68" "67 80" "300" "400"
-          gpu_pl_down 1
-          set_cpu_freq 1036800 1804800 1056000 2054400 1075200 2457600
-          sched_limit 5000 0 5000 0 5000 0
+          sched_boost 0 0
+          stune_top_app 0 0
+          sched_config "60 57" "87 72" "300" "400"
+          gpu_pl_down 2
+          set_cpu_freq 1075200 1804800 1056000 2054400 1075200 2841600
+          sched_limit 10000 0 0 5000 0 1000
+          cpuset '0' '0-1' '0-7' '0-7'
         elif [[ "$action" = "performance" ]]; then
           sched_boost 1 0
           stune_top_app 1 10
-          gpu_pl_down 1
-          set_cpu_freq 1036800 1420800 1056000 2419200 1075200 2841600
+          gpu_pl_down 0
+          set_cpu_freq 1075200 1420800 1056000 2419200 1075200 3200000
           sched_limit 5000 0 5000 0 5000 0
+          cpuset '0-1' '0-3' '0-7' '0-7'
         elif [[ "$action" = "fast" ]]; then
           sched_boost 1 0
           stune_top_app 1 100
           sched_limit 5000 0 10000 0 5000 0
           # sched_config "40 60" "50 75" "120" "150"
+          cpuset '0-1' '0-3' '0-7' '0-7'
         fi
-        set_hispeed_freq 0 0 0
-        cpuset '0-1' '0-3' '0-7' '0-7'
         watch_app yuan_shen_opt_run &
     ;;
 
-    "com.tencent.tmgp.pubgmhd")
-      manufacturer=$(getprop ro.product.manufacturer)
-      if [[ "$manufacturer" == "Xiaomi" ]]; then
-        cpuset '0-1' '0-3' '0-7' '0-7'
-        watch_app pubgmhd_opt_run &
-      fi
+    # pubg
+    "com.tencent.tmgp.pubgmhd" | "com.tencent.ig")
+      cpuset '0-1' '0-3' '0-7' '0-7'
+      watch_app pubgmhd_opt_run &
       set_hispeed_freq 0 0 0
     ;;
 
     # Wang Zhe Rong Yao
     "com.tencent.tmgp.sgame")
-        ctl_off cpu4
-        ctl_on cpu7
+        # ctl_off cpu4
+        # ctl_on cpu7
         if [[ "$action" = "powersave" ]]; then
           # sched_config "55 68" "69 78" "300" "400"
           sched_config "52 55" "69 67" "300" "400"
@@ -582,17 +627,49 @@ adjustment_by_top_app() {
         cpuset '0-1' '0-3' '0-3' '0-7'
     ;;
 
-    # XianYu, TaoBao, MIUI Home, Browser, TieBa Fast, TieBa、JingDong、TianMao、Mei Tuan、RE、ES、PuPuChaoShi
-    "com.taobao.idlefish" | "com.taobao.taobao" | "com.miui.home" | "com.android.browser" | "com.baidu.tieba_mini" | "com.baidu.tieba" | "com.jingdong.app.mall" | "com.tmall.wireless" | "com.sankuai.meituan" | "com.speedsoftware.rootexplorer" | "com.estrongs.android.pop" | "com.pupumall.customer")
-      if [[ "$action" == "balance" ]] && [[ "$top_app" == "com.miui.home" ]]; then
-        sched_boost 1 0
-        stune_top_app 1 1
-        sched_config "35 52" "45 65" "65" "80"
-      elif [[ "$action" != "powersave" ]]; then
+    # XianYu, TaoBao, Browser, TieBa Fast, TieBa、JingDong、TianMao、Mei Tuan、PuPuChaoShi
+    "com.taobao.idlefish" | "com.taobao.taobao" | "com.android.browser" | "com.baidu.tieba_mini" | "com.baidu.tieba" | "com.jingdong.app.mall" | "com.tmall.wireless" | "com.sankuai.meituan" | "com.pupumall.customer")
+      if [[ "$action" == "powersave" ]]; then
+        set_input_boost_freq 1075200 1478400 1516800 2000
+      elif [[ "$action" == "balance" ]]; then
+        set_input_boost_freq 1075200 1766400 1516800 2000
+      elif [[ "$action" == "performance" ]]; then
+        set_input_boost_freq 1075200 2054400 1516800 2000
+      else
         sched_boost 1 1
         stune_top_app 1 1
         sched_config "45 62" "55 75" "85" "100"
-        # echo 4-6 > /dev/cpuset/top-app/cpus
+      fi
+    ;;
+
+    "com.speedsoftware.rootexplorer" | "com.estrongs.android.pop")
+      if [[ "$action" == "powersave" ]]; then
+        set_input_boost_freq 1075200 1478400 1516800 2000
+      elif [[ "$action" == "balance" ]]; then
+        set_input_boost_freq 1075200 1766400 1516800 2000
+      elif [[ "$action" == "performance" ]]; then
+        sched_boost 1 0
+        stune_top_app 1 1
+        sched_config "40 50" "50 65" "85" "100"
+      else
+        sched_boost 1 1
+        stune_top_app 1 1
+        sched_config "40 50" "50 65" "85" "100"
+      fi
+    ;;
+
+    "com.miui.home")
+      if [[ "$action" == "powersave" ]]; then
+        set_input_boost_freq 1420800 1478400 1516800 1000
+      elif [[ "$action" == "balance" ]]; then
+        set_input_boost_freq 1420800 1478400 1516800 1000
+      elif [[ "$action" == "performance" ]]; then
+        sched_config "35 52" "45 65" "65" "80"
+        set_input_boost_freq 1420800 1478400 1516800 1000
+      else
+        sched_boost 1 1
+        stune_top_app 1 1
+        sched_config "45 62" "55 75" "85" "100"
       fi
     ;;
 
@@ -601,33 +678,69 @@ adjustment_by_top_app() {
       echo 0-6 > /dev/cpuset/foreground/cpus
     ;;
 
+    # BaiDuDiTu, TenXunDiTu, GaoDeDiTu
+    "com.baidu.BaiduMap" | "com.tencent.map" | "com.autonavi.minimap")
+      if [[ "$action" != "fast" ]]; then
+        core_online[7]=0
+        cpuset '0' '0-3' '0-3' '0-7'
+        gpu_pl_up 0
+        sched_boost 0 0
+        stune_top_app 0 0
+        set_cpu_pl 0
+        set_input_boost_freq 0 0 0 0
+        if [[ "$action" = "powersave" ]]; then
+          gpu_pl_down 5
+          sched_limit 0 1000 0 10000 0 2000
+          set_cpu_freq 300000 1708800 710400 1574400 844800 1632000
+        elif [[ "$action" = "balance" ]]; then
+          gpu_pl_down 4
+          sched_limit 0 500 0 10000 0 2000
+          set_cpu_freq 300000 1708800 710400 1670400 844800 1862400
+        elif [[ "$action" = "performance" ]]; then
+          gpu_pl_down 2
+          sched_limit 0 500 0 5000 0 1000
+          set_cpu_freq 300000 1804800 710400 1766400 825600 2073600
+        fi
+      fi
+    ;;
+
     # DouYin, BiliBili
     "com.ss.android.ugc.aweme" | "tv.danmaku.bili")
-      ctl_on cpu4
-      ctl_on cpu7
+      # ctl_on cpu4
+      # ctl_on cpu7
+      # set_ctl cpu4 85 45 0
+      # set_ctl cpu7 80 40 0
 
-      set_ctl cpu4 85 45 0
-      set_ctl cpu7 80 40 0
-
-      sched_boost 0 0
-      stune_top_app 0 0
       echo 0-3 > /dev/cpuset/foreground/cpus
-
       if [[ "$action" = "powersave" ]]; then
-        echo 0-5 > /dev/cpuset/top-app/cpus
+        sched_boost 0 0
+        stune_top_app 0 0
+        sched_config "85 85" "100 100" "240" "400"
+        echo 0-6 > /dev/cpuset/top-app/cpus
+        if [[ "$top_app" == "com.ss.android.ugc.aweme" ]]; then
+          set_cpu_freq 1075200 1708800 710400 1574400 844800 1747200
+        fi
+        set_input_boost_freq 979200 1478400 0 2000
       elif [[ "$action" = "balance" ]]; then
+        sched_boost 0 0
+        stune_top_app 0 0
+        sched_config "85 85" "100 100" "240" "400"
         echo 0-6 > /dev/cpuset/top-app/cpus
+        if [[ "$top_app" == "com.ss.android.ugc.aweme" ]]; then
+          set_cpu_freq 1075200 1804800 710400 1862400 844800 2073600
+        fi
+        set_input_boost_freq 979200 1670400 0 1500
       elif [[ "$action" = "performance" ]]; then
-        echo 0-6 > /dev/cpuset/top-app/cpus
+        sched_boost 0 0
+        stune_top_app 0 0
+        sched_config "70 70" "90 90" "240" "400"
+        set_input_boost_freq 1248000 1766400 1401600 1000
       elif [[ "$action" = "fast" ]]; then
-        echo 0-7 > /dev/cpuset/top-app/cpus
+        sched_boost 1 0
+        stune_top_app 1 0
+        sched_config "65 65" "75 80" "300" "400"
+        set_input_boost_freq 1708800 2054400 1862400 1000
       fi
-      pgrep -f $top_app | while read pid; do
-        # echo $pid > /dev/cpuset/foreground/cgroup.procs
-        echo $pid > /dev/stune/background/cgroup.procs
-      done
-
-      sched_config "85 85" "100 100" "240" "400"
     ;;
 
     "default")

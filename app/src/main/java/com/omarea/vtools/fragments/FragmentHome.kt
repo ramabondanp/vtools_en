@@ -11,6 +11,7 @@ import android.os.*
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CompoundButton
 import android.widget.Toast
 import com.omarea.Scene
 import com.omarea.common.shell.KeepShellPublic
@@ -26,6 +27,7 @@ import com.omarea.ui.AdapterCpuCores
 import com.omarea.utils.AccessibleServiceHelper
 import com.omarea.vtools.R
 import com.omarea.vtools.dialogs.DialogElectricityUnit
+import kotlinx.android.synthetic.main.dialog_danger_agreement.*
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.coroutines.*
 import java.math.BigDecimal
@@ -346,6 +348,7 @@ class FragmentHome : androidx.fragment.app.Fragment() {
                 } else {
                     (cpu_core_list.adapter as AdapterCpuCores).setData(cores)
                 }
+
             } catch (ex: Exception) {
 
             }
@@ -363,7 +366,7 @@ class FragmentHome : androidx.fragment.app.Fragment() {
         btn_defaultmode.alpha = 0.4f
         btn_gamemode.alpha = 0.4f
         btn_fastmode.alpha = 0.4f
-        when (modeSwitcher.getCurrentPowerMode()) {
+        when (ModeSwitcher.getCurrentPowerMode()) {
             ModeSwitcher.BALANCE -> {
                 btn_defaultmode.alpha = 1f
             }
@@ -406,7 +409,7 @@ class FragmentHome : androidx.fragment.app.Fragment() {
 
     private fun installConfig(toMode: String) {
         val dynamic = AccessibleServiceHelper().serviceRunning(context!!) && spf.getBoolean(SpfConfig.GLOBAL_SPF_DYNAMIC_CONTROL, SpfConfig.GLOBAL_SPF_DYNAMIC_CONTROL_DEFAULT)
-        if (!dynamic && modeSwitcher.getCurrentPowerMode() == toMode) {
+        if (!dynamic && ModeSwitcher.getCurrentPowerMode() == toMode) {
             modeSwitcher.setCurrent("", "")
             globalSPF.edit().putString(SpfConfig.GLOBAL_SPF_POWERCFG, "").apply()
             myHandler.post {

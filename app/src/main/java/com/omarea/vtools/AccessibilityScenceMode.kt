@@ -41,11 +41,13 @@ import kotlin.collections.ArrayList
 public class AccessibilityScenceMode : AccessibilityService() {
     private var flagRequestKeyEvent = true
     private var sceneConfigChanged: BroadcastReceiver? = null
-    private var isLandscap = false
+    private var isLandscape = false
     private var inputMethods = ArrayList<String>()
 
     private var displayWidth = 1080
     private var displayHeight = 2340
+    // 是否是平板
+    private var isTablet: Boolean = false
 
     companion object {
         private var lastAnalyseThread: Long = 0
@@ -72,9 +74,9 @@ public class AccessibilityScenceMode : AccessibilityService() {
 
     private fun onScreenConfigurationChanged(newConfig: Configuration) {
         if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
-            isLandscap = false
+            isLandscape = false
         } else if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            isLandscap = true
+            isLandscape = true
         }
         getDisplaySize()
     }
@@ -88,6 +90,8 @@ public class AccessibilityScenceMode : AccessibilityService() {
             displayWidth = point.x
             displayHeight = point.y
         }
+
+        isTablet = resources.configuration.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK >= Configuration.SCREENLAYOUT_SIZE_LARGE
     }
 
     private fun updateConfig() {
@@ -295,7 +299,6 @@ public class AccessibilityScenceMode : AccessibilityService() {
         this.modernModeEvent(null);
     }
 
-
     // 新的前台应用窗口判定逻辑
     private fun modernModeEvent(event: AccessibilityEvent? = null) {
         val effectiveWindows = this.getEffectiveWindows()
@@ -303,9 +306,28 @@ public class AccessibilityScenceMode : AccessibilityService() {
         if (effectiveWindows.isNotEmpty()) {
             try {
                 var lastWindow: AccessibilityWindowInfo? = null
+                // 最小窗口分辨率要求
+                val minWindowSize = if (isLandscape && !isTablet) {
+                    // 横屏时关注窗口大小，以显示区域大的主应用（平板设备不过滤窗口大小）
+                    // 屏幕一半大小，用于判断窗口是否是小窗（比屏幕一半大小小的的应用认为是窗口化运行）
+                    displayHeight * displayWidth / 2
+                } else {
+                    // 竖屏时以焦点窗口为前台应用，不关心窗口大小
+                    0
+                }
+
                 val logs = if (floatLogView == null) null else StringBuilder()
                 logs?.run {
-                    append("Scene窗口检测\n", "屏幕: ${displayHeight}x${displayWidth}\n")
+                    append("Scene窗口检测\n", "屏幕: ${displayHeight}x${displayWidth}")
+                    if (isLandscape) {
+                        append(" 横向")
+                    } else {
+                        append(" 竖向")
+                    }
+                    if (isTablet) {
+                        append(" Tablet")
+                    }
+                    append("\n")
                     if (event != null) {
                         append("事件: ${event.source?.packageName}\n")
                     } else {
@@ -334,7 +356,7 @@ public class AccessibilityScenceMode : AccessibilityService() {
                         continue
                     }
                     */
-                    if (isLandscap) {
+                    if (isLandscape) {
                         val outBounds = Rect()
                         window.getBoundsInScreen(outBounds)
 
@@ -384,28 +406,23 @@ public class AccessibilityScenceMode : AccessibilityService() {
                     }
                 }
                 logs?.append("\n")
-                if (lastWindow != null) {
+                if (lastWindow != null && lastWindowSize >= minWindowSize) {
                     val eventWindowId = event?.windowId
                     val lastWindowId = lastWindow.id
 
                     if (logs == null) {
                         if (eventWindowId == lastWindowId && event.packageName != null) {
                             val pa = event.packageName
-                            if (!(isLandscap  && inputMethods.contains(pa))) {
+                            if (!(isLandscape  && inputMethods.contains(pa))) {
                                 GlobalStatus.lastPackageName = pa.toString()
                                 EventBus.publish(EventType.APP_SWITCH)
                             }
                         } else {
                             lastAnalyseThread = System.currentTimeMillis()
-                            // try {
-                            // val thread: Thread = WindowAnalyzeThread(lastWindow, lastParsingThread)
-                            // thread.start()
                             windowAnalyse(lastWindow, lastAnalyseThread)
                             if (event != null) {
                                 startActivityPolling()
                             }
-                            // thread.wait(300);
-                            // } catch (Exception ignored){}
                         }
                     } else {
                         val wp = if (eventWindowId == lastWindowId) {
@@ -432,7 +449,7 @@ public class AccessibilityScenceMode : AccessibilityService() {
                         if (wp != null) {
                             logs.append("\n此前: ${GlobalStatus.lastPackageName}")
                             val pa = wp.toString()
-                            if (!(isLandscap  && inputMethods.contains(pa))) {
+                            if (!(isLandscape  && inputMethods.contains(pa))) {
                                 GlobalStatus.lastPackageName = pa
                                 EventBus.publish(EventType.APP_SWITCH)
                             }
@@ -502,43 +519,10 @@ public class AccessibilityScenceMode : AccessibilityService() {
 
             if (lastAnalyseThread == tid && wp != null) {
                 val pa = wp.toString()
-                if (!(isLandscap  && inputMethods.contains(pa))) {
+                if (!(isLandscape && inputMethods.contains(pa))) {
                     GlobalStatus.lastPackageName = pa
                     EventBus.publish(EventType.APP_SWITCH)
                 }
-            }
-        }
-    }
-
-    class WindowAnalyzeThread constructor(private val windowInfo: AccessibilityWindowInfo, private val tid: Long) : Thread() {
-        override fun run() {
-            // 如果当前window锁属的APP处于未响应状态，此过程可能会等待5秒后超时返回null，因此需要在线程中异步进行此操作
-            val root = (try {
-                windowInfo.root
-            } catch (ex: Exception) {
-                null
-            })
-            val wp = (try {
-                root?.packageName
-            } catch (ex: Exception) {
-                null
-            })
-            // MIUI 优化，打开MIUI多任务界面时当做没有发生应用切换
-            if (wp?.equals("com.miui.home") == true) {
-                /*
-                val node = root?.findAccessibilityNodeInfosByText("小窗应用")?.firstOrNull()
-                Log.d("Scene-MIUI", "" + node?.parent?.viewIdResourceName)
-                Log.d("Scene-MIUI", "" + node?.viewIdResourceName)
-                */
-                val node = root?.findAccessibilityNodeInfosByViewId("com.miui.home:id/txtSmallWindowContainer")?.firstOrNull()
-                if (node != null) {
-                    return
-                }
-            }
-
-            if (lastAnalyseThread == tid && wp != null) {
-                GlobalStatus.lastPackageName = wp.toString()
-                EventBus.publish(EventType.APP_SWITCH)
             }
         }
     }
@@ -578,14 +562,13 @@ public class AccessibilityScenceMode : AccessibilityService() {
         }
     }
 
-    private fun deestory() {
-        Toast.makeText(applicationContext, "Scene - 辅助服务已关闭！", Toast.LENGTH_SHORT).show()
+    private fun destroy() {
         if (appSwitchHandler != null) {
+            Toast.makeText(applicationContext, "Scene - 辅助服务已关闭！", Toast.LENGTH_SHORT).show()
             appSwitchHandler?.onInterrupt()
             appSwitchHandler = null
             // disableSelf()
             stopSelf()
-            // System.exit(0)
         }
     }
 
@@ -642,7 +625,7 @@ public class AccessibilityScenceMode : AccessibilityService() {
             sceneConfigChanged = null
         }
         serviceIsConnected = false
-        deestory()
+        destroy()
         stopSelf()
         return super.onUnbind(intent)
     }
@@ -651,6 +634,6 @@ public class AccessibilityScenceMode : AccessibilityService() {
     }
 
     override fun onDestroy() {
-        this.deestory()
+        this.destroy()
     }
 }

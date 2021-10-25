@@ -20,6 +20,9 @@ import com.omarea.store.SceneConfigStore
 import com.omarea.store.SpfConfig
 import com.omarea.utils.AccessibleServiceHelper
 import com.omarea.vtools.R
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 /**
  * 弹窗辅助类
@@ -121,7 +124,7 @@ class FloatPowercfgSelector(context: Context) {
         val serviceRunning = AccessibleServiceHelper().serviceRunning(context)
         var dynamic = serviceRunning && globalSPF.getBoolean(SpfConfig.GLOBAL_SPF_DYNAMIC_CONTROL, SpfConfig.GLOBAL_SPF_DYNAMIC_CONTROL_DEFAULT)
         val defaultMode = globalSPF.getString(SpfConfig.GLOBAL_SPF_POWERCFG_FIRST_MODE, ModeSwitcher.BALANCE)
-        var selectedMode = (if (dynamic) powerCfgSPF.getString(packageName, defaultMode) else modeSwitcher.getCurrentPowerMode())!!
+        var selectedMode = (if (dynamic) powerCfgSPF.getString(packageName, defaultMode) else ModeSwitcher.getCurrentPowerMode())!!
         val modeConfigCompleted = modeSwitcher.modeConfigCompleted()
 
         try {
@@ -192,31 +195,47 @@ class FloatPowercfgSelector(context: Context) {
                         switchMode.run()
                     }
                 } else {
-                    selectedMode = modeSwitcher.getCurrentPowerMode()
+                    selectedMode = ModeSwitcher.getCurrentPowerMode()
                     updateUI.run()
                 }
             }
         }
         btn_ignore.visibility = if (dynamic) View.VISIBLE else View.GONE
 
+        // 震动反馈
+        val hapticFeedback = Runnable {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+                GlobalScope.launch(Dispatchers.IO) {
+                    try {
+                        view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+                    } catch (ex: Exception) {}
+                }
+            }
+        }
+
         if (modeConfigCompleted) {
             btn_powersave.setOnClickListener {
+                hapticFeedback.run()
                 selectedMode = ModeSwitcher.POWERSAVE
                 switchMode.run()
             }
             btn_defaultmode.setOnClickListener {
+                hapticFeedback.run()
                 selectedMode = ModeSwitcher.BALANCE
                 switchMode.run()
             }
             btn_gamemode.setOnClickListener {
+                hapticFeedback.run()
                 selectedMode = ModeSwitcher.PERFORMANCE
                 switchMode.run()
             }
             btn_fastmode.setOnClickListener {
+                hapticFeedback.run()
                 selectedMode = ModeSwitcher.FAST
                 switchMode.run()
             }
             btn_ignore.setOnClickListener {
+                hapticFeedback.run()
                 if (dynamic) {
                     if (selectedMode != ModeSwitcher.IGONED) {
                         selectedMode = ModeSwitcher.IGONED

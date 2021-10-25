@@ -55,6 +55,13 @@ case "$target" in
     # Turn on scheduler boost for top app main
     echo 1 > /proc/sys/kernel/sched_boost_top_app
 
+    # colocation v3 settings
+    echo 51 > /proc/sys/kernel/sched_min_task_util_for_boost
+    echo 35 > /proc/sys/kernel/sched_min_task_util_for_colocation
+
+    # Enable conservative pl
+    echo 1 > /proc/sys/kernel/sched_conservative_pl
+
     # configure governor settings for silver cluster
     echo "schedutil" > /sys/devices/system/cpu/cpufreq/policy0/scaling_governor
     echo 0 > /sys/devices/system/cpu/cpufreq/policy0/schedutil/down_rate_limit_us
@@ -70,7 +77,7 @@ case "$target" in
     # configure input boost settings
     echo "0:1324800" > /sys/devices/system/cpu/cpu_boost/input_boost_freq
     echo 120 > /sys/devices/system/cpu/cpu_boost/input_boost_ms
-    echo "0:0 1:0 2:0 3:0 4:2342400 5:0 6:0 7:2361600" > /sys/devices/system/cpu/cpu_boost/powerkey_input_boost_freq
+    echo "0:1804800 1:0 2:0 3:0 4:2342400 5:0 6:0 7:2361600" > /sys/devices/system/cpu/cpu_boost/powerkey_input_boost_freq
     echo 400 > /sys/devices/system/cpu/cpu_boost/powerkey_input_boost_ms
 
     # configure governor settings for gold cluster

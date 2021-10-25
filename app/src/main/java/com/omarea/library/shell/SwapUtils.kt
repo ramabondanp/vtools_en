@@ -1,11 +1,13 @@
 package com.omarea.library.shell
 
 import android.content.Context
+import android.util.Log
 import com.omarea.common.shared.FileWrite
 import com.omarea.common.shell.KeepShell
 import com.omarea.common.shell.KeepShellPublic
 import com.omarea.common.shell.KernelProrp
 import com.omarea.common.shell.RootFile
+import com.omarea.model.ZramWriteBackStat
 import java.io.File
 
 /**
@@ -35,9 +37,9 @@ class SwapUtils(private val context: Context) {
                 if (txt.contains("/data/swapfile") || txt.contains("/swapfile")) {
                     return "/data/swapfile"
                 } else {
-                    val loopNumber = PropsUtils.getProp("vtools.swap.loop")
-                    if (loopNumber.isNotEmpty() && loopNumber != "error" && txt.contains("loop$loopNumber")) {
-                        return "/dev/block/loop$loopNumber"
+                    val loopName = PropsUtils.getProp("vtools.swap.loop").split("/").lastOrNull()
+                    if (loopName != null && loopName != "error" && txt.contains(loopName)) {
+                        return loopName
                     }
                 }
             }
@@ -118,7 +120,8 @@ class SwapUtils(private val context: Context) {
         }
 
         val keepShell = KeepShell()
-        keepShell.doCmdSync(sb.toString())
+        val r =keepShell.doCmdSync(sb.toString())
+        Log.d("xx", r)
         keepShell.tryExit()
     }
 
@@ -135,7 +138,7 @@ class SwapUtils(private val context: Context) {
             sb.append("0")
         }
 
-        sb.append("\nrm -f $swapfilePath;")
+        sb.append("\nrm -f $swapfilePath")
 
         val keepShell = KeepShell()
         keepShell.doCmdSync(sb.toString())
@@ -145,7 +148,17 @@ class SwapUtils(private val context: Context) {
     // 是否支持zram
     val zramSupport: Boolean
         get() {
-            return KeepShellPublic.doCmdSync("if [[ -e /dev/block/zram0 ]]; then echo 1; else echo 0; fi;") == "1"
+            return KeepShellPublic.doCmdSync(
+                    "if [[ ! -e /dev/block/zram0 ]] && [[ -e /sys/class/zram-control ]]; then\n" +
+                    "  cat /sys/class/zram-control/hot_add\n" +
+                    "fi\n" +
+                    "if [[ -e /dev/block/zram0 ]]; then echo 1; else echo 0; fi;") == "1"
+        }
+
+    // 是否支持zram WriteBack
+    val zramWriteBackSupport: Boolean
+        get() {
+            return KeepShellPublic.doCmdSync("if [[ -e /sys/block/zram0/backing_dev ]]; then echo 1; else echo 0; fi;") == "1"
         }
 
     // 是否已启用zram
@@ -168,10 +181,15 @@ class SwapUtils(private val context: Context) {
     fun resizeZram(sizeVal: Int, algorithm: String = "") {
         val keepShell = KeepShell()
         val currentSize = zramCurrentSizeMB
-        if (currentSize != sizeVal || (algorithm.isNotEmpty() && algorithm != compAlgorithm)) {
+        if (currentSize != sizeVal || (algorithm.isNotEmpty() && algorithm != compAlgorithm) || !zramEnabled) {
             val sb = StringBuilder()
             sb.append("echo 4 > /sys/block/zram0/max_comp_streams\n")
             sb.append("sync\n")
+
+            sb.append("if [[ -f /sys/block/zram0/backing_dev ]]; then\n")
+            sb.append("  backing_dev=$(cat /sys/block/zram0/backing_dev)\n")
+            sb.append("fi\n")
+
             sb.append("echo 3 > /proc/sys/vm/drop_caches\n")
             sb.append("swapoff /dev/block/zram0 >/dev/null 2>&1\n")
             sb.append("echo 1 > /sys/block/zram0/reset\n")
@@ -180,13 +198,17 @@ class SwapUtils(private val context: Context) {
                 sb.append("echo \"$algorithm\" > /sys/block/zram0/comp_algorithm\n")
             }
 
+            sb.append("if [[ -f /sys/block/zram0/backing_dev ]]; then\n")
+            sb.append("  echo \"\$backing_dev\" > /sys/block/zram0/backing_dev\n")
+            sb.append("fi\n")
+
             if (sizeVal > 2047) {
                 sb.append("echo " + sizeVal + "M > /sys/block/zram0/disksize\n")
             } else {
                 sb.append("echo " + (sizeVal * 1024 * 1024L) + " > /sys/block/zram0/disksize\n")
             }
 
-            sb.append("echo 3 > /sys/block/zram0/max_comp_streams\n")
+            sb.append("echo 4 > /sys/block/zram0/max_comp_streams\n")
             sb.append("mkswap /dev/block/zram0 >/dev/null 2>&1\n")
             sb.append("swapon /dev/block/zram0 -p 0 >/dev/null 2>&1\n")
             keepShell.doCmdSync(sb.toString())
@@ -194,6 +216,20 @@ class SwapUtils(private val context: Context) {
 
         keepShell.tryExit()
     }
+
+    // ZRAM WritBack 状态
+    val writeBackStat: ZramWriteBackStat
+        get () {
+            return ZramWriteBackStat().apply {
+                backingDev = KernelProrp.getProp("/sys/block/zram0/backing_dev")
+                val bdStats = KernelProrp.getProp("/sys/block/zram0/bd_stat").trim().split(Regex("[ ]+"))
+                if (bdStats.size == 3) {
+                    backed = bdStats[0].toInt() * 4
+                    backReads = bdStats[1].toInt() * 4
+                    backWrites = bdStats[2].toInt() * 4
+                }
+            }
+        }
 
     val zramCurrentSizeMB: Int
         get () {
@@ -258,8 +294,12 @@ class SwapUtils(private val context: Context) {
 
     val swapUsedSize: Int
         get() {
+            var loopName: String? = PropsUtils.getProp("vtools.swap.loop").split("/").lastOrNull()
+            if (loopName != null && !loopName.contains("loop")) {
+                loopName = null
+            }
             for (row in procSwaps) {
-                if (row.startsWith("/swapfile ") || row.startsWith("/data/swapfile ")) {
+                if (row.startsWith("/swapfile ") || row.startsWith("/data/swapfile ") || (loopName != null && row.contains(loopName))) {
                     val cols = row.split(" ").toMutableList()
                     val sizeStr = cols[2]
                     val usedStr = cols[3]
