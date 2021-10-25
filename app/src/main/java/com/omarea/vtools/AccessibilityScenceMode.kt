@@ -6,10 +6,7 @@ import android.content.*
 import android.content.res.Configuration
 import android.graphics.Point
 import android.graphics.Rect
-import android.os.Handler
-import android.os.Looper
 import android.util.LruCache
-import android.view.KeyEvent
 import android.view.WindowManager
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
@@ -19,13 +16,13 @@ import com.omarea.Scene
 import com.omarea.data.EventBus
 import com.omarea.data.EventType
 import com.omarea.data.GlobalStatus
+import com.omarea.data.IEventReceiver
 import com.omarea.library.basic.InputMethodApp
 import com.omarea.library.basic.LauncherApps
 import com.omarea.library.calculator.Flags
 import com.omarea.scene_mode.AppSwitchHandler
 import com.omarea.scene_mode.AutoClickInstall
 import com.omarea.scene_mode.AutoSkipAd
-import com.omarea.store.SceneConfigStore
 import com.omarea.store.SpfConfig
 import com.omarea.utils.AutoSkipCloudData
 import com.omarea.vtools.popup.FloatLogView
@@ -38,9 +35,16 @@ import kotlin.collections.ArrayList
 /**
  * Created by helloklf on 2016/8/27.
  */
-public class AccessibilityScenceMode : AccessibilityService() {
-    private var flagRequestKeyEvent = true
-    private var sceneConfigChanged: BroadcastReceiver? = null
+public class AccessibilityScenceMode : AccessibilityService(), IEventReceiver {
+    override val isAsync: Boolean
+        get() = false
+
+    override fun onSubscribe() {
+    }
+
+    override fun onUnsubscribe() {
+    }
+
     private var isLandscape = false
     private var inputMethods = ArrayList<String>()
 
@@ -72,6 +76,17 @@ public class AccessibilityScenceMode : AccessibilityService() {
         onScreenConfigurationChanged(newConfig)
     }
 
+    private fun getIsLandscape(): Boolean {
+        val config = resources.configuration
+        val orientation = config.orientation
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            return true
+        } else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+            return false
+        }
+        return false
+    }
+
     private fun onScreenConfigurationChanged(newConfig: Configuration) {
         if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
             isLandscape = false
@@ -95,8 +110,6 @@ public class AccessibilityScenceMode : AccessibilityService() {
     }
 
     private fun updateConfig() {
-        flagRequestKeyEvent = SceneConfigStore(this.applicationContext).needKeyCapture()
-
         val info = serviceInfo // AccessibilityServiceInfo()
         info.eventTypes = AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED or AccessibilityEvent.TYPE_WINDOWS_CHANGED
 
@@ -115,14 +128,53 @@ public class AccessibilityScenceMode : AccessibilityService() {
         info.packageNames = null
 
         info.flags = AccessibilityServiceInfo.FLAG_RETRIEVE_INTERACTIVE_WINDOWS or AccessibilityServiceInfo.FLAG_REPORT_VIEW_IDS or AccessibilityServiceInfo.FLAG_INCLUDE_NOT_IMPORTANT_VIEWS
-        if (flagRequestKeyEvent) {
-            info.flags = Flags(info.flags).addFlag(AccessibilityServiceInfo.FLAG_REQUEST_FILTER_KEY_EVENTS)
-        }
+
+        // 捕获实体按键实践
+        // info.flags = Flags(info.flags).addFlag(AccessibilityServiceInfo.FLAG_REQUEST_FILTER_KEY_EVENTS)
 
         serviceInfo = info
     }
 
+    override fun onCreate() {
+        super.onCreate()
+        EventBus.subscribe(this)
+    }
+
+    override fun eventFilter(eventType: EventType): Boolean {
+        return eventType == EventType.SERVICE_DEBUG || eventType == EventType.SERVICE_UPDATE || eventType == EventType.SCREEN_ON || eventType == EventType.STATE_RESUME
+    }
+
+    override fun onReceive(eventType: EventType, data: HashMap<String, Any>?) {
+        if (eventType == EventType.SERVICE_DEBUG) {
+            if (setLogView()) {
+                modernModeEvent()
+            }
+        } else if (eventType == EventType.SCREEN_ON) {
+            if (!serviceIsConnected) {
+                Scene.toast("The auxiliary service has expired, please reactivate the auxiliary service!")
+            }
+        } else if (eventType == EventType.STATE_RESUME) {
+            modernModeEvent(null)
+        } else if (eventType == EventType.SERVICE_UPDATE) {
+            updateConfig()
+            Scene.toast("Ancillary service configuration has been updated~", Toast.LENGTH_SHORT)
+        }
+    }
+
+    private fun setLogView(): Boolean {
+        val showLogView = spf.getBoolean(SpfConfig.GLOBAL_SPF_SCENE_LOG, false)
+        if (showLogView && floatLogView == null) {
+            floatLogView = FloatLogView(this)
+            return true
+        } else if (!showLogView && floatLogView != null) {
+            floatLogView?.hide()
+            floatLogView = null
+        }
+        return false
+    }
+
     public override fun onServiceConnected() {
+        super.onServiceConnected()
         spf = getSharedPreferences(SpfConfig.GLOBAL_SPF, Context.MODE_PRIVATE)
 
         // 获取屏幕方向
@@ -131,26 +183,13 @@ public class AccessibilityScenceMode : AccessibilityService() {
         serviceIsConnected = true
 
         updateConfig()
-        if (sceneConfigChanged == null) {
-            sceneConfigChanged = object : BroadcastReceiver() {
-                override fun onReceive(context: Context, intent: Intent) {
-                    updateConfig()
-                    Scene.toast("辅助服务配置已更新~", Toast.LENGTH_SHORT)
-                }
-            }
-            registerReceiver(sceneConfigChanged, IntentFilter(getString(R.string.scene_service_config_change_action)))
-        }
-        super.onServiceConnected()
 
         if (appSwitchHandler == null) {
             appSwitchHandler = AppSwitchHandler(this)
         }
 
         getDisplaySize()
-
-        if (spf.getBoolean(SpfConfig.GLOBAL_SPF_SCENE_LOG, false)) {
-            floatLogView = FloatLogView(this)
-        }
+        setLogView()
         if (spf.getBoolean(SpfConfig.GLOBAL_SPF_SKIP_AD, false) && spf.getBoolean(SpfConfig.GLOBAL_SPF_SKIP_AD_PRECISE, false)) {
             AutoSkipCloudData().updateConfig(this, false)
         }
@@ -295,10 +334,6 @@ public class AccessibilityScenceMode : AccessibilityService() {
         }.filter { it != null && it != "com.android.systemui" }.map { it.toString() }.toTypedArray()
     }
 
-    public fun notifyScreenOn() {
-        this.modernModeEvent(null);
-    }
-
     // 新的前台应用窗口判定逻辑
     private fun modernModeEvent(event: AccessibilityEvent? = null) {
         val effectiveWindows = this.getEffectiveWindows()
@@ -318,20 +353,20 @@ public class AccessibilityScenceMode : AccessibilityService() {
 
                 val logs = if (floatLogView == null) null else StringBuilder()
                 logs?.run {
-                    append("Scene窗口检测\n", "屏幕: ${displayHeight}x${displayWidth}")
+                    append("Scene window detection\n", "Screen: ${displayHeight}x${displayWidth}")
                     if (isLandscape) {
-                        append(" 横向")
+                        append(" Horizontal")
                     } else {
-                        append(" 竖向")
+                        append(" Vertical")
                     }
                     if (isTablet) {
                         append(" Tablet")
                     }
                     append("\n")
                     if (event != null) {
-                        append("事件: ${event.source?.packageName}\n")
+                        append("event: ${event.source?.packageName}\n")
                     } else {
-                        append("事件: 主动轮询${Date().time / 1000}\n")
+                        append("event: Active polling${Date().time / 1000}\n")
                     }
                 }
                 // TODO:
@@ -368,7 +403,7 @@ public class AccessibilityScenceMode : AccessibilityService() {
                             } catch (ex: java.lang.Exception) {
                                 null
                             }
-                            append("\n层级: ${window.layer} ${wp} Focused：${windowFocused}\n类型: ${window.type} Rect[${outBounds.left},${outBounds.top},${outBounds.right},${outBounds.bottom}]")
+                            append("\nlevel: ${window.layer} ${wp} Focused：${windowFocused}\nType: ${window.type} Rect[${outBounds.left},${outBounds.top},${outBounds.right},${outBounds.bottom}]")
                         }
 
                         val size = (outBounds.right - outBounds.left) * (outBounds.bottom - outBounds.top)
@@ -388,7 +423,7 @@ public class AccessibilityScenceMode : AccessibilityService() {
                             } catch (ex: java.lang.Exception) {
                                 null
                             }
-                            append("\n层级: ${window.layer} ${wp} Focused：${windowFocused}\n类型: ${window.type} Rect[${outBounds.left},${outBounds.top},${outBounds.right},${outBounds.bottom}]")
+                            append("\nLevel: ${window.layer} ${wp} Focused：${windowFocused}\nType: ${window.type} Rect[${outBounds.left},${outBounds.top},${outBounds.right},${outBounds.bottom}]")
                         }
 
                         if (lastWindowFocus && !windowFocused) {
@@ -413,7 +448,7 @@ public class AccessibilityScenceMode : AccessibilityService() {
                     if (logs == null) {
                         if (eventWindowId == lastWindowId && event.packageName != null) {
                             val pa = event.packageName
-                            if (!(isLandscape  && inputMethods.contains(pa))) {
+                            if (!(isLandscape && inputMethods.contains(pa))) {
                                 GlobalStatus.lastPackageName = pa.toString()
                                 EventBus.publish(EventType.APP_SWITCH)
                             }
@@ -437,7 +472,7 @@ public class AccessibilityScenceMode : AccessibilityService() {
                         // MIUI 优化，打开MIUI多任务界面时当做没有发生应用切换
                         if (wp?.equals("com.miui.home") == true) {
                             /*
-                            val node = root?.findAccessibilityNodeInfosByText("小窗应用")?.firstOrNull()
+                            val node = root?.findAccessibilityNodeInfosByText("Small window application")?.firstOrNull()
                             Log.d("Scene-MIUI", "" + node?.parent?.viewIdResourceName)
                             Log.d("Scene-MIUI", "" + node?.viewIdResourceName)
                             */
@@ -447,7 +482,7 @@ public class AccessibilityScenceMode : AccessibilityService() {
                             }
                         }
                         if (wp != null) {
-                            logs.append("\n此前: ${GlobalStatus.lastPackageName}")
+                            logs.append("\nBefore: ${GlobalStatus.lastPackageName}")
                             val pa = wp.toString()
                             if (!(isLandscape  && inputMethods.contains(pa))) {
                                 GlobalStatus.lastPackageName = pa
@@ -458,11 +493,11 @@ public class AccessibilityScenceMode : AccessibilityService() {
                             }
                         }
 
-                        logs.append("\n现在: ${GlobalStatus.lastPackageName}")
+                        logs.append("\nNow: ${GlobalStatus.lastPackageName}")
                         floatLogView?.update(logs.toString())
                     }
                 } else {
-                    logs?.append("\n现在: ${GlobalStatus.lastPackageName}")
+                    logs?.append("\nNow: ${GlobalStatus.lastPackageName}")
                     floatLogView?.update(logs.toString())
                     return
                 }
@@ -507,7 +542,7 @@ public class AccessibilityScenceMode : AccessibilityService() {
                     return@launch
                 }
                 /*
-                val node = root?.findAccessibilityNodeInfosByText("小窗应用")?.firstOrNull()
+                val node = root?.findAccessibilityNodeInfosByText("Small window application")?.firstOrNull()
                 Log.d("Scene-MIUI", "" + node?.parent?.viewIdResourceName)
                 Log.d("Scene-MIUI", "" + node?.viewIdResourceName)
                 */
@@ -563,67 +598,21 @@ public class AccessibilityScenceMode : AccessibilityService() {
     }
 
     private fun destroy() {
+        EventBus.unsubscribe(this)
         if (appSwitchHandler != null) {
-            Toast.makeText(applicationContext, "Scene - 辅助服务已关闭！", Toast.LENGTH_SHORT).show()
-            appSwitchHandler?.onInterrupt()
+            appSwitchHandler?.run {
+                EventBus.unsubscribe(this)
+            }
             appSwitchHandler = null
+            Toast.makeText(applicationContext, "Scene - Ancillary service is closed!", Toast.LENGTH_SHORT).show()
             // disableSelf()
             stopSelf()
         }
     }
 
-    private var handler = Handler(Looper.getMainLooper())
-    private var downTime: Long = -1
-    private var longClickTime: Long = 500
     private var serviceIsConnected = false
-    override fun onKeyEvent(event: KeyEvent): Boolean {
-        // Log.d("onKeyEvent", "keyCode " + event.keyCode);
-        if (!serviceIsConnected) {
-            return false
-        }
-        if (appSwitchHandler == null)
-            return false
-
-        val keyCode = event.keyCode
-        // 只阻止四大金刚键
-        if (!(keyCode == KeyEvent.KEYCODE_HOME || keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_APP_SWITCH || keyCode == KeyEvent.KEYCODE_MENU || keyCode == KeyEvent.KEYCODE_SEARCH)) {
-            return super.onKeyEvent(event)
-        }
-        when (event.action) {
-            KeyEvent.ACTION_DOWN -> {
-                downTime = event.eventTime
-                val currentDownTime = downTime
-                val stopEvent = appSwitchHandler!!.onKeyDown()
-                if (stopEvent) {
-                    handler.postDelayed({
-                        if (downTime == currentDownTime) {
-                            if (keyCode == KeyEvent.KEYCODE_HOME) {
-                                performGlobalAction(GLOBAL_ACTION_HOME)
-                            } else if (keyCode == KeyEvent.KEYCODE_BACK) {
-                                performGlobalAction(GLOBAL_ACTION_BACK)
-                            } else if (keyCode == KeyEvent.KEYCODE_APP_SWITCH || keyCode == KeyEvent.KEYCODE_MENU) {
-                                performGlobalAction(GLOBAL_ACTION_RECENTS)
-                            }
-                        }
-                    }, longClickTime)
-                }
-                return stopEvent
-            }
-            KeyEvent.ACTION_UP -> {
-                downTime = -1
-                return appSwitchHandler!!.onKeyDown()
-            }
-            else -> {
-                return super.onKeyEvent(event)
-            }
-        }
-    }
 
     override fun onUnbind(intent: Intent?): Boolean {
-        if (sceneConfigChanged != null) {
-            unregisterReceiver(sceneConfigChanged)
-            sceneConfigChanged = null
-        }
         serviceIsConnected = false
         destroy()
         stopSelf()

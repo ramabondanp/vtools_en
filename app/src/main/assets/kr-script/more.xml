@@ -33,13 +33,6 @@
             <set>run general/force_resize_set.sh</set>
         </switch>
 
-        <switch visible="getprop persist.vtools.ext_all">
-            <title>Virtual key device</title>
-            <desc>Mark the current device without physical buttons, MIUI system can enable full-screen gestures by this function, other systems can enable virtual keys. Reboot to take effect!</desc>
-            <get>run general/mainkey_get.sh</get>
-            <set>run general/mainkey_set.sh</set>
-        </switch>
-
         <action shell="hidden">
             <title>Transition animation length</title>
             <desc>Adjust the length of various animations</desc>

@@ -13,31 +13,16 @@
 
     <group>
         <action>
-            <title>View Mounted Partitions</title>
-            <desc>View the currently mounted partitions with the simple command</desc>
-            <set>df -h</set>
-        </action>
-        <action confirm="true">
-            <title>Disk Speed Test</title>
-            <desc>Check disk sequential read and write speeds using simple commands that take several minutes</desc>
-            <set>run disk_test.sh</set>
-        </action>
-        <action>
-            <title>UFS存储寿命</title>
+            <title>UFS storage life</title>
             <summary sh="run ufs/ufs_summary.sh" />
             <set>run ufs/ufs_detail.sh</set>
-            <desc>*数据仅供参考</desc>
+            <desc>*The data is for reference only</desc>
         </action>
     </group>
 
     <group>
         <action confirm="false">
-            <title>Hardware Parameters</title>
-            <desc>Check the hardware parameter information provided by the system</desc>
-            <set>run hw_properties.sh</set>
-        </action>
-        <action confirm="false">
-            <title>Temperature Sensor</title>
+            <title>Temperature sensor</title>
             <desc>View the current value of the temperature sensor</desc>
             <set>run sensor_values.sh</set>
         </action>
@@ -97,6 +82,4 @@
             </set>
         </action>
     </group>
-
-
 </group>

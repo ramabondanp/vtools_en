@@ -32,11 +32,6 @@
             <summary>Note: This operation will delete all QQ data!</summary>
             <set>run qq_style_fix.sh</set>
         </action>
-        <action confirm="true" max-sdk="29">
-            <title>Fix Taobao flashback</title>
-            <desc>Clean up the hot update files downloaded from Youku and Taobao, if you have Taobao or Youku flashback, you can try</desc>
-            <set>run taobao_fix.sh</set>
-        </action>
     </group>
 
     <group title="Google Related">

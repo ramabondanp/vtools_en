@@ -67,42 +67,9 @@
                 echo 'Command executed';
             </set>
         </action>
-        <action>
-            <title>Write buffer</title>
-            <desc>Adjusting the write buffer size</desc>
-            <params>
-                <param name="dirty_background_ratio" title="Write - minimum buffer size"
-                    options-sh="run io/cache_ratio_options.sh"
-                    value-sh="cat /proc/sys/vm/dirty_background_ratio" />
-                <param name="dirty_ratio" title="Write - maximum buffer size"
-                    options-sh="run io/cache_ratio_options.sh"
-                    value-sh="cat /proc/sys/vm/dirty_ratio" />
-                <param name="dirty_writeback_centisecs" title="Write - cache flush frequency (less than expiration time)"
-                    options-sh="run io/write_time_options.sh"
-                    value-sh="cat /proc/sys/vm/dirty_writeback_centisecs" />
-                <param name="dirty_expire_centisecs" title="Write - cache expiration time"
-                    options-sh="run io/write_time_options.sh"
-                    value-sh="cat /proc/sys/vm/dirty_expire_centisecs" />
-
-                <param name="read_ahead_kb" title="Read - buffer size"
-                    options-sh="run io/read_cache_options.sh"
-                    value-sh="cat /sys/block/sda/queue/read_ahead_kb" />
-            </params>
-            <set>run io/write_cache.sh</set>
-        </action>
     </group>
 
-    <group title="Other">
-        <action
-            id="performance_mem_clear"
-            logo="file:///android_asset/kr-script/icons/shortcut_mem_clear.png"
-            auto-off="true"
-            auto-finish="true">
-            <title>Clear RAM</title>
-            <desc>Clear the contents of the cache in RAM, such as: cached processes, destroyed processes, read and write pre-reading</desc>
-            <set>run drop_cache.sh</set>
-        </action>
-
+    <group title="other">
         <action confirm="true">
             <title>Clear dalvik-cache</title>
             <desc>Clearing the dalvik cache will immediately reboot the phone and take a lot of time to rebuild the cache on the next boot! This operation does not improve performance, so if you don't know what it is, don't click on it!</desc>

@@ -103,17 +103,20 @@
     </group>
 
     <group title="Function">
-        <action>
+        <picker>
             <title>Remove! and x</title>
-            <desc>Fix the WIFI, LTE icons in the status bar to keep showing by modifying the network detection server to a domestic address! or x</desc>
-            <params>
-                <param name="state" title="Operation Type">
-                    <option value="1">Remove! and x</option>
-                    <option value="0">Restore</option>
-                </param>
-            </params>
+            <desc>By changing the network detection server, the WIFI and LTE icons in the status bar are always displayed! or X</desc>
+            <summary sh="run network_checker_summary.sh" />
+            <options>
+                <option value="miui">MIUI server</option>
+                <option value="google">Google server</option>
+                <option value="v2ex">V2EX server</option>
+                <option value="disable">Disable network auth</option>
+                <option value="default">Restore default</option>
+            </options>
+            <get>run network_checker_get.sh</get>
             <set>run network_checker_set.sh</set>
-        </action>
+        </picker>
         <picker>
             <title>Switching NTP servers</title>
             <desc>If your system can synchronize the time properly, there is no need to replace the NTP server</desc>

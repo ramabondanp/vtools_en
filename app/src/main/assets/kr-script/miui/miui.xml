@@ -1,46 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <items>
     <resource dir="file:///android_asset/kr-script/miui" />
-    <group title="Status bar, nav bar" visible="getprop persist.vtools.ext_all">
+    <group title="interface" visible="getprop persist.vtools.ext_all">
         <switch>
-            <title>[MIUI10] Status bar notch</title>
-            <desc>Open a start the middle notch of MI8 and 8SE bangscreen status bar in MUI10 to reduce the number of icons, tested available on MiX2 and Mi6. Reboot takes effect!</desc>
-            <get>run mi8status_get.sh</get>
-            <set>run mi8status_set.sh</set>
-        </switch>
-        <switch>
-            <title>[MIUI9] Notification Center Search Box</title>
-            <desc>Closing this will hide the search box in the drop-down notification center by replacing the theme resource</desc>
-            <get>run miui_notice_search_get.sh</get>
-            <set>run miui_notice_search_set.sh</set>
-        </switch>
-        <switch>
-            <title>[MIUI10] Hide navbar</title>
-            <desc>Hide the navigation bar by modifying its height through theme resources to facilitate the use of third-party gestures</desc>
+            <title>【MIUI 10/11】Hide the navigation bar</title>
+            <desc>Hide the navigation bar by modifying the height of the navigation bar through theme resources, which is convenient for using third-party gestures</desc>
             <get>run miui_hide_nav_get.sh</get>
             <set>run miui_hide_nav_set.sh</set>
-        </switch>
-
-        <switch>
-            <title>Real Blur</title>
-            <desc>Dynamic blurring of the switch pull-down control center (valid for some models)</desc>
-            <get>run real_blur_get.sh</get>
-            <set>run real_blur_set.sh</set>
-        </switch>
-    </group>
-
-    <group title="Interface" visible="getprop persist.vtools.ext_all">
-        <switch>
-            <title>[MIUI10] Screen rounded corners</title>
-            <desc>Switch global rounded corner effect, tested on MiX2 and Mi6. Restart takes effect!</desc>
-            <get>run miui_round_get.sh</get>
-            <set>run miui_round_set.sh</set>
-        </switch>
-        <switch>
-            <title>[MIUI11] Disable USB pop-ups</title>
-            <desc>When connecting the data cable, do not pop up the window to select the transfer mode</desc>
-            <get>run miui_usb_dialog_get.sh</get>
-            <set>run miui_usb_dialog_set.sh</set>
         </switch>
     </group>
 
@@ -135,11 +101,6 @@
             <get>run thermal_conf2/current.sh</get>
             <set>run thermal_conf2/config.sh</set>
         </picker>
-        <action confirm="true">
-            <title>Turn on the hidden temp control option in MIUI9 and MIUI10</title>
-            <desc>It depends on the character, maybe it is possible to open out, but not necessarily la! It is said that the stable version is not possible.</desc>
-            <set>run miui_thermal_set.sh</set>
-        </action>
     </group>
 
     <group title="Function">
@@ -148,12 +109,6 @@
             <desc>Turn off this switch to block online update checking</desc>
             <get>run miui_update_get.sh</get>
             <set>run miui_update_set.sh</set>
-        </switch>
-        <switch visible="getprop persist.vtools.ext_all">
-            <title>[MIUI10] Security Keyboard</title>
-            <desc>Use MIUI's secure keyboard when entering passwords to avoid passwords being recorded as custom words by the input method. Reboot to take effect!</desc>
-            <get>run miui_security_keyboard_get.sh</get>
-            <set>run miui_security_keyboard_set.sh</set>
         </switch>
         <switch shell="hidden">
             <title>[MIUI11] Camera Lab function</title>
@@ -173,13 +128,5 @@
                 killall -9 com.android.camera 2>/dev/null
             </set>
         </switch>
-    </group>
-
-    <group title="Other">
-        <action max-sdk="29">
-            <title>App Store Simplification</title>
-            <desc>Simplify app store layout and remove some ad recommendations</desc>
-            <set>$PAGE_WORK_DIR/app_store_simplify.sh</set>
-        </action>
     </group>
 </items>
