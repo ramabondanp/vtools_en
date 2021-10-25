@@ -58,13 +58,13 @@ public class GpuUtils {
             String path1 = getGpuParamsDir() + "/cur_freq"; // 骁龙
             String path2 = "/sys/kernel/gpu/gpu_clock";
             String path3 = "/sys/kernel/debug/ged/hal/current_freqency"; // 天玑820
-            if (RootFile.INSTANCE.fileExists(path3)) {
-                // 天玑820
-                GPU_FREQ_CMD = "echo $((`cat /sys/kernel/debug/ged/hal/current_freqency | cut -f2 -d ' '` / 1000))";
+            if (RootFile.INSTANCE.fileExists(path1)) {
+                GPU_FREQ_CMD = "cat " + path1;
             } else if (RootFile.INSTANCE.fileExists(path2)) {
                 GPU_FREQ_CMD = "cat " + path2;
-            } else if (RootFile.INSTANCE.fileExists(path1)) {
-                GPU_FREQ_CMD = "cat " + path1;
+            } else if (RootFile.INSTANCE.fileExists(path3)) {
+                // 天玑820
+                GPU_FREQ_CMD = "echo $((`cat /sys/kernel/debug/ged/hal/current_freqency | cut -f2 -d ' '` / 1000))";
             } else {
                 GPU_FREQ_CMD = "";
             }
