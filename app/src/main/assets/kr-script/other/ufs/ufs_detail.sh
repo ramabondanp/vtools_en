@@ -1,4 +1,8 @@
-bDeviceLifeTimeEstA=$(cat /sys/kernel/debug/*.ufshc/dump_health_desc | grep bDeviceLifeTimeEstA | cut -f2 -d '=' | cut -f2 -d ' ')
+if [[ -f /sys/devices/platform/soc/1d84000.ufshc/health_descriptor/life_time_estimation_a ]]; then
+  bDeviceLifeTimeEstA=$(cat /sys/devices/platform/soc/1d84000.ufshc/health_descriptor/life_time_estimation_a)
+else
+  bDeviceLifeTimeEstA=$(cat /sys/kernel/debug/*.ufshc/dump_health_desc 2>/dev/null | grep bDeviceLifeTimeEstA | cut -f2 -d '=' | cut -f2 -d ' ')
+fi
 # 0x00 No information about the service life of the device was found.
 # 0x01 The estimated life of the device is 0% to 10%.
 # 0x02 The estimated life of the device is 10% to 20%.
@@ -54,7 +58,11 @@ case $bDeviceLifeTimeEstA in
 ;;
 esac
 
-bPreEOLInfo=$(cat /sys/kernel/debug/*.ufshc/dump_health_desc | grep bPreEOLInfo | cut -f2 -d '=' | cut -f2 -d ' ')
+if [[ -f /sys/devices/platform/soc/1d84000.ufshc/health_descriptor/eol_info ]]; then
+  bPreEOLInfo=$(cat /sys/devices/platform/soc/1d84000.ufshc/health_descriptor/eol_info)
+else
+  bPreEOLInfo=$(cat /sys/kernel/debug/*.ufshc/dump_health_desc | grep bPreEOLInfo | cut -f2 -d '=' | cut -f2 -d ' ')
+fi
 # 0x00 No members are defined.
 # 0x01 is normal. Less than 80% of reserved blocks are consumed.
 # 0x02 80% of the reserved blocks are consumed.
