@@ -84,7 +84,7 @@
                         android:layout_width="wrap_content"
                         android:background="@drawable/powercfg_balance"
                         android:backgroundTint="?android:colorAccent"
-                        android:text="忽略此应用"
+                        android:text="Ignore this app"
                         android:gravity="center_horizontal"
                         android:paddingVertical="6dp"
                         android:textColor="@android:color/white"
@@ -162,7 +162,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="10dp"
-                        android:text="独立亮度"
+                        android:text="Independent brightness"
                         android:textColor="#888"
                         android:textSize="12dp" />
 
@@ -171,7 +171,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="10dp"
-                        android:text="GPS定位"
+                        android:text="GPS positioning"
                         android:textColor="#888"
                         android:textSize="12dp" />
 
@@ -179,7 +179,7 @@
                         android:id="@+id/fw_app_dis_notice"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="屏蔽通知"
+                        android:text="Block notification"
                         android:textColor="#888"
                         android:textSize="12dp" />
                 </LinearLayout>
@@ -248,7 +248,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:text="动态响应 "
+                    android:text="Dynamic Response "
                     android:textColor="#888"
                     android:textSize="12dp" />
             </LinearLayout>
