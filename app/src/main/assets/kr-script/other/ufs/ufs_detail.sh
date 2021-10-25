@@ -1,5 +1,7 @@
 if [[ -f /sys/devices/platform/soc/1d84000.ufshc/health_descriptor/life_time_estimation_a ]]; then
   bDeviceLifeTimeEstA=$(cat /sys/devices/platform/soc/1d84000.ufshc/health_descriptor/life_time_estimation_a)
+elif [[ -f /sys/devices/platform/soc/1d84000.ufshc/health/lifetimeA ]]; then
+  bDeviceLifeTimeEstA=$(cat /sys/devices/platform/soc/1d84000.ufshc/health/lifetimeA)
 else
   bDeviceLifeTimeEstA=$(cat /sys/kernel/debug/*.ufshc/dump_health_desc 2>/dev/null | grep bDeviceLifeTimeEstA | cut -f2 -d '=' | cut -f2 -d ' ')
 fi
@@ -60,6 +62,8 @@ esac
 
 if [[ -f /sys/devices/platform/soc/1d84000.ufshc/health_descriptor/eol_info ]]; then
   bPreEOLInfo=$(cat /sys/devices/platform/soc/1d84000.ufshc/health_descriptor/eol_info)
+elif [[ -f /sys/devices/platform/soc/1d84000.ufshc/health/eol ]]; then
+  bPreEOLInfo=$(cat /sys/devices/platform/soc/1d84000.ufshc/health/eol)
 else
   bPreEOLInfo=$(cat /sys/kernel/debug/*.ufshc/dump_health_desc | grep bPreEOLInfo | cut -f2 -d '=' | cut -f2 -d ' ')
 fi
