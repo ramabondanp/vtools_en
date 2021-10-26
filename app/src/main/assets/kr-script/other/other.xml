@@ -13,6 +13,12 @@
 
     <group>
         <action>
+            <title>EMMC storage life</title>
+            <summary sh="run emmc/emmc_summary.sh" />
+            <set>run emmc/emmc_detail.sh</set>
+            <desc>*The data is for reference only</desc>
+        </action>
+        <action>
             <title>UFS storage life</title>
             <summary sh="run ufs/ufs_summary.sh" />
             <set>run ufs/ufs_detail.sh</set>

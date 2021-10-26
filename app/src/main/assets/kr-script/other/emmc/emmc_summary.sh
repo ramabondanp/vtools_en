@@ -1,14 +1,5 @@
-if [[ -f /sys/devices/platform/soc/1d84000.ufshc/health_descriptor/life_time_estimation_a ]]; then
-  #qcom
-  bDeviceLifeTimeEstA=$(cat /sys/devices/platform/soc/1d84000.ufshc/health_descriptor/life_time_estimation_a)
-elif [[ -f /sys/devices/platform/soc/1d84000.ufshc/health/lifetimeA ]]; then
-  #pixel
-  bDeviceLifeTimeEstA=$(cat /sys/devices/platform/soc/1d84000.ufshc/health/lifetimeA)
-elif [[ -f  /sys/devices/platform/bootdevice/health_descriptor/life_time_estimation_a ]]; then
-  #mtk
-  bDeviceLifeTimeEstA=$(cat  /sys/devices/platform/bootdevice/health_descriptor/life_time_estimation_a)
-elif [[ $(echo /sys/kernel/debug/*.ufshc/dump_health_desc) != "/sys/kernel/debug/*.ufshc/dump_health_desc" ]]; then
-  bDeviceLifeTimeEstA=$(cat /sys/kernel/debug/*.ufshc/dump_health_desc 2>/dev/null | grep bDeviceLifeTimeEstA | cut -f2 -d '=' | cut -f2 -d ' ')
+if [[ -f /sys/class/mmc_host/mmc0/mmc0:0001/life_time ]]; then
+  bDeviceLifeTimeEstA=$(cat /sys/class/mmc_host/mmc0/mmc0:0001/life_time | cut -f1 -d ' ')
 fi
 
 # 0x00 No information about the service life of the device was found.
@@ -24,7 +15,7 @@ fi
 # 0x0A The estimated life of the device is 90% to 100%.
 # 0x0B The device has exceeded its estimated useful life.
 
-[[ -z "$bDeviceLifeTimeEstA" ]] && { echo "This device has not use ufs nor health info" ; exit 0; }
+[[ -z "$bDeviceLifeTimeEstA" ]] && { echo "This device is not using emmc or has no health info" ; exit 0; }
 
 case $bDeviceLifeTimeEstA in
 "0x00"|"0x00")
