@@ -56,7 +56,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="5dp"
-                                android:text="The application bias function needs to activate the scene mode (auxiliary service) to automatically freeze the application" />
+                                android:text="The application bias function needs to activate the scene mode (accessibility service) to automatically freeze the application" />
                         </LinearLayout>
 
                         <ImageButton

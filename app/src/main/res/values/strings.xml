@@ -74,7 +74,7 @@
     <string name="settings_theme_wallpaper">Use wallpaper</string>
     <string name="settings_theme_wallpaper_desc">Use system wallpaper as window background, display as translucent interface</string>
     <string name="settings_debug_layer">Debug window</string>
-    <string name="settings_debug_layer_desc">Show the log of Scene\'s foreground application process (need to restart auxiliary services)</string>
+    <string name="settings_debug_layer_desc">Show the log of Scene\'s foreground application process (need to restart accessibility services)</string>
     <string name="settings_help_icon">Tip icon</string>
     <string name="settings_help_icon_desc">Show function description hint (question mark) icon next to function item</string>
     <string name="settings_auto_exit">Auto-quit on exception</string>
@@ -95,7 +95,7 @@
     <string name="menu_battery_stats">Battery stats</string>
     <string name="menu_core_control">CPU control</string>
     <string name="menu_sundry">Misc settings </string>
-    <string name="menu_additional">Additional</string>
+    <string name="menu_additional">Advanced menu</string>
     <string name="menu_applictions">App manager</string>
     <string name="menu_swap">SWAP settings</string>
     <string name="menu_battery">Charge ctrl</string>
@@ -116,8 +116,8 @@
 
     <string name="system">System</string>
 
-    <string name="accessibility_running">Auxiliary Services Activated</string>
-    <string name="accessibility_stoped">Click here to activate auxiliary services</string>
+    <string name="accessibility_running">Accessibility Services Activated</string>
+    <string name="accessibility_stoped">Click here to activate accessibility services</string>
 
     <string name="battery_title">Battery:.</string>
     <string name="battery_title_desc1">If you want to use the "charge speed" and "charge protection" functions, please make sure to keep Scene running in the background!</string>
@@ -398,7 +398,7 @@
 
     <string name="scene_contract_title">Risk Disclosure</string>
     <string name="scene_contract">Scene is an application for playing computer enthusiasts, using it requires excellent eyesight, reading comprehension and a good mind. \n\nUnexpected errors may occur during use, resulting in data loss or even failure to turn on the computer properly. \n\nPlease be sure not to use it on your [for work] or on the phone with [important data] to avoid damage! \n\nIn the process of use, be sure to read the prompt information carefully and operate carefully, do not easily dial the function options that you do not understand! \n\nIn addition, the author of this application does not guarantee that it will provide help in use and advice on recovery from failures!</string>
-    <string name="permission_float">Please authorize Show Hover Window permission for Scene first!</string>
+    <string name="permission_float">Please authorize Display Over Other Apps permission for Scene first!</string>
     <string name="lmk_optimize_desc">Allow Scene to automatically adjust LMK parameters according to your RAM capacity, thus enhancing background capabilities (may cause lagging at low RAM). To restore, please turn off this option and reboot your phone. If you want to set it automatically after booting, please allow the toolbox to start automatically</string>
     <string name="lmk_optimize">Low memory optimization</string>
     <string name="low_memory_killer">Low Memory Killer</string>

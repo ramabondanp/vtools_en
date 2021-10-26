@@ -151,7 +151,7 @@ public class AccessibilityScenceMode : AccessibilityService(), IEventReceiver {
             }
         } else if (eventType == EventType.SCREEN_ON) {
             if (!serviceIsConnected) {
-                Scene.toast("The auxiliary service has expired, please reactivate the auxiliary service!")
+                Scene.toast("The accessibility service has expired, please reactivate the accessibility service!")
             }
         } else if (eventType == EventType.STATE_RESUME) {
             modernModeEvent(null)
