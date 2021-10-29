@@ -9,71 +9,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="@dimen/activity_horizontal_margin">
-
-        <TextView
-            style="@style/textSmall"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/menu_scene_mode" />
-
-        <LinearLayout
-            android:id="@+id/nav_scene_service_not_active"
-            style="@style/ListCardItem"
-            android:layout_marginLeft="0dp"
-            android:layout_marginRight="0dp"
-            android:visibility="gone">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
-                    android:src="@drawable/nav_icon_warn"
-                    app:tint="?android:colorAccent" />
-
-                <TextView
-                    style="@style/textDefault"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
-                    android:layout_weight="1"
-                    android:text="Please click here to activate the accessibility service first" />
-            </LinearLayout>
-
-            <TextView
-                style="@style/textSmall"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="Scene mode requires support from accessibility services. Rest assured that Scene does not steal content from the interface, but only analyzes the interface hierarchy and display size and uses it to determine the foreground application state." />
-        </LinearLayout>
-
-        <GridLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:columnCount="2">
-
-            <com.omarea.ui.NavItem
-                android:id="@+id/nav_freeze"
-                style="@style/nav_item_wrap"
-                android:tag="root"
-                app:drawable="@drawable/ic_menu_freeze"
-                app:text="@string/menu_freeze" />
-
-            <com.omarea.ui.NavItem
-                android:id="@+id/nav_system_scene"
-                style="@style/nav_item_wrap_right"
-                android:tag="root"
-                app:drawable="@drawable/ic_menu_system"
-                app:text="@string/menu_system_scene" />
-        </GridLayout>
-
+        android:paddingBottom="16dp"
+        android:paddingHorizontal="@dimen/activity_horizontal_margin">
 
         <TextView
             style="@style/textSmall"
@@ -228,58 +165,5 @@
                 app:text="@string/menu_xposed_global" />
         </GridLayout>
 
-
-        <TextView
-            style="@style/textSmall"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:text="Accessibility" />
-
-        <GridLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:columnCount="2">
-
-            <com.omarea.ui.NavItem
-                android:id="@+id/nav_gesture"
-                style="@style/nav_item_wrap"
-                app:drawable="@drawable/ic_menu_addon"
-                app:text="@string/menu_gesture" />
-
-            <com.omarea.ui.NavItem
-                android:id="@+id/nav_filter"
-                style="@style/nav_item_wrap_right"
-                app:drawable="@drawable/app_filter"
-                app:text="@string/menu_filter" />
-        </GridLayout>
-
-
-        <TextView
-            style="@style/textSmall"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:text="Exchange feedback" />
-
-        <GridLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:columnCount="2">
-
-            <com.omarea.ui.NavItem
-                android:id="@+id/nav_qq"
-                style="@style/nav_item_wrap"
-                app:drawable="@drawable/ic_menu_qq"
-                app:text="@string/menu_qq" />
-
-            <com.omarea.ui.NavItem
-                android:id="@+id/nav_share"
-                style="@style/nav_item_wrap_right"
-                app:drawable="@drawable/ic_menu_share"
-                app:text="@string/menu_share" />
-        </GridLayout>
     </LinearLayout>
 </com.omarea.common.ui.OverScrollView>

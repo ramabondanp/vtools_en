@@ -69,9 +69,7 @@
 
     <string name="settings_disable_selinux">SeLinux tolerance mode</string>
     <string name="settings_disable_selinux_desc">Switch SELinux to tolerant mode (some software called [turn off Selinux]), SeLinux state has no effect on Scene, and turn on tolerant mode may crash and reboot!</string>
-    <string name="settings_theme">Theme</string>
-    <string name="settings_theme_wallpaper">Use wallpaper</string>
-    <string name="settings_theme_wallpaper_desc">Use system wallpaper as window background, display as translucent interface</string>
+    <string name="settings_theme">Theme color</string>
     <string name="settings_debug_layer">Debug window</string>
     <string name="settings_debug_layer_desc">Show the log of Scene\'s foreground application process (need to restart accessibility services)</string>
     <string name="settings_help_icon">Tip icon</string>

@@ -21,29 +21,6 @@
             android:focusableInTouchMode="true"
             android:orientation="vertical">
 
-            <LinearLayout style="@style/ListCardItem">
-
-                <TextView
-                    style="@style/textTitle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="function introduction" />
-
-                <TextView
-                    style="@style/textSmall"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/activity_vertical_margin"
-                    android:text="This interface shows the change process of power, temperature, and charging speed when you last charged." />
-
-                <TextView
-                    style="@style/textSmall"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/activity_vertical_margin"
-                    android:text="You need to keep this application running while charging to get data" />
-            </LinearLayout>
-
             <TextView
                 android:id="@+id/charge_state"
                 style="@style/ListCardItem"
@@ -105,60 +82,36 @@
             </LinearLayout>
 
             <LinearLayout
-                style="@style/ListCardItem"
-                android:paddingEnd="0dp">
-
+                android:orientation="vertical"
+                android:padding="@dimen/activity_horizontal_margin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/in_card_item"
+                android:layout_marginVertical="@dimen/activity_vertical_margin"
+                android:layout_marginHorizontal="@dimen/activity_horizontal_margin">
                 <TextView
-                    style="@style/textTitle"
+                    android:text="Are you looking for other features?"
+                    android:textColor="?android:textColorSecondary"
+                    style="@style/textDefault"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="How to use" />
-
-                <TextView
-                    style="@style/textSmall"
+                    android:layout_height="wrap_content" />
+                <LinearLayout
+                    android:id="@+id/nav_more"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="① Start this application" />
-
-                <TextView
-                    style="@style/textSmall"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="② Connect the charger" />
-
-                <TextView
-                    style="@style/textSmall"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="③ Turn off the screen until charging is complete" />
-
-                <TextView
-                    style="@style/textSmall"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="④ View curve" />
-
-                <TextView
-                    style="@style/textSmall"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="You need to keep this application running in the background to get statistics!" />
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/electricity_adj_unit"
+                        android:text="Current unit calibration"
+                        style="@style/textTitle"
+                        android:layout_marginEnd="20dp"
+                        android:textColor="@color/colorAccent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
 
             </LinearLayout>
-
-            <TextView
-                android:id="@+id/electricity_adj_unit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:text="Current unit calibration"
-                android:textColor="?android:colorAccent"
-                android:textSize="12sp" />
 
         </LinearLayout>
     </com.omarea.common.ui.OverScrollView>
