@@ -23,6 +23,7 @@
     <string name="btn_apply">Apply</string>
     <string name="btn_reboot">Restart</string>
     <string name="btn_resume_selected">Restore selected</string>
+    <string name="make_choice">Please confirm</string>
     <string name="error_su_timeout">Wait for timeout, please make sure your Root Manager is running in the background and try again! \n\nPlease make sure you have not prevented "Authorization Manager (SuperSu, Magisk Manager, etc.)" from starting itself and allowing background pop-ups, hover windows, and other permissions. If the authorization dialog box never pops up, we suggest restarting the phone and trying again! \n</string>
 
     <string name="error_root">Sorry, didn\'t get ROOT permission</string>
@@ -36,8 +37,6 @@
     <string name="app_name">Scene4</string>
     <string name="app_name_short">Scene4</string>
     <string name="app_name_mode_switch">Scene-Quick switch mode</string>
-
-    <string name="accessibility_service_description">Scene enhancement service \nYou need to activate this service to use the following features: \n\n1. Dynamic response (automatically adjusts performance according to the foreground application). \n\n2. Automatic behavior (switch networks when switching screens or recycle processes when switching applications). \n\n3. Automatic installation (automatically click next when installing third-party applications)</string>
 
     <string name="backup_action_title_boot">Export Boot</string>
     <string name="backup_action_desc_boot">Backup the currently used Boot as img, copy it to /sdcard/boot.img</string>
@@ -93,6 +92,7 @@
     <string name="menu_cpu_modes">CPU modes</string>
     <string name="menu_freeze">App freeze</string>
     <string name="menu_battery_stats">Battery stats</string>
+    <string name="menu_battery_stats_desc">View the power consumption (current) data recorded during application use</string>
     <string name="menu_core_control">CPU control</string>
     <string name="menu_sundry">Misc settings </string>
     <string name="menu_additional">Advanced menu</string>
@@ -118,6 +118,10 @@
 
     <string name="accessibility_running">Accessibility Services Activated</string>
     <string name="accessibility_stoped">Click here to activate accessibility services</string>
+    <string name="accessibility_service_description">Scene enhanced service\nYou need to activate this service to use the following functions:\n\n1. Dynamic response (automatically adjust performance according to the foreground application).\n\n2. Automatic behavior (in the switch Recycle the process when switching networks or switching applications when the screen is displayed).\n\n3. Automatic installation (automatically click next when installing third-party applications)</string>
+    <string name="accessibility_please_activate"> Please activate the [Scene Auxiliary Service] option in the system settings</string>
+    <string name="accessibility_activate"> Auxiliary services are not activated, click here to activate</string>
+    <string name="accessibility_activate_desc"> According to the application to adjust performance, automatically switch GPS, record power consumption speed, all need to activate this service </string>
 
     <string name="battery_title">Battery:.</string>
     <string name="battery_title_desc1">If you want to use the "charge speed" and "charge protection" functions, please make sure to keep Scene running in the background!</string>
@@ -174,6 +178,34 @@
     <string name="electricity_unit_adj_desc">Current charging rate, divided by</string>
     <string name="electricity_unit_as">Displayed as.</string>
     <string name="electricity_unit_adj_desc2">Charging should be displayed as a positive number, discharging should be displayed as a negative number</string>
+
+    <!--Scheduling configuration source selection-->
+<string name="schedule_source">Select config source</string>
+    <string name="schedule_classics">Classic config </string>
+    <string name="schedule_classics_desc">Scene provided presets, each mode is distinct</string>
+    <string name="schedule_positive">Emphasis on performance </string>
+    <string name="schedule_positive_desc">The preset provided by Scene, pay more attention to performance release as a whole</string>
+    <string name="schedule_scene_desc">According to changes in the foreground application, automatic switching mode</string>
+    <string name="schedule_scene">Dynamic response</string>
+    <string name="schedule_excellent">Excellent performance</string>
+    <string name="schedule_excellent_desc">Lift the game frequency limit/frame lock and high temperature reminder, please pay attention to protect your equipment!</string>
+
+    <string name="schedule_screen_on">Global default (bright screen state)</string>
+    <string name="schedule_screen_on_desc">Applications that have not separately set the scheduling mode will use this mode by default. \n\nIf you need to individually set the mode for an application, please click [App Policy] at the bottom of the current interface</string>
+    <string name="schedule_screen_off">Switch on standby</string>
+    <string name="schedule_screen_off_desc">After the mobile phone enters the standby state, it will switch to the selected mode</string>
+    <string name="schedule_delay_desc">After the foreground application changes, delay 5s before performing the scheduling mode switch</string>
+    <string name="schedule_delay">Delayed switching</string>
+    <string name="schedule_enhanced">Strict mode</string>
+    <string name="schedule_enhanced_desc">If this option is not turned on, Scene will only execute the scheduling profile when it needs to change gears, for example: switching between multiple applications set to [power saving mode], the scheduling profile only Will be executed once. \n\nIn strict mode, Scene will execute the scheduling configuration file every time the foreground application changes, and notify the application (package name) that is switched to the foreground to run. Scheduling configuration authors can use this feature to individually design scheduling parameters for different applications, and are no longer limited to the limitation of only four gears. \n\nWhen the Snapdragon 855, 865, and 888 models use the [Classic Configuration] [Performance Focus] configuration source, you can turn on the strict mode and experience the exclusive optimization in the following applications:\nYuanshen (official server, B server, Xiaomi server)\nXianyu, Taobao, Jingdong, Tmall, Baidu Post Bar\nTwin Vision\nBilibili, Douyin\n\nOther processor models, unless you are using an external configuration source (and the configuration author It has been indicated that this feature is supported), otherwise there is no need to turn on this option!</string>
+    <string name="schedule_app">App strategy</string>
+    <string name="schedule_app_desc">Set up a separate scheduling strategy for each application</string>
+    <string name="schedule_unfinished">Before installing a valid scheduling configuration, you cannot turn on this feature~</string>
+    <string name="schedule_remove_outside">You are using the scheduling configuration provided by other authors (located in /data/powercfg.sh), and you need to delete it to switch to the scheduling configuration that comes with Scene. Do you want to delete it now? \n\n* It is recommended to restart the phone once after deleting</string>
+    <string name="schedule_unofficial">You are using the scheduling configuration provided by other authors~</string>
+    <string name="schedule_unsupported">Scene\'s own scheduling configuration has not been adapted to the current SOC~</string>
+    <string name="schedule_dynamic_off">You have not turned on [Dynamic Response], Scene cannot adjust the performance of the device according to changes in the foreground application!</string>
+    <string name="schedule_uperf_fast">Uperf scheduling only provides three modes of [stuck/balanced/charged electricity], which correspond to Scene\’s [power saving/balanced/performance] respectively. \nWhen you select [Extreme Speed] mode in Scene, the actual effect is [Charge], which is the same as selecting [Performance] mode</string>
 
     <string name="applist_warn">The currently provided application data backup function requires the system to integrate busybox, toybox, use tar+gz to compress the data (if the system supports it, pigz will be used to improve the compression speed), only the data under "/data/data/application package name" will be backed up, and it is not It is not guaranteed to be compatible with all systems and applications. The \n\n app backup file is in /sdcard/backups/apps (Android 11+ system does not support backup function)</string>
     <string name="dialog_addin_device_warn">Model information Please do not enter special symbols! \n has been compatible with the model code of the [Application Variables] module, copy it and reopen this window to use it!</string>
@@ -268,6 +300,7 @@
 
     <string name="on_execute_please_wait">Executing operation, please wait...</string>
     <string name="please_wait">Please wait...</string>
+    <string name="please_notice">Please note</string>
     <string name="executed">The operation has been completed! </string>
     <string name="file_creating">Creating file in progress</string>
     <string name="zram_resizing">Resizing, please be patient...</string>
@@ -291,6 +324,13 @@
     <string name="help">help</string>
     <string name="warn">Warning</string>
     <string name="more">Learn more</string>
+    <string name="kepp_state">Keep state</string>
+    <string name="global_default">Global default </string>
+    <string name="unknown_mode">Unknown mode</string>
+    <string name="powersave_desc">The elderly call an expert directly</string>
+    <string name="balance_desc">Slow down, the world is pleasing to the eye</string>
+    <string name="performance_desc">Play the game to suppress the shock</string>
+    <string name="fast_desc">Happiness is always short-lived</string>
     <string name="not_support_config">No available schema configuration script found</string>
     <string name="not_support_config_desc">The app does not come with a performance configuration script for your phone. You can choose "Get scripts online" to see if there is one available for your phone, or "Learn more" for a custom configuration tutorial! </string>
     <string name="first_start_select_config">First time user, select configuration preferences first</string>
@@ -375,7 +415,7 @@
     <string name="flash_confirm">Confirm flash?</string>
 
     <string name="scene_addin_miss">advanced settings component missing </string>
-    <string name="scene_addin_miss_desc">Please download and install "Scene-Advanced Settings" from Scene, and set it to allow background auto-start! </string>
+    <string name="scene_addin_miss_desc">Please download and install "Scene-Advanced Settings" from the Scene official website, and set it to allow the background to start automatically! </string>
     <string name="scene_addin_sync_fail">from the "Scene-Advanced Settings" component synchronization Xposed settings failed! </string>
     <string name="scene_install_autoclick">click on installation</string>
     <string name="scene_install_autoclick_desc">When installing third-party applications, automatically help you point "Next" and "Install"</string>
@@ -403,6 +443,7 @@
     <string name="lmk_optimize">Low memory optimization</string>
     <string name="low_memory_killer">Low Memory Killer</string>
     <string name="busybox_nonsupport">Scene integrated Busybox does not support your current system, please download and install Busybox yourself.</string>
+    <string name="not_root_disabled">You cannot use this function without obtaining ROOT permission</string>
     <string name="dex2oat_completed">dex2oat compilation completed</string>
     <string name="dex2oat_compiling">dex2oat compilation in progress</string>
     <string name="dex2oat_reset_running">dex2oat reset in progress</string>
@@ -446,6 +487,7 @@
     <string name="app_donate">Reward</string>
     <string name="app_nav">Features</string>
     <string name="app_home">Overview</string>
+    <string name="app_tuner">Adjust</string>
 
     <string name="system_scene_next_task">Next task</string>
     <string name="system_scene_resume_charge">Resume charging</string>
@@ -478,6 +520,15 @@
         <item>/vendor/etc</item>
     </string-array>
 
+    <!--Configuration Source-->
+     <string name="source_uperf">External source (Uperf)</string>
+     <string name="source_outside">External source</string>
+     <string name="source_classics">Scene-Classic</string>
+     <string name="source_perf">Scene-performance</string>
+     <string name="source_undefined">Undefined</string>
+     <string name="source_unknown">Unknown</string>
+     <string name="source_author">Config source/author: </string>
+     <string name="notification_filter">Notification filtering</string>
 
     <string name="power_shutdown_cmd">sync;svc power shutdown || reboot -p;</string>
     <string name="power_reboot_cmd">sync;svc power reboot || reboot;</string>
