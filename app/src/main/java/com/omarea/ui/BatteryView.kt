@@ -14,8 +14,6 @@ import com.omarea.vtools.R
 
 
 class BatteryView : View {
-    //-------------必须给的数据相关-------------
-    private val str = arrayOf("已用", "可用")
     private var ratio = 0
     private var ratioState = 0
 
@@ -38,11 +36,7 @@ class BatteryView : View {
     //标注的画笔
     private var labelPaint: Paint? = null
 
-    //-------------颜色相关-------------
-    //边框颜色和标注颜色
-    private val mColor = intArrayOf(-0xec712a, 0x55888888, -0x1a8c8d, -0xb03c09, -0xe8a, -0x7e387c)
 
-    // private int[] mColor = new int[]{0xFFF06292, 0xFF9575CD, 0xFFE57373, 0xFF4FC3F7, 0xFFFFF176, 0xFF81C784};
     //文字颜色
     private val textColor = -0x777778
 
@@ -85,9 +79,9 @@ class BatteryView : View {
         super.onSizeChanged(w, h, oldw, oldh)
         mWidth = w
         mHeight = h
-        val mStrokeWidth = dp2px(context, 20f)
+        val mStrokeWidth = w / 7
         this.mStrokeWidth = mStrokeWidth.toFloat()
-        this.textSize = dp2px(context, 18f)
+        this.textSize = w / 8
         if (w > h) {
             this.mRadius = (h * 0.9 - mStrokeWidth).toInt().toFloat()
         } else {
@@ -180,9 +174,9 @@ class BatteryView : View {
         } else if (temperature > 41 || ratio < 31) {
             cyclePaint!!.color = resources.getColor(R.color.color_load_hight)
         } else if (temperature > 20) {
-            cyclePaint!!.color = resources.getColor(R.color.color_load_mid)
+            cyclePaint!!.color = resources.getColor(R.color.colorAccent)
         } else {
-            cyclePaint!!.color = resources.getColor(R.color.color_load_low)
+            cyclePaint!!.color = resources.getColor(R.color.color_load_none)
         }
 
         /*

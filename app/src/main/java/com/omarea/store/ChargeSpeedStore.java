@@ -56,7 +56,7 @@ public class ChargeSpeedStore extends SQLiteOpenHelper {
         ArrayList<ChargeSpeedHistory> histories = new ArrayList<>();
         try {
             SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
-            final Cursor cursor = sqLiteDatabase.rawQuery("select capacity, avg(io) as io from charge_history group by capacity", new String[]{});
+            final Cursor cursor = sqLiteDatabase.rawQuery("select capacity, avg(io) as io from charge_history group by capacity order by capacity", new String[]{});
             while (cursor.moveToNext()) {
                 histories.add(new ChargeSpeedHistory() {{
                     capacity = cursor.getInt(cursor.getColumnIndex("capacity"));
@@ -110,7 +110,7 @@ public class ChargeSpeedStore extends SQLiteOpenHelper {
         return histories;
     }
 
-    public boolean addHistory(long io, int capacity, float temperature) {
+    public boolean addHistory(long io, int capacity, double temperature) {
         SQLiteDatabase database = getWritableDatabase();
         getWritableDatabase().beginTransaction();
         try {

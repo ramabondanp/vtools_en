@@ -2,7 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="105dp"
+    android:layout_height="85dp"
     android:padding="4dp">
 
     <LinearLayout
@@ -13,14 +13,13 @@
 
         <FrameLayout
             android:layout_width="49dp"
-            android:layout_height="55dp"
+            android:layout_height="45dp"
             android:layout_gravity="center">
 
             <com.omarea.ui.CpuChartBarView
                 android:id="@+id/core_cpu_loading_chart"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:alpha="0.5"
                 app:free="1"
                 app:total="1" />
 
@@ -62,7 +61,7 @@
                 android:text="300Mhz ~ 2048Mhz"
                 android:textAlignment="center"
                 android:textColor="#8888"
-                android:textSize="9dp" />
+                android:textSize="8.5dp" />
         </LinearLayout>
     </LinearLayout>
 </FrameLayout>

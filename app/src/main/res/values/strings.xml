@@ -24,6 +24,7 @@
     <string name="btn_reboot">Restart</string>
     <string name="btn_resume_selected">Restore selected</string>
     <string name="make_choice">Please confirm</string>
+    <string name="download">Download</string>
     <string name="error_su_timeout">Wait for timeout, please make sure your Root Manager is running in the background and try again! \n\nPlease make sure you have not prevented "Authorization Manager (SuperSu, Magisk Manager, etc.)" from starting itself and allowing background pop-ups, hover windows, and other permissions. If the authorization dialog box never pops up, we suggest restarting the phone and trying again! \n</string>
 
     <string name="error_root">Sorry, didn\'t get ROOT permission</string>
@@ -34,8 +35,8 @@
     <string name="share_link">You should try Scene too, I think it\'s not bad, download address: \n http://vtools.omarea.com/</string>
     
 
-    <string name="app_name">Scene4</string>
-    <string name="app_name_short">Scene4</string>
+    <string name="app_name">Scene5</string>
+    <string name="app_name_short">Scene5 Alpha</string>
     <string name="app_name_mode_switch">Scene-Quick switch mode</string>
 
     <string name="backup_action_title_boot">Export Boot</string>
@@ -98,10 +99,12 @@
     <string name="menu_swap">SWAP settings</string>
     <string name="menu_battery">Charge ctrl</string>
     <string name="menu_charge">Charge stats</string>
+    <string name="menu_power_utilization">Power util</string>
     <string name="menu_custom_command">Custom command</string>
     <string name="menu_processes">Process mgr </string>
+    <string name="menu_modules">Magisk Module</string>
     <string name="menu_fps_chart">FPS record</string>
-    <string name="menu_app_magisk">Magisk Assist</string>
+    <string name="menu_app_magisk">Additional Modules</string>
     <string name="menu_gesture">Gesture nav</string>
     <string name="menu_xposed_app">App settings</string>
     <string name="menu_xposed_global">Global settings </string>
@@ -166,12 +169,15 @@
     </string-array>
     <string name="battery_exec_desc">Scene will perform speed change at different times according to your choice, the differences are as follows \n\nLower speed: only reset the charging speed when the charger is connected and the charge percentage changes \nAccelerate charging: reset the charging speed when the battery status changes and the charger is connected \nCharge to death: automatically reset the charging speed every second based on the logic of [Charge to accelerate] Speed</string>
 
-    <string name="battery_status_discharging">[Not charging</string>
-    <string name="battery_status_charging">[Charging in progress</string>
-    <string name="battery_status_full">[Fully charged</string>
-    <string name="battery_status_not_charging">[Not charging</string>
-    <string name="battery_status_unknown">[Status unknown</string>
-    <string name="battery_status_sum">(Approximate charge %smAh)</string>
+    <string name="battery_voltage">Current voltage: </string>
+    <string name="battery_electricity">Current: </string>
+    <string name="battery_temperature">Current temperature: </string>
+    <string name="battery_status_discharging">Not charging</string>
+    <string name="battery_status_charging">Charging</string>
+    <string name="battery_status_full">Is full</string>
+    <string name="battery_status_not_charging">Not charging</string>
+    <string name="battery_status_unknown">Unknown status </string>
+    <string name="battery_status_sum">\nApproximately charge %smAh</string>
     <string name="electricity_unit_adj">Current unit calibration</string>
     <string name="electricity_unit_adj_desc">Current charging rate, divided by</string>
     <string name="electricity_unit_as">Displayed as.</string>
@@ -199,7 +205,7 @@
     <string name="schedule_app">App strategy</string>
     <string name="schedule_app_desc">Set up a separate scheduling strategy for each application</string>
     <string name="schedule_unfinished">Before installing a valid scheduling configuration, you cannot turn on this feature~</string>
-    <string name="schedule_remove_outside">You are using the scheduling configuration provided by other authors (located in /data/powercfg.sh), and you need to delete it to switch to the scheduling configuration that comes with Scene. Do you want to delete it now? \n\n* It is recommended to restart the phone once after deleting</string>
+    <string name="schedule_remove_outside">You have already installed the scheduling configuration provided by another author (located in /data/powercfg.sh), and to change the configuration source you need to remove it first. Do you want to delete it now? \n\n* It is recommended to reboot the phone once after removing it</string>
     <string name="schedule_unofficial">You are using the scheduling configuration provided by other authors~</string>
     <string name="schedule_unsupported">Scene\'s own scheduling configuration has not been adapted to the current SOC~</string>
     <string name="schedule_dynamic_off">You have not turned on [Dynamic Response], Scene cannot adjust the performance of the device according to changes in the foreground application!</string>
@@ -435,7 +441,7 @@
     <string name="scene_reset_compile">com.omarea.vtools.ResetCompile</string>
 
     <string name="scene_contract_title">Risk Disclosure</string>
-    <string name="scene_contract">Scene is an application for playing computer enthusiasts, using it requires excellent eyesight, reading comprehension and a good mind. \n\nUnexpected errors may occur during use, resulting in data loss or even failure to turn on the computer properly. \n\nPlease be sure not to use it on your [for work] or on the phone with [important data] to avoid damage! \n\nIn the process of use, be sure to read the prompt information carefully and operate carefully, do not easily dial the function options that you do not understand! \n\nIn addition, the author of this application does not guarantee that it will provide help in use and advice on recovery from failures!</string>
+    <string name="scene_contract">Scene is an application geared towards playing with computers. Using it requires excellent eyesight, reading comprehension and a good mind. \n\nUnexpected errors may occur during use, resulting in data loss or even failure to turn on the computer properly. \nPlease be sure not to use it on your [for work] or on a phone that has [important data] to avoid damage! \n\nAccording to past feedback from users, using this software on the following manufacturers models is likely to lose data or even fail to boot up: \nMeizu, LG, Google Pixel \n\n\nThe process of using it, be sure to read the prompt information carefully and operate carefully, do not easily dial the function options that you do not understand! \n\nIn addition, the author of this application does not guarantee that it will provide help for use and advice on recovery from failure!</string>
     <string name="permission_float">Please authorize Display Over Other Apps permission for Scene first!</string>
     <string name="lmk_optimize_desc">Allow Scene to automatically adjust LMK parameters according to your RAM capacity, thus enhancing background capabilities (may cause lagging at low RAM). To restore, please turn off this option and reboot your phone. If you want to set it automatically after booting, please allow the toolbox to start automatically</string>
     <string name="lmk_optimize">Low memory optimization</string>

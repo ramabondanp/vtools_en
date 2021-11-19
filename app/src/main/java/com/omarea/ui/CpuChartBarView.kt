@@ -13,11 +13,11 @@ class CpuChartBarView : View {
     private var mainPaint: Paint? = null
     private var mHeight: Float = 0f
     private var mWidth: Float = 0f
+    private val maxHistory = 5
     private var loadHisotry = LinkedBlockingQueue<Int>().apply {
-        add(0)
-        add(0)
-        add(0)
-        add(0)
+        for (i in 0 until maxHistory) {
+            add(0)
+        }
     };
     private var strokeWidth = 0f
     private var accentColor = 0x22888888
@@ -62,7 +62,7 @@ class CpuChartBarView : View {
             mainPaint = Paint()
             mainPaint!!.isAntiAlias = true
             mainPaint!!.style = Paint.Style.FILL
-            strokeWidth = this.width.toFloat() / 5
+            strokeWidth = this.width.toFloat() / maxHistory
             mainPaint!!.strokeWidth = 0f
         }
 
@@ -76,11 +76,7 @@ class CpuChartBarView : View {
             } else {
                 mainPaint!!.color = accentColor
             }
-            if (ratio > 50) {
-                mainPaint?.alpha = 255
-            } else {
-                mainPaint?.alpha = 127 + ((ratio / 100.0f) * 255).toInt()
-            }
+            mainPaint?.alpha = 35 + ((ratio / 100.0f / 2) * 255).toInt()
 
             var top = 0f
             if (ratio <= 2) {
@@ -90,7 +86,7 @@ class CpuChartBarView : View {
             } else {
                 top = (100 - ratio) * mHeight / 100
             }
-            canvas.drawRoundRect((barWidth) * index, top, (barWidth) * index + (barWidth * 0.9f), mHeight, 5f, 5f, mainPaint!!)
+            canvas.drawRoundRect((barWidth) * index + (barWidth * 0.05f), top, (barWidth) * index + (barWidth * 0.95f), mHeight, 5f, 5f, mainPaint!!)
 
             index++
         }
@@ -103,7 +99,7 @@ class CpuChartBarView : View {
             val feeRatio = (fee * 100.0 / total).toInt()
             loadHisotry.put(100 - feeRatio)
         }
-        if (loadHisotry.size > 5) {
+        if (loadHisotry.size > maxHistory) {
             loadHisotry.poll()
         }
         invalidate()

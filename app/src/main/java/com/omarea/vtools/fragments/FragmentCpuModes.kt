@@ -1,21 +1,23 @@
 package com.omarea.vtools.fragments
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.CompoundButton
-import android.widget.Switch
-import android.widget.Toast
+import android.widget.*
 import androidx.fragment.app.Fragment
 import com.omarea.Scene
+import com.omarea.common.shared.FilePathResolver
+import com.omarea.common.shared.FileWrite
+import com.omarea.common.shell.KeepShellPublic
 import com.omarea.common.ui.DialogHelper
 import com.omarea.common.ui.ThemeMode
 import com.omarea.data.EventBus
@@ -31,6 +33,9 @@ import com.omarea.vtools.R
 import com.omarea.vtools.activities.*
 import com.projectkr.shell.OpenPageHelper
 import kotlinx.android.synthetic.main.fragment_cpu_modes.*
+import java.io.File
+import java.nio.charset.Charset
+import java.util.*
 
 class FragmentCpuModes : Fragment() {
     private var author: String = ""
@@ -83,10 +88,18 @@ class FragmentCpuModes : Fragment() {
                 globalSPF.edit().putBoolean(SpfConfig.GLOBAL_SPF_DYNAMIC_CONTROL, value).apply()
                 reStartService()
             }
-
         }
+        dynamic_control_opts2.initExpand(false)
         dynamic_control.setOnCheckedChangeListener { _, isChecked ->
             dynamic_control_opts.visibility = if (isChecked) View.VISIBLE else View.GONE
+        }
+        dynamic_control_toggle.setOnClickListener {
+            dynamic_control_opts2.toggleExpand()
+            if (dynamic_control_opts2.isExpand) {
+                (it as ImageView).setImageDrawable(context!!.getDrawable(R.drawable.arrow_up))
+            } else {
+                (it as ImageView).setImageDrawable(context!!.getDrawable(R.drawable.arrow_down))
+            }
         }
 
         strict_mode.isChecked = globalSPF.getBoolean(SpfConfig.GLOBAL_SPF_DYNAMIC_CONTROL_STRICT, false)
@@ -154,7 +167,7 @@ class FragmentCpuModes : Fragment() {
         config_author.setOnClickListener(sourceClick)
 
         nav_battery_stats.setOnClickListener {
-            val intent = Intent(context, ActivityBatteryStats::class.java)
+            val intent = Intent(context, ActivityPowerUtilization::class.java)
             startActivity(intent)
         }
         nav_app_scene.setOnClickListener {
@@ -188,12 +201,16 @@ class FragmentCpuModes : Fragment() {
         }
         if (CheckRootStatus.lastCheckResult) {
             nav_more.visibility = View.VISIBLE
-            nav_thermal.setOnClickListener {
-                val pageNode = PageNode("").apply {
-                    title = "温控配置"
-                    pageConfigPath = "file:///android_asset/kr-script/miui/miui.xml"
+            if (Build.MANUFACTURER.toLowerCase(Locale.getDefault()) == "xiaomi") {
+                nav_thermal.setOnClickListener {
+                    val pageNode = PageNode("").apply {
+                        title = "MUI专属"
+                        pageConfigPath = "file:///android_asset/kr-script/miui/miui.xml"
+                    }
+                    OpenPageHelper(activity!!).openPage(pageNode)
                 }
-                OpenPageHelper(activity!!).openPage(pageNode)
+            } else {
+                nav_thermal.visibility = View.GONE
             }
             nav_processes.setOnClickListener {
                 val intent = Intent(context, ActivityProcess::class.java)
@@ -252,6 +269,32 @@ class FragmentCpuModes : Fragment() {
         } else {
             conservative.visibility = View.GONE
             active.visibility = View.GONE
+        }
+
+        view.findViewById<View>(R.id.source_import).setOnClickListener {
+            chooseLocalConfig()
+
+            dialog.dismiss()
+        }
+        view.findViewById<View>(R.id.source_download).setOnClickListener {
+            // TODO:改为清空此前的所有自定义配置，而不仅仅是外部配置
+            if (outsideOverrode()) {
+                configInstaller.removeOutsideConfig()
+            }
+
+            getOnlineConfig()
+
+            dialog.dismiss()
+        }
+        view.findViewById<View>(R.id.source_custom).setOnClickListener {
+            // TODO:改为清空此前的所有自定义配置，而不仅仅是外部配置
+            if (outsideOverrode()) {
+                configInstaller.removeOutsideConfig()
+            }
+            globalSPF.edit().putString(SpfConfig.GLOBAL_SPF_PROFILE_SOURCE, ModeSwitcher.SOURCE_SCENE_CUSTOM).apply()
+            updateState()
+
+            dialog.dismiss()
         }
     }
 
@@ -349,7 +392,9 @@ class FragmentCpuModes : Fragment() {
             dynamic_control.isChecked = false
             reStartService()
         }
-        dynamic_control_opts.visibility = if (dynamic_control.isChecked) View.VISIBLE else View.GONE
+        dynamic_control_opts.postDelayed({
+            dynamic_control_opts.visibility = if (dynamic_control.isChecked) View.VISIBLE else View.GONE
+        }, 15)
         extreme_performance_on.isChecked = ThermalDisguise().isDisabled()
     }
 
@@ -372,12 +417,140 @@ class FragmentCpuModes : Fragment() {
 
     private val configInstaller = CpuConfigInstaller()
 
+    private val REQUEST_POWERCFG_FILE = 1
+    private val REQUEST_POWERCFG_ONLINE = 2
+    private fun chooseLocalConfig() {
+        val action = REQUEST_POWERCFG_FILE
+        if (Build.VERSION.SDK_INT >= 30) {
+            val intent = Intent(Intent.ACTION_GET_CONTENT)
+            intent.type = "*/*"
+            intent.addCategory(Intent.CATEGORY_OPENABLE)
+            startActivityForResult(intent, action)
+        } else {
+            try {
+                val intent = Intent(this.context, ActivityFileSelector::class.java)
+                intent.putExtra("extension", "sh")
+                startActivityForResult(intent, action)
+            } catch (ex: Exception) {
+                Toast.makeText(context, "启动内置文件选择器失败！", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_POWERCFG_FILE) {
+            if (resultCode == Activity.RESULT_OK && data != null) {
+                if (Build.VERSION.SDK_INT >= 30) {
+                    val absPath = FilePathResolver().getPath(this.activity, data.data)
+                    if (absPath != null) {
+                        if (absPath.endsWith(".sh")) {
+                            installLocalConfig(absPath)
+                        } else {
+                            Toast.makeText(context, "选择的文件无效（应当是.sh文件）！", Toast.LENGTH_SHORT).show()
+                        }
+                    } else {
+                        Toast.makeText(context, "所选的文件没找到！", Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    if (data.extras?.containsKey("file") != true) {
+                        return
+                    }
+                    val path = data.extras!!.getString("file")!!
+                    installLocalConfig(path)
+                }
+            }
+            return
+        } else if (requestCode == REQUEST_POWERCFG_ONLINE) {
+            if (resultCode == Activity.RESULT_OK) {
+                configInstalled()
+            }
+        }
+    }
+
     private fun openUrl(link: String) {
         try {
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(link))
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
         } catch (ex: Exception) {
+        }
+    }
+
+    private fun readFileLines(file: File): String? {
+        if (file.canRead()) {
+            return file.readText(Charset.defaultCharset()).trimStart().replace("\r", "")
+        } else {
+            val innerPath = FileWrite.getPrivateFilePath(context!!, "powercfg.tmp")
+            KeepShellPublic.doCmdSync("cp \"${file.absolutePath}\" \"$innerPath\"\nchmod 777 \"$innerPath\"")
+            val tmpFile = File(innerPath)
+            if (tmpFile.exists() && tmpFile.canRead()) {
+                val lines = tmpFile.readText(Charset.defaultCharset()).trimStart().replace("\r", "")
+                KeepShellPublic.doCmdSync("rm \"$innerPath\"")
+                return lines
+            }
+        }
+        return null
+    }
+
+    private fun getOnlineConfig() {
+        DialogHelper.alert(this.activity!!,
+                "提示",
+                "目前，Scene已不再提供【在线获取配置脚本】功能，如有需要，推荐使用“yc9559”提供的优化模块，通过Magisk刷入后重启手机，即可在Scene里体验调度切换功能~") {
+            openUrl("https://github.com/yc9559/uperf")
+        }
+
+        /*
+        var i = 0
+        DialogHelper.animDialog(AlertDialog.Builder(context)
+                .setTitle(getString(R.string.config_online_options))
+                .setCancelable(true)
+                .setSingleChoiceItems(
+                        arrayOf(
+                                getString(R.string.online_config_v1),
+                                getString(R.string.online_config_v2)
+                        ), 0) { _, which ->
+                    i = which
+                }
+                .setNegativeButton(R.string.btn_confirm) { _, _ ->
+                    if (i == 0) {
+                        getOnlineConfigV1()
+                    } else if (i == 1) {
+                        getOnlineConfigV2()
+                    }
+                })
+         */
+    }
+
+    private fun installLocalConfig(path: String) {
+        if (!path.endsWith(".sh")) {
+            Toast.makeText(context, "这似乎是个无效的脚本文件！", Toast.LENGTH_LONG).show()
+            return
+        }
+
+        val file = File(path)
+        if (file.exists()) {
+            if (file.length() > 200 * 1024) {
+                Toast.makeText(context, "这个文件也太大了，配置脚本大小不能超过200KB！", Toast.LENGTH_LONG).show()
+                return
+            }
+            val lines = readFileLines(file)
+            if (lines == null) {
+                Toast.makeText(context, "Scene无法读取此文件！", Toast.LENGTH_LONG).show()
+                return
+            }
+            val configStar = lines.split("\n").firstOrNull()
+            if (configStar != null && (configStar.startsWith("#!/") || lines.contains("echo "))) {
+                if (configInstaller.installCustomConfig(context!!, lines, ModeSwitcher.SOURCE_SCENE_IMPORT)) {
+                    configInstalled()
+                } else {
+                    Toast.makeText(context, "由于某些原因，安装配置脚本失败，请重试！", Toast.LENGTH_LONG).show()
+                }
+            } else {
+                Toast.makeText(context, "这似乎是个无效的脚本文件！", Toast.LENGTH_LONG).show()
+            }
+        } else {
+            Toast.makeText(context, "所选的文件没找到！", Toast.LENGTH_LONG).show()
         }
     }
 
@@ -395,6 +568,14 @@ class FragmentCpuModes : Fragment() {
     private fun configInstalled() {
         updateState()
         reStartService()
+    }
+
+    private fun outsideOverrode(): Boolean {
+        if (configInstaller.outsideConfigInstalled()) {
+            DialogHelper.helpInfo(activity!!, "你需要先删除外部配置，因为Scene会优先使用它！")
+            return true
+        }
+        return false
     }
 
     /**

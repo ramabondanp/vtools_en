@@ -183,7 +183,7 @@ class AppSwitchHandler(private var context: AccessibilityScenceMode, override va
      */
     private fun updateModeNoitfy(saveLog: Boolean = false) {
         if (screenOn) {
-            notifyHelper.notify(saveLog)
+            notifyHelper.notify()
         }
     }
 
@@ -259,7 +259,7 @@ class AppSwitchHandler(private var context: AccessibilityScenceMode, override va
 
     override fun eventFilter(eventType: EventType): Boolean {
         return when (eventType) {
-            EventType.APP_SWITCH, EventType.SCREEN_OFF, EventType.SCREEN_ON -> true
+            EventType.APP_SWITCH, EventType.SCREEN_OFF, EventType.SCREEN_ON, EventType.SCENE_CONFIG, EventType.SCENE_APP_CONFIG -> true
             else -> false
         }
     }

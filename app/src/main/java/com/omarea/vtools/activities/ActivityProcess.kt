@@ -10,11 +10,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.*
+import com.omarea.Scene
 import com.omarea.common.ui.DialogHelper
 import com.omarea.library.shell.ProcessUtils
 import com.omarea.model.ProcessInfo
 import com.omarea.ui.AdapterProcess
+import com.omarea.utils.AppListHelper
 import com.omarea.vtools.R
+import com.omarea.vtools.dialogs.DialogSingleAppOptions
 import kotlinx.android.synthetic.main.activty_process.*
 import java.util.*
 
@@ -28,12 +31,12 @@ class ActivityProcess : ActivityBase() {
         onViewCreated(this)
     }
 
-    private val processUtils = ProcessUtils()
+    private val processUtils = ProcessUtils(Scene.context)
     private var supported: Boolean = false
     private val handle = Handler(Looper.getMainLooper())
 
     private fun onViewCreated(context: Context) {
-        supported = processUtils.supported(context)
+        supported = processUtils.supported()
 
         if (supported) {
             process_unsupported.visibility = View.GONE
@@ -44,7 +47,19 @@ class ActivityProcess : ActivityBase() {
         }
 
         if (supported) {
-            process_list.adapter = AdapterProcess(context)
+            process_list.adapter = AdapterProcess(context).apply {
+                // 使用跳转时带过来的搜索关键字
+                var name = intent?.extras?.getString("name")
+                if (name != null) {
+                    if (name.contains(":")) {
+                        name = name.substring(0, name.indexOf(":"))
+                    }
+                    updateKeywords(name)
+                    updateFilterMode(AdapterProcess.FILTER_ANDROID)
+                    process_filter.setSelection(2)
+                    process_search.setText(name)
+                }
+            }
             process_list.setOnItemClickListener { _, _, position, _ ->
                 openProcessDetail((process_list.adapter as AdapterProcess).getItem(position))
             }
@@ -238,11 +253,27 @@ class ActivityProcess : ActivityBase() {
                 if (isAndroidProcess(processInfo)) {
                     loadIcon(findViewById<ImageView>(R.id.ProcessIcon), processInfo)
                     val btn = findViewById<Button>(R.id.ProcessStopApp)
+                    val options = findViewById<Button>(R.id.ProcessAppOptions)
                     btn.setOnClickListener {
                         processUtils.killProcess(processInfo)
                         dialog.dismiss()
                     }
+                    options.setOnClickListener {
+                        val packageName = if(processInfo.name.contains(":")) {
+                            processInfo.name.substring(0, processInfo.name.indexOf(":"))
+                        } else {
+                            processInfo.name
+                        }
+                        val app = AppListHelper(context).getApp(packageName)
+                        if (app != null) {
+                            DialogSingleAppOptions(this@ActivityProcess, app, handle).showSingleAppOptions()
+                        } else {
+                            Toast.makeText(context, "未找到此应用", Toast.LENGTH_SHORT).show()
+                        }
+                        dialog.dismiss()
+                    }
                     btn.visibility = View.VISIBLE
+                    options.visibility = View.VISIBLE
                 }
                 findViewById<View>(R.id.ProcessKill).setOnClickListener {
                     processUtils.killProcess(detail.pid)

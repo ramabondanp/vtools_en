@@ -1,10 +1,7 @@
 package com.omarea.ui.charge
 
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.Path
+import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
 import com.omarea.store.ChargeSpeedStore
@@ -12,6 +9,7 @@ import com.omarea.vtools.R
 
 class ChargeTimeView : View {
     private lateinit var storage: ChargeSpeedStore
+    private val dashPathEffect = DashPathEffect(floatArrayOf(4f, 8f), 0f)
 
     constructor(context: Context) : super(context) {
         init(null, 0)
@@ -54,12 +52,41 @@ class ChargeTimeView : View {
         return (dpValue * scale + 0.5f).toInt()
     }
 
+    private fun minutes2Str(minutes: Int): String {
+        if (minutes >= 1140) {
+            return "" + (minutes / 1140) + "d" + ((minutes % 1140) / 60) + "h"
+        } else if (minutes > 60) {
+            return "" + (minutes / 60) + "h" + (minutes % 60) + "m"
+        } else if (minutes == 0) {
+            return "0"
+        }
+        return "" + minutes + "m"
+    }
+
+    private val perfectRange = intArrayOf(45, 50, 75, 100, 150, 250, 300, 450, 600, 900, 1200, 1800, 2400)
+    private fun getPerfectXMax(value: Int): Int {
+        var lastPerfectValue = perfectRange.last()
+        if (value > lastPerfectValue) {
+            while (true) {
+                lastPerfectValue += 600
+                if (lastPerfectValue >= value) {
+                    return lastPerfectValue
+                }
+            }
+        } else {
+            for (it in perfectRange) {
+                if (value <= it) {
+                    return it
+                }
+            }
+        }
+        return value
+    }
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         val samples = storage.chargeTime()
         samples.sortBy { it.capacity }
 
-        val potintRadius = 4f
         val paint = Paint()
         paint.strokeWidth = 2f
 
@@ -69,99 +96,68 @@ class ChargeTimeView : View {
         val startTime = samples.map { it.startTime }.min()
         val maxTime = samples.map { it.endTime }.max()
         var minutes: Int = if (startTime != null && maxTime != null) (((maxTime - startTime) / 60000).toInt()) else 30
-        if (minutes < 50) {
-            minutes = 50
-        }
-        if (minutes % 10 != 0) {
-            minutes += (10 - (minutes % 10))
-        }
+        minutes = getPerfectXMax(minutes)
 
         val maxY = 101
 
         val ratioX = (this.width - innerPadding - innerPadding) * 1.0 / minutes // 横向比率
         val ratioY = ((this.height - innerPadding - innerPadding) * 1.0 / maxY).toFloat() // 纵向比率
-        val stratY = height - innerPadding
+        val startY = height - innerPadding
 
         val pathFilterAlpha = Path()
-        var isFirstPoint = true
 
         val textSize = dpSize * 8.5f
         paint.textSize = textSize
 
         paint.textAlign = Paint.Align.CENTER
 
-        val columnSize = if (minutes <= 90) {
-            10
-        } else if (minutes <= 120) {
-            15
-        } else if (minutes <= 180) {
-            20
-        } else {
-            30
-        }
+        val columns = 10
+        var scaleX = (minutes / columns.toDouble())
 
-        for (point in 0..minutes) {
-            if (point % 5 == 0) {
-                if (point % columnSize == 0) {
-                    paint.color = Color.parseColor("#888888")
-                    val text = (point).toString() + "分"
+        for (point in 0..columns) {
+            val drawX = (point * scaleX * ratioX).toInt() + innerPadding
+            if (point % 2 == 0) {
+                paint.color = Color.parseColor("#888888")
+                if (point % 4 == 0) {
+                    val text = minutes2Str((point * scaleX).toInt())
                     canvas.drawText(
-                            text,
-                            (point * ratioX).toInt() + innerPadding,
-                            this.height - innerPadding + textSize + (dpSize * 2),
-                            paint
-                    )
-                    canvas.drawCircle(
-                            (point * ratioX).toInt() + innerPadding,
-                            this.height - innerPadding,
-                            potintRadius,
-                            paint
-                    )
-                    paint.strokeWidth = if (point == 0) potintRadius else 2f
-                    if (point == 0) {
-                        paint.color = Color.parseColor("#888888")
-                    } else {
-                        paint.color = Color.parseColor("#aa888888")
-                    }
-                    canvas.drawLine(
-                            (point * ratioX).toInt() + innerPadding, innerPadding,
-                            (point * ratioX).toInt() + innerPadding, this.height - innerPadding, paint
-                    )
-                } else {
-                    paint.strokeWidth = 2f
-                    paint.color = Color.parseColor("#aa888888")
-                    canvas.drawLine(
-                            (point * ratioX).toInt() + innerPadding, innerPadding,
-                            (point * ratioX).toInt() + innerPadding, this.height - innerPadding, paint
+                        text,
+                        drawX,
+                        this.height - innerPadding + textSize + (dpSize * 2),
+                        paint
                     )
                 }
+                paint.strokeWidth = 2f
+            } else {
+                paint.strokeWidth = 1f
             }
+            paint.color = Color.parseColor("#40888888")
+            canvas.drawLine(
+                drawX, innerPadding,
+                drawX, this.height - innerPadding, paint
+            )
         }
 
         paint.textAlign = Paint.Align.RIGHT
+        paint.pathEffect = dashPathEffect
         for (point in 0..maxY) {
             paint.color = Color.parseColor("#888888")
-            if (point % 10 == 0) {
+            if (point % 20 == 0) {
                 if (point > 0) {
                     canvas.drawText(
-                            point.toString() + "%",
+                            "$point%",
                             innerPadding - dpSize * 4,
                             innerPadding + ((maxY - point) * ratioY).toInt() + textSize / 2.2f,
                             paint
                     )
-                    canvas.drawCircle(
-                            innerPadding,
-                            innerPadding + ((maxY - point) * ratioY).toInt(),
-                            potintRadius,
-                            paint
-                    )
                 }
-                paint.strokeWidth = if (point == 0) potintRadius else 2f
-                if (point == 0) {
-                    paint.color = Color.parseColor("#888888")
-                } else {
-                    paint.color = Color.parseColor("#aa888888")
-                }
+                paint.strokeWidth = 2f
+            } else {
+                paint.strokeWidth = 1f
+            }
+
+            if (point % 10 == 0) {
+                paint.color = Color.parseColor("#40888888")
                 canvas.drawLine(
                         innerPadding,
                         innerPadding + ((maxY - point) * ratioY).toInt(),
@@ -172,26 +168,27 @@ class ChargeTimeView : View {
             }
         }
 
-        paint.color = getColorAccent()
+        paint.pathEffect = null
+        paint.color = Color.parseColor("#801474e4")
         if (startTime != null) {
             val first = samples.first()
             val last = samples.last()
             val startX = ((first.startTime - startTime) / 60000f * ratioX).toFloat() + innerPadding
             val endX = ((last.endTime - startTime) / 60000f * ratioX).toFloat() + innerPadding
-            pathFilterAlpha.moveTo(startX, stratY - (first.capacity * ratioY))
+            pathFilterAlpha.moveTo(startX, startY - (first.capacity * ratioY))
             for (sample in samples) {
                 val currentX = ((sample.startTime - startTime) / 60000f * ratioX).toFloat() + innerPadding
-                pathFilterAlpha.lineTo(currentX, stratY - (sample.capacity * ratioY))
+                pathFilterAlpha.lineTo(currentX, startY - (sample.capacity * ratioY))
             }
-            pathFilterAlpha.lineTo(endX, stratY - (last.capacity * ratioY))
+            pathFilterAlpha.lineTo(endX, startY - (last.capacity * ratioY))
         }
 
         paint.reset()
         paint.isAntiAlias = true
         paint.style = Paint.Style.STROKE
-        paint.strokeWidth = 4f
+        paint.strokeWidth = 8f
 
-        paint.color = Color.parseColor("#8BC34A")
+        paint.color = Color.parseColor("#1474e4")
         canvas.drawPath(pathFilterAlpha, paint)
 
         // paint.textSize = dpSize * 12f

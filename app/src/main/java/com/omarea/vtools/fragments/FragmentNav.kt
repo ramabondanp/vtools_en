@@ -88,18 +88,13 @@ class FragmentNav : Fragment(), View.OnClickListener {
                     startActivity(intent)
                     return
                 }
-                R.id.nav_battery -> {
-                    val batteryUtils = BatteryUtils()
-                    if (batteryUtils.qcSettingSupport() || batteryUtils.bpSettingSupport()) {
-                        val intent = Intent(context, ActivityBattery::class.java)
-                        startActivity(intent)
-                    } else {
-                        Toast.makeText(context, "此功能不支持你的手机", Toast.LENGTH_SHORT).show()
-                    }
-                    return
-                }
                 R.id.nav_charge -> {
                     val intent = Intent(context, ActivityCharge::class.java)
+                    startActivity(intent)
+                    return
+                }
+                R.id.nav_power_utilization -> {
+                    val intent = Intent(context, ActivityPowerUtilization::class.java)
                     startActivity(intent)
                     return
                 }
@@ -113,7 +108,7 @@ class FragmentNav : Fragment(), View.OnClickListener {
                     return
                 }
                 R.id.nav_battery_stats -> {
-                    val intent = Intent(context, ActivityBatteryStats::class.java)
+                    val intent = Intent(context, ActivityPowerUtilization::class.java)
                     startActivity(intent)
                     return
                 }
@@ -134,6 +129,11 @@ class FragmentNav : Fragment(), View.OnClickListener {
                 }
                 R.id.nav_app_magisk -> {
                     val intent = Intent(context, ActivityMagisk::class.java)
+                    startActivity(intent)
+                    return
+                }
+                R.id.nav_modules -> {
+                    val intent = Intent(context, ActivityModules::class.java)
                     startActivity(intent)
                     return
                 }

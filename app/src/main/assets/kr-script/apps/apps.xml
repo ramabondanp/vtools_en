@@ -2,10 +2,10 @@
 <items>
     <resource dir="file:///android_asset/kr-script/apps" />
 
-    <group title="Rogue Killer">
-        <action max-sdk="29">
-            <title>QQ Personalization</title>
-            <desc>Disabling this option will remove personalized fonts, bubbles and avatar pendants from QQ</desc>
+    <group title="Rogue killer">
+        <action warn="Before uninstalling QQ, or clearing data by preserving Media (SDCard) data, please make sure to restore QQ personalization to enable first! Otherwise, you will not be able to log in normally if you install QQ again">
+            <title>QQ personalization</title>
+            <desc>Disabling this option will remove QQ's personalized fonts, bubbles, and avatar pendants</desc>
             <params>
                 <param name="font" title="Personalized Fonts">
                     <option value="1">Enable</option>
@@ -26,9 +26,9 @@
             </params>
             <set>run qq_style_set.sh</set>
         </action>
-        <action confirm="true" max-sdk="29">
-            <title>QQ personalization Problem fix</title>
-            <desc>Repair the problem that QQ can't be logged in after using disabled QQ personalization and double-clear cell phone</desc>
+        <action confirm="true">
+            <title>QQ personalization bug fix</title>
+            <desc>Fix the problem that QQ personalization is disabled and QQ cannot be logged in after the phone is double cleared.</desc>
             <summary>Note: This operation will delete all QQ data!</summary>
             <set>run qq_style_fix.sh</set>
         </action>

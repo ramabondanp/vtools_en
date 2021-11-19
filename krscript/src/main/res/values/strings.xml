@@ -35,7 +35,7 @@
     <string name="kr_shortcut_create_fail">Failed to create a shortcut</string>
     <string name="kr_shortcut_create_success">Shortcut creation request has been sent</string>
     <string name="kr_shortcut_create">Add shortcut</string>
-    <string name="kr_shortcut_create_desc">Do you want to add "%s" to the desktop for quick access?</string>
+    <string formatted="false" name="kr_shortcut_create_desc">Do you want to add "%s" to the desktop for quick access?</string>
     <string name="kr_ushortcut_nsupported">This feature does not support adding shortcuts</string>
     <string name="kr_script_task_notification">Background task notifications</string>
     <string name="kr_bg_task_start">Background tasks start running</string>
@@ -58,9 +58,9 @@
     <string name="kr_lock_message">This function has been locked</string>
     <string name="kr_sdk_too_low">System version is too low</string>
     <string name="kr_sdk_overtop">System version is too high</string>
-    <string name="kr_sdk_message">This function only works on systems with SDK%d ~ %d</string>
+    <string formatted="false" name="kr_sdk_message">This function only works on systems with SDK%d ~ %d</string>
     <string name="kr_sdk_discrepancy">System version does not match</string>
-    <string name="kr_sdk_discrepancy_message">This function only works on systems with SDK%d</string>
+    <string formatted="false" name="kr_sdk_discrepancy_message">This function only works on systems with SDK%d</string>
     <string name="picker_not_item">No option available at this time!</string>
     <string name="picker_select_none">None checked!</string>
 </resources>
