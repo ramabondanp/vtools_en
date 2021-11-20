@@ -76,7 +76,7 @@
                             android:layout_height="wrap_content">
                             <TextView
                                 style="@style/textSmallTitle"
-                                android:text="Physical Memory"
+                                android:text="Physical"
                                 android:layout_width="60dp"
                                 android:layout_height="wrap_content" />
                             <TextView
@@ -116,7 +116,7 @@
                             android:layout_height="wrap_content">
                             <TextView
                                 style="@style/textSmallTitle"
-                                android:text="Virtual Memory"
+                                android:text="Virtual"
                                 android:layout_width="60dp"
                                 android:layout_height="wrap_content" />
                             <TextView

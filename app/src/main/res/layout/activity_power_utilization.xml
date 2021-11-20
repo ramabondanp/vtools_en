@@ -268,7 +268,7 @@
                         android:layout_marginStart="4dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:text="The statistics here are: the average of the battery [current|temperature] during the foreground display of each application, it does not mean that this [power consumption|temperature] is all caused by this application! \n\nYou need to activate the auxiliary service and keep Scene running in the background, if still no data is recorded, try to calibrate the current units!" />
+                        app:text="The statistics here are: the average of the battery [current|temperature] during the foreground display of each application, it does not mean that this [power consumption|temperature] is all caused by this application! \n\nYou need to activate the accessibility service and keep Scene running in the background, if still no data is recorded, try to calibrate the current units!" />
                 </LinearLayout>
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -310,7 +310,7 @@
                     android:layout_height="wrap_content">
                     <TextView
                         android:id="@+id/electricity_adj_unit"
-                        android:text="Current unit calibration"
+                        android:text="Calibration"
                         style="@style/textTitle"
                         android:layout_marginEnd="20dp"
                         android:textColor="@color/colorAccent"
