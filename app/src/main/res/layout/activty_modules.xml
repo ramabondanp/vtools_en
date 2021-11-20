@@ -32,7 +32,7 @@
                 android:layout_weight="1"
                 android:imeOptions="actionSearch"
                 android:background="@android:color/transparent"
-                android:hint="在此输入模块名称(ID)进行搜索"
+                android:hint="Enter the module name (ID) here to search"
                 android:inputType="textFilter"
                 android:padding="8dp"
                 android:singleLine="true"

@@ -206,14 +206,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="自动添加" />
+                android:text="Auto Add" />
 
             <TextView
                 style="@style/textSecondary"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="添加已冻结的普通应用，到应用偏见列表" />
+                android:text="Add a freezed general application to the freeze list" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

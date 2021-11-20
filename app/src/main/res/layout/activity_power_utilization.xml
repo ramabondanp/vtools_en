@@ -31,7 +31,7 @@
                     style="@style/textTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="峰值记录" />
+                    android:text="Peak record" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -56,7 +56,7 @@
                             android:layout_height="70dp"
                             android:layout_alignTop="@id/battery_max_temperature"
                             android:gravity="center_vertical"
-                            android:text="温度"
+                            android:text="Temp"
                             android:textAlignment="center"
                             android:textColor="#77888888"
                             android:textSize="15dp" />
@@ -89,7 +89,7 @@
                             android:layout_height="70dp"
                             android:layout_alignTop="@id/battery_max_output"
                             android:gravity="center_vertical"
-                            android:text="耗电"
+                            android:text="Power usage"
                             android:textAlignment="center"
                             android:textColor="#77888888"
                             android:textSize="15dp" />
@@ -121,7 +121,7 @@
                             android:layout_height="70dp"
                             android:layout_alignTop="@id/battery_max_intput"
                             android:gravity="center_vertical"
-                            android:text="充电"
+                            android:text="Charge"
                             android:textAlignment="center"
                             android:textColor="#77888888"
                             android:textSize="15dp" />
@@ -150,7 +150,7 @@
                     android:paddingTop="2dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="使用记录" />
+                    android:text="Usage record" />
                 <com.omarea.ui.HelpIcon
                     android:layout_marginStart="4dp"
                     android:layout_toEndOf="@id/view_time_title"
@@ -263,12 +263,12 @@
                         style="@style/textTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="应用记录" />
+                        android:text="App record" />
                     <com.omarea.ui.HelpIcon
                         android:layout_marginStart="4dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:text="此处统计的数据为：在每个应用前台显示期间的电池[电流|温度]平均值，并非指该[耗电|温度]均由此应用造成！\n\n你需要激活辅助服务，并让Scene保持后台运行，如果还是没有记录数据，请尝试校准电流单位！" />
+                        app:text="The statistics here are: the average of the battery [current|temperature] during the foreground display of each application, it does not mean that this [power consumption|temperature] is all caused by this application! \n\nYou need to activate the auxiliary service and keep Scene running in the background, if still no data is recorded, try to calibrate the current units!" />
                 </LinearLayout>
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -297,7 +297,7 @@
                 android:layout_marginHorizontal="@dimen/activity_horizontal_margin">
 
                 <TextView
-                    android:text="在寻找其它功能吗？"
+                    android:text="Looking for other features?"
                     android:textColor="?android:textColorSecondary"
                     style="@style/textDefault"
                     android:layout_width="match_parent"
@@ -310,7 +310,7 @@
                     android:layout_height="wrap_content">
                     <TextView
                         android:id="@+id/electricity_adj_unit"
-                        android:text="电流单位校准"
+                        android:text="Current unit calibration"
                         style="@style/textTitle"
                         android:layout_marginEnd="20dp"
                         android:textColor="@color/colorAccent"
@@ -318,7 +318,7 @@
                         android:layout_height="wrap_content" />
                     <TextView
                         android:id="@+id/more_charge"
-                        android:text="充电统计"
+                        android:text="Charging stats"
                         style="@style/textTitle"
                         android:layout_marginEnd="20dp"
                         android:textColor="@color/colorAccent"
@@ -327,7 +327,7 @@
                     <TextView
                         android:id="@+id/charge_controller"
                         android:visibility="gone"
-                        android:text="充电控制"
+                        android:text="Charging control"
                         style="@style/textTitle"
                         android:layout_marginEnd="20dp"
                         android:textColor="@color/colorAccent"

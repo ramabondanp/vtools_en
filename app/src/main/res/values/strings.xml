@@ -120,8 +120,8 @@
     <string name="accessibility_running">Accessibility Services Activated</string>
     <string name="accessibility_stoped">Click here to activate accessibility services</string>
     <string name="accessibility_service_description">Scene enhanced service\nYou need to activate this service to use the following functions:\n\n1. Dynamic response (automatically adjust performance according to the foreground application).\n\n2. Automatic behavior (in the switch Recycle the process when switching networks or switching applications when the screen is displayed).\n\n3. Automatic installation (automatically click next when installing third-party applications)</string>
-    <string name="accessibility_please_activate"> Please activate the [Scene Auxiliary Service] option in the system settings</string>
-    <string name="accessibility_activate"> Auxiliary services are not activated, click here to activate</string>
+    <string name="accessibility_please_activate"> Please activate the [Scene Accessibility Service] option in the system settings</string>
+    <string name="accessibility_activate"> Accessibility services are not activated, click here to activate</string>
     <string name="accessibility_activate_desc"> According to the application to adjust performance, automatically switch GPS, record power consumption speed, all need to activate this service </string>
 
     <string name="battery_title">Battery:.</string>

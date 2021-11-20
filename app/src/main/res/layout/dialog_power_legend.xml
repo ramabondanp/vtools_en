@@ -21,7 +21,7 @@
         <TextView
             android:layout_marginStart="@dimen/activity_horizontal_margin"
             style="@style/textSmall"
-            android:text="屏幕点亮"
+            android:text="Screen on"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>
@@ -40,7 +40,7 @@
         <TextView
             android:layout_marginStart="@dimen/activity_horizontal_margin"
             style="@style/textSmall"
-            android:text="屏幕关闭"
+            android:text="Screen off"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>
@@ -61,7 +61,7 @@
         <TextView
             android:layout_marginStart="@dimen/activity_horizontal_margin"
             style="@style/textSmall"
-            android:text="屏幕点亮，未记录电池状态"
+            android:text="Screen lights up, no battery status recorded"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>
@@ -81,7 +81,7 @@
         <TextView
             android:layout_marginStart="@dimen/activity_horizontal_margin"
             style="@style/textSmall"
-            android:text="屏幕关闭，未记录电池状态"
+            android:text="Screen off, no battery status recorded"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>
@@ -91,7 +91,7 @@
         android:background="@drawable/in_card_item"
         android:padding="@dimen/activity_vertical_margin"
         style="@style/textSmall"
-        android:text="在手机屏幕关闭时，Scene会停止记录电池状态以减少耗电，在图表中显示为灰色虚线。"
+        android:text="When the phone screen is turned off, Scene stops recording the battery status to reduce power consumption, which is shown as a gray dashed line in the graph."
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <TextView
@@ -100,7 +100,7 @@
         android:background="@drawable/in_card_item"
         android:padding="@dimen/activity_vertical_margin"
         style="@style/textSmall"
-        android:text="但如果图表中出现蓝色虚线，Scene后台进程被休眠，未能按计划的频率记录电池状态。"
+        android:text="However, if a blue dotted line appears in the chart, the Scene background process is hibernated and fails to record the battery status as often as planned."
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
