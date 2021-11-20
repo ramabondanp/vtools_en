@@ -79,14 +79,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Eliminate bias" />
+                android:text="Eliminate freeze" />
 
             <TextView
                 style="@style/textSecondary"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Remove this app from the bias list and unfreeze it" />
+                android:text="Remove this app from the freeze list and unfreeze it" />
         </LinearLayout>
     </LinearLayout>
 

@@ -318,7 +318,7 @@
                         style="@style/scene_config_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="application bias" />
+                        android:text="App freeze" />
 
                     <Switch
                         android:id="@+id/app_details_freeze"

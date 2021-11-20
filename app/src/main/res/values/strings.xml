@@ -216,7 +216,7 @@
     <string name="dialog_addin_device_desc">After modification, you can click "Restore"-&gt;"Confirm" to restore the model before modification, uninstalling Scene will cause the backup model information to be lost, please be sure to restore before uninstalling! \n\nOr, you can also restore the model information by re-flashing the full ROM! \n\nUse DualBootPatcher multi-system software do not use this function to modify models!!!</string>
     <string name="dialog_addin_device_inner">Preset Templates</string>
     <string name="title_activity_shortcut">Quick Start</string>
-    <string name="title_activity_freeze">Application Bias</string>
+    <string name="title_activity_freeze">Application freeze</string>
     <string name="title_activity_online">Scene-Online</string>
 
     <string name="shortcut_disabled">Temporarily unavailable</string>
@@ -414,7 +414,7 @@
     <string name="boot_resize_zram">Set ZRAM capacity...</string>
     <string name="boot_swapon">Start SWAP...</string>
     <string name="boot_lmk">Adjust LMK parameters...</string>
-    <string name="boot_freeze">Freeze bias application...</string>
+    <string name="boot_freeze">Freezing application...</string>
 
     <string name="flash_confirm">Confirm flash?</string>
 
@@ -453,7 +453,7 @@
     <string name="dex2oat_reset_running">dex2oat reset in progress</string>
 
     <string name="freeze_shortcut_lost">Shortcut lost</string>
-    <string name="freeze_shortcut_lost_desc">The following applications that have been added to bias mode have lost their startup shortcuts or were not created successfully, are they recreated immediately?</string>
+    <string name="freeze_shortcut_lost_desc">The following applications that have been added to freeze mode have lost their startup shortcuts or were not created successfully, are they recreated immediately?</string>
     <string name="freeze_disable_completed">Frozen application ×</string>
     <string name="freeze_enable_completed">Unfrozen application √</string>
     <string name="freeze_shortcut_add_success">Creation completed</string>

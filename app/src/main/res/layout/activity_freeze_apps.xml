@@ -56,7 +56,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="5dp"
-                                android:text="The application bias function needs to activate the scene mode (accessibility service) to automatically freeze the application" />
+                                android:text="The application freeze function needs to activate the scene mode (accessibility service) to automatically freeze the application" />
                         </LinearLayout>
 
                         <ImageButton
@@ -184,7 +184,7 @@
                                 <com.omarea.ui.HelpIcon
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    app:text="Open the application when you click the application in the bias list, instead of switching the frozen state" />
+                                    app:text="Open the application when you click the application in the freeze list, instead of switching the frozen state" />
 
                                 <Switch
                                     android:id="@+id/freeze_click_open"
@@ -204,7 +204,7 @@
                                 <com.omarea.ui.HelpIcon
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    app:text="When there is a biased application that has not added a shortcut to the desktop, a prompt to add a shortcut pops up" />
+                                    app:text="When there is a frozen application that has not added a shortcut to the desktop, a prompt to add a shortcut pops up" />
 
                                 <Switch
                                     android:id="@+id/freeze_shortcut_suggest"
@@ -226,7 +226,7 @@
                                 <com.omarea.ui.HelpIcon
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    app:text="Freeze after leaving the application interface for more than this time, 0 means no limit. All biased applications will be automatically frozen after the screen is locked for 1 minute, and will not be affected by this setting!" />
+                                    app:text="Freeze after leaving the application interface for more than this time, 0 means no limit. All frozen applications will be automatically frozen after the screen is locked for 1 minute, and will not be affected by this setting!" />
 
                                 <TextView
                                     style="@style/textTitle"
@@ -273,7 +273,7 @@
                                 <com.omarea.ui.HelpIcon
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    app:text="Maximum number of bias applications that can be unfrozen at the same time, 0 means no limit" />
+                                    app:text="Maximum number of freeze applications that can be unfrozen at the same time, 0 means no limit" />
 
                                 <TextView
                                     style="@style/textTitle"
@@ -321,7 +321,7 @@
                                 <com.omarea.ui.HelpIcon
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    app:text="The delay time of freezing the bias application after the screen is off" />
+                                    app:text="The delay time of freezing the freeze application after the screen is off" />
 
                                 <TextView
                                     style="@style/textTitle"
@@ -371,7 +371,7 @@
                                 <com.omarea.ui.HelpIcon
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    app:text="Display the shortcut entry of the ~application bias~ management interface on the desktop" />
+                                    app:text="Display the shortcut entry of the ~application freeze~ management interface on the desktop" />
 
                                 <Switch
                                     android:id="@+id/freeze_quick_entry"

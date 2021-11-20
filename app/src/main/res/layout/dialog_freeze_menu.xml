@@ -44,7 +44,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Set all applications in the bias list to frozen" />
+                android:text="Set all applications in the freeze list to frozen" />
         </LinearLayout>
     </LinearLayout>
 
@@ -86,7 +86,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Unfreeze all apps in the bias list and put them in a launchable state" />
+                android:text="Unfreeze all apps in the freeze list and put them in a launchable state" />
         </LinearLayout>
     </LinearLayout>
 
@@ -171,7 +171,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Unfreeze all apps and clear the app bias list" />
+                android:text="Unfreeze all apps and clear the app freeze list" />
         </LinearLayout>
     </LinearLayout>
 
