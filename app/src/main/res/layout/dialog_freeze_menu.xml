@@ -1,219 +1,372 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="@dimen/activity_horizontal_margin">
-
+    android:layout_height="match_parent">
     <LinearLayout
-        android:id="@+id/menu_freeze"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="6dp"
-        android:background="@drawable/krscript_item_ripple"
-        android:gravity="center_vertical"
-        android:minHeight="70dp"
-        android:orientation="horizontal"
-        android:padding="6dp">
-
-        <ImageView
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="@dimen/activity_horizontal_margin"
-            android:background="@drawable/dialog_icon_bg"
-            android:backgroundTint="#33b5e5"
-            android:src="@drawable/app_options_freeze"
-            app:tint="@android:color/white" />
+        android:orientation="vertical"
+        android:padding="@dimen/activity_horizontal_margin">
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:id="@+id/menu_freeze"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:layout_marginBottom="6dp"
+            android:background="@drawable/krscript_item_ripple"
+            android:gravity="center_vertical"
+            android:minHeight="70dp"
+            android:orientation="horizontal"
+            android:padding="6dp">
 
-            <TextView
-                android:layout_width="match_parent"
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:background="@drawable/dialog_icon_bg"
+                android:backgroundTint="#33b5e5"
+                android:src="@drawable/app_options_freeze"
+                app:tint="@android:color/white" />
+
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Freeze All" />
+                android:orientation="vertical">
 
-            <TextView
-                style="@style/textSecondary"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Set all applications in the freeze list to frozen" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Freeze all" />
+
+                <TextView
+                    style="@style/textSecondary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Set all apps in the freeze list to frozen state" />
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/menu_unfreeze"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="6dp"
-        android:background="@drawable/krscript_item_ripple"
-        android:gravity="center_vertical"
-        android:minHeight="70dp"
-        android:orientation="horizontal"
-        android:padding="6dp">
-
-        <ImageView
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="@dimen/activity_horizontal_margin"
-            android:background="@drawable/dialog_icon_bg"
-            android:backgroundTint="#7CB342"
-            android:src="@drawable/app_options_freeze"
-            app:tint="@android:color/white" />
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:id="@+id/menu_unfreeze"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:layout_marginBottom="6dp"
+            android:background="@drawable/krscript_item_ripple"
+            android:gravity="center_vertical"
+            android:minHeight="70dp"
+            android:orientation="horizontal"
+            android:padding="6dp">
 
-            <TextView
-                android:layout_width="match_parent"
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:background="@drawable/dialog_icon_bg"
+                android:backgroundTint="#7CB342"
+                android:src="@drawable/app_options_freeze"
+                app:tint="@android:color/white" />
+
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Unfreeze all" />
+                android:orientation="vertical">
 
-            <TextView
-                style="@style/textSecondary"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Unfreeze all apps in the freeze list and put them in a launchable state" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Unfreeze all" />
+
+                <TextView
+                    style="@style/textSecondary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Unfreeze all apps in the freeze list and put them in a bootable state" />
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/menu_shortcut"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="6dp"
-        android:background="@drawable/krscript_item_ripple"
-        android:gravity="center_vertical"
-        android:minHeight="70dp"
-        android:orientation="horizontal"
-        android:padding="6dp">
-
-        <ImageView
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="@dimen/activity_horizontal_margin"
-            android:background="@drawable/dialog_icon_bg"
-            android:backgroundTint="#B3CA6E"
-            android:padding="8dp"
-            android:src="@drawable/app_options_shortcut"
-            app:tint="@android:color/white" />
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:id="@+id/menu_shortcut"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:layout_marginBottom="6dp"
+            android:background="@drawable/krscript_item_ripple"
+            android:gravity="center_vertical"
+            android:minHeight="70dp"
+            android:orientation="horizontal"
+            android:padding="6dp">
 
-            <TextView
-                android:layout_width="match_parent"
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:background="@drawable/dialog_icon_bg"
+                android:backgroundTint="#B3CA6E"
+                android:padding="8dp"
+                android:src="@drawable/app_options_shortcut"
+                app:tint="@android:color/white" />
+
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Adding shortcuts" />
+                android:orientation="vertical">
 
-            <TextView
-                style="@style/textSecondary"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Add bulk shortcuts to the desktop" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Add shortcut" />
+
+                <TextView
+                    style="@style/textSecondary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Add shortcuts to the desktop in bulk" />
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/menu_remove"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="6dp"
-        android:background="@drawable/krscript_item_ripple"
-        android:gravity="center_vertical"
-        android:minHeight="70dp"
-        android:orientation="horizontal"
-        android:padding="6dp">
-
-        <ImageView
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="@dimen/activity_horizontal_margin"
-            android:background="@drawable/dialog_icon_bg"
-            android:backgroundTint="#FB8C00"
-            android:src="@drawable/app_options_clear2"
-            app:tint="@android:color/white" />
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:id="@+id/menu_remove"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:layout_marginBottom="6dp"
+            android:background="@drawable/krscript_item_ripple"
+            android:gravity="center_vertical"
+            android:minHeight="70dp"
+            android:orientation="horizontal"
+            android:padding="6dp">
 
-            <TextView
-                android:layout_width="match_parent"
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:background="@drawable/dialog_icon_bg"
+                android:backgroundTint="#FB8C00"
+                android:src="@drawable/app_options_clear2"
+                app:tint="@android:color/white" />
+
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Clear list" />
+                android:orientation="vertical">
 
-            <TextView
-                style="@style/textSecondary"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Unfreeze all apps and clear the app freeze list" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Clear the list" />
+
+                <TextView
+                    style="@style/textSecondary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Unfreeze all apps and clear the app freeze list" />
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/menu_auto_add"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="6dp"
-        android:background="@drawable/krscript_item_ripple"
-        android:gravity="center_vertical"
-        android:minHeight="70dp"
-        android:orientation="horizontal"
-        android:padding="6dp">
-
-        <ImageView
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="@dimen/activity_horizontal_margin"
-            android:background="@drawable/dialog_icon_bg"
-            android:backgroundTint="#00ACC1"
-            android:src="@drawable/app_options_restore"
-            app:tint="@android:color/white" />
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:id="@+id/menu_auto_add"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:layout_marginBottom="6dp"
+            android:background="@drawable/krscript_item_ripple"
+            android:gravity="center_vertical"
+            android:minHeight="70dp"
+            android:orientation="horizontal"
+            android:padding="6dp">
 
-            <TextView
-                android:layout_width="match_parent"
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:background="@drawable/dialog_icon_bg"
+                android:backgroundTint="#00ACC1"
+                android:src="@drawable/app_options_restore"
+                app:tint="@android:color/white" />
+
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Auto Add" />
+                android:orientation="vertical">
 
-            <TextView
-                style="@style/textSecondary"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Add a frozen general application to the freeze list" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Automatically add" />
+
+                <TextView
+                    style="@style/textSecondary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Add frozen common applications to the application freeze list" />
+            </LinearLayout>
         </LinearLayout>
+
+        <com.omarea.ui.UMExpandLayout
+            android:id="@+id/freeze_options"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_marginHorizontal="0dp"
+                style="@style/ListCardItem"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:id="@+id/freeze_suspend"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+                    <com.omarea.ui.HelpIcon
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:text="The desktop icon is not hidden when the app is frozen, but only grayed out (the effect is the same as [Pause] in the app management), so as to avoid destroying the desktop layout when the app is frozen. This function requires Android P+" />
+
+                    <Switch
+                        android:id="@+id/freeze_suspend_mode"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Keep app icons" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/freeze_suspend_xposed"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <com.omarea.ui.HelpIcon
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:text="After Scene is activated as an Xposed module [and allowed to start automatically], the following desktops can directly open frozen applications:\nOnePlus Desktop, OnePlus Hydrogen Desktop, One Hydrogen Desktop\nLawnchair Beta, Lawnchair Magic Edition\nMIUI Desktop , POCO desktop, MIUI global search\nLineageOS Trebuchet\nSystem settings, Pixel launcher\n\nAfter enabling authorization and accommodation, all applications can open frozen applications" />
+
+                    <Switch
+                        android:id="@+id/freeze_any_unfreeze"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Xposed authorized accommodation" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <com.omarea.ui.HelpIcon
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:text="It freezes after leaving the application interface for more than this time. 0 means no limit. All frozen apps will be automatically frozen after 1 minute after the screen is locked, and will not be affected by this setting!" />
+                    <TextView
+                        style="@style/textTitle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Activity time limit (minutes)" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_marginTop="6dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <SeekBar
+                        android:id="@+id/freeze_time_limit"
+                        style="@style/SceneSeekBar"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:max="10"
+                        android:min="0"
+                        android:progress="2" />
+
+                    <TextView
+                        android:id="@+id/freeze_time_limit_text"
+                        style="@style/textDefault"
+                        android:layout_width="30dp"
+                        android:layout_height="wrap_content"
+                        android:text="1"
+                        android:textAlignment="center" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <com.omarea.ui.HelpIcon
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:text="When there is a frozen application that has not added a shortcut to the desktop, a prompt to add a shortcut pops up" />
+
+                    <Switch
+                        android:id="@+id/freeze_shortcut_suggest"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Prompt to create a shortcut" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <com.omarea.ui.HelpIcon
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:text="Display the shortcut entry of the application frozen management interface on the desktop" />
+
+                    <Switch
+                        android:id="@+id/freeze_quick_entry"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Desktop shortcut entry" />
+                </LinearLayout>
+            </LinearLayout>
+        </com.omarea.ui.UMExpandLayout>
+        <ImageView
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:id="@+id/freeze_options_switch"
+            android:src="@drawable/arrow_down"
+            android:padding="4dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="60dp"
+            android:background="@drawable/in_card_item"
+            android:layout_height="24dp" />
     </LinearLayout>
-</LinearLayout>
+</ScrollView>

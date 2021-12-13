@@ -70,17 +70,18 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Backing up application data" />
+                            android:text="Backup APK" />
                         <TextView
                             style="@style/textSecondary"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Also backup application data \n Note: This feature is not very reliable, you may encounter problems such as not being able to restore or corrupted data after restoration!!!" />
+                            android:text="The APK file will be extracted to the /sdcard/backups directory" />
                     </LinearLayout>
 
                     <Switch
-                        android:id="@+id/backup_include_data"
+                        android:enabled="false"
+                        android:checked="true"
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="8dp"
                         android:layout_width="wrap_content"

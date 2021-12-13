@@ -211,7 +211,6 @@
     <string name="schedule_dynamic_off">You have not turned on [Dynamic Response], Scene cannot adjust the performance of the device according to changes in the foreground application!</string>
     <string name="schedule_uperf_fast">Uperf scheduling only provides three modes of [stuck/balanced/charged electricity], which correspond to Scene\’s [power saving/balanced/performance] respectively. \nWhen you select [Extreme Speed] mode in Scene, the actual effect is [Charge], which is the same as selecting [Performance] mode</string>
 
-    <string name="applist_warn">The currently provided application data backup function requires the system to integrate busybox, toybox, use tar+gz to compress the data (if the system supports it, pigz will be used to improve the compression speed), only the data under "/data/data/application package name" will be backed up, and it is not It is not guaranteed to be compatible with all systems and applications. The \n\n app backup file is in /sdcard/backups/apps (Android 11+ system does not support backup function)</string>
     <string name="dialog_addin_device_warn">Model information Please do not enter special symbols! \n has been compatible with the model code of the [Application Variables] module, copy it and reopen this window to use it!</string>
     <string name="dialog_addin_device_desc">After modification, you can click "Restore"-&gt;"Confirm" to restore the model before modification, uninstalling Scene will cause the backup model information to be lost, please be sure to restore before uninstalling! \n\nOr, you can also restore the model information by re-flashing the full ROM! \n\nUse DualBootPatcher multi-system software do not use this function to modify models!!!</string>
     <string name="dialog_addin_device_inner">Preset Templates</string>
@@ -256,6 +255,7 @@
     <string name="addin_bpc_desc">Turn off some options in Performance Boost Config to avoid power consumption caused by the CPU being pulled up frequently, but keep the application startup boost, which will slightly reduce the experience. A reboot is required!</string>
     <string name="addin_continue">Continue</string>
 
+    <string name="swap_shell_01">All loopback devices have been occupied and cannot be mounted!</string>
     <string name="swap_on_close">SWAP is being closed, which can be slow</string>
     <string name="swap_current_state">Current state:</string>
     <string name="swap_memory_info">Memory Info</string>
@@ -388,14 +388,6 @@
         <item>Constrained background</item>
         <item>Reclaimed Memory</item>
     </string-array>
-    <string-array name="cgroup_mem_values">
-        <item></item>
-        <item>scene_lock</item>
-        <item>scene_perf</item>
-        <item>scene_fg</item>
-        <item>scene_bg</item>
-        <item>scene_cache</item>
-    </string-array>
 
     <string name="title_activity_timing_task">Timed Tasks</string>
     <string name="title_activity_trigger">Triggers</string>
@@ -493,6 +485,20 @@
     <string name="app_home">Overview</string>
     <string name="app_tuner">Adjust</string>
 
+    <string name="home_cache_cleared">Cache cleared</string>
+    <string name="home_core_switch">Switch CPU core</string>
+    <string name="home_core_required">At least one core should be turned on</string>
+    <string name="home_utilization">Load:</string>
+    <string name="home_browser_error">Failed to start browser!</string>
+    <string name="home_shell_begin">Start to reclaim a small amount of memory (long press to reclaim more~)</string>
+    <string name="home_shell_01">Not sure, your kernel does not support it!</string>
+    <string name="home_shell_02">Idle SWAP is not enough to complete automatic recycling~</string>
+    <string name="home_shell_03">Do not perform multiple memory reclamation operations at the same time~</string>
+    <string name="home_shell_04">Okay, memory recovery is over~</string>
+    <string name="home_shell_05">The operation failed, and there was an error in calculating the capacity!</string>
+    <string name="home_shell_06">Sufficient memory, no need to clean up!</string>
+    <string name="home_shell_07">Enough memory has been released via ZRAM write-back</string>
+
     <string name="system_scene_next_task">Next task</string>
     <string name="system_scene_resume_charge">Resume charging</string>
     <string name="system_scene_battery_left">Battery below</string>
@@ -517,13 +523,6 @@
         <item>All types</item>
     </string-array>
 
-    <string-array name="start_dir_options">
-        
-        <item>/sdcard</item>
-        <item>/system/etc</item>
-        <item>/vendor/etc</item>
-    </string-array>
-
     <!--Configuration Source-->
      <string name="source_uperf">External source (Uperf)</string>
      <string name="source_outside">External source</string>
@@ -534,12 +533,6 @@
      <string name="source_author">Config source/author: </string>
      <string name="notification_filter">Notification filtering</string>
 
-    <string name="power_shutdown_cmd">sync;svc power shutdown || reboot -p;</string>
-    <string name="power_reboot_cmd">sync;svc power reboot || reboot;</string>
-    <string name="power_hot_reboot_cmd">sync;am restart || busybox killall system_server;</string>
-    <string name="power_fastboot_cmd">sync;reboot bootloader;</string>
-    <string name="power_recovery_cmd">sync;reboot recovery;</string>
-    <string name="power_emergency_cmd">sync;reboot edl;</string>
     <string name="miui_thermal_desc">Click the menu in the upper right corner, select and edit the temperature control file, click Save after editing ~\n\nNote: With the Android system constantly updated, to modify the system partition becomes more and more difficult, may be modified can not be successfully saved, or reboot that is automatically restored, it is recommended to use magisk module to complete the temperature control modification! \n\n temperature control file is usually in the /system/etc or /vendor/etc directory, the name begins with "thermal", suffix ".conf"</string>
     <string name="monitor_process_unsupported">Process Manager is not compatible with your phone yet!</string>
 </resources>

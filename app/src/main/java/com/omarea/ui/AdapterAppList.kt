@@ -20,10 +20,6 @@ import java.util.ArrayList
 import java.util.HashMap
 import kotlin.Comparator
 
-/**
- * Created by Hello on 2018/01/26.
- */
-
 class AdapterAppList(private val context: Context, apps: ArrayList<AppInfo>, private var keywords: String = "") : BaseAdapter() {
     private val list: ArrayList<AppInfo>?
     private val appInfoLoader = AppInfoLoader(context)
@@ -160,18 +156,14 @@ class AdapterAppList(private val context: Context, apps: ArrayList<AppInfo>, pri
             itemTitle?.text = keywordHightLight(item.appName)
             itemText?.text = keywordHightLight(item.packageName)
 
-            if (item.icon == null) {
-                val id = item.path
-                this.appPath = id
-                GlobalScope.launch(Dispatchers.Main) {
-                    val icon = appInfoLoader.loadIcon(item).await()
-                    val imgView = imgView!!
-                    if (icon != null && appPath == id) {
-                        imgView.setImageDrawable(icon)
-                    }
+            val id = item.path
+            this.appPath = id
+            GlobalScope.launch(Dispatchers.Main) {
+                val icon = appInfoLoader.loadIcon(item).await()
+                val imgView = imgView!!
+                if (icon != null && appPath == id) {
+                    imgView.setImageDrawable(icon)
                 }
-            } else {
-                imgView!!.setImageDrawable(item.icon)
             }
 
             enabledStateText?.run {

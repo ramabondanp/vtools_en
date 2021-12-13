@@ -10,388 +10,49 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <TabHost
-        android:id="@+id/freeze_tabhost"
+    <RelativeLayout
+        android:id="@+id/tab_freeze_apps"
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:layout_marginTop="?actionBarSize"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/layout_app_bar">
+        android:layout_height="match_parent">
 
-        <LinearLayout
+        <EditText
+            android:background="@drawable/list_view_bg"
+            android:id="@+id/freeze_apps_search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:hint="Search app name"
+            android:inputType="textFilter"
+            android:maxLength="10"
+            android:padding="@dimen/activity_horizontal_margin"
+            android:singleLine="true"
+            android:textSize="16dp" />
+
+        <com.omarea.common.ui.OverScrollGridView
+            android:layout_marginTop="10dp"
+            android:background="@drawable/list_view_bg"
+            android:layout_below="@id/freeze_apps_search"
+            android:id="@+id/freeze_apps"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:numColumns="4" />
 
-            <FrameLayout
-                android:id="@android:id/tabcontent"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1">
-
-                <RelativeLayout
-                    android:id="@+id/tab_freeze_apps"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <LinearLayout
-                        android:id="@+id/freeze_toolbar"
-                        style="@style/ListCardItem"
-                        android:alpha="0.9"
-                        android:orientation="horizontal">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
-
-                            <TextView
-                                style="@style/textSmall"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="tips"
-                                android:textColor="?android:colorAccent" />
-
-                            <TextView
-                                style="@style/textSmall"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="5dp"
-                                android:text="The application freeze function needs to activate the scene mode (accessibility service) to automatically freeze the application" />
-                        </LinearLayout>
-
-                        <ImageButton
-                            android:id="@+id/freeze_add"
-                            style="?android:buttonBarButtonStyle"
-                            android:src="@drawable/kr_plus"
-                            android:layout_marginStart="8dp"
-                            android:scaleType="centerInside"
-                            android:padding="5dp"
-                            android:layout_width="28dp"
-                            android:layout_height="28dp"
-                            android:layout_gravity="center_vertical"
-                            android:tint="?android:colorAccent" />
-
-                        <ImageButton
-                            android:id="@+id/freeze_menu"
-                            style="?android:buttonBarButtonStyle"
-                            android:layout_width="28dp"
-                            android:layout_height="28dp"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginStart="6dp"
-                            android:padding="4dp"
-                            android:scaleType="centerInside"
-                            android:src="@drawable/kr_list"
-                            android:tint="?android:colorAccent" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_below="@+id/freeze_toolbar"
-                        android:layout_alignParentBottom="true"
-                        style="@style/ListCardItemLast"
-                        android:layout_height="match_parent"
-                        android:alpha="0.9"
-                        android:focusable="true"
-                        android:focusableInTouchMode="true"
-                        android:orientation="vertical"
-                        android:paddingLeft="0dp"
-                        android:paddingTop="0dp"
-                        android:paddingRight="0dp"
-                        android:paddingBottom="10dp">
-
-                        <EditText
-                            android:id="@+id/freeze_apps_search"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@android:color/transparent"
-                            android:hint="Search application name"
-                            android:inputType="textFilter"
-                            android:maxLength="10"
-                            android:padding="@dimen/activity_horizontal_margin"
-                            android:singleLine="true"
-                            android:textSize="16dp" />
-
-                        <com.omarea.common.ui.OverScrollGridView
-                            android:id="@+id/freeze_apps"
-                            android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_weight="1"
-                            android:numColumns="4" />
-                    </LinearLayout>
-                </RelativeLayout>
-
-                <com.omarea.common.ui.OverScrollView
-                    android:id="@+id/tab_freeze_settings"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
-
-                        <LinearLayout style="@style/ListCardItem">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:gravity="center_vertical"
-                                android:orientation="horizontal">
-
-                                <com.omarea.ui.HelpIcon
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    app:text="Do not hide the desktop icon when freezing the application, but only gray it (same effect as [Pause] in the application management), so as to avoid destroying the desktop layout when the application is frozen. This feature requires Android P+" />
-
-                                <Switch
-                                    android:id="@+id/freeze_suspend_mode"
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:text="Keep application icons" />
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/activity_vertical_margin"
-                                android:gravity="center_vertical"
-                                android:orientation="horizontal">
-
-                                <com.omarea.ui.HelpIcon
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    app:text="Scene is activated as an Xposed module [and allowed to start automatically], the following desktops can directly open frozen applications:\nOnePlus Desktop, OnePlus Hydrogen Desktop, OneHydrogen Desktop\nLawnchair Beta, Lawnchair Magic Fun Edition\nMIUI Desktop, POCO Desktop, MIUI Global Search\nLineageOS Trebuchet\nSystem Settings, Pixel Launcher\n\nAfter enabling authorization and accommodation, all applications can open frozen applications" />
-
-                                <Switch
-                                    android:id="@+id/freeze_any_unfreeze"
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:text="Xposed authorization accommodation" />
-                            </LinearLayout>
-
-                        </LinearLayout>
-
-                        <LinearLayout style="@style/ListCardItem">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:gravity="center_vertical"
-                                android:orientation="horizontal">
-
-                                <com.omarea.ui.HelpIcon
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    app:text="Open the application when you click the application in the freeze list, instead of switching the frozen state" />
-
-                                <Switch
-                                    android:id="@+id/freeze_click_open"
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:text="click to start the application" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/activity_vertical_margin"
-                                android:gravity="center_vertical"
-                                android:orientation="horizontal">
-
-                                <com.omarea.ui.HelpIcon
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    app:text="When there is a frozen application that has not added a shortcut to the desktop, a prompt to add a shortcut pops up" />
-
-                                <Switch
-                                    android:id="@+id/freeze_shortcut_suggest"
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:text="Prompt to create a shortcut" />
-                            </LinearLayout>
-                        </LinearLayout>
-
-                        <LinearLayout style="@style/ListCardItem">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:gravity="center_vertical"
-                                android:orientation="horizontal">
-
-                                <com.omarea.ui.HelpIcon
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    app:text="Freeze after leaving the application interface for more than this time, 0 means no limit. All frozen applications will be automatically frozen after the screen is locked for 1 minute, and will not be affected by this setting!" />
-
-                                <TextView
-                                    style="@style/textTitle"
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:text="Activity time limit (minutes)" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="6dp"
-                                android:gravity="center_vertical"
-                                android:orientation="horizontal"
-                                android:paddingBottom="6dp">
-
-                                <SeekBar
-                                    android:id="@+id/freeze_time_limit"
-                                    style="@style/SceneSeekBar"
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:max="10"
-                                    android:min="0"
-                                    android:progress="2" />
-
-                                <TextView
-                                    android:id="@+id/freeze_time_limit_text"
-                                    style="@style/textSmall"
-                                    android:layout_width="30dp"
-                                    android:layout_height="wrap_content"
-                                    android:text="1"
-                                    android:textAlignment="center" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/activity_vertical_margin"
-                                android:gravity="center_vertical"
-                                android:orientation="horizontal">
-
-                                <com.omarea.ui.HelpIcon
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    app:text="Maximum number of freeze applications that can be unfrozen at the same time, 0 means no limit" />
-
-                                <TextView
-                                    style="@style/textTitle"
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:text="Limit on the number of activities (a)" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="6dp"
-                                android:gravity="center_vertical"
-                                android:orientation="horizontal"
-                                android:paddingBottom="6dp">
-
-                                <SeekBar
-                                    android:id="@+id/freeze_item_limit"
-                                    style="@style/SceneSeekBar"
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:max="10"
-                                    android:min="0"
-                                    android:progress="5" />
-
-                                <TextView
-                                    android:id="@+id/freeze_item_limit_text"
-                                    style="@style/textSmall"
-                                    android:layout_width="30dp"
-                                    android:layout_height="wrap_content"
-                                    android:text="5"
-                                    android:textAlignment="center" />
-                            </LinearLayout>
-
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/activity_vertical_margin"
-                                android:gravity="center_vertical"
-                                android:orientation="horizontal">
-
-                                <com.omarea.ui.HelpIcon
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    app:text="The delay time of freezing the freeze application after the screen is off" />
-
-                                <TextView
-                                    style="@style/textTitle"
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:text="Interactive screen processing delay (minutes)" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="6dp"
-                                android:gravity="center_vertical"
-                                android:orientation="horizontal"
-                                android:paddingBottom="6dp">
-
-                                <SeekBar
-                                    android:id="@+id/freeze_screen_delay"
-                                    style="@style/SceneSeekBar"
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:max="10"
-                                    android:min="0"
-                                    android:progress="0" />
-
-                                <TextView
-                                    android:id="@+id/freeze_screen_delay_text"
-                                    style="@style/textSmall"
-                                    android:layout_width="30dp"
-                                    android:layout_height="wrap_content"
-                                    android:text="0"
-                                    android:textAlignment="center" />
-                            </LinearLayout>
-                        </LinearLayout>
-
-
-                        <LinearLayout style="@style/ListCardItem">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:gravity="center_vertical"
-                                android:orientation="horizontal">
-
-                                <com.omarea.ui.HelpIcon
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    app:text="Display the shortcut entry of the ~application freeze~ management interface on the desktop" />
-
-                                <Switch
-                                    android:id="@+id/freeze_quick_entry"
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:text="Desktop shortcut entry" />
-
-                            </LinearLayout>
-
-                        </LinearLayout>
-                    </LinearLayout>
-                </com.omarea.common.ui.OverScrollView>
-            </FrameLayout>
-
-            <TabWidget
-                android:id="@android:id/tabs"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/tab_widget_background" />
-        </LinearLayout>
-    </TabHost>
+        <ImageButton
+            android:id="@+id/freeze_menu"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            style="?android:buttonBarButtonStyle"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:layout_marginVertical="12dp"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_gravity="center_vertical"
+            android:padding="4dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/kr_list"
+            android:tint="?android:colorAccent" />
+    </RelativeLayout>
 </RelativeLayout>

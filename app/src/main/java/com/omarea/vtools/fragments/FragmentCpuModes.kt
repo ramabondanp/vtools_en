@@ -8,11 +8,13 @@ import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.omarea.Scene
 import com.omarea.common.shared.FilePathResolver
@@ -96,9 +98,9 @@ class FragmentCpuModes : Fragment() {
         dynamic_control_toggle.setOnClickListener {
             dynamic_control_opts2.toggleExpand()
             if (dynamic_control_opts2.isExpand) {
-                (it as ImageView).setImageDrawable(context!!.getDrawable(R.drawable.arrow_up))
+                (it as ImageView).setImageDrawable(ContextCompat.getDrawable(context!!, R.drawable.arrow_up))
             } else {
-                (it as ImageView).setImageDrawable(context!!.getDrawable(R.drawable.arrow_down))
+                (it as ImageView).setImageDrawable(ContextCompat.getDrawable(context!!, R.drawable.arrow_down))
             }
         }
 
@@ -218,10 +220,15 @@ class FragmentCpuModes : Fragment() {
                 startActivity(intent)
             }
             nav_freeze.setOnClickListener {
-                val intent = Intent(Intent.ACTION_VIEW)
-                intent.setClassName(
-                        "com.omarea.vtools", "com.omarea.vtools.activities.ActivityFreezeApps2")
-                startActivity(intent)
+                if (AccessibleServiceHelper().serviceRunning(context!!)) {
+                    val intent = Intent(Intent.ACTION_VIEW)
+                    intent.setClassName(
+                        "com.omarea.vtools", "com.omarea.vtools.activities.ActivityFreezeApps2"
+                    )
+                    startActivity(intent)
+                } else {
+                    startService()
+                }
             }
         }
 
@@ -393,7 +400,7 @@ class FragmentCpuModes : Fragment() {
             reStartService()
         }
         dynamic_control_opts.postDelayed({
-            dynamic_control_opts.visibility = if (dynamic_control.isChecked) View.VISIBLE else View.GONE
+            dynamic_control_opts?.visibility = if (dynamic_control.isChecked) View.VISIBLE else View.GONE
         }, 15)
         extreme_performance_on.isChecked = ThermalDisguise().isDisabled()
     }
@@ -419,14 +426,18 @@ class FragmentCpuModes : Fragment() {
 
     private val REQUEST_POWERCFG_FILE = 1
     private val REQUEST_POWERCFG_ONLINE = 2
+    // 是否使用内置的文件选择器
+    private var useInnerFileChooser = false
     private fun chooseLocalConfig() {
         val action = REQUEST_POWERCFG_FILE
-        if (Build.VERSION.SDK_INT >= 30) {
+        if (Build.VERSION.SDK_INT >= 30 && !Environment.isExternalStorageManager()) {
+            useInnerFileChooser = false
             val intent = Intent(Intent.ACTION_GET_CONTENT)
             intent.type = "*/*"
             intent.addCategory(Intent.CATEGORY_OPENABLE)
             startActivityForResult(intent, action)
         } else {
+            useInnerFileChooser = true
             try {
                 val intent = Intent(this.context, ActivityFileSelector::class.java)
                 intent.putExtra("extension", "sh")
@@ -441,7 +452,8 @@ class FragmentCpuModes : Fragment() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_POWERCFG_FILE) {
             if (resultCode == Activity.RESULT_OK && data != null) {
-                if (Build.VERSION.SDK_INT >= 30) {
+                // 安卓原生文件选择器
+                if (Build.VERSION.SDK_INT >= 30 && !useInnerFileChooser) {
                     val absPath = FilePathResolver().getPath(this.activity, data.data)
                     if (absPath != null) {
                         if (absPath.endsWith(".sh")) {
@@ -452,7 +464,7 @@ class FragmentCpuModes : Fragment() {
                     } else {
                         Toast.makeText(context, "所选的文件没找到！", Toast.LENGTH_SHORT).show()
                     }
-                } else {
+                } else { // Scene内置文件选择器
                     if (data.extras?.containsKey("file") != true) {
                         return
                     }

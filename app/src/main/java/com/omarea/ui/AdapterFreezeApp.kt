@@ -1,11 +1,10 @@
 package com.omarea.ui
 
 import android.content.Context
-import android.graphics.drawable.Drawable
-import android.util.LruCache
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.core.content.ContextCompat
 import com.omarea.common.ui.OverScrollGridView
 import com.omarea.library.basic.AppInfoLoader
 import com.omarea.model.AppInfo
@@ -15,9 +14,6 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.util.*
 
-/**
- * Created by Hello on 2018/01/26.
- */
 class AdapterFreezeApp(private val context: Context, private var apps: ArrayList<AppInfo>) : BaseAdapter(), Filterable {
     private val appIconLoader = AppInfoLoader(context)
     private var filter: Filter? = null
@@ -25,7 +21,6 @@ class AdapterFreezeApp(private val context: Context, private var apps: ArrayList
     private val mLock = Any()
 
     private class ArrayFilter(private var adapter: AdapterFreezeApp) : Filter() {
-
         override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
             adapter.filterApps = results!!.values as ArrayList<AppInfo>
             if (results.count > 0) {
@@ -36,7 +31,7 @@ class AdapterFreezeApp(private val context: Context, private var apps: ArrayList
         }
 
         override fun performFiltering(constraint: CharSequence?): FilterResults {
-            val results = Filter.FilterResults()
+            val results = FilterResults()
             val prefix: String = if (constraint == null) "" else constraint.toString()
 
             if (prefix.isEmpty()) {
@@ -47,7 +42,7 @@ class AdapterFreezeApp(private val context: Context, private var apps: ArrayList
                 results.values = list
                 results.count = list.size
             } else {
-                val prefixString = prefix.toLowerCase()
+                val prefixString = prefix.toLowerCase(Locale.getDefault())
 
                 val values: ArrayList<AppInfo>
                 synchronized(adapter.mLock) {
@@ -59,16 +54,14 @@ class AdapterFreezeApp(private val context: Context, private var apps: ArrayList
 
                 for (i in 0 until count) {
                     val value = values[i]
-                    val valueText = value.appName!!.toString().toLowerCase()
+                    val valueText = value.appName.toLowerCase(Locale.getDefault())
 
-                    // First match against the whole, non-splitted value
                     if (valueText.contains(prefixString)) {
                         newValues.add(value)
                     } else {
                         val words = valueText.split(" ".toRegex()).dropLastWhile({ it.isEmpty() }).toTypedArray()
                         val wordCount = words.size
 
-                        // Start at index 0, in case valueText starts with space(s)
                         for (k in 0 until wordCount) {
                             if (words[k].contains(prefixString)) {
                                 newValues.add(value)
@@ -93,18 +86,24 @@ class AdapterFreezeApp(private val context: Context, private var apps: ArrayList
         return filter!!
     }
 
-    private val iconCaches = LruCache<String, Drawable>(100)
-
     init {
         filterApps.sortBy { !it.enabled || it.suspended }
     }
 
     override fun getCount(): Int {
-        return filterApps.size
+        return filterApps.size + 1
     }
 
     override fun getItem(position: Int): AppInfo {
-        return filterApps[position]
+        if (position < filterApps.size) {
+            return filterApps[position]
+        } else {
+            // 虚拟一个listItem 用于显示列表末尾的添加按钮
+            return AppInfo.getItem().apply {
+                packageName = "plus"
+                appName = "添加应用"
+            }
+        }
     }
 
     override fun getItemId(position: Int): Long {
@@ -122,12 +121,12 @@ class AdapterFreezeApp(private val context: Context, private var apps: ArrayList
 
     fun updateRow(position: Int, listView: OverScrollGridView, appInfo: AppInfo) {
         try {
-            val visibleFirstPosi = listView.firstVisiblePosition
-            val visibleLastPosi = listView.lastVisiblePosition
+            val visibleFirst = listView.firstVisiblePosition
+            val visibleLast = listView.lastVisiblePosition
 
-            if (position >= visibleFirstPosi && position <= visibleLastPosi) {
+            if (position in visibleFirst..visibleLast) {
                 filterApps[position] = appInfo
-                val view = listView.getChildAt(position - visibleFirstPosi)
+                val view = listView.getChildAt(position - visibleFirst)
                 updateRow(position, view)
             }
         } catch (ex: Exception) {
@@ -142,11 +141,13 @@ class AdapterFreezeApp(private val context: Context, private var apps: ArrayList
         viewHolder.packageName = packageName
         viewHolder.itemTitle = convertView.findViewById(R.id.ItemTitle)
         viewHolder.imgView = convertView.findViewById(R.id.ItemIcon)
-        viewHolder.imgView!!.setTag(getItem(position).packageName)
-        viewHolder.itemTitle!!.text = item.appName.toString()
+        viewHolder.imgView!!.tag = getItem(position).packageName
+        viewHolder.itemTitle!!.text = item.appName
         viewHolder.imgView!!.alpha = if (item.enabled && !item.suspended) 1f else 0.3f
 
-        if (item.icon == null) {
+        if (item.packageName == "plus") {
+            viewHolder.imgView!!.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.icon_add_app))
+        } else {
             viewHolder.run {
                 GlobalScope.launch(Dispatchers.Main) {
                     val icon = appIconLoader.loadIcon(item.packageName).await()
@@ -156,8 +157,6 @@ class AdapterFreezeApp(private val context: Context, private var apps: ArrayList
                     }
                 }
             }
-        } else {
-            viewHolder.imgView!!.setImageDrawable(item.icon)
         }
     }
 

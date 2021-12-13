@@ -38,19 +38,15 @@ class DialogSingleAppOptions(context: Activity, var app: AppInfo, handler: Handl
     }
 
     private fun loadAppIcon(app: AppInfo): Drawable? {
-        if (app.icon != null) {
-            return app.icon
-        } else {
-            var icon: Drawable? = null
-            try {
-                val installInfo = context.packageManager.getPackageInfo(app.packageName.toString(), 0)
-                icon = installInfo.applicationInfo.loadIcon(context.packageManager)
-                return icon
-            } catch (ex: Exception) {
-            } finally {
-            }
-            return null
+        var icon: Drawable? = null
+        try {
+            val installInfo = context.packageManager.getPackageInfo(app.packageName.toString(), 0)
+            icon = installInfo.applicationInfo.loadIcon(context.packageManager)
+            return icon
+        } catch (ex: Exception) {
+        } finally {
         }
+        return null
     }
 
     /**
@@ -219,7 +215,7 @@ class DialogSingleAppOptions(context: Activity, var app: AppInfo, handler: Handl
 
         view.findViewById<View>(R.id.app_install).run {
             setOnClickListener {
-                restoreAll(apk = true, data = false)
+                restoreAll(apk = true)
             }
         }
         val dataExists = backupDataExists(app.packageName)
@@ -227,14 +223,14 @@ class DialogSingleAppOptions(context: Activity, var app: AppInfo, handler: Handl
             visibility = if (dataExists) View.VISIBLE else View.GONE
             setOnClickListener {
                 dialog.dismiss()
-                restoreAll(apk = true, data = true)
+                restoreAll(apk = true)
             }
         }
         view.findViewById<View>(R.id.app_restore_data).run {
             visibility = if (dataExists) View.VISIBLE else View.GONE
             setOnClickListener {
                 dialog.dismiss()
-                restoreAll(apk = false, data = true)
+                restoreAll(apk = false)
             }
         }
         view.findViewById<View>(R.id.app_copy_name).setOnClickListener {

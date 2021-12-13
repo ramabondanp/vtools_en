@@ -3,6 +3,12 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
+    applicationVariants.all { variant ->
+        variant.outputs.all {
+            def fileName = "Scene" + "_${defaultConfig.versionName}_${defaultConfig.versionCode}_" + variant.name + ".apk"
+            outputFileName = fileName
+        }
+    }
     dataBinding {
         enabled =true
     }
@@ -21,7 +27,7 @@ android {
         applicationId "com.omarea.vtools"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 202111131
+        versionCode 202111261
         versionName "5.0.0 Alpha"
         externalNativeBuild {
             cmake {
@@ -102,6 +108,8 @@ dependencies {
     //        }
     //    }
     // implementation files('libs/crimson.jar')
+
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
 }
 repositories {
     mavenCentral()
