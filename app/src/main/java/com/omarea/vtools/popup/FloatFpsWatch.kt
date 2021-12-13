@@ -25,7 +25,7 @@ import com.omarea.data.GlobalStatus
 import com.omarea.data.IEventReceiver
 import com.omarea.library.shell.CpuFrequencyUtils
 import com.omarea.library.shell.CpuLoadUtils
-import com.omarea.library.shell.FpsUtils
+import com.omarea.library.shell.SurfaceFlingerFpsUtils2
 import com.omarea.library.shell.GpuUtils
 import com.omarea.scene_mode.ModeSwitcher
 import com.omarea.store.FpsWatchStore
@@ -169,13 +169,13 @@ public class FloatFpsWatch(private val mContext: Context) {
 
     private var myHandler = Handler(Looper.getMainLooper())
 
-    private val fpsUtils = FpsUtils(KeepShellPublic.getInstance("fps-recorder", true))
+    private val fpsUtils = SurfaceFlingerFpsUtils2()
     private val cpu = CpuLoadUtils()
     private var coreCount = -1
     private var clusters = ArrayList<Array<String>>()
 
     private fun updateInfo() {
-        val fps = fpsUtils.fps
+        val fps = fpsUtils.getFps()
         val gpuLoad = GpuUtils.getGpuLoad()
         if (coreCount < 1) {
             coreCount = CpuFrequencyUtils().coreCount
