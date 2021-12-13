@@ -81,16 +81,17 @@ function ged_render() {
 }
 
 function gpu_render() {
-    local freqs=`cat /proc/gpufreq/gpufreq_opp_dump | awk '{printf $4 "\n"}' | cut -f1 -d ","`
+    cat /proc/gpufreq/gpufreq_opp_dump | awk '{printf $4 "\n"}' | cut -f1 -d "," > gpu_freqs
     local get_shell="cat /proc/gpufreq/gpufreq_opp_freq | grep freq | awk '{printf \$4 \"\\\\n\"}' | cut -f1 -d ','"
 
     echo "      <picker title=\"Fixed Frequency\" shell=\"hidden\" reload=\"@GPU\">"
     echo "          <options>"
     echo "            <option value=\"0\">Not fixed</option>"
-    for freq in $freqs
+    while read -r freq
     do
-      echo "            <option value=\"$freq\">${freq}Khz</option>"
-    done
+        local freq_mhz=$(($freq / 1000))
+        echo "            <option value=\"${freq}\">${freq_mhz} MHz</option>"
+    done < gpu_freqs
     echo "          </options>"
     echo "          <get>$get_shell</get>"
     echo "          <set>$import_utils gpu_freq</set>"
@@ -139,9 +140,9 @@ xml_start
         ppm_render
     group_end
 
-    group_start 'GED'
-         ged_render
-    group_end
+    #group_start 'GED'
+    #     ged_render
+    #group_end
 
 if [[ -f /proc/gpufreq/gpufreq_opp_freq ]]
 then
