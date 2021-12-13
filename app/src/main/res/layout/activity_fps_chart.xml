@@ -122,7 +122,7 @@
                 <TextView
                     android:visibility="gone"
                     android:layout_marginBottom="8dp"
-                    android:text="无帧率记录"
+                    android:text="No frame rate recording"
                     android:id="@+id/chart_sessions_empty"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
@@ -138,7 +138,7 @@
                     style="@style/textDefault"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="未选择记录" />
+                    android:text="No record selected" />
 
                 <TextView
                     android:id="@+id/chart_session_time"

@@ -105,7 +105,7 @@ class ActivityFpsChart : ActivityBase(), AdapterSessions.OnItemClickListener {
             if (FloatFpsWatch.show != true) {
                 it.rotation = 45f
                 FloatFpsWatch(context).showPopupWindow()
-                DialogHelper.helpInfo(this@ActivityFpsChart, "请进入需要记录帧率的应用，并点击屏幕右上方[绿色]小按钮开始记录帧率！")
+                DialogHelper.helpInfo(this@ActivityFpsChart, "Please enter the app that needs to record the frame rate, and click the small [green] button at the top right of the screen to start recording the frame rate!")
                 /*
                 val serviceState = AccessibleServiceHelper().serviceRunning(context)
                 if (serviceState) {
