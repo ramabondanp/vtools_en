@@ -57,7 +57,7 @@ class ActivityStartSplash : Activity() {
         val btnConfirm = view.findViewById<Button>(R.id.btn_confirm)
         val agreement = view.findViewById<CompoundButton>(R.id.agreement)
         val timer = Timer()
-        var timeout = 30
+        var timeout = 5
         var clickItems = 0
         timer.schedule(object : TimerTask() {
             override fun run() {
@@ -67,7 +67,7 @@ class ActivityStartSplash : Activity() {
                         btnConfirm.text = timeout.toString() + "s"
                     } else {
                         timer.cancel()
-                        btnConfirm.text = "同意继续"
+                        btnConfirm.text = "Agree"
                     }
                 }
             }
@@ -130,7 +130,7 @@ class ActivityStartSplash : Activity() {
 
     private class CheckFileWrite(private val context: ActivityStartSplash) : Runnable {
         override fun run() {
-            context.start_state_text.text = "检查并获取必需权限……"
+            context.start_state_text.text = "Check and obtain required permissions……"
             context.hasRoot = true
 
             context.checkFileWrite(InstallBusybox(context))
@@ -139,7 +139,7 @@ class ActivityStartSplash : Activity() {
 
     private class InstallBusybox(private val context: ActivityStartSplash) : Runnable {
         override fun run() {
-            context.start_state_text.text = "检查Busybox是否安装..."
+            context.start_state_text.text = "Check if Busybox is installed..."
             Busybox(context).forceInstall {
                 context.startToFinish()
             }
