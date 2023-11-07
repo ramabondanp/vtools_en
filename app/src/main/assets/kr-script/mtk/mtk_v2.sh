@@ -136,18 +136,6 @@ gpu_render() {
     if [[ -f $dvfs ]]; then
       switch_hidden "Dynamic Frequency and Voltage Scaling (DVFS)" "cat $dvfs | cut -f2 -d ' '" "echo \$state > $dvfs"
     fi
-
-    if [[ -d '/data/adb/modules/dimensity_hybrid_governor' ]]; then
-    switch_hidden 'GPU Hybrid Tuner (step-down)' 'if [[ $(pidof gpu-scheduler) != "" ]]; then echo 1;fi' "$import_utils dimensity_hybrid_switch"
-    else
-    echo "\
-    <action shell=\"hidden\">\
-        <title>Get GPU Hybrid Tuner (step-down)</title>\
-        <desc>Downloading and using a GPU/DDR auxiliary frequency regulator may reduce power consumption in high-load GPU scenarios, but it doesn't always happen!</desc>\
-        <set>am start -a android.intent.action.VIEW -d https://vtools.oss-cn-beijing.aliyuncs.com/addin/dimensity_hybrid_governor.zip</set>\
-        <summary sh=\"if [[ '$(pidof gpu-scheduler)' != '' ]]; then echo '正在运行中';fi\" />\
-    </action>"
-    fi
 }
 
 common_render() {
