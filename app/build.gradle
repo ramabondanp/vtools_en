@@ -5,7 +5,7 @@ apply plugin: 'kotlin-android-extensions'
 android {
     applicationVariants.all { variant ->
         variant.outputs.all {
-            def fileName = "Scene" + "_${defaultConfig.versionName}_${defaultConfig.versionCode}_" + variant.name + ".apk"
+            def fileName = "Scene" + "_${defaultConfig.versionName}_r${defaultConfig.versionCode}_" + variant.name + ".apk"
             outputFileName = fileName
         }
     }
@@ -16,19 +16,19 @@ android {
         omarea_Signing {
             keyAlias 'genom'
             keyPassword 'asdf1234'
-            storeFile file('/root/work/vtools_en/genom.keystore')
+            storeFile file('genom.keystore')
             storePassword 'asdf1234'
         }
     }
     compileSdkVersion 30
     buildToolsVersion '29.0.2'
     defaultConfig {
-        resConfigs "zh"
+        resConfigs "en"
         applicationId "com.omarea.vtools"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 202111261
-        versionName "5.0.0 Alpha"
+        versionCode generateVersionCode()
+        versionName "5.0_OpenSource"
         externalNativeBuild {
             cmake {
                 cppFlags ""
@@ -45,7 +45,7 @@ android {
             zipAlignEnabled true
             debuggable false
             jniDebuggable = false
-            // signingConfig signingConfigs.omarea_Signing
+            signingConfig signingConfigs.omarea_Signing
         }
         release_mini {
             shrinkResources true
@@ -113,4 +113,11 @@ dependencies {
 }
 repositories {
     mavenCentral()
+}
+
+def generateVersionCode() {
+    def result = "git rev-list HEAD --count".execute().text.trim() //unix
+    if(result.empty) result = "PowerShell -Command git rev-list HEAD --count".execute().text.trim() //windows
+    if(result.empty) throw new RuntimeException("Could not generate versioncode on this platform? Cmd output: ${result.text}")
+    return result.toInteger()
 }
