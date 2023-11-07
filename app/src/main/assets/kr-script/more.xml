@@ -66,6 +66,11 @@
             config-sh="file:///android_asset/kr-script/mtk/mtk.sh"
             desc="MTK/Tenguiz exclusive option" title="MTK/Tenguiz exclusive"
             visible="run common/mtk_ppm.sh" />
+        <page
+            id="page-mtk-v2"
+            config-sh="file:///android_asset/kr-script/mtk/mtk_v2.sh"
+            desc="MTK/Tenguiz exclusive option" title="MTK/Tenguiz exclusive"
+            visible="run common/mtk_v2.sh" />
     </group>
 
     <group>
