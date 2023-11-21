@@ -36,7 +36,7 @@
     
 
     <string name="app_name">Scene5</string>
-    <string name="app_name_short">Scene5 Alpha</string>
+    <string name="app_name_short">Scene5 OpenSource</string>
     <string name="app_name_mode_switch">Scene-Quick switch mode</string>
 
     <string name="backup_action_title_boot">Export Boot</string>
