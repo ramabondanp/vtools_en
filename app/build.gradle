@@ -5,7 +5,7 @@ apply plugin: 'kotlin-android-extensions'
 android {
     applicationVariants.all { variant ->
         variant.outputs.all {
-            def fileName = "Scene" + "_${defaultConfig.versionName}_r${defaultConfig.versionCode}_" + variant.name + ".apk"
+            def fileName = "Scene" + "_5.0_OpenSource_r${defaultConfig.versionCode}_" + variant.name + ".apk"
             outputFileName = fileName
         }
     }
@@ -28,7 +28,7 @@ android {
         minSdkVersion 23
         targetSdkVersion 29
         versionCode generateVersionCode()
-        versionName "5.0_OpenSource"
+        versionName "r" + generateVersionCode()
         externalNativeBuild {
             cmake {
                 cppFlags ""
