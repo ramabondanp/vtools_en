@@ -53,6 +53,11 @@
 
     <group>
         <page
+            id="page-infinix"
+            config-sh="file:///android_asset/kr-script/infinix/main.sh"
+            desc="Options for Infinix phones" title="Infinix Note 30/Pro Exclusive"
+            visible="run common/infinix_support.sh" />
+        <page
             id="page-xiaomi"
             config="miui/miui.xml"
             desc="Options for MIUI system" title="MIUI Exclusive"
