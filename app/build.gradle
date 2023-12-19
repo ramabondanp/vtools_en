@@ -21,7 +21,6 @@ android {
         }
     }
     compileSdkVersion 30
-    buildToolsVersion '29.0.2'
     defaultConfig {
         resConfigs "en"
         applicationId "com.omarea.vtools"
