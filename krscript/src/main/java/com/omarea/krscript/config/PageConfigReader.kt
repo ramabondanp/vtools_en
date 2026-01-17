@@ -213,9 +213,12 @@ class PageConfigReader {
 
     private var actionParamInfos: ArrayList<ActionParamInfo>? = null
     var actionParamInfo: ActionParamInfo? = null
+    private fun resolveText(raw: String): String {
+        return resourceStringResolver.resolveRow(raw)
+    }
     private fun tagStartInAction(action: ActionNode, parser: XmlPullParser) {
         if ("title" == parser.name) {
-            action.title = parser.nextText()
+            action.title = resolveText(parser.nextText())
         } else if ("desc" == parser.name) {
             descNode(action, parser)
         } else if ("summary" == parser.name) {
@@ -303,7 +306,7 @@ class PageConfigReader {
                     option.value = attrValue
                 }
             }
-            option.title = parser.nextText()
+            option.title = resolveText(parser.nextText())
             if (option.value == null)
                 option.value = option.title
             actionParamInfo.options!!.add(option)
@@ -327,7 +330,7 @@ class PageConfigReader {
 
     private fun tagStartInPage(node: PageNode, parser: XmlPullParser) {
         when (parser.name) {
-            "title" -> node.title = parser.nextText()
+            "title" -> node.title = resolveText(parser.nextText())
             "desc" -> descNode(node, parser)
             "summary" -> summaryNode(node, parser)
             "resource" -> resourceNode(parser)
@@ -361,7 +364,7 @@ class PageConfigReader {
                             }
                         }
                     }
-                    option.title = parser.nextText()
+                    option.title = resolveText(parser.nextText())
                     if (option.key.isEmpty()) {
                         option.key = option.title
                     }
@@ -377,7 +380,7 @@ class PageConfigReader {
 
     private fun tagStartInSwitch(switchNode: SwitchNode, parser: XmlPullParser) {
         when (parser.name) {
-            "title" -> switchNode.title = parser.nextText()
+            "title" -> switchNode.title = resolveText(parser.nextText())
             "desc" -> descNode(switchNode, parser)
             "summary" -> summaryNode(switchNode, parser)
             "get", "getstate" -> switchNode.getState = parser.nextText()
@@ -541,11 +544,13 @@ class PageConfigReader {
             val attrValue = resourceStringResolver.resolveRow(parser.getAttributeValue(i))
             if (attrName == "su" || attrName == "sh" || attrName == "desc-sh") {
                 nodeInfoBase.descSh = attrValue
-                nodeInfoBase.desc = executeResultRoot(context, nodeInfoBase.descSh)
+                nodeInfoBase.desc = resourceStringResolver.resolveRow(
+                    executeResultRoot(context, nodeInfoBase.descSh)
+                )
             }
         }
         if (nodeInfoBase.desc.isEmpty())
-            nodeInfoBase.desc = parser.nextText()
+            nodeInfoBase.desc = resolveText(parser.nextText())
     }
 
     private fun summaryNode(nodeInfoBase: NodeInfoBase, parser: XmlPullParser) {
@@ -554,11 +559,13 @@ class PageConfigReader {
             val attrValue = resourceStringResolver.resolveRow(parser.getAttributeValue(i))
             if (attrName == "su" || attrName == "sh" || attrName == "summary-sh") {
                 nodeInfoBase.summarySh = attrValue
-                nodeInfoBase.summary = executeResultRoot(context, nodeInfoBase.summarySh)
+                nodeInfoBase.summary = resourceStringResolver.resolveRow(
+                    executeResultRoot(context, nodeInfoBase.summarySh)
+                )
             }
         }
         if (nodeInfoBase.summary.isEmpty())
-            nodeInfoBase.summary = parser.nextText()
+            nodeInfoBase.summary = resolveText(parser.nextText())
     }
 
     private fun resourceNode(parser: XmlPullParser) {
@@ -587,7 +594,7 @@ class PageConfigReader {
 
     private fun tagStartInText(textNode: TextNode, parser: XmlPullParser) {
         if ("title" == parser.name) {
-            textNode.title = parser.nextText()
+            textNode.title = resolveText(parser.nextText())
         } else if ("desc" == parser.name) {
             descNode(textNode, parser)
         } else if ("summary" == parser.name) {
@@ -637,13 +644,13 @@ class PageConfigReader {
             } catch (ex: Exception) {
             }
         }
-        textRow.text = "" + parser.nextText()
+        textRow.text = "" + resolveText(parser.nextText())
         textNode.rows.add(textRow)
     }
 
     private fun tagStartInPicker(pickerNode: PickerNode, parser: XmlPullParser) {
         if ("title" == parser.name) {
-            pickerNode.title = parser.nextText()
+            pickerNode.title = resolveText(parser.nextText())
         } else if ("desc" == parser.name) {
             descNode(pickerNode, parser)
         } else if ("summary" == parser.name) {
@@ -660,7 +667,7 @@ class PageConfigReader {
                     option.value = attrValue
                 }
             }
-            option.title = parser.nextText()
+            option.title = resolveText(parser.nextText())
             if (option.value == null)
                 option.value = option.title
             pickerNode.options!!.add(option)

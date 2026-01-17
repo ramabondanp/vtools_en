@@ -13,6 +13,7 @@ open class ResourceStringResolver(protected val context: Context) {
     // 示例
     // @string/home_shell_01
     private val regex2 = Regex("^@(string|dimen)/[_a-z]+.*", RegexOption.IGNORE_CASE)
+    private val inlineRegex = Regex("@(string|dimen)[:/][A-Za-z0-9_]+", RegexOption.IGNORE_CASE)
 
     fun resolveRow(originRow: String): String {
         val row = originRow.trim()
@@ -47,7 +48,25 @@ open class ResourceStringResolver(protected val context: Context) {
             }
         }
 
-        return originRow
+        val resources = context.resources
+        val replaced = inlineRegex.replace(originRow) { match ->
+            val raw = match.value
+            val separatorIndex = raw.indexOf(':').takeIf { it >= 0 } ?: raw.indexOf('/')
+            val type = raw.substring(1, separatorIndex).toLowerCase(Locale.ENGLISH)
+            val name = raw.substring(separatorIndex + 1)
+            try {
+                val id = resources.getIdentifier(name, type, context.packageName)
+                when (type) {
+                    "string" -> resources.getString(id)
+                    "dimen" -> resources.getDimension(id).toString()
+                    else -> raw
+                }
+            } catch (ex: Exception) {
+                raw
+            }
+        }
+
+        return replaced
     }
 
     fun resolveRows(rows: List<String>): String {

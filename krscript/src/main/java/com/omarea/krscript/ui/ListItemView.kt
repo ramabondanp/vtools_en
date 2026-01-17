@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
+import com.omarea.common.shell.ShellTranslation
 import com.omarea.krscript.R
 import com.omarea.krscript.executor.ScriptEnvironmen
 import com.omarea.krscript.model.NodeInfoBase
@@ -69,12 +70,14 @@ open class ListItemView(private val context: Context,
 
     open fun updateViewByShell() {
         if (config.descSh.isNotEmpty()) {
-            config.desc = ScriptEnvironmen.executeResultRoot(context, config.descSh, config)
+            val result = ScriptEnvironmen.executeResultRoot(context, config.descSh, config)
+            config.desc = ShellTranslation(context).resolveRow(result)
             desc = config.desc
         }
 
         if (config.summarySh.isNotEmpty()) {
-            config.summary = ScriptEnvironmen.executeResultRoot(context, config.summarySh, config)
+            val result = ScriptEnvironmen.executeResultRoot(context, config.summarySh, config)
+            config.summary = ShellTranslation(context).resolveRow(result)
             summary = config.summary
         }
     }
