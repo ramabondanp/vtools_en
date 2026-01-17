@@ -3,10 +3,10 @@
 pm_cmd=""
 if [[ "$state" = "1" ]]; then
     pm_cmd="enable"
-    echo '√√  Enable Google Service Suite'
+    echo '√√  Enabled  Google Play services suite'
 else
     pm_cmd="disable"
-    echo '××  Disable Google Service Suite'
+    echo '××  Disabled  Google Play services suite'
 fi
 
 echo ''

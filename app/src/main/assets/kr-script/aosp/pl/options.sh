@@ -1,6 +1,6 @@
 #!/system/bin/sh
 
-echo 'null|默认'
+echo 'null|Default'
 echo '5|5%'
 echo '9|10%'
 echo '14|15%'

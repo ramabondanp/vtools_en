@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<items>
+    <resource dir="file:///android_asset/kr-script/flyme" />
+
+    <group>
+        <switch shell="hidden"
+            title="[Magisk] Extreme GT" desc="@string:extreme_gt_flyme_desc">
+            <set>
+                if [[ $state == 1 ]]; then
+                run extreme_gt_flyme/setup.sh
+                else
+                run extreme_gt_flyme/uninstall.sh
+                fi
+            </set>
+            <get>
+                module=/data/adb/modules/extreme_gt_flyme
+                if [[ -d $module ]] &amp;&amp; [[ ! -f $module/disable ]] &amp;&amp; [[ ! -f $module/remove ]]; then
+                  echo 1
+                fi
+            </get>
+        </switch>
+    </group>
+</items>

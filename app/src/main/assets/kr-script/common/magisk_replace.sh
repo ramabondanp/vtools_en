@@ -3,7 +3,7 @@
 source ./kr-script/common/magisk.sh
 source ./kr-script/common/mount.sh
 
-# 替换
+# Replace
 function _replace_file() {
     local resource="$1"
     local output="$2"
@@ -12,19 +12,19 @@ function _replace_file() {
 
     if [[ "$mg" = 1 ]]
     then
-        echo "Replace by Magisk $output"
+        echo "Replace via Magisk: $output"
         magisk_replace_file $resource $output
         success="$?"
         if [[ "$success" = 1 ]]; then
-            echo 'Operation successful, please restart your phone!'
+            echo 'Operation successful. Please reboot the phone!'
         else
-            echo 'Operation failure...' 1>&2
+            echo 'Operation failed...' 1>&2
         fi
     else
         echo "Replace $output"
         mount_all
 
-        # 备份资源
+        # Backup resource
         if [[ -f "$output" ]] && [[ ! -f "$output.bak" ]]; then
             cp "$output" "$output.bak"
         fi
@@ -34,7 +34,7 @@ function _replace_file() {
     fi
 }
 
-# 还原
+# Restore
 function _restore_file() {
     local resource="$1"
     local output="$2"
@@ -42,14 +42,14 @@ function _restore_file() {
     module_installed
     mg="$?"
 
-    # 是否安装了magisk模块
+    # Whether a Magisk module is installed
     if [[ "$mg" = 1 ]]
     then
         magisk_file_exist "$output"
         local file_in_magisk="$?"
 
         if [[ "$file_in_magisk" = "1" ]]; then
-            echo "Remove from Magisk module $output"
+            echo "Remove from Magisk module: $output"
             magisk_cancel_replace $output
             success="$?"
             if [[ "$success" = 1 ]]; then
@@ -59,19 +59,19 @@ function _restore_file() {
 
                     if [[ "$md5" = "$verify" ]]
                     then
-                        echo 'Please restart your phone to make the changes take effect!' 1>&2
+                        echo 'Please reboot the phone for changes to take effect!' 1>&2
                     else
-                        echo 'Please restart your phone to make the changes take effect!'
+                        echo 'Please reboot the phone for changes to take effect!'
                     fi
                 else
                     echo 'Operation completed...'
                 fi
             else
-                echo 'Operation failure...' 1>&2
+                echo 'Operation failed...' 1>&2
             fi
         else
             echo "Restore $output"
-            # 物理还原文件
+            # Restore file physically
             mount_all
             if [[ -f "$output.bak" ]]
             then
@@ -81,9 +81,9 @@ function _restore_file() {
         fi
     else
         echo "Restore $output"
-        # 移除副本
+        # Remove copy
         rm -f $output
-        # 物理还原文件
+        # Restore file physically
         mount_all
         if [[ -f "$output.bak" ]]
         then
@@ -93,9 +93,9 @@ function _restore_file() {
     fi
 }
 
-# 混合模式替换文件(如果有magisk就用magisk，否则就用root直接替换系统文件)
+# Replace file in mixed mode (use Magisk if available, otherwise root replaces system file directly)
 # mixture_hook_file "./kr-script/miui/resources/com.android.systemui" "/system/media/theme/default/com.android.systemui" "$mode"
-# $mode 可是 1 或者 0，1表示替换，0表示取消替换
+# $mode can be 1 or 0: 1 = replace, 0 = cancel replace
 function mixture_hook_file()
 {
     local resource="$1"
@@ -110,34 +110,34 @@ function mixture_hook_file()
     fi
 }
 
-# 是否已用混合模式替换了文件(如果有magisk就用magisk，否则就用root直接替换系统文件)
+# Whether the file has been replaced in mixed mode (use Magisk if available, otherwise root replaces system file directly)
 # file_mixture_hooked "./kr-script/miui/resources/com.android.systemui" "/system/media/theme/default/com.android.systemui"
-# @return 【1】或【0】
+# @return 1 or 0
 function file_mixture_hooked()
 {
     local resource="$1"
     local output="$2"
-    # 检查用于替换的资源文件是否存在
+    # Check whether the resource file exists
     if [[ ! -f $resource ]]
     then
         return 0
         exit 0
     fi
 
-    # 是否已经在magisk模块里替换文件
+    # Whether the file has been replaced in the Magisk module
     magisk_file_exist $output
     exist="$?"
 
-    # magisk模块里的替换文件是否和预期相同
+    # Whether the Magisk module replacement matches the expected file
     magisk_file_equals $resource $output
     equals="$?"
 
-    # 验证是否已经在Magisk中替换
+    # Verify whether it is replaced in Magisk
     if [[ $exist = 1 ]] && [[ $equals = 1 ]]
     then
         return 1
     else
-        # 判断是否已经在System里存在替换文件
+        # Check whether a replacement exists in System
         if [[ -f $output ]]
         then
             local md5=`busybox md5sum $resource | cut -f1 -d ' '`

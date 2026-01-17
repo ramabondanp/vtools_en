@@ -1,8 +1,8 @@
 #!/system/bin/sh
 source ./kr-script/common/mount.sh
 
-# 从build.prop文件读取prop的值是否为1
-function cat_prop_is_1()
+# Read whether the prop value is 1 from build.prop
+cat_prop_is_1()
 {
     prop="$1"
     g="^$prop="
@@ -37,8 +37,8 @@ function cat_prop_is_1()
     echo 0
 }
 
-# 从build.prop文件读取prop的值是否为0
-function cat_prop_is_0()
+# Read whether the prop value is 0 from build.prop
+cat_prop_is_0()
 {
     prop="$1"
     g="^$prop="
@@ -72,19 +72,19 @@ function cat_prop_is_0()
     echo 0
 }
 
-function magisk_set_system_prop() {
+magisk_set_system_prop() {
     if [[ -d "$MAGISK_PATH" ]];
     then
-        echo "You have already installed Magisk, this modification will be done through the operation"
+        echo "Magisk detected; this change will be applied through Magisk"
         $BUSYBOX sed -i "/$1=/"d "$MAGISK_PATH/system.prop"
-        $BUSYBOX echo "$1=$2" >> "$MAGISK_PATH/system.prop"
-        setprop $1 $2 2> /dev/null
+        $BUSYBOX echo -e "\n$1=$2" >> "$MAGISK_PATH/system.prop"
+        setprop "$1" "$2" 2> /dev/null
         return 1
     fi;
     return 0
 }
 
-function set_system_prop() {
+set_system_prop() {
     local prop=$1
     local state=$2
 
@@ -94,24 +94,24 @@ function set_system_prop() {
         local path="/vendor/build.prop"
     fi
 
-    echo 'To use this function, you need to unlock the system partition, otherwise the modification is invalid!'
-    echo 'The system comes with ROOT may not be able to use this function'
+    echo 'To use this feature, the system partition must be unlocked, otherwise changes will be ineffective.'
+    echo 'The built-in system root may not support this feature.'
 
-    echo 'Step1.Mount/system rw'
+    echo 'Step1. Mount /system as read-write'
     mount_all
 
     $BUSYBOX sed "/$prop=/"d $path > /cache/build.prop
-    $BUSYBOX echo "$prop=$state" >> /cache/build.prop
-    echo "Step2.修改$prop=$state"
+    $BUSYBOX echo  -e "\n$prop=$state" >> /cache/build.prop
+    echo "Step2. Update $prop=$state"
 
-    echo 'Step3.Write to file'
+    echo 'Step3. Write file'
     cp /cache/build.prop $path
     chmod 0755 $path
 
-    echo 'Step4.Delete temporary files'
+    echo 'Step4. Remove temporary file'
     rm /cache/build.prop
     sync
 
     echo ''
-    echo 'Effective after reboot!'
+    echo 'Takes effect after reboot!'
 }

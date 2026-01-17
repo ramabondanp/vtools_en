@@ -1,19 +1,30 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <items>
     <resource dir="file:///android_asset/kr-script/miui" />
-    <group title="interface" visible="getprop persist.vtools.ext_all">
-        <switch>
-            <title>【MIUI 10/11】Hide the navigation bar</title>
-            <desc>Hide the navigation bar by modifying the height of the navigation bar through theme resources, which is convenient for using third-party gestures</desc>
+    <group title="UI">
+        <switch max-sdk="32">
+            <title>MIUI 10/11/12 Hide Navigation Bar</title>
+            <desc>Hide the navigation bar by changing its height via theme resources to enable third-party gestures</desc>
             <get>run miui_hide_nav_get.sh</get>
             <set>run miui_hide_nav_set.sh</set>
         </switch>
+        <action
+            visible="run edge/support.sh"
+            shell="hidden">
+            <title>Edge Touch Protection</title>
+            <summary sh="run edge/summary.sh" />
+            <param
+                title="Region Size (%)"
+                desc="Adjustable range in system settings is 20%~100%"
+                min="0" max="200" name="level" value-sh="run edge/get.sh" type="seekbar" />
+            <set>run edge/set.sh</set>
+        </action>
     </group>
 
-    <group title="One-handed mode">
+    <group title="One-Handed Mode" visible="if [[ $(getprop ro.build.version.sdk) -lt 31 ]]; then echo 1; fi">
         <switch shell="hidden" id="@node-handy-switch">
-            <title>One-handed mode</title>
-            <desc>Whether to enable the one-handed mode function</desc>
+            <title>One-Handed Mode</title>
+            <desc>Enable one-handed mode</desc>
             <get>settings get system handy_mode_state</get>
             <set>
                 settings put system handy_mode_state 0
@@ -21,25 +32,25 @@
             </set>
         </switch>
         <picker shell="hidden">
-            <title>One-handed mode - size</title>
+            <title>One-Handed Mode - Size</title>
             <get>settings get system handy_mode_size</get>
             <set>settings put system handy_mode_size $state</set>
             <options>
-                <option value="3.0">3.0inch</option>
-                <option value="3.5">3.5inch</option>
-                <option value="4.0">4.0inch</option>
-                <option value="4.5">4.5inch</option>
-                <option value="5.0">5.0inch</option>
-                <option value="5.2">5.2inch</option>
-                <option value="5.5">5.5inch</option>
-                <option value="5.7">5.7inch</option>
+                <option value="3.0">3.0 in</option>
+                <option value="3.5">3.5 in</option>
+                <option value="4.0">4.0 in</option>
+                <option value="4.5">4.5 in</option>
+                <option value="5.0">5.0 in</option>
+                <option value="5.2">5.2 in</option>
+                <option value="5.5">5.5 in</option>
+                <option value="5.7">5.7 in</option>
             </options>
         </picker>
         <picker shell="hidden" value="1" reload="@node-handy-switch">
-            <title>Switching the display mode</title>
+            <title>Switch Display Mode</title>
             <options>
                 <option value="1">Left hand</option>
-                <option value="2">Right Hand</option>
+                <option value="2">Right hand</option>
             </options>
             <set>
                 settings put system handy_mode_state 0
@@ -47,28 +58,17 @@
                 am broadcast -a miui.action.handymode.changemode --ei mode $state
             </set>
         </picker>
-        <action
-            visible="run edge/support.sh"
-            shell="hidden">
-            <title>Edge anti-touch</title>
-            <summary sh="run edge/summary.sh" />
-            <param
-                title="Area size(%)"
-                desc="The adjustable range in the system settings is 20%~100%"
-                min="0" max="200" name="level" value-sh="run edge/get.sh" type="seekbar" />
-            <set>run edge/set.sh</set>
-        </action>
     </group>
 
     <group title="Hardware">
         <action
             visible="run haptic/support.sh"
             shell="hidden">
-            <title>Vibration Feedback</title>
+            <title>Haptic Feedback</title>
             <summary sh="run haptic/summary.sh" />
             <param
-                title="Vibration strength(%)"
-                desc="More than 150% may have no significant effect"
+                title="Haptic Strength (%)"
+                desc="Above 150% may have no noticeable effect"
                 min="0" max="400" name="level" value-sh="run haptic/get.sh" type="seekbar" />
             <set>run haptic/set.sh</set>
         </action>
@@ -76,43 +76,39 @@
             visible="run ai_key/support.sh"
             options-sh="run ai_key/options.sh"
             shell="hidden">
-            <title>AI key events</title>
+            <title>AI Key Action</title>
             <summary sh="run ai_key/summary.sh" />
             <get>run ai_key/get.sh</get>
             <set>run ai_key/set.sh</set>
         </picker>
     </group>
 
-    <group title="Temp control">
-        <picker
-            visible="run thermal_conf/support.sh"
-            title="Temp ctrl config switch" desc="Replace the temperature control to the system directory by Magisk module (need to reboot the phone to take effect), suitable for 710|730(g)|835|845|855(plus), Tiangui 820 series models"
-            options-sh="run thermal_conf/options.sh">
-            <summary sh="run thermal_conf/summary.sh" />
-            <get>run thermal_conf/current.sh</get>
-            <set>run thermal_conf/config.sh</set>
-        </picker>
-        <picker
-            id="mi-thermal"
-            visible="run thermal_conf2/support.sh"
-            title="Temp ctrl config switch（2）" desc="(Replace the temperature control to /data/vendor/thermal, no need to reboot the phone to take effect, suitable for Snapdragon 855, 865(plus), 870, 888 models)"
-            options-sh="run thermal_conf2/options.sh">
-            <summary sh="run thermal_conf2/summary.sh" />
-            <get>run thermal_conf2/current.sh</get>
-            <set>run thermal_conf2/config.sh</set>
-        </picker>
+    <group title="Thermal" id="thermal">
+        <page
+            id="miui-thermal"
+            config="miui-thermal.xml"
+            desc="Change thermal and FPS lock configs" title="Thermal &amp; FPS Lock" />
     </group>
 
-    <group title="Function">
-        <switch id="miui_update" visible="getprop persist.vtools.ext_all">
+    <group title="Features">
+        <action shell="hidden">
+            <title>Enable USB Install</title>
+            <desc>Skip SIM verification and force-enable USB install and USB security settings</desc>
+            <set>
+                setprop presist.security.adbinput 1
+                setprop presist.fastboot.enable 1
+                setprop persist.security.adbinput 1
+            </set>
+        </action>
+        <switch id="miui_update">
             <title>[MIUI10] Online Update Check</title>
-            <desc>Turn off this switch to block online update checking</desc>
+            <desc>Turn off to block online update checks</desc>
             <get>run miui_update_get.sh</get>
             <set>run miui_update_set.sh</set>
         </switch>
         <switch shell="hidden">
-            <title>[MIUI11] Camera Lab function</title>
-            <desc>Turn on the lab function settings in the camera settings screen</desc>
+            <title>[MIUI11] Camera Lab Features</title>
+            <desc>Enable Lab feature settings in the camera app</desc>
             <get>
                 if [[ -e /sdcard/DCIM/Camera/Lab_options_visible ]]; then
                     echo 1

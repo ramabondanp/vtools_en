@@ -4,7 +4,7 @@
 # pm query-activities --brief -a android.intent.action.MAIN -c android.intent.category.HOME
 # pm set-home-activity com.google.android.apps.nexuslauncher/.NexusLauncherActivity  --user 0
 
-# 终止所有可能在运行的桌面程序
+# Stop all running launcher apps
 launchers=$(pm query-activities --brief -a android.intent.action.MAIN -c android.intent.category.HOME | grep '/')
 for launcher in $launchers ; do
     packageName=`echo $launcher | cut -f1 -d '/'`
@@ -12,7 +12,7 @@ for launcher in $launchers ; do
     killall -9 $packageName 2>/dev/null
 done
 
-# 安全中心之类的东西
+# Security center and similar apps
 security_apps="
 com.miui.securitycenter
 com.miui.guardprovider
@@ -28,12 +28,12 @@ do
 done
 
 
-# 切换桌面
+# Switch launcher
 activity="$state"
 if [[ "$activity" != "" ]]; then
-    echo "Switching the desktop to [$activity]"
+    echo "Switch launcher to [$activity]"
     pm set-home-activity $activity --user ${ANDROID_UID}
 fi
 
-# 模拟home键 返回桌面
+# Simulate Home key to return to launcher
 input keyevent 3

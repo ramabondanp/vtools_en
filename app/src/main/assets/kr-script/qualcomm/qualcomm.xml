@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<items>
+    <resource dir="file:///android_asset/kr-script/qualcomm" />
+
+    <group>
+        <switch confirm="true" visible=". ./kr-script/qualcomm/msm_booster_support.sh">
+            <title>Performance Boost Config</title>
+            <desc>@string:kr_msm_perf_boost_desc</desc>
+            <get>. ./kr-script/qualcomm/msm_booster_get.sh</get>
+            <set>. ./kr-script/qualcomm/msm_booster_set.sh</set>
+        </switch>
+        <switch confirm="true" visible=". ./kr-script/qualcomm/msm_perfd_support.sh">
+            <title>Perfd</title>
+            <desc>@string:kr_msm_perf_boost_desc</desc>
+            <get>. ./kr-script/qualcomm/msm_perfd_get.sh</get>
+            <set>. ./kr-script/qualcomm/msm_perfd_set.sh</set>
+        </switch>
+    </group>
+
+    <group title="DDR" id="DDR" visible="run ddr.sh visible">
+        <picker reload="DDR" options-sh="run ddr.sh options" shell="hidden">
+            <title>Max Freq</title>
+            <get>run ddr.sh get_max_freq</get>
+            <set>run ddr.sh set_max_freq</set>
+            <summary sh="run ddr.sh get_max_freq" />
+        </picker>
+        <picker reload="DDR" options-sh="run ddr.sh options" shell="hidden">
+            <title>Min Freq</title>
+            <get>run ddr.sh get_min_freq</get>
+            <set>run ddr.sh set_min_freq</set>
+            <summary sh="run ddr.sh get_min_freq" />
+        </picker>
+        <picker reload="DDR" options-sh="run ddr.sh options" shell="hidden">
+            <title>Boost Freq</title>
+            <get>run ddr.sh get_boost_freq</get>
+            <set>run ddr.sh set_boost_freq</set>
+            <summary sh="run ddr.sh get_boost_freq" />
+        </picker>
+        <picker options-sh="run ddr.sh options_and_0" shell="hidden"
+            exist="/dev/scene/debug/qcom_aoss/ddr_frequency_mhz">
+            <title>Fixed Freq</title>
+            <get>run ddr.sh get_ddr_frequency_mhz</get>
+            <set>run ddr.sh set_ddr_frequency_mhz</set>
+            <summary sh="run ddr.sh get_ddr_frequency_mhz" />
+        </picker>
+    </group>
+
+    <group title="DDRQOS" id="DDRQOS" visible="run ddrqos.sh visible">
+        <picker reload="DDRQOS" options-sh="run ddrqos.sh options" shell="hidden">
+            <title>Max Freq</title>
+            <get>run ddrqos.sh get_max_freq</get>
+            <set>run ddrqos.sh set_max_freq</set>
+            <summary sh="run ddrqos.sh get_max_freq" />
+        </picker>
+        <picker reload="DDRQOS" options-sh="run ddrqos.sh options" shell="hidden">
+            <title>Min Freq</title>
+            <get>run ddrqos.sh get_min_freq</get>
+            <set>run ddrqos.sh set_min_freq</set>
+            <summary sh="run ddrqos.sh get_min_freq" />
+        </picker>
+        <picker reload="DDRQOS" options-sh="run ddrqos.sh options" shell="hidden">
+            <title>Boost Freq</title>
+            <get>run ddrqos.sh get_boost_freq</get>
+            <set>run ddrqos.sh set_boost_freq</set>
+            <summary sh="run ddrqos.sh get_boost_freq" />
+        </picker>
+    </group>
+
+    <group title="L3" id="L3" visible="run l3.sh visible">
+        <picker reload="L3" options-sh="run l3.sh options" shell="hidden">
+            <title>Max Freq</title>
+            <get>run l3.sh get_max_freq</get>
+            <set>run l3.sh set_max_freq</set>
+            <summary sh="run l3.sh get_max_freq" />
+        </picker>
+        <picker reload="L3" options-sh="run l3.sh options" shell="hidden">
+            <title>Min Freq</title>
+            <get>run l3.sh get_min_freq</get>
+            <set>run l3.sh set_min_freq</set>
+            <summary sh="run l3.sh get_min_freq" />
+        </picker>
+        <picker reload="L3" options-sh="run l3.sh options" shell="hidden">
+            <title>Boost Freq</title>
+            <get>run l3.sh get_boost_freq</get>
+            <set>run l3.sh set_boost_freq</set>
+            <summary sh="run l3.sh get_boost_freq" />
+        </picker>
+    </group>
+
+    <group title="LLCC" id="LLCC" visible="run llcc.sh visible">
+        <picker reload="LLCC" options-sh="run llcc.sh options" shell="hidden">
+            <title>Max Freq</title>
+            <get>run llcc.sh get_max_freq</get>
+            <set>run llcc.sh set_max_freq</set>
+            <summary sh="run llcc.sh get_max_freq" />
+        </picker>
+        <picker reload="LLCC" options-sh="run llcc.sh options" shell="hidden">
+            <title>Min Freq</title>
+            <get>run llcc.sh get_min_freq</get>
+            <set>run llcc.sh set_min_freq</set>
+            <summary sh="run llcc.sh get_min_freq" />
+        </picker>
+        <picker reload="LLCC" options-sh="run llcc.sh options" shell="hidden">
+            <title>Boost Freq</title>
+            <get>run llcc.sh get_boost_freq</get>
+            <set>run llcc.sh set_boost_freq</set>
+            <summary sh="run llcc.sh get_boost_freq" />
+        </picker>
+    </group>
+
+    <group title="XIAOMI">
+        <switch shell="hidden"
+            exist="/sys/module/perfmgr/parameters/perfmgr_enable"
+            title="Perfmgr Enable" desc="@string:kr_feas_des">
+            <get>cat /sys/module/perfmgr/parameters/perfmgr_enable</get>
+            <set>
+                path=/sys/module/perfmgr/parameters/perfmgr_enable
+                chmod 777 $path
+                echo $state > $path
+                if [[ "$state" == "1" ]]; then
+                  chmod 444 $path
+                fi
+            </set>
+        </switch>
+    </group>
+</items>

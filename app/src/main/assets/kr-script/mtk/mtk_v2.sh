@@ -3,6 +3,7 @@ run="sh $START_DIR/kr-script/mtk"
 
 perfmgr=/sys/module/mtk_fpsgo/parameters/perfmgr_enable
 pandora_feas=/sys/module/perfmgr_mtk/parameters/perfmgr_enable
+fbt_ceiling=/sys/kernel/fpsgo/fbt/enable_ceiling
 if [[ -f $pandora_feas ]]; then
   perfmgr=$pandora_feas
 fi
@@ -52,41 +53,64 @@ action() {
 }
 
 get_row_id() {
-  local row_id=$(echo "$1" | cut -f1 -d ']')
-  echo "${row_id/[/}"
+  local row_id=`echo $1 | cut -f1 -d ']'`
+  echo ${row_id/[/}
 }
 get_row_title() {
-    echo "$1" | cut -f2 -d ' ' | cut -f1 -d ':'
+    echo $1 | cut -f2 -d ' ' | cut -f1 -d ':'
 }
 get_row_state() {
-    echo "$1" | cut -f2 -d ':'
+    echo $1 | cut -f2 -d ':'
 }
 
 
 soc=$(getprop ro.hardware)
 gpu_render() {
     if [[ -f /proc/gpufreqv2/stack_signed_opp_table ]]; then
-        TABLE="/proc/gpufreqv2/stack_signed_opp_table"
-    elif [[ -f /proc/gpufreqv2/gpu_working_opp_table ]]; then
-        TABLE="/proc/gpufreqv2/gpu_working_opp_table"
+        GPU_TABLE="/proc/gpufreqv2/stack_signed_opp_table"
+    elif [[ -f /proc/gpufreqv2/gpu_signed_opp_table ]]; then
+        GPU_TABLE="/proc/gpufreqv2/gpu_signed_opp_table"
+    fi
+    if [[ "$soc" == "mt6983" || "$soc" == "mt6895" ]]; then
+        if [[ "$soc" == "mt6983" ]]; then
+          volt_list="62500 61875 61875 61250 60625 60000 59375 58750 58125 57500 56875 56250 55625 55000 54375 53750 53125 52500 51875 51250 50625 50000"
+        else
+          volt_list="62500 61875 61875 61250 60625 60000 59375 58750 58125 57500 56875 56250 55625 55000 54375 53750 53125 52500 51875 51250 50625 50000 49375 48750 48125 47500 46875 46250 45625 45000 44375 43750 43125 42500 41875"
+        fi
+        echo "      <action title=\"Fixed Frequency\" shell=\"hidden\" reload=\"@GPU\" summary-sh=\"$import_utils gpu_freq_cur_khz2\">"
+        echo '          <param title="Frequency" name="state" value-sh="'$import_utils gpu_freq_cur'">'
+        echo "            <option value=\"-1\">No fixed</option>"
+        for freq in $(cat /proc/gpufreqv2/stack_signed_opp_table | awk '{printf $3 "\n"}' | cut -f1 -d ",")
+        do
+          echo "            <option value=\"$freq\">${freq}KHz</option>"
+        done
+        echo "          </param>"
+        echo '          <param title="Voltage" name="voltage" value-sh="'$import_utils gpu_volt_cur'">'
+        echo "            <option value=\"-1\">No fixed</option>"
+        for voltage in $volt_list
+        do
+          echo "            <option value=\"$voltage\">${voltage}</option>"
+        done
+        echo "          </param>"
+        echo "          <set>$import_utils gpu_freq</set>"
+        echo "      </action>"
+    else
+        echo "      <picker title=\"Fixed Frequency\" shell=\"hidden\" reload=\"@GPU\" summary-sh=\"$import_utils gpu_freq_cur_khz\">"
+        echo "          <options>"
+        echo "            <option value=\"-1\">No fixed</option>"
+        for freq in $(cat "$GPU_TABLE" | awk '{printf $3 "\n"}' | cut -f1 -d ",")
+        do
+          echo "            <option value=\"$freq\">${freq}KHz</option>"
+        done
+        echo "          </options>"
+        echo "          <get>$import_utils gpu_freq_cur</get>"
+        echo "          <set>$import_utils gpu_freq</set>"
+        echo "      </picker>"
     fi
 
-    echo "      <picker title=\"Fixed frequency\" shell=\"hidden\" reload=\"@GPU\" summary-sh=\"$import_utils gpu_freq_cur_khz\">"
+    echo "      <picker title=\"Max Frequency\" shell=\"hidden\" reload=\"@GPU\" summary-sh=\"$import_utils gpu_freq_max_freq_cur_khz\">"
     echo "          <options>"
-    echo "            <option value=\"-1\">Not fixed</option>"
-    for freq in $(cat "$TABLE" | awk '{printf $3 "\n"}' | cut -f1 -d ",")
-    do
-      echo "            <option value=\"$freq\">${freq}KHz</option>"
-    done
-    echo "          </options>"
-    echo "          <get>$import_utils gpu_freq_cur</get>"
-    echo "          <set>$import_utils gpu_freq</set>"
-    echo "      </picker>"
-
-    echo "      <picker title=\"Highest frequency\" shell=\"hidden\" reload=\"@GPU\" summary-sh=\"$import_utils gpu_freq_max_freq_cur_khz\">"
-    echo "          <desc>[Fixed frequency] has a higher priority than [Highest frequency] and cannot be set at the same time.</desc>"
-    echo "          <options>"
-    cat "$TABLE" | while read freq
+    cat "$GPU_TABLE" | while read freq
     do
       echo "            <option value=\"$(echo "${freq:1:2}")\">$(echo "$freq" | awk '{printf $3 "\n"}' | cut -f1 -d ",")KHz</option>"
     done
@@ -94,20 +118,33 @@ gpu_render() {
     echo "          <get>$import_utils gpu_freq_max_freq_cur</get>"
     echo "          <set>$import_utils gpu_freq_max_freq</set>"
     echo "      </picker>"
+    echo "<text><slice>[Fixed Frequency] has higher priority than [Max Frequency] and cannot be set at the same time</slice></text>"
 
-    #dcs_mode=/sys/kernel/ged/hal/dcs_mode
-    #if [[ -f $dcs_mode ]]; then
-    #  switch_hidden "DCS Policy" 'When GPU performance requirements decrease, some cores are shut down to reduce power consumption. But with this feature turned on, sometimes the GPU frequency will jump repeatedly between the lowest/highest.' "if [[ \$(grep enable $dcs_mode) != '' ]]; then echo 1; fi" "$import_utils set_dcs_mode"
-    #fi
+    dcs_mode=/sys/kernel/ged/hal/dcs_mode
+    if [[ -f $dcs_mode ]]; then
+      switch_full "DCS Policy" 'When GPU demand is low, disable some cores to reduce power. Enabling this can cause GPU frequency to bounce between min/max.' "if [[ \$(grep disabled $dcs_mode) == '' ]]; then echo 1; fi" "$import_utils set_dcs_mode"
+    fi
 
     ged_kpi=/sys/module/sspm_v3/holders/ged/parameters/is_GED_KPI_enabled
     if [[ -f $ged_kpi ]]; then
-      switch_hidden "GED KPI" 'Lower performance to reduce battery consumption, but may cause lag during gaming' "cat $ged_kpi" "$import_utils set_ged_kpi"
+      switch_full "GED KPI" 'Suppress performance to reduce power, but it may cause stutter in games' "cat $ged_kpi" "$import_utils set_ged_kpi"
     fi
 
     local dvfs=/proc/mali/dvfs_enable
     if [[ -f $dvfs ]]; then
-      switch_hidden "Dynamic Frequency and Voltage Scaling (DVFS)" "Enable or disable DVFS" "cat $dvfs | cut -f2 -d ' '" "echo \$state > $dvfs"
+      switch_hidden "Dynamic freq/volt scaling (DVFS)" "cat $dvfs | cut -f2 -d ' '" "echo \$state > $dvfs"
+    fi
+
+    if [[ -d '/data/adb/modules/dimensity_hybrid_governor' ]]; then
+    switch_hidden 'GPU Hybrid Governor (Undervolt)' 'if [[ $(pidof gpu-scheduler) != "" ]]; then echo 1;fi' "$import_utils dimensity_hybrid_switch"
+    elif [[ "$soc" == "mt6983" || "$soc" == "mt6895" ]]; then
+    echo "\
+    <action shell=\"hidden\">\
+        <title>Get GPU Hybrid Governor (Undervolt)</title>\
+        <desc>Download and use the GPU/DDR auxiliary governor. It may reduce GPU power under heavy load, but not always.</desc>\
+        <set>am start -a android.intent.action.VIEW -d https://vtools.oss-cn-beijing.aliyuncs.com/addin/dimensity_hybrid_governor.zip</set>\
+        <summary sh=\"if [[ '$(pidof gpu-scheduler)' != '' ]]; then echo 'Running';fi\" />\
+    </action>"
     fi
 }
 
@@ -116,12 +153,80 @@ common_render() {
     switch_hidden "FPSGO Enable" 'Lower or boost performance based on real-time frame rate to reduce power consumption or improve frame rate stability. However, if this feature is turned on, there may be continuous small frame drops.' "cat $fpsgo" "$import_utils set_fpsgo"
   fi
 
+  if [[ -f $fbt_ceiling ]]; then
+    switch_hidden "FBT ceiling" "Limit peak FBT performance, may reduce power use or jitter but can lower max FPS" "cat $fbt_ceiling" "$import_utils set_fbt_ceiling"
+  fi
+
   if [[ -f $perfmgr ]]; then
-    echo "      <switch title=\"Perfmgr Enable\" desc=\"FEAS is implemented through Perfmgr. Enabling this feature can significantly reduce power consumption in some games.\" reload=\"page\" shell=\"hidden\">"
+    echo "      <switch title=\"Perfmgr Enable\" desc=\"FEAS is implemented via Perfmgr; enabling it can significantly reduce power in some games\" reload=\"page\">"
     echo "          <get>cat $perfmgr</get>"
     echo "          <set>$import_utils set_perfmgr</set>"
     echo "      </switch>"
   fi
+}
+
+ddr_render() {
+  dvfsrc_a=/sys/devices/platform/soc/1c00f000.dvfsrc
+  dvfsrc_b=/sys/devices/platform/1c00f000.dvfsrc
+  dvfsrc_c=/sys/devices/platform/1c013000.dvfsrc
+  dvfsrc_d=/sys/class/devfreq/mtk-dvfsrc-devfreq
+  dir=''
+  if [[ -d $dvfsrc_a ]]; then
+    dir=$dvfsrc_a
+  elif [[ -d $dvfsrc_b ]]; then
+    dir=$dvfsrc_b
+  elif [[ -d $dvfsrc_c ]]; then
+    dir=$dvfsrc_c
+  else
+    dir=$dvfsrc_d
+  fi
+  dvfsrc=$dir/mtk-dvfsrc-devfreq/devfreq/mtk-dvfsrc-devfreq
+  opp_table=$dvfsrc/available_frequencies
+
+  echo "      <picker id=\"DDR-MIN-FREQ\" title=\"DDR MinFreq\" shell=\"hidden\" reload=\"@DRAM\">"
+  echo "          <options>"
+  echo "            <option value=\"0\">Default</option>"
+  for freq in $(cat $opp_table)
+  do
+    if [[ "$freq" != "" ]]; then
+    echo "            <option value=\"$freq\">${freq}hz</option>"
+    fi
+  done
+  echo "          </options>"
+  echo "          <set>$import_utils ddr_freq</set>"
+  echo "          <get>cat $dvfsrc/min_freq</get>"
+  echo "      </picker>"
+
+
+  dir_name=$(basename $dir)
+  dvfsrc2=${dir}/${dir_name}:dvfsrc-helper # ${dir}/1c00f000.dvfsrc:dvfsrc-helper
+  opp_table=$dvfsrc2/dvfsrc_opp_table
+  echo "      <picker title=\"Fixed DDR Frequency\" summary=\"If voltage is too low, the device may crash!!! In most cases, fixed frequency is meaningless; use only for comparison tests.\" shell=\"hidden\" reload=\"@DRAM\">"
+  echo "          <options>"
+  echo "            <option value=\"999\">No fixed</option>"
+  if [[ $(grep '\[OPP' $opp_table) != "" ]]; then
+    grep '\[OPP' $opp_table | while read freq
+    do
+      if [[ "$freq" != "" ]]; then
+        d_opp=$(echo "${freq:4:2}")
+        d_khz=$(echo ${freq:9})
+      echo "            <option value=\"$(echo -n $d_opp)\">${d_khz}</option>"
+      fi
+    done
+  else
+    grep 'Mbps' $opp_table | while read freq
+    do
+      if [[ "$freq" != "" ]]; then
+        d_opp=$(echo "${freq:1:2}")
+        d_volt=$(echo "${freq:6:6}")
+        d_khz=$(echo ${freq:14})
+      echo "            <option value=\"$(echo -n $d_opp)\">${d_volt}μv  ${d_khz}</option>"
+      fi
+    done
+  fi
+  echo "          </options>"
+  echo "          <set>$import_utils ddr_freq_fixed</set>"
+  echo "      </picker>"
 }
 
 xml_start
@@ -137,6 +242,10 @@ fi
 
 group_start 'FPSGO/FEAS'
   common_render
+group_end
+
+group_start 'DRAM'
+  ddr_render
 group_end
 
 xml_end

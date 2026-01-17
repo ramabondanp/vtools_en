@@ -15,41 +15,41 @@ settings put global low_power_sticky $state;
 # Whether or not to enable the User Absent, Radios Off feature on small battery devices.         * Type: int (0 for false, 1 for true)
 # user_absent_radios_off_for_small_battery_enabled
 
-function killproc()
+killproc()
 {
     stop "$1" 2> /dev/null
     killall -9 "$1" 2> /dev/null
 }
 
-echo 'Power saving mode may not be available during charging'
+echo 'Power saving may not work while charging'
 echo '-'
 
 if [[ $state = "1" ]]
 then
-    echo "Enabling automatic app restrictions may require Android Pie"
+    echo "Enable app auto restriction (may require Android Pie)"
     settings put global app_auto_restriction_enabled true
 
-    echo "Turn on the application to force standby"
+    echo "Enable forced app standby"
     settings put global forced_app_standby_enabled 1
 
-    echo "Turn on the application standby"
+    echo "Enable app standby"
     settings put global app_standby_enabled 1
 
-    echo "Turn on mandatory standby for small capacity battery device applications"
+    echo "Enable forced app standby on small-battery devices"
     settings put global forced_app_standby_for_small_battery_enabled 1
 
     ai=`settings get system ai_preload_user_state`
     if [[ ! "$ai" = "null" ]]
     then
-      echo "Turn off ai preload in MIUI10"
+      echo "Disable MIUI10 AI preload"
       settings put system ai_preload_user_state 0
     fi
 
-    echo "Turn on Android's native power saving mode"
+    echo "Enable Android native power saving mode"
     settings put global low_power 1
     settings put global low_power_sticky 1
 
-    echo "Close debugging services and logging processes"
+    echo "Stop debugging services and log processes"
     killproc woodpeckerd
     # killproc debuggerd
     # killproc debuggerd64
@@ -72,7 +72,7 @@ then
     # killproc magiskd
     killproc magisklogd
 
-    echo "Clean up background dormant whitelist"
+    echo "Clear background idle whitelist"
     echo "Please wait..."
     for item in `dumpsys deviceidle whitelist`
     do
@@ -83,7 +83,7 @@ then
         # if [[ -n "$r" ]]; then
             am set-inactive $app true > /dev/null 2>&1
             am set-idle $app true > /dev/null 2>&1
-            # 9.0 让后台应用立即进入闲置状态
+            # 9.0: force background apps to enter idle immediately
             am make-uid-idle --user current $app > /dev/null 2>&1
         # fi
     done
@@ -98,28 +98,28 @@ then
     dumpsys deviceidle step
     dumpsys deviceidle step
 
-    echo 'Note: Scene may not be able to keep the background after power saving mode is turned on.'
-    echo 'And, you may not receive the background message push!'
+    echo 'Note: After enabling power saving, Scene may not stay in the background'
+    echo 'You may also stop receiving background push messages!'
     echo ''
 else
-    echo "Turning off automatic app restrictions may require Android Pie"
+    echo "Disable app auto restriction (may require Android Pie)"
     settings put global app_auto_restriction_enabled false
 
-    echo "Close the application to force standby"
+    echo "Disable forced app standby"
     settings put global forced_app_standby_enabled 0
 
-    echo "Turn on the application standby"
+    echo "Enable app standby"
     settings put global app_standby_enabled 1
 
-    echo "Close the small capacity battery device application forced standby"
+    echo "Disable forced app standby on small-battery devices"
     settings put global forced_app_standby_for_small_battery_enabled 0
 
-    echo "Turn off Android's native power saving mode"
+    echo "Disable Android native power saving mode"
     settings put global low_power 0
     settings put global low_power_sticky 0
 fi
 
-echo 'Status has been switched, some deeply customized systems this operation may not work!'
+echo 'State switched; this may not work on heavily customized systems!'
 echo '-'
 
 

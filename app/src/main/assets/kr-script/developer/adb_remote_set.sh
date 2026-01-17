@@ -1,6 +1,6 @@
 #!/system/bin/sh
 
-# 默认通常是 5555，但为了保持相对安全，改了个别的
+# Default is usually 5555; changed for a bit more safety
 port="33445"
 
 if [[ ! "$state" = "1" ]]
@@ -9,7 +9,7 @@ then
     stop adbd
     killall -9 adbd 2>/dev/null
     start adbd
-    echo '远程调试服务已停止'
+    echo 'Remote debugging service stopped'
     setprop service.adb.tcp.port ""
     return 0
 fi
@@ -26,15 +26,18 @@ then
     ip=`ifconfig eth0 | grep "inet addr" | awk '{ print $2}' | awk -F: '{print $2}'` 2>/dev/null
 fi
 
-echo "On a computer that is connected to the same network (LAN) as the phone"
-echo 'With the following command'
+echo "On a computer connected to the same LAN as the phone"
+echo 'Use the following command'
 echo ''
 
 if [[ -n "$ip" ]]
 then
     echo "adb connect $ip:$port"
 else
-    echo "adb connect 手机IP:$port"
+    echo "adb connect <phone-ip>:$port"
 fi
 
-echo 'to connect the phone'
+echo 'to connect to the phone'
+
+echo 'If both devices are on the same LAN and the IP is correct but it still fails'
+echo 'try reconnecting Wi-Fi on both devices while keeping network debugging enabled'

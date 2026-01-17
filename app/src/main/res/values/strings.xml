@@ -476,6 +476,414 @@
     <string name="kr_page_load_success">Page loaded successfully</string>
     <string name="kr_auto_run_item_losted">Specified item is missing</string>
 
+
+    <string name="extreme_gt_flyme_desc">Removes temperature and frame rate restrictions for the current device(For Meizu Only)</string>
+
+    <string name="extrem_gt_desc">Removes temperature and frame rate restrictions for the current device(For ColorOS/RealmeUI Only)</string>
+
+    <string name="kr_aosp">AOSP</string>
+
+    <string name="kr_aosp_desc">The closer the system is to AOSP, the better</string>
+
+    <string name="kr_aosp_low_power">Low power mode</string>
+
+    <string name="kr_aosp_low_power_critical_level">Low power mode trigger level</string>
+
+    <string name="kr_aosp_low_power_desc">"AOSP's own power-saving mode, not the phone manufacturer's own"</string>
+
+    <string name="kr_aosp_low_power_level">Low battery level</string>
+
+    <string name="kr_aosp_low_power_level_desc">Set the low battery level and the level that triggers the low battery mode</string>
+
+    <string name="kr_aosp_low_power_wran_level">Low battery warning level</string>
+
+    <string name="kr_aosp_net_checker">Remove ! and ×</string>
+
+    <string name="kr_aosp_net_checker_desc">Change the network detection server to avoid displaying × or ! on the WiFi icon and LTE icon!</string>
+
+    <string name="kr_aosp_net_checker_disable">Disable network check</string>
+
+    <string name="kr_aosp_net_checker_google">Google</string>
+
+    <string name="kr_aosp_net_checker_miui">MIUI</string>
+
+    <string name="kr_aosp_net_checker_reset">Restore to default</string>
+
+    <string name="kr_aosp_net_checker_v2ex">V2EX</string>
+
+    <string name="kr_aosp_night_mode">Night mode</string>
+
+    <string name="kr_aosp_night_mode_auto">Auto</string>
+
+    <string name="kr_aosp_night_mode_desc">Toggle night mode</string>
+
+    <string name="kr_aosp_night_mode_off">OFF</string>
+
+    <string name="kr_aosp_night_mode_on">ON</string>
+
+    <string name="kr_aosp_night_mode_reboot">Restart after switchover</string>
+
+    <string name="kr_aosp_night_mode_reboot_n">No(AOSP)</string>
+
+    <string name="kr_aosp_night_mode_reboot_y">Yes</string>
+
+    <string name="kr_aosp_ntp">NTP server</string>
+
+    <string name="kr_aosp_ntp_address">Enter the NTP server address you know</string>
+
+    <string name="kr_aosp_ntp_custom">Customized NTP server</string>
+
+    <string name="kr_aosp_ntp_custom_desc">@string/kr_aosp_ntp_desc</string>
+
+    <string name="kr_aosp_ntp_desc">If your phone can get the latest time normally, there is no need to change it</string>
+
+    <string name="kr_aosp_popup_notification">Pop-up notification</string>
+
+    <string name="kr_aosp_popup_notification_desc">Pop up at the top of the screen when you receive a notification</string>
+
+    <string name="kr_aosp_rotation">Screen rotation</string>
+
+    <string name="kr_aosp_rotation_desc">"Force rotation of the screen orientation (can't make portrait apps force landscape, but can you turn the phone upside down?)"</string>
+
+    <string name="kr_aosp_rotation_inverted_landscape">Inverted landscape</string>
+
+    <string name="kr_aosp_rotation_inverted_portrait">Inverted portrait</string>
+
+    <string name="kr_aosp_rotation_landscape">Landscape</string>
+
+    <string name="kr_aosp_rotation_portrait">Portrait</string>
+
+    <string name="kr_aosp_satus_airplane">Airplane mode</string>
+
+    <string name="kr_aosp_status_alarm_clock">Alarm clock</string>
+
+    <string name="kr_aosp_status_battery">Battery</string>
+
+    <string name="kr_aosp_status_bluetooth">Bluetooth</string>
+
+    <string name="kr_aosp_status_cast">Screen cast</string>
+
+    <string name="kr_aosp_status_headset">Headset</string>
+
+    <string name="kr_aosp_status_icons">Hide StatusBar icons</string>
+
+    <string name="kr_aosp_status_icons_desc">Set the hidden status bar icon</string>
+
+    <string name="kr_aosp_status_ime">Input method manager</string>
+
+    <string name="kr_aosp_status_location">Location</string>
+
+    <string name="kr_aosp_status_mobile">Mobile</string>
+
+    <string name="kr_aosp_status_rotate">Rotate</string>
+
+    <string name="kr_aosp_status_su">ROOT permission</string>
+
+    <string name="kr_aosp_status_volume_mute">Volume/Mute</string>
+
+    <string name="kr_aosp_status_zen_mode">Zen mode</string>
+
+    <string name="kr_app">Application</string>
+
+    <string name="kr_app_desc">Third party application related options</string>
+
+    <string name="kr_apps_camera2_desc">Enable the CameraV2 Api. The camera may fail to turn on or switch slowly</string>
+
+    <string name="kr_apps_camera2_summary">Google Camera needs to download its own version for your model</string>
+
+    <string name="kr_apps_default_app">Default apps</string>
+
+    <string name="kr_apps_google_otp">Security codes</string>
+
+    <string name="kr_apps_google_otp_desc">See the Google Security Code page for authorizing logins to new devices</string>
+
+    <string name="kr_apps_google_service">Google services</string>
+
+    <string name="kr_apps_google_service_desc">Turn this option off to temporarily disable Google services framework to save power</string>
+
+    <string name="kr_apps_google_settings">Google settings</string>
+
+    <string name="kr_apps_google_settings_desc">本功能为了方便隐藏了“Google设置”的定制系统，打开“Google设置”</string>
+
+    <string name="kr_apps_google_subscribe">Google Subscription management</string>
+
+    <string name="kr_apps_google_subscribe_desc">View and manage paid content you subscribe to on the Play Store</string>
+
+    <string name="kr_apps_install_external_storage">External storage</string>
+
+    <string name="kr_apps_install_internal_storage">Internal storage</string>
+
+    <string name="kr_apps_install_location">App installation location</string>
+
+    <string name="kr_apps_install_location_auto">Auto(System determination)</string>
+
+    <string name="kr_apps_install_location_wran">Note: Some apps specify the installation path in the manifest file, and the installation location may not be controlled by this setting</string>
+
+    <string name="kr_apps_launcher">Default launcher</string>
+
+    <string name="kr_apps_live_wallpaper">Live Wallpaper</string>
+
+    <string name="kr_bat_doze_clear">Clean battery optimization whitelist</string>
+
+    <string name="kr_bat_doze_clear_desc">For Android M+, cleans up Doze mode whitelisted apps</string>
+
+    <string name="kr_bat_frozen">Use Freezer</string>
+
+    <string name="kr_bat_frozen_desc">Pause execution of cached apps. This feature comes from using Google AOSP, and may not be applicable to Chinese localized custom ROMs.</string>
+
+    <string name="kr_bat_frozen_reboot">This change takes effect after restarting the phone</string>
+
+    <string name="kr_bat_opt">Battery optimization</string>
+
+    <string name="kr_bat_opt_desc">"Enter the system's battery optimization settings page"</string>
+
+    <string name="kr_battery">Battery&amp;Charge</string>
+
+    <string name="kr_battery_desc">Power consumption record, low power</string>
+
+    <string name="kr_dev">Developer tools</string>
+
+    <string name="kr_dev_desc">Options for developers</string>
+
+    <string name="kr_dev_developer_settings">Developer settings</string>
+
+    <string name="kr_dev_experimental">experimental</string>
+
+    <string name="kr_dev_hide_error">Hide error pop-ups</string>
+
+    <string name="kr_dev_hide_error_desc">Do not display app crashes and unresponsive pop-ups</string>
+
+    <string name="kr_dev_hwui_render">HWUI Renderer</string>
+
+    <string name="kr_dev_hwui_render_desc">Switch HWUI rendering engine, this feature only supports Android O(8.x), Android P(9.0)</string>
+
+    <string name="kr_dev_hwui_vulkan">HWUI using Vulkan</string>
+
+    <string name="kr_dev_hwui_vulkan_desc">Use of the Vulkan-based HWUI rendering engine, which is a new feature of Android Q and can lead to serious compatibility errors and even system corruption</string>
+
+    <string name="kr_dev_log_clear">Clear the logcat buffer</string>
+
+    <string name="kr_dev_log_clear_desc">Empty the logcat buffer so that you can start fetching errors again</string>
+
+    <string name="kr_dev_log_dump">logcat dump</string>
+
+    <string name="kr_dev_log_dump_desc">logcat -d To the specified location</string>
+
+    <string name="kr_dev_log_dump_ok">Logs have been dumped to</string>
+
+    <string name="kr_dev_mem_stat">Memory usage</string>
+
+    <string name="kr_dev_notch">Notched screen</string>
+
+    <string name="kr_dev_notch_no_notch">"Pretend it's not a screen with a notch"</string>
+
+    <string name="kr_dev_notch_no_notch_desc">"If you're often bothered by the black area at the top of the screen that appears to be left empty, or the left side of the screen isn't full-screen when you're playing a game, then this feature might help you out!"</string>
+
+    <string name="kr_dev_notch_os">Applicable OS</string>
+
+    <string name="kr_dev_notch_style">Notch shape</string>
+
+    <string name="kr_dev_notch_style_hole">居中打孔屏</string>
+
+    <string name="kr_dev_ota">Install OTA package</string>
+
+    <string name="kr_dev_ota_desc">Manual installation of OTA packages for A/B (including VAB) partitioned devices</string>
+
+    <string name="kr_dev_ota_file">ROM .zip location</string>
+
+    <string name="kr_dev_ota_summary">Warning: This is an experimental feature and may cause damage to the system or equipment!</string>
+
+    <string name="kr_dev_ota_wran">Do not support the installation of incremental packages. ROOT will be lost after installing the full package</string>
+
+    <string name="kr_dev_remote_adb">Remote ADB debugging</string>
+
+    <string name="kr_dev_remote_adb_desc">"Open the device's network debugging port, so that developers can connect the computer without a data cable, do not open this option in a public WIFI network environment!"</string>
+
+    <string name="kr_dev_running_service">Running services</string>
+
+    <string name="kr_dev_sandbox">Storage sandbox</string>
+
+    <string name="kr_dev_sandbox_default">Default</string>
+
+    <string name="kr_dev_sandbox_desc">After opening the sandbox, all applications will not be able to access the local storage root directory</string>
+
+    <string name="kr_dev_sandbox_off">OFF</string>
+
+    <string name="kr_dev_sandbox_on">ON</string>
+
+    <string name="kr_dev_sandbox_reboot_5s">The device will reboot in 5 seconds~</string>
+
+    <string name="kr_dev_show_anr">ANR alert</string>
+
+    <string name="kr_dev_show_anr_desc">Display the application not responding (ANR) alert for background applications.</string>
+
+    <string name="kr_dev_show_error">Crashing dialog box</string>
+
+    <string name="kr_dev_show_error_desc">Show alert box on every app crash</string>
+
+    <string name="kr_feas_des">FEAS is implemented through Perfmgr, and enabling this feature can reduce power consumption in some games. Do not open in apps other than games!</string>
+
+    <string name="kr_flyme">Meizu</string>
+
+    <string name="kr_flyme_desc">Options for Flyme</string>
+
+    <string name="kr_kr_ui_navbar_wran">Determine the toggle, which may cause the interface to display incorrectly？</string>
+
+    <string name="kr_miui">Xiaomi</string>
+
+    <string name="kr_miui_desc">Options for MIUI, HyperOS</string>
+
+    <string name="kr_msm_perf_boost_desc">"The system increases the CPU frequency within a short period of time according to the user's operation, which greatly improves the fluency"</string>
+
+    <string name="kr_mtk">MTK</string>
+
+    <string name="kr_mtk_desc">"Options for MTK'Soc"</string>
+
+    <string name="kr_oppo">OPPO</string>
+
+    <string name="kr_oppo_desc">Options for ColorOS, RealmeUI</string>
+
+    <string name="kr_others">Others</string>
+
+    <string name="kr_others_desc">Other miscellaneous features</string>
+
+    <string name="kr_others_emmc_health">EMMC storage life</string>
+
+    <string name="kr_others_fstrim">Run FSTRIM</string>
+
+    <string name="kr_others_fstrim_desc">Generally, the system executes the command periodically</string>
+
+    <string name="kr_others_google_key">Google key action</string>
+
+    <string name="kr_others_self_rescue">[Module]System self-rescue</string>
+
+    <string name="kr_others_self_rescue_desc">Install an automatic brick rescue module in case of system failure due to careless operation</string>
+
+    <string name="kr_others_temperature_sensors">temperature sensor</string>
+
+    <string name="kr_others_temperature_sensors_desc">View the current value of the temperature sensors</string>
+
+    <string name="kr_others_thermal_remove">[Module]Temperature controlled removal</string>
+
+    <string name="kr_others_thermal_remove_desc">Create the Magisk module to remove temperature control by occupying empty files</string>
+
+    <string name="kr_others_ufs_health">UFS storage life</string>
+
+    <string name="kr_others_ufs_health_desc">* Values are for reference only</string>
+
+    <string name="kr_others_usap_reboot">OK, Please restart your phone.</string>
+
+    <string name="kr_qcom">Qualcomm/Snapdragon</string>
+
+    <string name="kr_qcom_desc">"Options for Qualcomm/Snapdragon'Soc"</string>
+
+    <string name="kr_ui">UI/Display</string>
+
+    <string name="kr_ui_anim_activity">Activity</string>
+
+    <string name="kr_ui_anim_duration">Animation duration</string>
+
+    <string name="kr_ui_anim_duration_desc">Adjust the length of various animations</string>
+
+    <string name="kr_ui_anim_mi">App switch(Xiaomi)</string>
+
+    <string name="kr_ui_anim_mi_desc">This option is only available for the MIUI13 launcher</string>
+
+    <string name="kr_ui_anim_translation">Translation</string>
+
+    <string name="kr_ui_anim_window">Popup/Window</string>
+
+    <string name="kr_ui_brightness">Brightness</string>
+
+    <string name="kr_ui_brightness_desc">Set the screen brightness forcibly</string>
+
+    <string name="kr_ui_brightness_lock">Lock</string>
+
+    <string name="kr_ui_color_calibration">Color correction</string>
+
+    <string name="kr_ui_color_calibration0">Black and white mode</string>
+
+    <string name="kr_ui_color_calibration1">Red myopia</string>
+
+    <string name="kr_ui_color_calibration2">Green myopia</string>
+
+    <string name="kr_ui_color_calibration3">Blue myopia</string>
+
+    <string name="kr_ui_color_matrix">ColorMatrix</string>
+
+    <string name="kr_ui_color_matrix_desc">Use ColorMatrix to change the appearance of the screen</string>
+
+    <string name="kr_ui_color_saturation">Color saturation</string>
+
+    <string name="kr_ui_color_saturation_value">saturation(%)</string>
+
+    <string name="kr_ui_desc">Options related to the interface display or screen</string>
+
+    <string name="kr_ui_h_contraste">High contrast mode</string>
+
+    <string name="kr_ui_h_contraste_desc">Sharpen text and increase contrast to make it easier to see</string>
+
+    <string name="kr_ui_navbar">Virtual key/Full screen device</string>
+
+    <string name="kr_ui_navbar_desc">Indicates that the current device does not have physical keys. After this option is disabled, the system does not provide gesture and virtual navigation keys. Restart to take effect</string>
+
+    <string name="kr_ui_refresh_rate">Refresh rate</string>
+
+    <string name="kr_ui_refresh_rate_v">Refresh rate display</string>
+
+    <string name="kr_ui_refresh_rate_v_value">Displays the current refresh rate on the screen</string>
+
+    <string name="kr_ui_split_view">Forced split screen</string>
+
+    <string name="kr_ui_split_view_desc">适用于Android 7.0+，同开发者设置中的“强制将Activity设为可调整大小”选项。开启此项，从而对声明支持分屏的应用进行分屏操作！</string>
+
+    <string name="kr_vivo">vivo</string>
+
+    <string name="kr_vivo_desc">Options for vivo</string>
+
+    <string name="kr_vivo_rr">High Refresh Rate Policy</string>
+
+    <string name="kr_vivo_rr_desc">(*#*#4244#*#*)For Origin OS 3+</string>
+
+
+    <string name="dialog_addin_by_magisk">Modified through Magisk, please restart the phone ~</string>
+
+    <string name="kr_aosp_net_checker_default">Default</string>
+
+    <string name="kr_others_ufs_health_op_used">OP Spent</string>
+
+    <string name="kr_others_ufs_health_over">Run out of life</string>
+
+    <string name="kr_others_ufs_health_unknown">unknown</string>
+
+    <string name="kr_others_ufs_health_used">Spent</string>
+
+    <string name="kr_system_default">System Default</string>
+
+
+    <string name="mi_joyose">Joyose</string>
+
+    <string name="mi_thermal_config">Thermal config switch</string>
+
+    <string name="mi_thermal_config_desc">Replace to /data/vendor/thermal, no need to restart the phone immediately effective. Configuration according to the system temperature control file, generated by the program automatically processing, please ensure that your system comes with temperature control is the official original version!</string>
+
+    <string name="oppo_cpu_limiter">CPU frequency limit</string>
+
+    <string name="oppo_cpu_limiter_desc">"During the game, adjust the CPU frequency limit according to the frame rate. This could be an FAS implementation. You can force it off, but you can't force it on unadapted games."</string>
+
+    <string name="oppo_fix_ota">Fixed OTA update validation</string>
+
+    <string name="oppo_fix_ota_desc">If you download the full package when the system is updated and still prompt unzip failure or dm-verify, you can try clicking this option</string>
+
+    <string name="oppo_game_touch">High sample rate touch</string>
+
+    <string name="oppo_game_touch_desc">Enable higher touch sampling rates, which may cause a slight increase in power consumption</string>
+
+    <string name="oppo_install_scan">App installer scan</string>
+
+    <string name="oppo_install_scan_desc">Turn this option off to disable the App security scanner</string>
+
+
     <string name="magisk_install_desc">Most of Scene\'s modifications to the system can now be done in the form of the Magisk module. But first you have to agree to Scene to install the add-on module on your phone automatically and restart it (recommended)!</string>
     <string name="magisk_install_title">Scene add-on module</string>
     <string name="cache_recycle">Recycle cache</string>

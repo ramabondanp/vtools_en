@@ -2,54 +2,56 @@
 # rom=/sdcard/Download/miui_STAR_V12.5.20.0.RKACNXM_942a5712ef_11.0.zip
 
 if [[ ! -f /cache/7za ]]; then
-  echo '请放置 7za 二进制文件到/cache目录下！' 1>&2
+  echo 'Place the 7za binary in /cache!' 1>&2
   exit
+else
+  chmod 755 /cache/7za
 fi
 
 alias 7za="/cache/7za"
 
 if [[ "$rom" == "" ]] || [[ ! -f "$rom" ]]; then
-  echo '未选择ROM文件，或指定的文件无法访问！' 1>&2
-  echo "选择的文件：$rom" 1>&2
+  echo 'ROM file not selected or inaccessible!' 1>&2
+  echo "Selected file: $rom" 1>&2
   exit 1
 fi
 
 out_dir=${rom%.*}
 if [[ "$out_dir" == "" ]]; then
-  echo "路径解析失败 $out_dir" 1>&2
+  echo "Failed to parse path $out_dir" 1>&2
   exit 1
 elif [[ -e "$out_dir" ]]; then
-  echo "解压路径已存在 $out_dir" 1>&2
+  echo "Extraction path already exists $out_dir" 1>&2
   exit 1
 fi
 
 files=$(7za l $rom)
 if [[ $(echo "$files" | grep payload.bin) == "" ]] && [[ $(echo "$files" | grep payload_properties.txt) == "" ]]; then
-  echo '压缩文件无效：payload.bin或payload_properties.txt缺失' 1>&2
+  echo 'Archive invalid: payload.bin or payload_properties.txt missing' 1>&2
   exit 1
 fi
 
-echo '解压ROM……'
+echo 'Extracting ROM...'
 7za e -o"$out_dir" "$rom" > /dev/null
 
 if [[ ! -f "$out_dir/payload.bin" ]] && [[ ! -f "$out_dir/payload_properties.txt" ]]; then
-  echo '解压失败：payload.bin或payload_properties.txt缺失' 1>&2
+  echo 'Extraction failed: payload.bin or payload_properties.txt missing' 1>&2
   exit 1
 fi
 
 echo '\n\n'
-echo '即将开始更新系统，根据设备性能，可能需要5~10分钟甚至更久'
-echo '你可以触摸日志输出区域，使屏幕保持点亮，但不要随意点击其它按钮。'
-echo '在此期间(输出onPayloadApplicationComplete(ErrorCode::……之前)请勿操作手机'
-echo '出现[INFO:……UPDATE_STATUS_DOWNLOADING (x), x.xxxxxx……]红色文字时，不要惊慌，这只是正常的进度显示！' 1>&2
-echo '更新完成后，不建议在重启前安装Magisk，因为时常会导致数据异常需要恢复出厂设置'
+echo 'System update is about to start; depending on device performance, it may take 5-10 minutes or longer'
+echo 'You can touch the log output area to keep the screen on, but do not tap other buttons.'
+echo 'During this period (before onPayloadApplicationComplete(ErrorCode::...) is printed), do not operate the phone'
+echo 'If red text like [INFO:...UPDATE_STATUS_DOWNLOADING (x), x.xxxxxx...] appears, do not panic; it is normal progress output.' 1>&2
+echo 'After the update completes, do not install Magisk before rebooting; it may cause data issues requiring a factory reset'
 
 # slot=$(getprop ro.boot.slot_suffix)
-# echo -n '当前插槽：' $slot
+# echo -n 'Current slot: ' $slot
 # if [[ "$slot" == "_a" ]]; then
-#   echo '，新系统将会安装到：_b'
+#   echo ', new system will install to: _b'
 # else
-#   echo '，新系统将会安装到：_a'
+#   echo ', new system will install to: _a'
 # fi
 # echo '\n'
 
@@ -59,6 +61,6 @@ sleep 15
 headers=$(cat "$out_dir/payload_properties.txt")
 update_engine_client --follow --update --payload="file://$out_dir/payload.bin" --headers="$headers" # --verify=false
 
-echo '请自行参照错误码(ErrorCode)，判断更新是否成功'
-echo 'kSuccess(0) 表示更新成功 ^_^'
-echo '其它错误码均表示更新失败！'
+echo 'Refer to ErrorCode to determine whether the update succeeded'
+echo 'kSuccess(0) means the update succeeded ^_^'
+echo 'Any other error code means the update failed!'

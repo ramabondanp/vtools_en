@@ -1,3 +1,3 @@
 settings put secure anr_show_background $state;
 
-echo 'Status has been switched, some deeply customized systems this operation may not work!' 1>&2
+echo 'State switched; this may not work on heavily customized systems!' 1>&2

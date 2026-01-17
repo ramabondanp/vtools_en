@@ -1,0 +1,6 @@
+id=scene_resurgence
+name=System Recovery
+version=1.0.0
+versionCode=1
+description=A system recovery module created by Scene that attempts to fix common errors when boot fails
+author=Duduski

@@ -3,24 +3,37 @@
     <resource dir="file:///android_asset/kr-script/battery" />
     <group>
         <action confirm="true">
-            <title>Clean up battery optimization whitelist</title>
-            <desc>For Android M+, clean up Doze mode whitelist applications (some systems like to add some applications to the whitelist automatically, resulting in these applications not being able to be hibernated!</desc>
+            <title>@string:kr_bat_doze_clear</title>
+            <desc>@string:kr_bat_doze_clear_desc</desc>
             <set>run doze_clear.sh</set>
         </action>
 
         <page
             id="HighPowerApplicationsActivity"
             activity="com.android.settings/.Settings$HighPowerApplicationsActivity">
-            <title>Battery Optimization</title>
-            <desc>Go to the system's battery optimization settings screen</desc>
+            <title>@string:kr_bat_opt</title>
+            <desc>@string:kr_bat_opt_desc</desc>
         </page>
-    </group>
 
-    <group>
-        <action confirm="true">
-            <title>Clear power consumption records</title>
-            <desc>Clearing application power consumption records and battery curve data does not restore battery life!</desc>
-            <set>run history_clear.sh</set>
-        </action>
+        <switch shell="hidden" min-sdk="30">
+            <title>@string:kr_bat_frozen</title>
+            <desc>@string:kr_bat_frozen_desc</desc>
+            <get>
+                if [[ $(device_config get activity_manager_native_boot use_freezer) == 'true' ]]; then
+                  echo 1
+                else
+                  echo 0
+                fi
+            </get>
+            <set>
+                if [[ $state == 1 ]]; then
+                  state=true
+                else
+                  state=false
+                fi
+                device_config put activity_manager_native_boot use_freezer $state
+                echo '@string:kr_bat_frozen_reboot'
+            </set>
+        </switch>
     </group>
 </root>

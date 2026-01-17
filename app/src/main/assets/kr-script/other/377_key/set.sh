@@ -7,17 +7,17 @@ if [[ "$state" != "" ]] && [[ "$state" != "INFO" ]]; then
             mkdir -p $MAGISK_PATH$dir
             cp $file $MAGISK_PATH$file
         fi
-        # busybox sed -i "s/^原内容/替换为/" 文件路径
+        # busybox sed -i "s/^original/replace-with/" file path
 
         busybox sed -i "s/^key 377.*/key 377   $state/" $MAGISK_PATH$file
         echo $state
-        echo 'This modification, need to reboot the phone to take effect!' 1>&2
+        echo 'This change requires a reboot to take effect!' 1>&2
     else
-        echo 'No add-on module installed, no changes can be applied~' 1>&2
+        echo 'Add-on module not installed; cannot apply changes.' 1>&2
     fi
 else
     if [[ -f $MAGISK_PATH$file ]]; then
         rm $MAGISK_PATH$file
-        echo 'This modification, need to reboot the phone to take effect!' 1>&2
+        echo 'This change requires a reboot to take effect!' 1>&2
     fi
 fi

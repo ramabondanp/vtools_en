@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<items>
+    <resource dir="file:///android_asset/kr-script/miui" />
+    <group id="thermal">
+        <picker id="mi-thermal-local" reload="thermal"
+            title="@string:mi_thermal_config"
+            desc="@string:mi_thermal_config_desc"
+            options-sh="(wget 'http://127.0.0.1:8765/miui-thermal' -q -O miui-thermal.ini &amp;&amp; cat miui-thermal.ini &amp;&amp; rm miui-thermal.ini) || curl 'http://127.0.0.1:8765/miui-thermal'">
+            <summary sh="run thermal_conf3/summary.sh" />
+            <get>run thermal_conf3/current.sh</get>
+            <set>run thermal_conf3/config.sh local</set>
+        </picker>
+    </group>
+    <group>
+        <page title="@string:mi_joyose"
+            activity="com.omarea.vtools/.activities.ActivityMiuiCloudProfile">
+        </page>
+    </group>
+</items>

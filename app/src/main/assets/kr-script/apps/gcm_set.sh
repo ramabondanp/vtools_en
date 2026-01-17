@@ -23,4 +23,4 @@ else
     echo "persist.camera.eis.enable=${result2}"
 fi
 
-echo 'Modified, may require reboot to take effect!' 1>&2
+echo 'Updated. A reboot may be required to take effect.' 1>&2

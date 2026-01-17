@@ -1,21 +1,20 @@
 mode=$(settings get global captive_portal_mode)
 if [[ "$mode" == "0" ]]; then
-  echo 'Network connectivity check is disabled'
+  echo '@string:kr_aosp_net_checker_disable'
 else
-  echo -n 'use:'
   url=$(settings get global captive_portal_https_url)
   case "$url" in
     *"google"*)
-      echo 'Google server'
+      echo '@string:kr_aosp_net_checker_google'
     ;;
     *"miui"*)
-      echo 'MIUI server'
+      echo '@string:kr_aosp_net_checker_miui'
     ;;
     *"v2ex"*)
-      echo 'V2EX server'
+      echo '@string:kr_aosp_net_checker_v2ex'
     ;;
     "null"|"")
-      echo 'Default server'
+      echo '@string:kr_aosp_net_checker_default'
     ;;
   esac
 fi

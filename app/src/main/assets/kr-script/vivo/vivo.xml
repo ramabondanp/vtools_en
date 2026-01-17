@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<items>
+    <resource dir="file:///android_asset/kr-script/vivo" />
+
+    <group>
+        <page
+            id="HighRefreshRate"
+            activity="com.android.settings/com.android.settings.Settings$ScreenApplicationRefreshActivity">
+            <title>@string:kr_vivo_rr</title>
+            <desc>@string:kr_vivo_rr_desc</desc>
+        </page>
+    </group>
+</items>

@@ -1,103 +1,90 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <pages>
     <resource dir="file:///android_asset/kr-script/common" />
-    <resource dir="file:///android_asset/kr-script/general" />
 
     <group>
-        <switch
-            visible="if [[ `getprop persist.vtools.ext_all` != '1' ]]; then echo 1; fi"
-            shell="hidden"
-            reload="page"
-            warning="Using features that require modification of system files may result in system corruption due to compatibility or exceptions and cannot be restored by restoring factory settings. Sure you want to continue using these features?">
-            <title>Show danger function</title>
-            <desc>Show functions that require modification of system files</desc>
-            <set>setprop persist.vtools.ext_all $state</set>
-            <get>getprop persist.vtools.ext_all</get>
-        </switch>
-        <switch
-            visible="getprop persist.vtools.ext_all"
-            shell="hidden"
-            reload="page">
-            <title>Show danger function</title>
-            <desc>Show functions that require modification of system files</desc>
-            <set>setprop persist.vtools.ext_all $state</set>
-            <get>getprop persist.vtools.ext_all</get>
-        </switch>
-    </group>
-
-    <group>
-        <switch visible="run common/android_n.sh" shell="hidden">
-            <title>Forced split screen</title>
-            <desc>For Android 7.0+, same as the "Force resizable Activity" option in developer settings. Turn this on to enable split-screen operation for apps that declare split-screen support!</desc>
-            <get>run general/force_resize_get.sh</get>
-            <set>run general/force_resize_set.sh</set>
-        </switch>
-
-        <action shell="hidden">
-            <title>Transition animation length</title>
-            <desc>Adjust the length of various animations</desc>
-            <params>
-                <param name="w" title="Duration of pop-up animation"
-                    options-sh="run general/animation/options.sh" value="1"
-                    value-sh="settings get global window_animation_scale" />
-                <param name="transition" title="Interface switching animation length"
-                    options-sh="run general/animation/options.sh" value="1"
-                    value-sh="settings get global transition_animation_scale" />
-                <param name="animator" title="Length of animation program"
-                    options-sh="run general/animation/options.sh" value="1"
-                    value-sh="settings get global animator_duration_scale" />
-            </params>
-            <set>run general/animation/set.sh</set>
-        </action>
-    </group>
-
-    <group>
-        <page
-            id="page-infinix"
-            config-sh="file:///android_asset/kr-script/infinix/main.sh"
-            desc="Options for Infinix phones" title="Infinix Note 30/Pro Exclusive"
-            visible="run common/infinix_support.sh" />
         <page
             id="page-xiaomi"
             config="miui/miui.xml"
-            desc="Options for MIUI system" title="MIUI Exclusive"
+            desc="@string:kr_miui_desc" title="@string:kr_miui"
             visible="run common/miui_support.sh" />
+        <page
+            id="page-oppo"
+            config="oppo/oppo.xml"
+            desc="@string:kr_oppo_desc" title="@string:kr_oppo"
+            visible="run common/oppo_support.sh" />
+        <page
+            id="page-flyme"
+            config="flyme/flyme.xml"
+            desc="@string:kr_flyme_desc" title="@string:kr_flyme"
+            visible="run common/flyme_support.sh" />
+        <page
+            id="page-vivo"
+            config="vivo/vivo.xml"
+            desc="@string:kr_vivo_desc" title="@string:kr_vivo"
+            visible="run common/vivo_support.sh" />
         <page
             id="page-google"
             config="aosp/aosp.xml"
-            desc="The closer to the native system the more applicable" title="AOSP Exclusive" />
+            desc="@string:kr_aosp_desc" title="@string:kr_aosp" />
+    </group>
+
+    <group>
         <page
             id="page-mtk"
             config-sh="file:///android_asset/kr-script/mtk/mtk.sh"
-            desc="MTK/Tenguiz exclusive option" title="MTK/Tenguiz exclusive"
+            desc="@string:kr_mtk_desc" title="@string:kr_mtk"
             visible="run common/mtk_ppm.sh" />
         <page
             id="page-mtk-v2"
             config-sh="file:///android_asset/kr-script/mtk/mtk_v2.sh"
-            desc="MTK/Tenguiz exclusive option" title="MTK/Tenguiz exclusive"
+            desc="@string:kr_mtk_desc" title="@string:kr_mtk"
             visible="run common/mtk_v2.sh" />
+        <page
+            id="page-qualcomm"
+            config="qualcomm/qualcomm.xml"
+            desc="@string:kr_qcom_desc" title="@string:kr_qcom"
+            visible="run common/qualcomm.sh" />
     </group>
 
     <group>
         <page
-            id="page-performance"
-            config="performance/performance.xml"
-            desc="Device performance tuning and performance optimization" title="Operational Performance" />
+            id="page-display"
+            config="display/display.xml"
+            desc="@string:kr_ui_desc" title="@string:kr_ui" />
         <page
             id="page-battery"
             config="battery/battery.xml"
-            desc="Power consumption record, low power" title="Battery, charging" />
+            desc="@string:kr_battery_desc" title="@string:kr_battery" />
         <page
             id="page-apps"
             config="apps/apps.xml"
-            desc="Third-party application-related options" title="Applications" />
+            desc="@string:kr_app_desc" title="@string:kr_app" />
+    </group>
+
+    <group>
         <page
             id="page-developer"
             config="developer/developer.xml"
-            desc="Features for developers" title="Developer Tools" />
+            desc="@string:kr_dev_desc" title="@string:kr_dev" />
         <page
             id="page-other"
             config="other/other.xml"
-            desc="Other misc functions" title="Misc" />
+            desc="@string:kr_others_desc" title="@string:kr_others" />
+    </group>
+
+    <group exist="/data/blacklist.conf">
+        <action shell="hidden">
+            <title>Freeze List</title>
+            <desc>Configure the auto-freeze app list for the Magisk module [App Freezer]</desc>
+            <param name="apps" type="app" multiple="multiple" value-sh="cat /data/blacklist.conf | grep -E -v '^#'" />
+            <summary sh="echo Added $(cat /data/blacklist.conf | grep -E -v '^#' | wc -l) apps" />
+            <set>
+                echo "# scene_freezer target apps\n$apps" > /data/blacklist.conf
+                killall scene-freezer 2>/dev/null
+                MODDIR=/data/adb/modules/scene_freezer
+                nohup $MODDIR/scene-freezer > /dev/null 2>&amp;1 &amp;
+            </set>
+        </action>
     </group>
 </pages>

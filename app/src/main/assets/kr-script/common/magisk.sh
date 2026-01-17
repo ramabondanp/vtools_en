@@ -9,7 +9,7 @@ function module_installed() {
     fi
 }
 
-# 替换文件，用法如：
+# Replace a file, usage:
 # magisk_replace_file "./kr-script/miui/resources/com.android.systemui" "/system/media/theme/default/com.android.systemui"
 function magisk_replace_file() {
     local input="$1"
@@ -25,12 +25,12 @@ function magisk_replace_file() {
         local result="$?"
         return $result
     else
-        echo "$input Does not exist and cannot be copied to the module" 1>&2
+        echo "$input does not exist; cannot copy to module" 1>&2
         return 0
     fi
 }
 
-# 取消文件替换，用法如：
+# Cancel file replacement, usage:
 # magisk_cancel_replace "/system/media/theme/default/com.android.systemui"
 function magisk_cancel_replace()
 {
@@ -42,7 +42,7 @@ function magisk_cancel_replace()
     return 1
 }
 
-# 判断某个文件是否被模块替换
+# Check whether a file is replaced by the module
 function magisk_file_exist()
 {
     if [[ -f "$MAGISK_PATH$1" ]]
@@ -53,7 +53,7 @@ function magisk_file_exist()
     fi
 }
 
-# 判断文件是否与模块中某个文件相同，用法
+# Check whether a file matches the module file, usage:
 # magisk_file_equals "./kr-script/miui/resources/com.android.systemui" "/system/media/theme/default/com.android.systemui"
 function magisk_file_equals()
 {

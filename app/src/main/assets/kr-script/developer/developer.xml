@@ -3,76 +3,142 @@
     <resource dir="file:///android_asset/kr-script/developer" />
 
     <group>
+        <action>
+            <title>@string:kr_dev_log_dump</title>
+            <desc>@string:kr_dev_log_dump_desc</desc>
+            <param name="path" value="/sdcard/logcat.log" />
+            <set>
+                p="$path"
+                if [[ "$p" == "" ]]; then
+                p="/sdcard/logcat.log"
+                fi
+                if [[ -f "$p" ]]; then
+                rm "$p"
+                fi
+                logcat -d > "$p"
+                if [[ -f "$p" ]]; then
+                echo '@string:kr_dev_log_dump_ok ' $p
+                fi
+            </set>
+        </action>
+        <action>
+            <title>@string:kr_dev_log_clear</title>
+            <desc>@string:kr_dev_log_clear_desc</desc>
+            <set>
+                logcat -c
+            </set>
+        </action>
         <switch id="developer_remote_adb">
-            <title>Remote ADB debugging</title>
-            <desc>Turn on the network debugging port of the device to facilitate developers to connect to the computer without a data cable, never turn on this option in a public WIFI network environment!</desc>
+            <title>@string:kr_dev_remote_adb</title>
+            <desc>@string:kr_dev_remote_adb_desc</desc>
             <summary sh="run adb_remote_summary.sh" />
             <get>run adb_remote_get.sh</get>
             <set>run adb_remote_set.sh</set>
         </switch>
         <switch id="developer_error_dialog" shell="hidden">
-            <title>Hide error pop-ups</title>
-            <desc>Don't show app crashes and unresponsive pop-ups</desc>
+            <title>@string:kr_dev_hide_error</title>
+            <desc>@string:kr_dev_hide_error_desc</desc>
             <get>run hide_errordialog_get.sh</get>
             <set>run hide_errordialog_set.sh</set>
         </switch>
         <switch id="developer_anr" shell="hidden">
-            <title>Always show the crash dialog</title>
-            <desc>Show dialog box every time the application crashes</desc>
+            <title>@string:kr_dev_show_error</title>
+            <desc>@string:kr_dev_show_error_desc</desc>
             <get>settings get secure show_first_crash_dialog_dev_option</get>
             <set>settings put secure show_first_crash_dialog_dev_option $state</set>
         </switch>
         <switch id="developer_anr" shell="hidden">
-            <title>Show background application not responding</title>
-            <desc>Display the "Application Not Responding (ANR)" dialog for background applications</desc>
+            <title>@string:kr_dev_show_anr</title>
+            <desc>@string:kr_dev_show_anr_desc</desc>
             <get>run anr_get.sh</get>
             <set>run anr_set.sh</set>
         </switch>
         <switch id="show_touches" shell="hidden">
-            <title>Display touch feedback</title>
-            <desc>Small dots are displayed when touching the screen</desc>
+            <title>Show Touch Feedback</title>
+            <desc>Show a small dot when touching the screen</desc>
             <get>settings get system show_touches</get>
             <set>settings put system show_touches $state</set>
         </switch>
+    </group>
+
+    <group title="@string:kr_dev_experimental">
         <picker value=" "
             target-sdk="29"
             auto-off="true"
             visible=". ./kr-script/common/android_q.sh">
-            <title>Sandbox mechanism</title>
-            <desc>With sandboxing on, all applications will not be able to access the native storage root (and not just those with TargetAPI >= Q)</desc>
+            <title>@string:kr_dev_sandbox</title>
+            <desc>@string:kr_dev_sandbox_desc</desc>
             <options>
-                <option value="default">Default</option>
-                <option value="on">Enable</option>
-                <option value="off">Disable</option>
+                <option value="default">@string:kr_dev_sandbox_default</option>
+                <option value="on">@string:kr_dev_sandbox_on</option>
+                <option value="off">@string:kr_dev_sandbox_off</option>
             </options>
             <set>
                 if [[ $state ]]; then
-                    echo 'Device will reboot in 5 seconds~'
-                    sleep 5
-                    sm set-isolated-storage $state
+                echo '@string:kr_dev_sandbox_reboot_5s'
+                sleep 5
+                sm set-isolated-storage $state
                 fi
             </set>
         </picker>
+        <action min-sdk="26" max-sdk="33">
+            <title>@string:kr_dev_hwui_render</title>
+            <desc>@string:kr_dev_hwui_render_desc</desc>
+            <summary sh="run hwui_render/summary.sh" />
+            <param name="renderer"
+                options-sh="run hwui_render/options.sh"
+                value-sh="run hwui_render/get.sh" />
+            <set>run hwui_render/set.sh</set>
+        </action>
+        <switch min-sdk="29" confirm="true">
+            <title>@string:kr_dev_hwui_vulkan</title>
+            <desc>@string:kr_dev_hwui_vulkan_desc</desc>
+            <get>run hwui_vulkan/get.sh</get>
+            <set>run hwui_vulkan/set.sh</set>
+        </switch>
     </group>
 
-    <group title="Other entrances">
-        <page activity="com.android.settings.APPLICATION_DEVELOPMENT_SETTINGS" title="Developer Options" />
-        <page activity="com.android.settings/.RunningServices" title="Running services" />
-        <page activity="com.android.settings/.Settings$MemorySettingsActivity" title="Memory Usage" />
+    <group>
+        <page activity="com.android.settings.APPLICATION_DEVELOPMENT_SETTINGS" title="@string:kr_dev_developer_settings" />
+        <page activity="com.android.settings/.RunningServices" title="@string:kr_dev_running_service" />
+        <page activity="com.android.settings/.Settings$MemorySettingsActivity" title="@string:kr_dev_mem_stat" />
     </group>
 
-    <group title="系统更新"
-        visible-sh="binary_exist update_engine_client">
+    <group title="@string:kr_dev_notch">
+        <action>
+            <title>@string:kr_dev_notch_no_notch</title>
+            <desc>@string:kr_dev_notch_no_notch_desc</desc>
+            <param name="type" value="hole" title="@string:kr_dev_notch_style">
+                <option value="hole">@string:kr_dev_notch_style_hole</option>
+            </param>
+            <param name="os" title="@string:kr_dev_notch_os" value-sh="getprop ro.build.version.sdk">
+                <option value="31">Android 12(SDK31)</option>
+            </param>
+            <set>
+                run notch/apply.sh
+            </set>
+        </action>
+    </group>
+
+    <group>
+        <switch title="Allow Installing Unknown Sources" max-sdk="35">
+            <get>settings get secure install_non_market_apps</get>
+            <get>settings put secure install_non_market_apps $state</get>
+        </switch>
+    </group>
+
+    <group title="OTA"
+        visible="binary_exist.sh update_engine_client">
         <action
             interruptible="false"
-            warn="不支持增量包更新。全量更新完之后，ROOT会丢失，需要自行重新获取ROOT权限。由于不正确操作或【意外】导致的损失，需自行承担！！！">
-            <title>安装OTA更新</title>
-            <desc>适用于A/B(含VAB)分区设备的手动安装更新</desc>
-            <summary>注意：这是试验性功能，可能导致系统/设备损坏！</summary>
+            warn="@string:kr_dev_ota_wran">
+            <title>@string:kr_dev_ota</title>
+            <desc>@string:kr_dev_ota_desc</desc>
+            <summary>@string:kr_dev_ota_summary</summary>
             <params>
-                <param title="ROM文件路径"
+                <param title="@string:kr_dev_ota_file"
                     name="rom"
-                    editable="false"
+                    editable="true"
                     type="file"
                     suffix="zip"
                     required="true" />

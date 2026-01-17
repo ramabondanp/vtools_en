@@ -22,7 +22,7 @@ if [[ -n "$stared" ]] || [[ -n "$stared2" ]]; then
     then
         echo "$ip:$port"
     else
-        echo "Mobile IP:$port"
+        echo "<phone-ip>:$port"
     fi
 else
     echo ""

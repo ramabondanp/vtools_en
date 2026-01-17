@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pages>
+    <resource dir="file:///android_asset/kr-script/img" />
+
+    <group title="REC" visible="run twrp_mode.sh verify">
+        <action id="install" interruptible="false">
+            <title>TWRP injector for AB/VAB</title>
+            <desc>Flash twrp.img on AB/VAB devices.</desc>
+            <summary sh="run twrp_mode.sh mode" />
+            <params>
+                <param name="file" type="file" suffix="img" title="choose a twrp.img" required="true" />
+                <param name="mode" readonly="readonly" value-sh="run twrp_mode.sh mode" title="install method" required="true" />
+            </params>
+            <set>run twrp_install.sh</set>
+        </action>
+    </group>
+
+    <group title="OTA" visible="run vab_slot.sh verify">
+        <action visible="run payload-dumper-go.sh verify" interruptible="false">
+            <title>install ota.zip</title>
+            <desc>Install the full OTA package.</desc>
+            <param name="file" type="file" suffix="zip" title="choose a ota.zip" required="true" />
+            <param name="program" readonly="readonly" value="update_engine" title="install method" required="true" />
+            <set>
+                install-ota "$file"
+            </set>
+        </action>
+
+        <action visible="run payload-dumper-go.sh verify" interruptible="false">
+            <title>patch-boot payload.bin</title>
+            <desc>Extract boot.img from payload.bin and patch it with Magisk.</desc>
+            <param name="file" type="file" suffix="bin" title="choose a payload.bin file" required="true" />
+            <param name="program" readonly="readonly" value="payload-dumper" title="unpack program" required="true" />
+            <set>
+                patch-boot "$file"
+            </set>
+        </action>
+
+        <action visible="run payload-dumper-go.sh verify">
+            <title>extract-boot ota.zip</title>
+            <desc>Extract boot.img from ota.zip.</desc>
+            <param name="file" type="file" suffix="zip" title="choose a ota.zip" required="true" />
+            <param name="mode" readonly="readonly" value="7zip,payload-dumper" title="unpack program" required="true" />
+            <set>
+                extract-boot "$file"
+            </set>
+        </action>
+    </group>
+</pages>

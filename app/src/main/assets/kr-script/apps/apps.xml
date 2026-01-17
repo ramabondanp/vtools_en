@@ -2,89 +2,61 @@
 <items>
     <resource dir="file:///android_asset/kr-script/apps" />
 
-    <group title="Rogue killer">
-        <action warn="Before uninstalling QQ, or clearing data by preserving Media (SDCard) data, please make sure to restore QQ personalization to enable first! Otherwise, you will not be able to log in normally if you install QQ again">
-            <title>QQ personalization</title>
-            <desc>Disabling this option will remove QQ's personalized fonts, bubbles, and avatar pendants</desc>
-            <params>
-                <param name="font" title="Personalized Fonts">
-                    <option value="1">Enable</option>
-                    <option value="0">Disable</option>
-                </param>
-                <param name="bubble" title="Personalized Bubbles">
-                    <option value="1">Enable</option>
-                    <option value="0">Disable</option>
-                </param>
-                <param name="pendant" title="Avatar pendant">
-                    <option value="1">Enable</option>
-                    <option value="0">Disable</option>
-                </param>
-                <param name="sticker" title="Emoji stickers">
-                    <option value="1">Enable</option>
-                    <option value="0">Disable</option>
-                </param>
-            </params>
-            <set>run qq_style_set.sh</set>
-        </action>
-        <action confirm="true">
-            <title>QQ personalization bug fix</title>
-            <desc>Fix the problem that QQ personalization is disabled and QQ cannot be logged in after the phone is double cleared.</desc>
-            <summary>Note: This operation will delete all QQ data!</summary>
-            <set>run qq_style_fix.sh</set>
-        </action>
-    </group>
-
-    <group title="Google Related">
-        <page auto-off="true" id="google_settings" activity="com.google.android.gms/.app.settings.GoogleSettingsLink"
-            visible=". ./kr-script/common/gapps_support.sh">
-            <title>Open Google Settings</title>
-            <desc>This feature is to facilitate the customization system that hides "Google Settings", open "Google Settings"</desc>
-        </page>
+    <group>
         <switch id="google_service"
-            logo-path="kr-script/apps/google.png"
             shell="hidden"
             visible=". ./kr-script/common/gapps_support.sh">
-            <title>Enable Google Services</title>
-            <desc>Turn off this option to temporarily disable Google Framework to save power</desc>
+            <title>@string:kr_apps_google_service</title>
+            <desc>@string:kr_apps_google_service_desc</desc>
             <get>run gapps_get.sh</get>
             <set>run gapps_set.sh</set>
         </switch>
+        <page auto-off="true" id="google_settings"
+            activity="com.google.android.gms/.app.settings.GoogleSettingsLink"
+            visible=". ./kr-script/common/gapps_support.sh">
+            <title>@string:kr_apps_google_settings</title>
+            <desc>@string:kr_apps_google_settings_desc</desc>
+        </page>
         <switch auto-off="true" id="google_hal_eis" shell="hidden">
             <title>Camera2 HAL、EIS</title>
-            <desc>Enable HAL and EIS to support Google Camera HDR+ feature or avoid flashing. May cause the camera to fail to open or switch slowly</desc>
-            <summary>Google Camera requires you to download the version that suits your model</summary>
+            <desc>@string:kr_apps_camera2_desc</desc>
+            <summary>@string:kr_apps_camera2_summary</summary>
             <get>run gcm_get.sh</get>
             <set>run gcm_set.sh</set>
         </switch>
         <page link="https://play.google.com/store/account/subscriptions">
-            <title>Google Subscription Management</title>
-            <desc>View and manage your paid content subscriptions on the Play Store</desc>
+            <title>@string:kr_apps_google_subscribe</title>
+            <desc>@string:kr_apps_google_subscribe_desc</desc>
+        </page>
+        <page activity="com.google.android.gms/com.google.android.gms.auth.account.otp.OtpActivity">
+            <title>@string:kr_apps_google_otp</title>
+            <desc>@string:kr_apps_google_otp_desc</desc>
         </page>
     </group>
 
-    <group title="Other">
-        <picker title="App Installation Location" auto-off="true" summary-sh="run install-location-summary.sh">
-            <option value="0">Automatic (automatically determined by the system)</option>
-            <option value="1">Internal storage (local)</option>
-            <option value="2">External Storage(SDCard)</option>
+    <group>
+        <picker title="@string:kr_apps_install_location" auto-off="true" summary-sh="run install-location-summary.sh">
+            <option value="0">@string:kr_apps_install_location_auto</option>
+            <option value="1">@string:kr_apps_install_internal_storage</option>
+            <option value="2">@string:kr_apps_install_external_storage</option>
             <get>pm get-install-location | cut -f1 -d '['</get>
             <set>
                 pm set-install-location $state
-                echo 'Note: Some applications specify the installation path in the manifest file, the installation location may not be controlled by this setting'
+                echo '@string:kr_apps_install_location_wran'
             </set>
         </picker>
         <picker auto-off="true"
             visible=". ./kr-script/common/android_p.sh"
             summary-sh="run launcher/get.sh"
             options-sh="run launcher/options.sh">
-            <title>Default Desktop</title>
+            <title>@string:kr_apps_launcher</title>
             <get>run launcher/get.sh</get>
             <set>run launcher/set.sh</set>
         </picker>
-        <page title="Select dynamic wallpaper" id="livepicker"
+        <page title="@string:kr_apps_live_wallpaper" id="livepicker"
             activity="com.android.wallpaper.livepicker/com.android.wallpaper.livepicker.LiveWallpaperActivity" />
         <page
-            title="Default App Settings"
+            title="@string:kr_apps_default_app"
             activity="com.android.permissioncontroller/com.android.packageinstaller.role.ui.DefaultAppListActivity"
             visible="pm query-activities --brief -n com.android.permissioncontroller/com.android.packageinstaller.role.ui.DefaultAppListActivity | grep '/' > /dev/null &amp;&amp; echo 1" />
     </group>

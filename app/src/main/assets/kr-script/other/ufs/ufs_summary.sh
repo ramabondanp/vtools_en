@@ -8,6 +8,7 @@ fi
 
 dump_files=$(find /sys -name "dump_*_desc" | grep ufshc)
 if [[ "$bDeviceLifeTimeEstA" == "" ]];then
+  # dump_files=$(find /sys -name "dump_*_desc" | grep ufshc)
   for line in $dump_files
   do
     str=$(grep 'bDeviceLifeTimeEstA' $line | cut -f2 -d '=' | cut -f2 -d ' ')
@@ -28,59 +29,58 @@ if [[ "$bDeviceLifeTimeEstA" == "" ]];then
   done
 fi
 
-# 0x00 No information found about the device's usage lifespan.
-# 0x01 Device estimated lifespan: 0% to 10%.
-# 0x02 Device estimated lifespan: 10% to 20%.
-# 0x03 Device estimated lifespan: 20% to 30%.
-# 0x04 Device estimated lifespan: 30% to 40%.
-# 0x05 Device estimated lifespan: 40% to 50%.
-# 0x06 Device estimated lifespan: 50% to 60%.
-# 0x07 Device estimated lifespan: 60% to 70%.
-# 0x08 Device estimated lifespan: 70% to 80%.
-# 0x09 Device estimated lifespan: 80% to 90%.
-# 0x0A Device estimated lifespan: 90% to 100%.
-# 0x0B Device has exceeded its estimated lifespan.
+# 0x00	No information about device life.
+# 0x01	Estimated device life: 0% to 10%.
+# 0x02	Estimated device life: 10% to 20%.
+# 0x03	Estimated device life: 20% to 30%.
+# 0x04	Estimated device life: 30% to 40%.
+# 0x05	Estimated device life: 40% to 50%.
+# 0x06	Estimated device life: 50% to 60%.
+# 0x07	Estimated device life: 60% to 70%.
+# 0x08	Estimated device life: 70% to 80%.
+# 0x09	Estimated device life: 80% to 90%.
+# 0x0A	Estimated device life: 90% to 100%.
+# 0x0B	Device has exceeded its estimated lifetime.
 
-[[ -z "$bDeviceLifeTimeEstA" ]] && { echo "This device has not used UFS nor provided health information." ; exit 0; }
-
+# Used lifetime
 case $bDeviceLifeTimeEstA in
 "0x00"|"0x0")
-  echo 'Used lifespan: Unknown'
-  ;;
+echo '@string:kr_others_ufs_health_used @string:kr_others_ufs_health_unknown'
+;;
 "0x01"|"0x1")
-  echo 'Used lifespan: 0% ~ 10%'
-  ;;
+echo '@string:kr_others_ufs_health_used 0% ~ 10%'
+;;
 "0x02"|"0x2")
-  echo 'Used lifespan: 10% ~ 20%'
-  ;;
+echo '@string:kr_others_ufs_health_used 10% ~ 20%'
+;;
 "0x03"|"0x3")
-  echo 'Used lifespan: 20% ~ 30%'
-  ;;
+echo '@string:kr_others_ufs_health_used 20% ~ 30%'
+;;
 "0x04"|"0x4")
-  echo 'Used lifespan: 30% ~ 40%'
-  ;;
+echo '@string:kr_others_ufs_health_used 30% ~ 40%'
+;;
 "0x05"|"0x5")
-  echo 'Used lifespan: 40% ~ 50%'
-  ;;
+echo '@string:kr_others_ufs_health_used 40% ~ 50%'
+;;
 "0x06"|"0x6")
-  echo 'Used lifespan: 50% ~ 60%'
-  ;;
+echo '@string:kr_others_ufs_health_used 50% ~ 60%'
+;;
 "0x07"|"0x7")
-  echo 'Used lifespan: 60% ~ 70%'
-  ;;
+echo '@string:kr_others_ufs_health_used 60% ~ 70%'
+;;
 "0x08"|"0x8")
-  echo 'Used lifespan: 70% ~ 80%'
-  ;;
+echo '@string:kr_others_ufs_health_used 70% ~ 80%'
+;;
 "0x09"|"0x9")
-  echo 'Used lifespan: 80% ~ 90%'
-  ;;
+echo '@string:kr_others_ufs_health_used 80% ~ 90%'
+;;
 "0x0A"|"0xA")
-  echo 'Used lifespan: 90% ~ 100%'
-  ;;
+echo '@string:kr_others_ufs_health_used 90% ~ 100%'
+;;
 "0x0B"|"0xB")
-  echo 'Exceeded estimated lifespan'
-  ;;
+echo "@string:kr_others_ufs_health_over" # 'Exceeded estimated lifetime'
+;;
 *)
-  echo 'Used lifespan: Unknown'
-  ;;
+echo '@string:kr_others_ufs_health_used @string:kr_others_ufs_health_unknown'
+;;
 esac

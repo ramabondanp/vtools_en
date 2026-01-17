@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<group>
+    <resource dir="file:///android_asset/kr-script/display" />
+    <group>
+        <action shell="hidden" visible="run brightness.sh supported" id="brightness">
+            <title>@string:kr_ui_brightness</title>
+            <desc>@string:kr_ui_brightness_desc</desc>
+            <params>
+                <param name="brightness" label="@string:kr_ui_brightness" type="seekbar"
+                       max-sh="run brightness.sh get_max_brightness" min="1"
+                       value-sh="run brightness.sh get_brightness" />
+                <param name="lock" label="@string:kr_ui_brightness_lock" type="switch" />
+            </params>
+            <set>run brightness.sh set_brightness</set>
+        </action>
+        <action shell="hidden" id="ColorMatrix" min-sdk="33">
+            <title>@string:kr_ui_color_matrix</title>
+            <desc>@string:kr_ui_color_matrix_desc</desc>
+            <param name="r" min="80" max="120" value="100" title="Red (R)" type="seekbar" />
+            <param name="g" min="80" max="120" value="100" title="Green (G)" type="seekbar" />
+            <param name="b" min="80" max="120" value="100" title="Blue (B)" type="seekbar" />
+            <param name="a" min="-25" max="25" value="0" title="Brightness (Alpha)" type="seekbar" />
+            <set>
+              r=$(echo "scale=2;$r/100"|bc)
+              g=$(echo "scale=2;$g/100"|bc)
+              b=$(echo "scale=2;$b/100"|bc)
+              if [[ $(getprop ro.build.version.sdk) -lt 34 ]] &amp;&amp; [[ $a -lt 0 ]]; then
+                a=0
+              fi
+              a=$(echo "scale=2;$a/100"|bc)
+              run mat4.sh mat4_rgba $r $g $b $a
+            </set>
+        </action>
+        <action id="color-grey" shell="hidden">
+            <title>@string:kr_ui_color_saturation</title>
+            <param title="@string:kr_ui_color_saturation_value" type="seekbar" max="200" min="0" value="100" name="value" />
+            <set>
+              v=$(echo "scale=2; $value / 100" | bc)
+              service call SurfaceFlinger 1022 f $v
+              setprop persist.sys.sf.color_saturation $v
+            </set>
+        </action>
+        <picker id="refresh-ratio" shell="hidden" min-sdk="29" options-sh="run display_modes.sh">
+            <title>@string:kr_ui_refresh_rate</title>
+            <set>
+                if [[ $state != '' ]]; then
+                  service call SurfaceFlinger 1035 i32 $state
+                fi
+            </set>
+        </picker>
+        <action shell="hidden" id="refresh-rate-view">
+            <title>@string:kr_ui_refresh_rate_v</title>
+            <desc>@string:kr_ui_refresh_rate_v_value</desc>
+            <param name="state" value="1">
+                <option value="1">ON</option>
+                <option value="0">OFF</option>
+            </param>
+            <set>
+                service call SurfaceFlinger 1034 i32 $state
+            </set>
+        </action>
+    </group>
+
+    <group>
+        <switch shell="hidden">
+            <title>@string:kr_ui_h_contraste</title>
+            <desc>@string:kr_ui_h_contraste_desc</desc>
+            <get>settings get secure high_text_contrast_enabled</get>
+            <set>settings put secure high_text_contrast_enabled $state</set>
+        </switch>
+        <switch
+            auto-off="true"
+            auto-finish="true"
+            shell="hidden"
+            id="display_daltonizer">
+            <title>@string:kr_ui_color_calibration</title>
+            <get>settings get secure accessibility_display_daltonizer_enabled</get>
+            <set>
+                mode=`settings get secure accessibility_display_daltonizer`
+                if [[ "$mode" == "null" ]] || [[ "$mode" == "" ]]; then
+                settings put secure accessibility_display_daltonizer 0
+                fi
+                settings put secure accessibility_display_daltonizer_enabled $state
+            </set>
+        </switch>
+        <picker auto-off="true" shell="hidden">
+            <title>@string:kr_ui_color_calibration</title>
+            <options>
+                <option value="0">@string:kr_ui_color_calibration0</option>
+                <option value="1">@string:kr_ui_color_calibration1</option>
+                <option value="2">@string:kr_ui_color_calibration2</option>
+                <option value="3">@string:kr_ui_color_calibration3</option>
+            </options>
+            <get>settings get secure accessibility_display_daltonizer</get>
+            <set>settings put secure accessibility_display_daltonizer $state</set>
+        </picker>
+    </group>
+
+    <group>
+        <switch visible="run common/android_n.sh" shell="hidden">
+            <title>@string:kr_ui_split_view</title>
+            <desc>@string:kr_ui_split_view_desc</desc>
+            <get>run force_resize_get.sh</get>
+            <set>run force_resize_set.sh</set>
+        </switch>
+        <switch warning="@string:kr_kr_ui_navbar_wran"
+            visible="if [[ $MAGISK_PATH != '' ]];then echo 1; else echo 0; fi">
+            <title>@string:kr_ui_navbar</title>
+            <desc>@string:kr_ui_navbar_desc</desc>
+            <get>run mainkey_get.sh</get>
+            <set>run mainkey_set.sh</set>
+        </switch>
+
+        <action shell="hidden">
+            <title>@string:kr_ui_anim_duration</title>
+            <desc>@string:kr_ui_anim_duration_desc</desc>
+            <params>
+                <param name="w" title="@string:kr_ui_anim_window"
+                    options-sh="run animation/options.sh" value="1.0"
+                    value-sh="settings get global window_animation_scale" />
+                <param name="transition" title="@string:kr_ui_anim_activity"
+                    options-sh="run animation/options.sh" value="1.0"
+                    value-sh="settings get global transition_animation_scale" />
+                <param name="animator" title="@string:kr_ui_anim_translation"
+                    options-sh="run animation/options.sh" value="1.0"
+                    value-sh="settings get global animator_duration_scale" />
+                <param name="duration_ratio" title="@string:kr_ui_anim_mi"
+                    desc="@string:kr_ui_anim_mi_desc"
+                    options-sh="run animation/options2.sh" value="1.0"
+                    value-sh="settings get global transition_animation_duration_ratio" />
+            </params>
+            <set>run animation/set.sh</set>
+        </action>
+    </group>
+</group>

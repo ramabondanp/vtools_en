@@ -2,68 +2,62 @@
 <items>
     <resource dir="file:///android_asset/kr-script/aosp" />
 
-    <group title="Interface">
-        <switch visible=". ./kr-script/common/android_n.sh">
-            <title>Free Window</title>
-            <desc>Enable the windowed mode of the (native) system and display the windowed button in the multitasking screen</desc>
-            <get>run free_form/get.sh</get>
-            <set>run free_form/set.sh</set>
-        </switch>
+    <group>
         <switch>
-            <title>Hover notification</title>
-            <desc>Show hover notification at the top of the screen when you receive a message</desc>
+            <title>@string:kr_aosp_popup_notification</title>
+            <desc>@string:kr_aosp_popup_notification_desc</desc>
             <get>settings get global heads_up_notifications_enabled</get>
             <set>settings put global heads_up_notifications_enabled $state</set>
         </switch>
         <action>
-            <title>Night Mode</title>
-            <desc>Toggle night mode switch setting</desc>
+            <title>@string:kr_aosp_night_mode</title>
+            <desc>@string:kr_aosp_night_mode_desc</desc>
             <params>
-                <param name="state" title="Night Mode" value-sh="settings get secure ui_night_mode">
-                    <option value="0">Automatic</option>
-                    <option value="1">Turn off</option>
-                    <option value="2">Turn on</option>
+                <param name="state" title="@string:kr_aosp_night_mode" value-sh="settings get secure ui_night_mode">
+                    <option value="0">@string:kr_aosp_night_mode_auto</option>
+                    <option value="1">@string:kr_aosp_night_mode_off</option>
+                    <option value="2">@string:kr_aosp_night_mode_on</option>
                 </param>
-                <param name="hotreboot" title="Additional Operations">
-                    <option value="0">Not required (AOSP)</option>
-                    <option value="1">Restart after switching (MIUI, etc.)</option>
+                <param name="hotreboot" title="@string:kr_aosp_night_mode_reboot">
+                    <option value="0">@string:kr_aosp_night_mode_reboot_n</option>
+                    <option value="1">@string:kr_aosp_night_mode_reboot_y</option>
                 </param>
             </params>
             <set>run night_mode.sh</set>
         </action>
         <picker>
-            <title>Rotate screen</title>
-            <desc>Force rotation of the screen orientation (can not make the vertical screen application forced horizontal screen, but you can turn the phone upside down to use?</desc>
+            <title>@string:kr_aosp_rotation</title>
+            <desc>@string:kr_aosp_rotation_desc</desc>
             <options>
-                <option value="0">Normal</option>
-                <option value="1">Horizontal Screen</option>
-                <option value="2">Reverse Vertical</option>
-                <option value="3">Reverse landscape</option>
+                <option value="0">@string:kr_aosp_rotation_portrait</option>
+                <option value="1">@string:kr_aosp_rotation_landscape</option>
+                <option value="2">@string:kr_aosp_rotation_inverted_portrait</option>
+                <option value="3">@string:kr_aosp_rotation_inverted_landscape</option>
             </options>
             <get>settings get system user_rotation</get>
             <set>run rotation.sh</set>
         </picker>
         <picker multiple="multiple" separator="," visible=". ./kr-script/common/android_n.sh">
-            <title>Hide status bar icon</title>
-            <desc>Set the hidden status bar icon</desc>
+            <title>@string:kr_aosp_status_icons</title>
+            <desc>@string:kr_aosp_status_icons_desc</desc>
             <options>
-                <option value="mobile">Cell phone signal</option>
+                <option value="mobile">@string:kr_aosp_status_mobile</option>
                 <option value="volte">VoLTE</option>
-                <option value="airplane">Flight Mode</option>
-                <option value="location">Positioning icons</option>
+                <option value="airplane">@string:kr_aosp_satus_airplane</option>
+                <option value="location">@String:kr_aosp_status_location</option>
                 <option value="wifi">WIFI</option>
                 <option value="nfc">NFC</option>
                 <option value="vpn">VPN</option>
-                <option value="bluetooth">Bluetooth</option>
-                <option value="volume">Volume/Mute</option>
-                <option value="zen">Do not disturb mode</option>
-                <option value="alarm_clock">Alarm Clock</option>
-                <option value="headset">Headphones</option>
-                <option value="ime">Input Method</option>
-                <option value="battery">Battery icon</option>
-                <option value="rotate">Screen rotation</option>
-                <option value="cast">Screen capture (screen recording)</option>
-                <option value="su">ROOT permission</option>
+                <option value="bluetooth">@string:kr_aosp_status_bluetooth</option>
+                <option value="volume">@string:kr_aosp_status_volume_mute</option>
+                <option value="zen">@string:kr_aosp_status_zen_mode</option>
+                <option value="alarm_clock">@string:kr_aosp_status_alarm_clock</option>
+                <option value="headset">@string:kr_aosp_status_headset</option>
+                <option value="ime">@string:kr_aosp_status_ime</option>
+                <option value="battery">@string:kr_aosp_status_battery</option>
+                <option value="rotate">@string:kr_aosp_status_rotate</option>
+                <option value="cast">@string:kr_aosp_status_cast</option>
+                <option value="su">@string:kr_aosp_status_su</option>
             </options>
             <get>
                 settings get secure icon_blacklist
@@ -74,27 +68,21 @@
         </picker>
     </group>
 
-    <group title="Performance">
-        <!--<switch confirm="true">
-            <title>Low memory devices</title>
-            <desc>Enable the low memory device logo to activate some features designed for low-end machines (pure native system only!!!) The custom system may not boot up after opening!</desc>
-            <get>run low_ram/get.sh</get>
-            <set>run low_ram/set.sh</set>
-        </switch>-->
+    <group>
         <switch>
-            <title>Power saving mode</title>
-            <desc>Switch the native Android system comes with a power saving mode (not a third-party UI custom power saving mode)</desc>
+            <title>@string:kr_aosp_low_power</title>
+            <desc>@string:kr_aosp_low_power_desc</desc>
             <get>run ps/get.sh</get>
             <set>run ps/set.sh</set>
         </switch>
         <action>
-            <title>Low Power Level</title>
-            <desc>Set the low battery level, and the level that triggers low battery mode</desc>
+            <title>@string:kr_aosp_low_power_level</title>
+            <desc>@string:kr_aosp_low_power_level_desc</desc>
             <params>
-                <param name="level" title="Low battery mode trigger level"
+                <param name="level" title="@string:kr_aosp_low_power_critical_level"
                     options-sh="run pl/options.sh"
                     value-sh="settings get global low_power_trigger_level" />
-                <param name="levelmax" title="Low Battery Alert Level"
+                <param name="levelmax" title="@string:kr_aosp_low_power_wran_level"
                     options-sh="run pl/options.sh"
                     value-sh="settings get global low_power_trigger_level_max" />
             </params>
@@ -102,24 +90,24 @@
         </action>
     </group>
 
-    <group title="Function">
+    <group>
         <picker>
-            <title>Remove! and x</title>
-            <desc>By changing the network detection server, the WIFI and LTE icons in the status bar are always displayed! or X</desc>
+            <title>@string:kr_aosp_net_checker</title>
+            <desc>@string:kr_aosp_net_checker_desc</desc>
             <summary sh="run network_checker_summary.sh" />
             <options>
-                <option value="miui">MIUI server</option>
-                <option value="google">Google server</option>
-                <option value="v2ex">V2EX server</option>
-                <option value="disable">Disable network auth</option>
-                <option value="default">Restore default</option>
+                <option value="miui">@string:kr_aosp_net_checker_miui</option>
+                <option value="google">@string:kr_aosp_net_checker_google</option>
+                <option value="v2ex">@string:kr_aosp_net_checker_v2ex</option>
+                <option value="disable">@string:kr_aosp_net_checker_disable</option>
+                <option value="default">@string:kr_aosp_net_checker_reset</option>
             </options>
             <get>run network_checker_get.sh</get>
             <set>run network_checker_set.sh</set>
         </picker>
         <picker>
-            <title>Switching NTP servers</title>
-            <desc>If your system can synchronize the time properly, there is no need to replace the NTP server</desc>
+            <title>@string:kr_aosp_ntp</title>
+            <desc>@string:kr_aosp_ntp_desc</desc>
             <options>
                 <option>pool.ntp.org</option>
                 <option>ntp.ntsc.ac.cn</option>
@@ -131,10 +119,31 @@
             <set>run ntp_set.sh</set>
         </picker>
         <action>
-            <title>Custom NTP server</title>
-            <desc>If your system can synchronize the time properly, there is no need to replace the NTP server</desc>
-            <param name="state" desc="Please enter the address of the NTP server you know" value-sh="settings get global ntp_server" />
+            <title>@string:kr_aosp_ntp_custom</title>
+            <desc>@string:kr_aosp_ntp_custom_desc</desc>
+            <param name="state" desc="@string:kr_aosp_ntp_address" value-sh="settings get global ntp_server" />
             <set>run ntp_set.sh</set>
         </action>
+    </group>
+
+    <group>
+        <page
+            min-sdk="33"
+            id="PrivacyControlsActivity"
+            activity="com.android.settings/com.android.settings.Settings$PrivacyControlsActivity">
+            <title>Privacy Controls</title>
+        </page>
+        <page
+            min-sdk="32"
+            id="TextReadingSettingsActivity"
+            activity="com.android.settings/com.android.settings.Settings$TextReadingSettingsActivity">
+            <title>Text Reading Settings</title>
+        </page>
+        <page
+            min-sdk="32"
+            id="ReduceBrightness"
+            activity="com.android.settings/com.android.settings.Settings$ReduceBrightColorsSettingsActivity">
+            <title>Reduce Brightness</title>
+        </page>
     </group>
 </items>

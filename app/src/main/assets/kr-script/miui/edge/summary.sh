@@ -4,5 +4,5 @@ if [[ "$value" == "" ]] || [[ "$value" == "null" ]]; then
     echo ""
 else
     value=`awk -v x=$value -v y=100 'BEGIN{printf "%.0f\n",x*y}'`
-    echo "当前: ${value}%"
+    echo "Current: ${value}%"
 fi

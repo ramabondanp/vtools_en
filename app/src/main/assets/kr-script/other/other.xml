@@ -1,42 +1,46 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <group>
     <resource dir="file:///android_asset/kr-script/other" />
-
-    <action id="addin_restart_systemui" shell="hidden">
-        <title>Restart SystemUI</title>
-        <desc>End the SystemUI process and make it reload</desc>
-        <set>
-            am kill com.android.systemui 2> /dev/null
-            killall -9 com.android.systemui 2> /dev/null
-        </set>
-    </action>
+    <group>
+        <action>
+            <title>@string:kr_others_ufs_health</title>
+            <summary sh="run ufs/ufs_summary.sh" />
+            <set>run ufs/ufs_detail.sh</set>
+            <desc>@string:kr_others_ufs_health_desc</desc>
+        </action>
+        <action visible="item_exist.sh /sys/block/mmcblk0/device/life_time">
+            <title>@string:kr_others_emmc_health</title>
+            <summary sh="run emmc/emmc_summary.sh" />
+            <set>run emmc/emmc_detail.sh</set>
+            <desc>@string:kr_others_ufs_health_desc</desc>
+        </action>
+    </group>
 
     <group>
         <action>
-            <title>EMMC storage life</title>
-            <summary sh="run emmc/emmc_summary.sh" />
-            <set>run emmc/emmc_detail.sh</set>
-            <desc>*The data is for reference only</desc>
+            <title>@string:kr_others_self_rescue</title>
+            <desc>@string:kr_others_self_rescue_desc</desc>
+            <set>run resurgence/set.sh</set>
         </action>
         <action>
-            <title>UFS storage life</title>
-            <summary sh="run ufs/ufs_summary.sh" />
-            <set>run ufs/ufs_detail.sh</set>
-            <desc>*The data is for reference only</desc>
+            <title>@string:kr_others_thermal_remove</title>
+            <desc>@string:kr_others_thermal_remove_desc</desc>
+            <param name="selected" multiple="multiple" value-sh="run thermal/value.sh" options-sh="run thermal/options.sh" />
+            <set>run thermal/set.sh</set>
         </action>
     </group>
 
     <group>
         <action confirm="false">
-            <title>Temperature sensor</title>
-            <desc>View the current value of the temperature sensor</desc>
+            <title>@string:kr_others_temperature_sensors</title>
+            <desc>@string:kr_others_temperature_sensors_desc</desc>
             <set>run sensor_values.sh</set>
         </action>
         <picker
             visible="run 377_key/support.sh"
             options-sh="run 377_key/options.sh"
             shell="hidden">
-            <title>Google key events</title>
+            <title>@string:kr_others_google_key</title>
             <summary sh="run 377_key/summary.sh" />
             <get>run 377_key/get.sh</get>
             <set>run 377_key/set.sh</set>
@@ -44,48 +48,40 @@
     </group>
 
     <group>
-        <switch shell="hidden">
-            <title>High Contrast Mode</title>
-            <desc>Sharpen text and enhance contrast to make it easy to see the text</desc>
-            <get>settings get secure high_text_contrast_enabled</get>
-            <set>settings put secure high_text_contrast_enabled $state</set>
-        </switch>
-        <switch
-            auto-off="true"
-            auto-finish="true"
-            shell="hidden"
-            id="display_daltonizer">
-            <title>Color correction</title>
-            <get>settings get secure accessibility_display_daltonizer_enabled</get>
+        <action>
+            <title>@string:kr_others_fstrim</title>
+            <desc>@string:kr_others_fstrim_desc</desc>
             <set>
-                mode=`settings get secure accessibility_display_daltonizer`
-                if [[ "$mode" == "null" ]] || [[ "$mode" == "" ]]; then
-                    settings put secure accessibility_display_daltonizer 0
-                fi
-                settings put secure accessibility_display_daltonizer_enabled $state
+                echo 'fstrim /data'; fstrim /data;
+                echo 'fstrim /cache'; fstrim /cache;
+                echo 'fstrim /system'; fstrim /system 2>/dev/null;
+                sm fstrim 2>/dev/null
             </set>
-        </switch>
-        <picker auto-off="true" shell="hidden">
-            <title>Color correction mode</title>
-            <options>
-                <option value="0">Black and white mode</option>
-                <option value="1">Red visual weakness (red and green indistinguishable)</option>
-                <option value="2">Green vision weakness (red and green indistinguishable)</option>
-                <option value="3">Blue vision weakness (blue-yellow indistinguishable)</option>
-            </options>
-            <get>settings get secure accessibility_display_daltonizer</get>
-            <set>settings put secure accessibility_display_daltonizer $state</set>
-        </picker>
+        </action>
     </group>
 
     <group>
-        <action id="PixivID" logo="../icons/pixiv.png" shell="hidden" auto-finish="true">
-            <title>View Pixiv's work</title>
-            <desc>Enter the Pixiv work ID and visit its web address</desc>
-            <param name="id" label="Work ID" placeholder="For example: 82661417" desc="Please bring your own stairs for the network environment in China" />
+        <switch min-sdk="29">
+            <title>USAP pool</title>
+            <get>
+                if [[ $(getprop persist.device_config.runtime_native.usap_pool_enabled) == 'true' || $(getprop persist.sys.usap_pool_enabled) == 'true' ]]; then
+                echo 1
+                else
+                echo 0
+                fi
+            </get>
             <set>
-                am start -a android.intent.action.VIEW -d https://www.pixiv.net/artworks/$id
+                prop=persist.device_config.runtime_native.usap_pool_enabled
+                prop2=persist.sys.usap_pool_enabled
+                if [[ $state == '1' ]]; then
+                setprop $prop true
+                setprop $prop2 true
+                else
+                setprop $prop false
+                setprop $prop2 false
+                fi
+                echo '@string:kr_others_usap_reboot'
             </set>
-        </action>
+        </switch>
     </group>
 </group>

@@ -7,7 +7,9 @@ for sensor in *
 do
   if [[ -f $sensor/temp ]]
   then
+    echo -n $sensor'#'
     echo `cat $sensor/type` `cat $sensor/temp` # $sensor
   fi
 done
 
+# cat thermal_zone5/temp

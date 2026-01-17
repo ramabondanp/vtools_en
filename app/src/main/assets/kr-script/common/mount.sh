@@ -1,6 +1,6 @@
 #!/system/bin/sh
 
-# 挂载系统分区为读写
+# Remount system partitions as read-write
 function mount_all() {
     $BUSYBOX mount -o rw,remount / 2> /dev/null
     mount -o rw,remount / 2> /dev/null

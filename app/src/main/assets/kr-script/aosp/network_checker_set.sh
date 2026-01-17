@@ -1,6 +1,6 @@
 #!/system/bin/sh
 
-echo 'Turn off the network'
+echo 'Disable network'
 settings put global airplane_mode_on 1 > /dev/null 2>&1
 am broadcast -a android.intent.action.AIRPLANE_MODE --ez state true > /dev/null 2>&1
 
@@ -17,11 +17,11 @@ if [[ "$state" == "" ]] || [[ "$state" == "default" ]]; then
     settings reset global captive_portal_mode
     settings delete global captive_portal_detection_enabled
     settings reset global captive_portal_detection_enabled
-    echo 'Network auth parameters have been reset'
+    echo 'Network validation parameters reset'
 elif [[ "$state" == "disable" ]]; then
     settings put global captive_portal_mode 0
-    echo 'Network status monitoring is disabled'
-    echo 'Note: This will cause you to not automatically pop up the login verification when you connect to the public WIFI!' 1>&2
+    echo 'Network status monitoring disabled'
+    echo 'Note: This prevents captive portal login prompts on public Wi-Fi!' 1>&2
 else
     server_url=""
     if [[ "$state" == "miui" ]]; then
@@ -37,7 +37,7 @@ else
     settings put global captive_portal_use_https 1
     settings put global captive_portal_mode 1
     settings put global captive_portal_detection_enabled 1
-    echo "Changed the network detection server to https:$server_url"
+    echo "Network check server changed to https:$server_url"
 fi
 
 echo 'Restart network'

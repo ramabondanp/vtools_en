@@ -1,7 +1,7 @@
 file="/system/etc/hosts"
 
 if [[ "$MAGISK_PATH" != "" ]]; then
-    # Magisk 替换
+    # Magisk replacement
 
     if [[ ! -f $MAGISK_PATH$file ]]; then
         mkdir -p $MAGISK_PATH/system/etc
@@ -9,22 +9,22 @@ if [[ "$MAGISK_PATH" != "" ]]; then
     fi
 
     if [[ $state == 1 ]]; then
-        # 恢复更新 移除规则
+        # Restore updates: remove rule
         $BUSYBOX sed -i '/127.0.0.1\ \ \ \ \ \ \ update.miui.com/'d $MAGISK_PATH$file
     else
-        # 屏蔽更新 添加规则
+        # Block updates: add rule
         $BUSYBOX sed -i '$a127.0.0.1\ \ \ \ \ \ \ update.miui.com' $MAGISK_PATH$file
     fi
     pm clear com.android.updater 2> /dev/null
 
-    echo 'This operation requires a restart of the phone to take effect!'
+    echo 'This action requires a reboot to take effect!'
 else
-    # 非 Magisk 替换
+    # Non-Magisk replacement
 
     source ./kr-script/common/mount.sh
     mount_all
 
-    echo 'Block MIUI online update download address(System partition needs to be unlocked)...'
+    echo 'Block MIUI online update download address (requires unlocked system partition)...'
 
     path="/system/etc/hosts"
     $BUSYBOX sed '/127.0.0.1\ \ \ \ \ \ \ update.miui.com/'d $path > /cache/hosts
@@ -40,6 +40,6 @@ else
     rm /cache/hosts
     sync
 
-    echo 'You may need to reboot your phone for this to take effect!'
+    echo 'A reboot may be required for changes to take effect!'
 fi
 
