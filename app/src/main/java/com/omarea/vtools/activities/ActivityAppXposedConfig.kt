@@ -213,13 +213,13 @@ class ActivityAppXposedConfig : ActivityBase() {
                     desc.append("DPI:${dpi}  ")
                 }
                 if (excludeRecent) {
-                    desc.append("隐藏后台  ")
+                    desc.append("Hide background  ")
                 }
                 if (smoothScroll) {
-                    desc.append("弹性慢速滚动  ")
+                    desc.append("Elastic slow scrolling  ")
                 }
                 if (webDebug) {
-                    desc.append("Web调试  ")
+                    desc.append("Web debugging  ")
                 }
                 item.desc = desc.toString()
             }

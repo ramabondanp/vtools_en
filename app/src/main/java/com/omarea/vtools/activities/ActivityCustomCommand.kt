@@ -29,9 +29,9 @@ class ActivityCustomCommand : ActivityBase() {
             val title = binding.commandTitle.text?.toString()
             val script = binding.commandScript.text?.toString()
             if (title.isNullOrEmpty()) {
-                Toast.makeText(this, "先输入一个标题吧！", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Please enter a title first!", Toast.LENGTH_SHORT).show()
             } else if (script.isNullOrEmpty()) {
-                Toast.makeText(this, "脚本内容不能为空哦！", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Script content cannot be empty!", Toast.LENGTH_SHORT).show()
             } else {
                 saveCommand(title, script)
             }
@@ -39,7 +39,7 @@ class ActivityCustomCommand : ActivityBase() {
     }
 
     private fun runCommand() {
-        Toast.makeText(this, "还未实现此功能！", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "This feature is not implemented yet!", Toast.LENGTH_SHORT).show()
     }
 
     private fun saveCommand(title: String, script: String, replace: Boolean = false) {
@@ -49,7 +49,7 @@ class ActivityCustomCommand : ActivityBase() {
 
         if (File(fullPath).exists() && !replace) {
             val current = File(fullPath).readText(Charset.defaultCharset())
-            DialogHelper.confirmBlur(this, "要覆盖已存在的同名命令？", "已存在同名命令，内容为：\n" + current, {
+            DialogHelper.confirmBlur(this, "Overwrite existing command with the same name?", "A command with the same name already exists, content:\n" + current, {
                 saveCommand(title, script, true)
             })
         } else {
@@ -58,9 +58,9 @@ class ActivityCustomCommand : ActivityBase() {
                     putExtra("path", fullPath)
                 })
                 finish()
-                Toast.makeText(this, "添加成功！", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Added successfully!", Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(this, "保存失败！", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Save failed!", Toast.LENGTH_SHORT).show()
             }
         }
     }

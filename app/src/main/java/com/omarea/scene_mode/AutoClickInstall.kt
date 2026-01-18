@@ -13,20 +13,17 @@ import java.util.*
 class AutoClickInstall : AutoClickBase() {
     internal var autoClickKeyWords: ArrayList<String> = object : ArrayList<String>() {
         init {
-            add("继续安装")
-            add("继续安装")
-            add("下一步")
-            add("下一步")
+            add("Continue")
+            add("Continue")
             add("Next")
             add("Next")
         }
     }
     internal var autoClickKeyWords2: ArrayList<String> = object : ArrayList<String>() {
         init {
-            add("安装")
             add("Install")
-            add("安裝")
-            add("完成")
+            add("Install")
+            add("Done")
             add("Done")
         }
     }
@@ -89,7 +86,7 @@ class AutoClickInstall : AutoClickBase() {
         val source = event.source ?: return
 
         try {
-            val next2Nodes = source.findAccessibilityNodeInfosByText("继续安装")
+            val next2Nodes = source.findAccessibilityNodeInfosByText("Continue")
             if (next2Nodes != null && !next2Nodes.isEmpty()) {
                 var node: AccessibilityNodeInfo
                 for (i in next2Nodes.indices) {

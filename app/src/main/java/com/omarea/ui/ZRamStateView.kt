@@ -13,7 +13,7 @@ import com.omarea.vtools.R
 
 class ZRamStateView : View {
     //-------------必须给的数据相关-------------
-    private val str = arrayOf("已用", "可用")
+    private val str = arrayOf("Used", "Available")
     private var ratio = 0
     private var ratioState = 0
 

@@ -74,11 +74,11 @@ class ActivitySwap : ActivityBase() {
                 val currentUsed = swapUtils.swapUsedSize
                 val avgSpeed = (totalUsed - currentUsed).toFloat() / (System.currentTimeMillis() - startTime) * 1000
                 val tipStr = StringBuilder()
-                tipStr.append(String.format("回收Swapfile ${currentUsed}/${totalUsed}MB (%.1fMB/s)\n", avgSpeed))
+                tipStr.append(String.format("Reclaiming Swapfile ${currentUsed}/${totalUsed}MB (%.1fMB/s)\n", avgSpeed))
                 if (avgSpeed > 0) {
-                    tipStr.append("大约还需 " + (currentUsed / avgSpeed).toInt() + "秒")
+                    tipStr.append("About " + (currentUsed / avgSpeed).toInt() + " seconds remaining")
                 } else {
-                    tipStr.append("请耐心等待~")
+                    tipStr.append("Please wait...")
                 }
                 myHandler.post {
                     processBarDialog.showDialog(tipStr.toString())
@@ -97,11 +97,11 @@ class ActivitySwap : ActivityBase() {
                 val currentUsed = swapUtils.zramUsedSize
                 val avgSpeed = (totalUsed - currentUsed).toFloat() / (System.currentTimeMillis() - startTime) * 1000
                 val tipStr = StringBuilder()
-                tipStr.append(String.format("回收ZRAM ${currentUsed}/${totalUsed}MB (%.1fMB/s)\n", avgSpeed))
+                tipStr.append(String.format("Reclaiming ZRAM ${currentUsed}/${totalUsed}MB (%.1fMB/s)\n", avgSpeed))
                 if (avgSpeed > 0) {
-                    tipStr.append("大约还需 " + (currentUsed / avgSpeed).toInt() + "秒")
+                    tipStr.append("About " + (currentUsed / avgSpeed).toInt() + " seconds remaining")
                 } else {
-                    tipStr.append("请耐心等待~")
+                    tipStr.append("Please wait...")
                 }
                 myHandler.post {
                     processBarDialog.showDialog(tipStr.toString())
@@ -140,8 +140,8 @@ class ActivitySwap : ActivityBase() {
             val usedSize = swapUtils.swapUsedSize
             if (usedSize > 500) {
                 DialogHelper.confirm(this,
-                        "确认重启手机？",
-                        "Swap被大量使用(${usedSize}MB)，短时间内很难完成回收。\n因此需要重启手机来完成此操作，请确保你的重要数据都已保存！！！", {
+                        "Reboot phone?",
+                        "Swap is heavily used (${usedSize}MB) and is hard to reclaim quickly.\nA reboot is required to complete this. Please make sure your important data is saved.", {
                     swapConfig.edit().putBoolean(SpfConfig.SWAP_SPF_SWAP, false).apply()
                     swapModuleUtils.saveModuleConfig(swapConfig)
                     KeepShellPublic.doCmdSync("sync\nsleep 2\nsvc power reboot || reboot")
@@ -163,7 +163,7 @@ class ActivitySwap : ActivityBase() {
                 utils.autoSetLMK(info.totalMem)
                 binding.swapLmkCurrent.text = utils.getCurrent()
             } else {
-                Toast.makeText(context, "需要重启手机才会恢复默认的LMK参数！", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Reboot required to restore default LMK parameters!", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -205,7 +205,7 @@ class ActivitySwap : ActivityBase() {
                 intent.data = Uri.parse(getString(R.string.swap_module_download_url))
                 context.startActivity(intent)
             } catch (ex: java.lang.Exception) {
-                Toast.makeText(context, "启动下载失败！", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Failed to start download!", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -483,7 +483,7 @@ class ActivitySwap : ActivityBase() {
 
             val size = swapSize.progress * 128
             if (size < 1) {
-                Scene.toast("请先设定SWAP大小！")
+                Scene.toast("Please set the SWAP size first!")
                 return@setOnClickListener
             } else if (size == swapUtils.swapFileSize) {
                 // 如果大小和已经创建的文件一致，跳过创建
@@ -510,7 +510,7 @@ class ActivitySwap : ActivityBase() {
                         val speed = (size * 1000.0 / time).toInt()
                         Toast.makeText(
                                 context,
-                                "Swapfile创建完毕，耗时${time / 1000}s，平均写入速度：${speed}MB/s",
+                                "Swapfile created in ${time / 1000}s, average write speed: ${speed}MB/s",
                                 Toast.LENGTH_LONG
                         ).show()
                         swapActiveDialog()
@@ -569,7 +569,7 @@ class ActivitySwap : ActivityBase() {
                     .putBoolean(SpfConfig.SWAP_SPF_SWAP, autoStart.isChecked)
                     .apply()
 
-            processBarDialog.showDialog("稍等...")
+            processBarDialog.showDialog("Please wait...")
             Thread {
                 val swapPriority = swapConfig.getInt(SpfConfig.SWAP_SPF_SWAP_PRIORITY, -2)
                 if (swapPriority == 0) {
@@ -644,7 +644,7 @@ class ActivitySwap : ActivityBase() {
             val params = rows[i].split(" ").toMutableList()
             val path = params[0]
             tr["path"] = path
-            tr["type"] = params[1].replace("file", "文件").replace("partition", "分区")
+            tr["type"] = params[1].replace("file", "File").replace("partition", "Partition")
 
             val size = swapUsedSizeParseMB(params[2])
             // tr.put("size", if (size.length > 3) (size.substring(0, size.length - 3) + "m") else "0")
@@ -735,11 +735,11 @@ class ActivitySwap : ActivityBase() {
                 binding.zramCompactAlgorithm.text = compAlgorithm
 
                 if (currentSwap.isNotEmpty()) {
-                    binding.txtSwapAutoStart.text = if (swapConfig.getBoolean(SpfConfig.SWAP_SPF_SWAP, false)) "重启后保持当前设置" else "重启后失效"
+                    binding.txtSwapAutoStart.text = if (swapConfig.getBoolean(SpfConfig.SWAP_SPF_SWAP, false)) "Keep after reboot" else "Reset after reboot"
                 } else {
                     binding.txtSwapAutoStart.text = "--"
                 }
-                binding.txtZramAutoStart.text = if (swapConfig.getBoolean(SpfConfig.SWAP_SPF_ZRAM, false)) "重启后保持当前设置" else "重启后还原系统设定"
+                binding.txtZramAutoStart.text = if (swapConfig.getBoolean(SpfConfig.SWAP_SPF_ZRAM, false)) "Keep after reboot" else "Restore system defaults after reboot"
             } catch (ex: java.lang.Exception) {
             }
         }
@@ -755,9 +755,9 @@ class ActivitySwap : ActivityBase() {
                     var value = "";
                     for (row in split("\n")) {
                         if (row.startsWith("pswpin")) {
-                            prop = "从SWAP读出："
+                            prop = "Read from SWAP:"
                         } else if (row.startsWith("pswpout")) {
-                            prop = "写入到SWAP："
+                            prop = "Write to SWAP:"
                         } else {
                             continue
                         }

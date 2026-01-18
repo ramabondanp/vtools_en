@@ -66,7 +66,7 @@ public class AdapterRootFileSelector extends BaseAdapter {
     }
 
     private void loadDir(final RootFileInfo dir) {
-        progressBarDialog.showDialog("加载中...");
+        progressBarDialog.showDialog("Loading...");
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -175,14 +175,14 @@ public class AdapterRootFileSelector extends BaseAdapter {
                     @Override
                     public void onClick(View v) {
                         if (!file.exists()) {
-                            Toast.makeText(view.getContext(), "所选的文件已被删除，请重新选择！", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(view.getContext(), "Selected file has been deleted. Please choose again!", Toast.LENGTH_SHORT).show();
                             return;
                         }
                         ArrayList<RootFileInfo> files = file.listFiles();
                         if (files.size() > 0) {
                             loadDir(file);
                         } else {
-                            Snackbar.make(view, "该目录下没有文件！", Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(view, "No files in this directory!", Snackbar.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -205,13 +205,13 @@ public class AdapterRootFileSelector extends BaseAdapter {
                     view.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            DialogHelper.Companion.animDialog(new AlertDialog.Builder(view.getContext()).setTitle("选定文件？")
+                            DialogHelper.Companion.animDialog(new AlertDialog.Builder(view.getContext()).setTitle("Select this file?")
                                     .setMessage(file.getAbsolutePath())
                                     .setPositiveButton(R.string.btn_confirm, new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
                                             if (!file.exists()) {
-                                                Toast.makeText(view.getContext(), "所选的文件已被删除，请重新选择！", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(view.getContext(), "Selected file has been deleted. Please choose again!", Toast.LENGTH_SHORT).show();
                                                 return;
                                             }
                                             selectedFile = file;
@@ -233,13 +233,13 @@ public class AdapterRootFileSelector extends BaseAdapter {
                     @Override
                     public boolean onLongClick(View v) {
                         DialogHelper.Companion.confirm(view.getContext(),
-                                "删除所选文件？",
+                                "Delete selected file?",
                                 file.getAbsolutePath(),
                                 new Runnable() {
                                     @Override
                                     public void run() {
                                         if (!file.exists()) {
-                                            Toast.makeText(view.getContext(), "所选的文件已被删除，请重新选择！", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(view.getContext(), "Selected file has been deleted. Please choose again!", Toast.LENGTH_SHORT).show();
                                             return;
                                         }
                                         selectedFile = file;

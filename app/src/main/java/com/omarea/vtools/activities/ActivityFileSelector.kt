@@ -92,7 +92,7 @@ class ActivityFileSelector : ActivityBase() {
         if (startDir.exists() && startDir.isDirectory) {
             val list = startDir.listFiles()
             if (list == null) {
-                Toast.makeText(applicationContext, "没有读取文件的权限！", Toast.LENGTH_LONG).show()
+                Toast.makeText(applicationContext, "No permission to read files!", Toast.LENGTH_LONG).show()
                 return
             }
             val onSelected = Runnable {

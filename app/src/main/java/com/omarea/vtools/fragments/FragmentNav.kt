@@ -77,7 +77,7 @@ class FragmentNav : Fragment(), View.OnClickListener {
     override fun onClick(v: View?) {
         v?.run {
             if (!CheckRootStatus.lastCheckResult && "root".equals(getTag())) {
-                Toast.makeText(context, "没有获得ROOT权限，不能使用本功能", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Root permission not granted; this feature is unavailable.", Toast.LENGTH_SHORT).show()
                 return
             }
 
@@ -107,7 +107,7 @@ class FragmentNav : Fragment(), View.OnClickListener {
                         val intent = Intent(context, ActivityImg::class.java)
                         startActivity(intent)
                     } else {
-                        Toast.makeText(context, "此功能不支持你的手机", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "This feature is not supported on your device.", Toast.LENGTH_SHORT).show()
                     }
                     return
                 }
@@ -192,7 +192,7 @@ class FragmentNav : Fragment(), View.OnClickListener {
                 val intent = Intent(Intent.ACTION_VIEW, uri)
                 startActivity(intent)
             } catch (ex: Exception) {
-                Toast.makeText(context, "启动在线页面失败！", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Failed to open online page!", Toast.LENGTH_SHORT).show()
             }
         })
     }
@@ -208,7 +208,7 @@ class FragmentNav : Fragment(), View.OnClickListener {
             if (XposedCheck.xposedIsRunning()) {
                 onPass.run()
             } else {
-                Toast.makeText(context, "请先在Xposed管理器中重新勾选“Scene”，并重启手机", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "Please re-enable \"Scene\" in Xposed Manager and reboot the phone.", Toast.LENGTH_LONG).show()
             }
         } else {
             installVAddin()

@@ -157,7 +157,7 @@ class ActivityImg : ActivityBase() {
             }
             DialogHelper.confirm(this,
                     getString(R.string.flash_confirm),
-                    "此操作将刷入${imgPath}到系统${partition}分区，如果你选择了错误的文件，刷入后可能导致手机无法开机！",
+                    "This will flash ${imgPath} to the system ${partition} partition. If you chose the wrong file, the phone may fail to boot!",
                     {
                         when (requestCode) {
                             BOOT_IMG -> BackupRestoreUtils(this).flashBoot(imgPath)
@@ -178,17 +178,17 @@ class ActivityImg : ActivityBase() {
                     if (absPath.endsWith(".img")) {
                         flash(absPath, requestCode)
                     } else {
-                        Toast.makeText(this, "选择的文件无效（应当是.img文件）！", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Invalid file (should be a .img file)!", Toast.LENGTH_SHORT).show()
                     }
                 } else {
-                    Toast.makeText(this, "所选的文件没找到！", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Selected file not found!", Toast.LENGTH_SHORT).show()
                 }
             } else {
                 if (data.extras?.containsKey("file") == true) {
                     val path = data.extras!!.getString("file")!!
                     flash(path, requestCode)
                 } else {
-                    Toast.makeText(this, "所选的文件没找到！", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Selected file not found!", Toast.LENGTH_SHORT).show()
                 }
             }
         }

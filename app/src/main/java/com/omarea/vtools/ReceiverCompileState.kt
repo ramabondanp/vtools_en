@@ -24,7 +24,7 @@ class ReceiverCompileState : BroadcastReceiver() {
     private fun updateNotification(title: String, text: String, total: Int, current: Int, autoCancel: Boolean = true) {
         val builder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             if (!channelCreated) {
-                nm.createNotificationChannel(NotificationChannel("vtool-compile", "后台编译", NotificationManager.IMPORTANCE_LOW))
+                nm.createNotificationChannel(NotificationChannel("vtool-compile", "Background compile", NotificationManager.IMPORTANCE_LOW))
                 channelCreated = true
             }
             NotificationCompat.Builder(Scene.context, "vtool-compile")

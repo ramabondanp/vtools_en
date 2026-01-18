@@ -75,7 +75,7 @@ class Update {
             } catch (ex: Exception) {
                 /*
                 handler.post {
-                    Toast.makeText(context, "检查更新失败！\n" + ex.message, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Update check failed!\n" + ex.message, Toast.LENGTH_SHORT).show()
                 }
                 */
             }
@@ -84,8 +84,8 @@ class Update {
 
     private fun update(context: Context, jsonObject: JSONObject) {
         DialogHelper.confirm(context,
-                "下载新版本" + jsonObject.getString("versionName") + " ？",
-                "更新内容：" + "\n\n" + jsonObject.getString("message"),
+                "Download new version " + jsonObject.getString("versionName") + "?",
+                "What's new:" + "\n\n" + jsonObject.getString("message"),
                 {
                     var downloadUrl = "http://vtools.oss-cn-beijing.aliyuncs.com/app-release${jsonObject.getInt("versionCode")}.apk"// "http://47.106.224.127/publish/app-release.apk"
                     if (jsonObject.has("downloadUrl")) {
@@ -97,7 +97,7 @@ class Update {
                         intent.data = Uri.parse(downloadUrl)
                         context.startActivity(intent)
                     } catch (ex: java.lang.Exception) {
-                        Toast.makeText(context, "启动下载失败！", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Failed to start download!", Toast.LENGTH_SHORT).show()
                     }
                     /*
                     //创建下载任务,downloadUrl就是下载链接
@@ -119,7 +119,7 @@ class Update {
                             val id = intent!!.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
                             if (id == taskId) {
                                 val path = getRealFilePath(context!!, downloadManager.getUriForDownloadedFile(taskId))
-                                Toast.makeText(context, "下载完成，请手动点击下载通知安装更新！", Toast.LENGTH_LONG).show()
+                                Toast.makeText(context, "Download complete. Please tap the notification to install the update.", Toast.LENGTH_LONG).show()
                             }
                         }
                     }, intentFilter)

@@ -43,7 +43,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <!--卸载保留数据-->
+                <!-- Uninstall but keep data -->
                 <LinearLayout
                     android:id="@+id/app_options_uninstall_keep"
                     android:layout_width="match_parent"
@@ -89,7 +89,7 @@
                         android:layout_height="wrap_content" />
                 </LinearLayout>
 
-                <!--从当前用户卸载应用-->
+                <!-- Uninstall for current user -->
                 <LinearLayout
                     android:id="@+id/app_options_uninstall_user"
                     android:layout_width="match_parent"

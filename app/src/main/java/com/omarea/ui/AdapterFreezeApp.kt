@@ -101,7 +101,7 @@ class AdapterFreezeApp(private val context: Context, private var apps: ArrayList
             // 虚拟一个listItem 用于显示列表末尾的添加按钮
             return AppInfo.getItem().apply {
                 packageName = "plus"
-                appName = "添加应用"
+                appName = "Add app"
             }
         }
     }

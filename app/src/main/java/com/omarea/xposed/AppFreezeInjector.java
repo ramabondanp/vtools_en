@@ -57,7 +57,7 @@ public class AppFreezeInjector {
                 // 方式3：通过Scene解冻后再启动
                 if (unfreeze(context, packageName)) {
                     // -> 通过Scene解冻就完事了咯
-                    Toast.makeText(context, "已通过Scene解冻应用：" + packageName, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Unfrozen app via Scene: " + packageName, Toast.LENGTH_SHORT).show();
                 }
 
                 // 方式1： 由Scene通过ROOT启动

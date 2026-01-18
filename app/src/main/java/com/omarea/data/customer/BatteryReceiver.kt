@@ -212,13 +212,13 @@ class BatteryReceiver(private var service: Context, override val isAsync: Boolea
     }
 
     private fun disableCharge() {
-        Scene.toast("充电保护策略已为您暂停充电！", Toast.LENGTH_SHORT)
+        Scene.toast("Charging protection has paused charging.", Toast.LENGTH_SHORT)
         keepShellAsync?.doCmd(DisableCharge)
         chargeDisabled = true
     }
 
     private fun resumeCharge() {
-        Scene.toast("充电保护策略已为您恢复充电！", Toast.LENGTH_SHORT)
+        Scene.toast("Charging protection has resumed charging.", Toast.LENGTH_SHORT)
         keepShellAsync!!.doCmd(ResumeCharge)
         chargeDisabled = false
     }

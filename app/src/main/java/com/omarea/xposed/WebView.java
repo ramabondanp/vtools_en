@@ -20,7 +20,7 @@ public class WebView {
                 try {
                     XposedHelpers.callStaticMethod(android.webkit.WebView.class, "setWebContentsDebuggingEnabled", true);
                 } catch (Exception ex) {
-                    XposedBridge.log("强制Webview调试模式 callStaticMethod setWebContentsDebuggingEnabled" + ex.getMessage());
+                    XposedBridge.log("Force WebView debug mode callStaticMethod setWebContentsDebuggingEnabled " + ex.getMessage());
                 }
             }
 

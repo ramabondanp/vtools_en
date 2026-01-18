@@ -34,12 +34,12 @@ class SceneTaskItem : LinearLayout {
 
         val binding = binding ?: return
         if (taskInfo.taskName.isNullOrEmpty()) {
-            binding.systemSceneTaskName.text = "未命名任务"
+            binding.systemSceneTaskName.text = "Unnamed task"
         } else {
             binding.systemSceneTaskName.text = taskInfo.taskName
         }
 
-        val timePrefix = if (taskInfo.expireDate < 1) ("每天，") else ""
+        val timePrefix = if (taskInfo.expireDate < 1) ("Every day, ") else ""
         binding.systemSceneTaskTime.text = (if (taskInfo.enabled) "● " else "○ ") + timePrefix + getTimeStr(taskInfo)
         binding.systemSceneTaskContent.text = getTaskContentText(taskInfo)
     }
@@ -49,7 +49,7 @@ class SceneTaskItem : LinearLayout {
         val minutes = taskInfo.triggerTimeMinutes % 60
         val hoursStr = if (hours < 10) ("0" + hours) else hours.toString()
         val minutesStr = if (minutes < 10) ("0" + minutes) else minutes.toString()
-        val stuffix = if (taskInfo.afterScreenOff) " 屏幕关闭后" else ""
+        val stuffix = if (taskInfo.afterScreenOff) " after screen off" else ""
 
         return hoursStr + ":" + minutesStr + stuffix
     }
@@ -62,22 +62,22 @@ class SceneTaskItem : LinearLayout {
                     null -> {
                     }
                     TaskAction.STANDBY_MODE_ON -> {
-                        buffer.append("休眠模式 √")
+                        buffer.append("Sleep mode ON")
                     }
                     TaskAction.STANDBY_MODE_OFF -> {
-                        buffer.append("休眠模式 ×")
+                        buffer.append("Sleep mode OFF")
                     }
                     TaskAction.FSTRIM -> {
-                        buffer.append("FSTRIM √")
+                        buffer.append("FSTRIM ON")
                     }
                     TaskAction.POWER_OFF -> {
-                        buffer.append("自动关机 √")
+                        buffer.append("Auto shutdown ON")
                     }
                     TaskAction.ZEN_MODE_OFF -> {
-                        buffer.append("勿扰模式 ×")
+                        buffer.append("Do Not Disturb OFF")
                     }
                     TaskAction.ZEN_MODE_ON -> {
-                        buffer.append("勿扰模式 √")
+                        buffer.append("Do Not Disturb ON")
                     }
                 }
                 buffer.append("     ")

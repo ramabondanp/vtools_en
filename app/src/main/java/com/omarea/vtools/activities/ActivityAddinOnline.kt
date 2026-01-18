@@ -129,8 +129,8 @@ class ActivityAddinOnline : ActivityBase() {
                     if (url.startsWith("https://github.com/yc9559/cpufreq-interactive-opt/") && url.contains("vtools-powercfg") && url.endsWith("powercfg.apk")) {
                         val configPath = url.substring(url.indexOf("vtools-powercfg"))
                         DialogHelper.animDialog(AlertDialog.Builder(binding.vtoolsOnline.context)
-                                .setTitle("可用的配置脚本")
-                                .setMessage("在当前页面上检测到可用于性能调节的配置脚本，是否立即将其安装到本地？\n\n配置：$configPath\n\n作者：yc9559\n\n")
+                                .setTitle("Available config script")
+                                .setMessage("A performance tuning config script was detected on this page. Install it locally now?\n\nConfig: $configPath\n\nAuthor: yc9559\n\n")
                                 .setPositiveButton(R.string.btn_confirm) { _, _ ->
                                     val configAbsPath = "https://github.com/yc9559/cpufreq-interactive-opt/raw/master/$configPath"
                                     downloadPowercfg(configAbsPath)
@@ -143,8 +143,8 @@ class ActivityAddinOnline : ActivityBase() {
                         // https://github.com/yc9559/wipe-v2/releases/download/0.1.190503-dev/sdm625.zip
                         val configPath = url.substring(url.lastIndexOf("/") + 1).replace(".zip", "")
                         DialogHelper.animDialog(AlertDialog.Builder(binding.vtoolsOnline.context)
-                                .setTitle("配置安装提示")
-                                .setMessage("你刚刚点击的内容，似乎是一个可用于性能调节的配置脚本，是否立即将其安装到本地？\n\n配置：$configPath\n\n作者：yc9559\n\n")
+                                .setTitle("Config installation prompt")
+                                .setMessage("The content you clicked appears to be a performance tuning config script. Install it locally now?\n\nConfig: $configPath\n\nAuthor: yc9559\n\n")
                                 .setPositiveButton(R.string.btn_confirm) { _, _ ->
                                     val configAbsPath = url
                                     downloadPowercfgV2(configAbsPath)
@@ -254,7 +254,7 @@ class ActivityAddinOnline : ActivityBase() {
 
     private fun downloadPowercfg(url: String) {
         val progressBarDialog = ProgressBarDialog(this)
-        progressBarDialog.showDialog("正在获取配置，稍等...")
+        progressBarDialog.showDialog("Fetching config, please wait...")
         Thread(Runnable {
             try {
                 val myURL = URL(url)
@@ -266,7 +266,7 @@ class ActivityAddinOnline : ActivityBase() {
                 if (powercfg.startsWith("#!/") && CpuConfigInstaller().installCustomConfig(this, powercfg, ModeSwitcher.SOURCE_SCENE_ONLINE)) {
                     binding.vtoolsOnline.post {
                         DialogHelper.animDialog(AlertDialog.Builder(this)
-                                .setTitle("配置文件已安装")
+                                .setTitle("Config file installed")
                                 .setPositiveButton(R.string.btn_confirm) { _, _ ->
                                     setResult(Activity.RESULT_OK)
                                     finish()
@@ -274,7 +274,7 @@ class ActivityAddinOnline : ActivityBase() {
                     }
                 } else {
                     binding.vtoolsOnline.post {
-                        Toast.makeText(applicationContext, "下载配置文件失败或文件无效！", Toast.LENGTH_LONG).show()
+                        Toast.makeText(applicationContext, "Failed to download config file or file is invalid!", Toast.LENGTH_LONG).show()
                     }
                 }
                 binding.vtoolsOnline.post {
@@ -283,7 +283,7 @@ class ActivityAddinOnline : ActivityBase() {
             } catch (ex: Exception) {
                 binding.vtoolsOnline.post {
                     progressBarDialog.hideDialog()
-                    Toast.makeText(applicationContext, "下载配置文件失败！", Toast.LENGTH_LONG).show()
+                    Toast.makeText(applicationContext, "Failed to download config file!", Toast.LENGTH_LONG).show()
                 }
             }
         }).start()
@@ -291,7 +291,7 @@ class ActivityAddinOnline : ActivityBase() {
 
     private fun downloadPowercfgV2(url: String) {
         val progressBarDialog = ProgressBarDialog(this)
-        progressBarDialog.showDialog("正在获取配置，稍等...")
+        progressBarDialog.showDialog("Fetching config, please wait...")
         Thread(Runnable {
             try {
                 val myURL = URL(url)
@@ -308,14 +308,14 @@ class ActivityAddinOnline : ActivityBase() {
                     while (true) {
                         val zipEntry = zipInputStream.nextEntry
                         if (zipEntry == null) {
-                            throw java.lang.Exception("下载的文件无效，未从中找到powercfg.sh")
+                            throw java.lang.Exception("Downloaded file is invalid; powercfg.sh not found")
                         } else if (zipEntry.name == "powercfg.sh") {
                             val byteArray = zipInputStream.readBytes()
                             val powercfg = byteArray.toString(Charset.defaultCharset())
                             if (powercfg.startsWith("#!/") && CpuConfigInstaller().installCustomConfig(this, powercfg, ModeSwitcher.SOURCE_SCENE_ONLINE)) {
                                 binding.vtoolsOnline.post {
                                     DialogHelper.animDialog(AlertDialog.Builder(this)
-                                            .setTitle("配置文件已安装")
+                                            .setTitle("Config file installed")
                                             .setPositiveButton(R.string.btn_confirm) { _, _ ->
                                                 setResult(Activity.RESULT_OK)
                                                 finish()
@@ -323,7 +323,7 @@ class ActivityAddinOnline : ActivityBase() {
                                 }
                             } else {
                                 binding.vtoolsOnline.post {
-                                    Toast.makeText(applicationContext, "下载配置文件失败或文件无效！", Toast.LENGTH_LONG).show()
+                                    Toast.makeText(applicationContext, "Failed to download config file or file is invalid!", Toast.LENGTH_LONG).show()
                                 }
                             }
                             binding.vtoolsOnline.post {
@@ -335,12 +335,12 @@ class ActivityAddinOnline : ActivityBase() {
                         }
                     }
                 } else {
-                    throw IOException("文件存储失败")
+                    throw IOException("Failed to save file")
                 }
             } catch (ex: Exception) {
                 binding.vtoolsOnline.post {
                     progressBarDialog.hideDialog()
-                    Toast.makeText(applicationContext, "下载配置文件失败！", Toast.LENGTH_LONG).show()
+                    Toast.makeText(applicationContext, "Failed to download config file!", Toast.LENGTH_LONG).show()
                 }
             }
         }).start()

@@ -88,7 +88,7 @@ class ActivityApplistions : ActivityBase() {
                 intent.action = Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION
                 startActivity(intent)
             } catch (ex: Exception) {
-                Toast.makeText(this, "无法申请存储管理权限~", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Unable to request storage management permission.", Toast.LENGTH_SHORT).show()
             }
         }
     }

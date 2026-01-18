@@ -161,7 +161,7 @@
             android:name=".activities.ActivityOtherSettings"
             android:configChanges="keyboardHidden|orientation|uiMode"
             android:excludeFromRecents="true"
-            android:label="Scene 杂项设置"
+            android:label="Scene Misc Settings"
             android:launchMode="singleTop"
             android:screenOrientation="behind" />
         <activity

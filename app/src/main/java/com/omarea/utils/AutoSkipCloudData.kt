@@ -36,7 +36,7 @@ class AutoSkipCloudData {
                 }
                 val data = JSONArray(stringBuilder.toString().trim { it <= ' ' })
                 if (showMsg) {
-                    Scene.toast("从云端获得 " + data.length() + " 条(自动跳过)数据")
+                    Scene.toast("Fetched " + data.length() + " auto-skip entries from the cloud")
                 }
                 val db = AutoSkipConfigStore(context)
                 db.clearAll()
@@ -48,7 +48,7 @@ class AutoSkipCloudData {
                 }
             } catch (ex: Exception) {
                 if (showMsg) {
-                    Scene.toast("获取云端配置数据失败~")
+                    Scene.toast("Failed to fetch cloud config data")
                 }
             }
         }

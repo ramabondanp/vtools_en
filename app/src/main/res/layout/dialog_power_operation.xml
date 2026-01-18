@@ -283,7 +283,7 @@
                     style="@style/textSmall"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="重启到9008模式，*此模式仅限部分骁龙设备可用" />
+                    android:text="Reboot to 9008 mode (available only on some Snapdragon devices)" />
             </LinearLayout>
 
         </LinearLayout>

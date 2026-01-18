@@ -96,8 +96,8 @@ class ActivitySystemScene : ActivityBase() {
         val tabIconHelper = TabIconHelper(binding.configlistTabhost, this)
         binding.configlistTabhost.setup()
 
-        tabIconHelper.newTabSpec("系统场景", getDrawable(R.drawable.tab_security)!!, R.id.blacklist_tab3)
-        tabIconHelper.newTabSpec("设置", getDrawable(R.drawable.tab_settings)!!, R.id.configlist_tab5)
+        tabIconHelper.newTabSpec("System scenes", getDrawable(R.drawable.tab_security)!!, R.id.blacklist_tab3)
+        tabIconHelper.newTabSpec("Settings", getDrawable(R.drawable.tab_settings)!!, R.id.configlist_tab5)
         binding.configlistTabhost.currentTab = 0
         binding.configlistTabhost.setOnTabChangedListener { tabId ->
             tabIconHelper.updateHighlight()
@@ -200,7 +200,7 @@ class ActivitySystemScene : ActivityBase() {
             startActivity(intent)
         }
         sceneTaskItem.setOnLongClickListener {
-            DialogHelper.confirm(this, "删除该任务？", "", {
+            DialogHelper.confirm(this, "Delete this task?", "", {
                 TimingTaskManager(context).removeTask(timingTaskInfo)
                 updateCustomList()
             })
@@ -221,7 +221,7 @@ class ActivitySystemScene : ActivityBase() {
             startActivity(intent)
         }
         itemView.setOnLongClickListener {
-            DialogHelper.confirm(this, "删除该触发器？", "", {
+            DialogHelper.confirm(this, "Delete this trigger?", "", {
                 TriggerManager(context).removeTrigger(triggerInfo)
                 updateCustomList()
             })

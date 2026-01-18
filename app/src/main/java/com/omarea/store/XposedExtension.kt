@@ -40,7 +40,7 @@ public class XposedExtension(private val context: Context) {
                 return false
             }
         } catch (ex: Exception) {
-            Toast.makeText(this.context, "未安装“Scene-高级设定”插件！", Toast.LENGTH_LONG).show()
+            Toast.makeText(this.context, "The \"Scene - Advanced Settings\" plugin is not installed!", Toast.LENGTH_LONG).show()
             return false
         }
 
@@ -73,7 +73,7 @@ public class XposedExtension(private val context: Context) {
 
             return true
         } catch (ex: Exception) {
-            Toast.makeText(this.context, "连接到“Scene-高级设定”插件失败，请不要阻止插件自启动！", Toast.LENGTH_LONG).show()
+            Toast.makeText(this.context, "Failed to connect to the \"Scene - Advanced Settings\" plugin. Please do not block it from auto-starting!", Toast.LENGTH_LONG).show()
         }
         return false
     }

@@ -21,12 +21,12 @@
             <TextView
                 android:id="@+id/confirm_title"
                 style="@style/dialogTitle"
-                android:text="应用温控" />
+                android:text="Apply thermal config" />
             <TextView
                 android:layout_marginBottom="16dp"
                 android:id="@+id/confirm_message"
                 style="@style/dialogDesc"
-                android:text="将修改后的温控配置拷贝到 /data/vendor/thermal/config 目录，使配置立即生效。\n\n经测试，在未遭到破坏性修改的 MIUI 12&amp;12.5系统上，此功能工作正常。其中测试设备包括：855、865\870、888处理器机型\n\n配置生效情况自行检查 /data/vendor/thermal/decrypt.txt 或 /data/vendor/thermal/thermal.dump 判断！"/>
+                android:text="Copy the modified thermal config to /data/vendor/thermal/config to apply it immediately.\n\nTested on MIUI 12 &amp; 12.5 systems without destructive modifications; it works. Tested devices include Snapdragon 855, 865/870, and 888 models.\n\nVerify whether the config took effect by checking /data/vendor/thermal/decrypt.txt or /data/vendor/thermal/thermal.dump."/>
 
             <LinearLayout
                 android:orientation="vertical"
@@ -64,13 +64,13 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="保存修改" />
+                            android:text="Save changes" />
                         <TextView
                             style="@style/textSecondary"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="保存对温控的修改到选中的源文件" />
+                            android:text="Save thermal changes to the selected source file" />
                     </LinearLayout>
 
                     <Switch

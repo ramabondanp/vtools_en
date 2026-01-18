@@ -211,7 +211,7 @@ class FragmentCpuModes : Fragment() {
             if (Build.MANUFACTURER.lowercase(Locale.getDefault()) == "xiaomi") {
                 binding.navThermal.setOnClickListener {
                     val pageNode = PageNode("").apply {
-                        title = "MUI专属"
+                        title = "MIUI only"
                         pageConfigPath = "file:///android_asset/kr-script/miui/miui.xml"
                     }
                     OpenPageHelper(activity!!).openPage(pageNode)
@@ -452,7 +452,7 @@ class FragmentCpuModes : Fragment() {
                 intent.putExtra("extension", "sh")
                 startActivityForResult(intent, action)
             } catch (ex: Exception) {
-                Toast.makeText(context, "启动内置文件选择器失败！", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Failed to launch built-in file picker!", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -468,10 +468,10 @@ class FragmentCpuModes : Fragment() {
                         if (absPath.endsWith(".sh")) {
                             installLocalConfig(absPath)
                         } else {
-                            Toast.makeText(context, "选择的文件无效（应当是.sh文件）！", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "Invalid file (should be a .sh file)!", Toast.LENGTH_SHORT).show()
                         }
                     } else {
-                        Toast.makeText(context, "所选的文件没找到！", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Selected file not found!", Toast.LENGTH_SHORT).show()
                     }
                 } else { // Scene内置文件选择器
                     if (data.extras?.containsKey("file") != true) {
@@ -516,8 +516,8 @@ class FragmentCpuModes : Fragment() {
 
     private fun getOnlineConfig() {
         DialogHelper.alert(this.activity!!,
-                "提示",
-                "目前，Scene已不再提供【在线获取配置脚本】功能，如有需要，推荐使用“yc9559”提供的优化模块，通过Magisk刷入后重启手机，即可在Scene里体验调度切换功能~") {
+                "Notice",
+                "Scene no longer provides online config scripts. If needed, use the optimization module by \"yc9559\" and flash it with Magisk, then reboot to use scheduling switches in Scene.") {
             openUrl("https://github.com/yc9559/uperf")
         }
 
@@ -545,19 +545,19 @@ class FragmentCpuModes : Fragment() {
 
     private fun installLocalConfig(path: String) {
         if (!path.endsWith(".sh")) {
-            Toast.makeText(context, "这似乎是个无效的脚本文件！", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, "This seems to be an invalid script file!", Toast.LENGTH_LONG).show()
             return
         }
 
         val file = File(path)
         if (file.exists()) {
             if (file.length() > 200 * 1024) {
-                Toast.makeText(context, "这个文件也太大了，配置脚本大小不能超过200KB！", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "File too large; config scripts must be <= 200KB!", Toast.LENGTH_LONG).show()
                 return
             }
             val lines = readFileLines(file)
             if (lines == null) {
-                Toast.makeText(context, "Scene无法读取此文件！", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "Scene cannot read this file!", Toast.LENGTH_LONG).show()
                 return
             }
             val configStar = lines.split("\n").firstOrNull()
@@ -565,13 +565,13 @@ class FragmentCpuModes : Fragment() {
                 if (configInstaller.installCustomConfig(context!!, lines, ModeSwitcher.SOURCE_SCENE_IMPORT)) {
                     configInstalled()
                 } else {
-                    Toast.makeText(context, "由于某些原因，安装配置脚本失败，请重试！", Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, "Failed to install config script. Please retry.", Toast.LENGTH_LONG).show()
                 }
             } else {
-                Toast.makeText(context, "这似乎是个无效的脚本文件！", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "This seems to be an invalid script file!", Toast.LENGTH_LONG).show()
             }
         } else {
-            Toast.makeText(context, "所选的文件没找到！", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, "Selected file not found!", Toast.LENGTH_LONG).show()
         }
     }
 
@@ -593,7 +593,7 @@ class FragmentCpuModes : Fragment() {
 
     private fun outsideOverrode(): Boolean {
         if (configInstaller.outsideConfigInstalled()) {
-            DialogHelper.helpInfo(activity!!, "你需要先删除外部配置，因为Scene会优先使用它！")
+            DialogHelper.helpInfo(activity!!, "You need to delete the external config first because Scene will prioritize it.")
             return true
         }
         return false

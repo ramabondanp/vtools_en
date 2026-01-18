@@ -65,7 +65,7 @@ class ActivityAppConfig2 : ActivityBase() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_reset -> {
-                DialogHelper.confirm(this, "确定重置？", "这将清空你对单个应用配置的【性能调节、独立亮度、屏幕旋转、内存(cgroup)、自动加速、性能监视器】选项！", {
+                DialogHelper.confirm(this, "Reset settings?", "This will clear your per-app settings for performance tuning, per-app brightness, screen rotation, memory (cgroup), auto boost, and the performance monitor.", {
                     sceneConfigStore.resetAll()
                     spfPowercfg.all.clear()
                     initDefaultConfig()
@@ -128,7 +128,7 @@ class ActivityAppConfig2 : ActivityBase() {
             }
         } else {
             binding.sceneAppList.setOnItemLongClickListener { _, _, _, _ ->
-                DialogHelper.helpInfo(this, "", "请先回到功能列表，进入 [性能配置] 功能，开启 [动态响应] 功能")
+                DialogHelper.helpInfo(this, "", "Go back to the feature list, open [Performance config], and enable [Dynamic Response].")
                 true
             }
         }
@@ -323,19 +323,19 @@ class ActivityAppConfig2 : ActivityBase() {
         item.sceneConfigInfo = configInfo
         val desc = StringBuilder()
         if (configInfo.aloneLight) {
-            desc.append("独立亮度 ")
+            desc.append("Per-app brightness ")
         }
         if (configInfo.disNotice) {
-            desc.append("屏蔽通知  ")
+            desc.append("Block notifications  ")
         }
         if (configInfo.disButton) {
-            desc.append("屏蔽按键  ")
+            desc.append("Block keys  ")
         }
         if (configInfo.freeze) {
-            desc.append("自动冻结  ")
+            desc.append("Auto freeze  ")
         }
         if (configInfo.gpsOn) {
-            desc.append("打开GPS  ")
+            desc.append("Enable GPS  ")
         }
         if (configInfo.screenOrientation != ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED) {
             DialogAppOrientation.Transform(this).getName(configInfo.screenOrientation).run {

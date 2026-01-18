@@ -34,7 +34,7 @@ public class WeChatScanHook {
                     VirtualCameraInfo targetCamera = cameraHookProvider.getCameraIdHook();
                     param.args[0] = targetCamera.cameraId;
 
-                    XposedBridge.log("Scene: 微信启动相机 CameraId [" + param.args[0] + "] Total: " + Camera.getNumberOfCameras());
+                    XposedBridge.log("Scene: WeChat start camera CameraId [" + param.args[0] + "] Total: " + Camera.getNumberOfCameras());
                 }
             });
 

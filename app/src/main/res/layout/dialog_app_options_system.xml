@@ -54,7 +54,7 @@
             </LinearLayout>
 
 
-            <!--复制应用包名-->
+            <!-- Copy package name -->
             <LinearLayout
                 android:id="@+id/app_options_copay_package"
                 android:layout_marginTop="6dp"
@@ -90,7 +90,7 @@
                         app:tint="@android:color/darker_gray" />
                 </LinearLayout>
             </LinearLayout>
-            <!--复制应用路径-->
+            <!-- Copy app path -->
             <LinearLayout
                 android:id="@+id/app_options_copay_path"
                 android:layout_marginTop="6dp"
@@ -179,7 +179,7 @@
                         android:text="" />
                 </LinearLayout>
 
-                <!--查看应用详情-->
+                <!-- View app details -->
                 <LinearLayout
                     android:id="@+id/app_options_open_detail"
                     android:layout_marginStart="6dp"
@@ -198,7 +198,7 @@
                         app:tint="?android:colorAccent" />
                 </LinearLayout>
 
-                <!--在应用商店查看-->
+                <!-- View in app store -->
                 <LinearLayout
                     android:id="@+id/app_options_app_store"
                     android:layout_width="50dp"
@@ -219,7 +219,7 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <!--备份APK-->
+            <!-- Backup APK -->
             <LinearLayout
                 android:id="@+id/app_options_backup_apk"
                 android:layout_width="match_parent"
@@ -267,7 +267,7 @@
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:orientation="vertical">
 
-            <!--清空数据-->
+            <!-- Clear data -->
             <LinearLayout
                 android:id="@+id/app_options_clear"
                 android:layout_width="match_parent"
@@ -308,7 +308,7 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <!--卸载应用更新-->
+            <!-- Uninstall app updates -->
             <LinearLayout
                 android:id="@+id/app_options_uninstall"
                 android:layout_width="match_parent"
@@ -349,7 +349,7 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <!--从当前用户卸载应用-->
+            <!-- Uninstall for current user -->
             <LinearLayout
                 android:id="@+id/app_options_uninstall_user"
                 android:layout_width="match_parent"
@@ -390,7 +390,7 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <!--删除应用应用文件-->
+            <!-- Delete app files -->
             <LinearLayout
                 android:id="@+id/app_options_delete"
                 android:layout_width="match_parent"

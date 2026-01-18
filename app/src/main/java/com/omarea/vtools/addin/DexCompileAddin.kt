@@ -20,7 +20,7 @@ import com.omarea.vtools.services.CompileService
 class DexCompileAddin(private var context: ActivityBase) : AddinBase(context) {
     fun isSupport(): Boolean {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-            Toast.makeText(context, "系统版本过低，至少需要Android 7.0！", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "System version too low, Android 7.0+ required!", Toast.LENGTH_SHORT).show()
             return false
         }
         return true
@@ -28,15 +28,15 @@ class DexCompileAddin(private var context: ActivityBase) : AddinBase(context) {
 
     private fun triggerCompile (action: String) {
         if (CompileService.compiling) {
-            Toast.makeText(context, "有一个后台编译过程正在进行，不能重复开启", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "A background compile is already running; cannot start another.", Toast.LENGTH_SHORT).show()
         } else {
             try {
                 val service = Intent(context, CompileService::class.java)
                 service.action = action
                 context.startService(service)
-                Toast.makeText(context, "开始后台编译，请查看通知了解进度", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Background compile started. Check notifications for progress.", Toast.LENGTH_SHORT).show()
             } catch (ex: java.lang.Exception) {
-                Toast.makeText(context, "启动后台过程失败", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Failed to start background process", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -48,7 +48,7 @@ class DexCompileAddin(private var context: ActivityBase) : AddinBase(context) {
         }
 
         if (CompileService.compiling) {
-            Toast.makeText(context, "有一个后台编译过程正在进行~", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "A background compile is already running.", Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -72,7 +72,7 @@ class DexCompileAddin(private var context: ActivityBase) : AddinBase(context) {
         }
         view.findViewById<View>(R.id.faq).setOnClickListener {
             dialog.dismiss()
-            Toast.makeText(context, "此页面，在国内(CN)可能需要“虚拟专用网络”才能正常访问", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, "This page may require a VPN in mainland China.", Toast.LENGTH_LONG).show()
 
             context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(context.getString(R.string.addin_dex2oat_helplink))))
         }
@@ -86,7 +86,7 @@ class DexCompileAddin(private var context: ActivityBase) : AddinBase(context) {
         val arr = arrayOf(
                 "verify",
                 "speed",
-                "恢复默认")
+                "Restore default")
         val intallMode = PropsUtils.getProp("dalvik.vm.dex2oat-filter")
         var index = 0
         when (intallMode) {
@@ -94,11 +94,11 @@ class DexCompileAddin(private var context: ActivityBase) : AddinBase(context) {
             "speed" -> index = 1
         }
         DialogHelper.animDialog(AlertDialog.Builder(context)
-                .setTitle("请选择Dex2oat配置")
+                .setTitle("Select Dex2oat config")
                 .setSingleChoiceItems(arr, index) { _, which ->
                     index = which
                 }
-                .setNegativeButton("确定") { _, _ ->
+                .setNegativeButton("OK") { _, _ ->
                     val stringBuilder = StringBuilder()
 
                     //移除已添加的配置
@@ -123,10 +123,10 @@ class DexCompileAddin(private var context: ActivityBase) : AddinBase(context) {
                     stringBuilder.append("chmod 0755 /system/build.prop\n")
 
                     execShell(stringBuilder)
-                    Toast.makeText(context, "配置已修改，但需要重启才能生效！", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Config updated; reboot required to take effect.", Toast.LENGTH_SHORT).show()
                 }
-                .setNeutralButton("查看说明") { _, _ ->
-                    DialogHelper.animDialog(AlertDialog.Builder(context).setTitle("说明").setMessage("interpret-only模式安装应用更快。speed模式安装应用将会很慢，但是运行速度更快。"))
+                .setNeutralButton("View details") { _, _ ->
+                    DialogHelper.animDialog(AlertDialog.Builder(context).setTitle("Info").setMessage("interpret-only installs faster. speed installs slower but runs faster."))
                 })
     }
 
@@ -137,9 +137,9 @@ class DexCompileAddin(private var context: ActivityBase) : AddinBase(context) {
         }
 
         val arr = arrayOf(
-                "不编译（优化安装速度）",
-                "编译（优化运行速度）",
-                "恢复默认")
+                "No compile (faster install)",
+                "Compile (faster runtime)",
+                "Restore default")
         val intallMode = PropsUtils.getProp("pm.dexopt.install")
         var index = 0
         when (intallMode) {
@@ -161,7 +161,7 @@ class DexCompileAddin(private var context: ActivityBase) : AddinBase(context) {
                 .setSingleChoiceItems(arr, index) { _, which ->
                     index = which
                 }
-                .setNegativeButton("确定") { _, _ ->
+                .setNegativeButton("OK") { _, _ ->
                     val stringBuilder = StringBuilder()
 
                     //移除已添加的配置
@@ -216,13 +216,13 @@ class DexCompileAddin(private var context: ActivityBase) : AddinBase(context) {
                     stringBuilder.append("chmod 0755 /system/build.prop\n")
 
                     execShell(stringBuilder)
-                    Toast.makeText(context, "配置已修改，但需要重启才能生效！", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Config updated; reboot required to take effect.", Toast.LENGTH_SHORT).show()
                 }
-                .setNeutralButton("查看说明") { _, _ ->
+                .setNeutralButton("View details") { _, _ ->
                     DialogHelper.animDialog(AlertDialog.Builder(context)
-                            .setTitle("说明")
+                            .setTitle("Info")
                             .setMessage(R.string.addin_dexopt_helpinfo)
-                            .setNegativeButton("了解更多") { _, _ ->
+                            .setNegativeButton("Learn more") { _, _ ->
                                 context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(context.getString(R.string.addin_dex2oat_helplink))))
                             })
                 })

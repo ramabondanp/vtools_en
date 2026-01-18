@@ -16,7 +16,7 @@
         android:paddingVertical="10dp"
         style="@style/textSmall"
         android:textColor="@color/colorAccent"
-        android:text="如果应用无法恢复，可尝试在Recovery(TWRP)模式备份并删除 /data/system/users/0/package-restrictions.xml"
+        android:text="If the app cannot be restored, try backing up and deleting /data/system/users/0/package-restrictions.xml in Recovery (TWRP) mode"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

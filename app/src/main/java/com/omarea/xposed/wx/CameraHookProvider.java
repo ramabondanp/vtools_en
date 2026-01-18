@@ -21,7 +21,7 @@ public class CameraHookProvider {
     // 打印所有后置摄像头的Id
     private void dumpCameraList() {
         // 枚举所有摄像头
-        XposedBridge.log("Scene: 摄像头数量 " + Camera.getNumberOfCameras());
+        XposedBridge.log("Scene: camera count " + Camera.getNumberOfCameras());
         for (int cameraId = 0; cameraId < Camera.getNumberOfCameras(); cameraId++) {
             Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
             Camera.getCameraInfo(cameraId, cameraInfo);
@@ -83,7 +83,7 @@ public class CameraHookProvider {
     public void setCameraIdHook(int cameraIndex) {
         hackCameraIndex = cameraIndex;
         valueKeepOnece = true;
-        XposedBridge.log("Scene: 切换摄像头 " + cameraIndex);
+        XposedBridge.log("Scene: switch camera " + cameraIndex);
     }
 
     public VirtualCameraInfo getCameraIdHook() {

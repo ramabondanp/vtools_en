@@ -13,7 +13,7 @@ class NotificationListenerService : NotificationListenerService() {
         }
         /*
         if (sbn.isOngoing) {
-            Toast.makeText(this,  sbn.id.toString() + "正在后台运行...", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, sbn.id.toString() + " is running in the background...", Toast.LENGTH_SHORT).show()
             return
         }
         */

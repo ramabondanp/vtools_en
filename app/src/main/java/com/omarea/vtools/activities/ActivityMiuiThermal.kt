@@ -50,10 +50,10 @@ class ActivityMiuiThermal : ActivityBase() {
         var currentIndex = 0
         DialogHelper.animDialog(
                 AlertDialog.Builder(this)
-                        .setTitle("选择配置来源目录")
+                        .setTitle("Select config source directory")
                         .setSingleChoiceItems(options, currentIndex) { _, index ->
                             currentIndex = index
-                        }.setPositiveButton("浏览选定目录") { _, _ ->
+                        }.setPositiveButton("Browse selected directory") { _, _ ->
                             if (currentIndex > -1) {
                                 val intent = Intent(this.applicationContext, ActivityFileSelector::class.java)
                                 intent.putExtra("extension", "conf")
@@ -82,7 +82,7 @@ class ActivityMiuiThermal : ActivityBase() {
                     return
                 }
             } else {
-                Toast.makeText(this, "这个文件名，看上去不是一个温控配置文件~", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "This filename doesn't look like a thermal config file.", Toast.LENGTH_LONG).show()
             }
         }
     }
@@ -115,7 +115,7 @@ class ActivityMiuiThermal : ActivityBase() {
         )
         File(file_path).delete()
         if (result == "error") {
-            Toast.makeText(this, "保存失败，请检查是否已授予ROOT权限，以及文件是否被锁定！", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Save failed. Check root permission and whether the file is locked.", Toast.LENGTH_LONG).show()
         } else {
             val output = (try {
                 MiuiThermalAESUtil.decrypt(File(currentFile).readBytes())
@@ -124,9 +124,9 @@ class ActivityMiuiThermal : ActivityBase() {
             })
             val savedContent = String(output, Charset.forName("UTF-8"))
             if (savedContent.equals(currentContent)) {
-                Toast.makeText(this, "保存成功~", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Saved successfully.", Toast.LENGTH_LONG).show()
             } else {
-                Toast.makeText(this, "保存失败，请检查是否已授予ROOT权限，以及文件是否被锁定！", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Save failed. Check root permission and whether the file is locked.", Toast.LENGTH_LONG).show()
             }
         }
     }
@@ -148,23 +148,23 @@ class ActivityMiuiThermal : ActivityBase() {
             )
             File(file_path).delete()
             if (result == "error") {
-                Toast.makeText(this, "未能应用温控配置！", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Failed to apply thermal config!", Toast.LENGTH_LONG).show()
             } else {
                 val savedContent = KernelProrp.getProp("/data/vendor/thermal/decrypt.txt").trim()
                 if (savedContent.equals(currentContent)) {
-                    Toast.makeText(this, "应用温控配置成功~", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, "Thermal config applied successfully.", Toast.LENGTH_LONG).show()
                 } else if (!RootFile.fileExists(outPath)) {
-                    Toast.makeText(this, "未能应用温控配置！", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, "Failed to apply thermal config!", Toast.LENGTH_LONG).show()
                 } else {
                     Toast.makeText(
                             this,
-                            "无法确认温控是否应用成功，请检查日志或通过dump thermal-engine验证生效情况！",
+                            "Unable to confirm whether the thermal config applied. Check logs or verify with dump thermal-engine.",
                             Toast.LENGTH_LONG
                     ).show()
                 }
             }
         } else {
-            Toast.makeText(this, "系统不支持或目录已被破坏，无法应用温控配置！", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "System not supported or directory is corrupted; cannot apply thermal config.", Toast.LENGTH_LONG).show()
         }
         if (saveConfig) {
             saveConfig()
@@ -196,7 +196,7 @@ class ActivityMiuiThermal : ActivityBase() {
             if (currentFile.isNotEmpty()) {
                 saveConfig()
             } else {
-                Toast.makeText(this, "你都还没打开文件呢，保存个毛啊！", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "You haven't opened a file yet.", Toast.LENGTH_SHORT).show()
             }
             true
         } else if (id == R.id.action_apply) {
@@ -212,7 +212,7 @@ class ActivityMiuiThermal : ActivityBase() {
                     this.applyThermal(saveConfig)
                 }
             } else {
-                Toast.makeText(this, "你都还没打开文件呢，应用个毛啊！", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "You haven't opened a file yet.", Toast.LENGTH_SHORT).show()
             }
             true
         } else if (id == R.id.action_hele) {

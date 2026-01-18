@@ -116,12 +116,12 @@ class ActivityTimingTask : ActivityBase() {
                         })
                         updateUI()
                     }
-                }).setTitle("选择要执行的命令").show(supportFragmentManager, "custom-action-picker")
+                }).setTitle("Select command to execute").show(supportFragmentManager, "custom-action-picker")
             } else {
-                Toast.makeText(this, "你还没创建自定义命令", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "You haven't created any custom commands yet.", Toast.LENGTH_SHORT).show()
             }
         } else {
-            Toast.makeText(this, "你还没创建自定义命令", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "You haven't created any custom commands yet.", Toast.LENGTH_SHORT).show()
         }
     }
 

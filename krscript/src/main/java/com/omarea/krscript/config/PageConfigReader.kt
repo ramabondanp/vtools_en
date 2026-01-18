@@ -203,7 +203,7 @@ class PageConfigReader {
             return mainList
         } catch (ex: Exception) {
             Handler(Looper.getMainLooper()).post {
-                Toast.makeText(context, "解析配置文件失败\n" + ex.message, Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "Failed to parse config file\n" + ex.message, Toast.LENGTH_LONG).show()
             }
             Log.e("KrConfig Fail！", "" + ex.message)
         }

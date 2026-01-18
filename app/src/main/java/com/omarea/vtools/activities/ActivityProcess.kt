@@ -271,7 +271,7 @@ class ActivityProcess : ActivityBase() {
                         if (app != null) {
                             DialogSingleAppOptions(this@ActivityProcess, app, handle).showSingleAppOptions()
                         } else {
-                            Toast.makeText(context, "未找到此应用", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "App not found", Toast.LENGTH_SHORT).show()
                         }
                         dialog.dismiss()
                     }
@@ -284,7 +284,7 @@ class ActivityProcess : ActivityBase() {
                 }
             }
         } else {
-            Toast.makeText(this, "无法获取详情，该进程可能已经退出!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Unable to get details; the process may have exited.", Toast.LENGTH_SHORT).show()
         }
     }
 }

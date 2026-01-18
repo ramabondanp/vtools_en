@@ -46,11 +46,11 @@ class FragmentDonate : androidx.fragment.app.Fragment(), View.OnClickListener {
             try {
                 startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("weixin://dl/business/?ticket=wxp://f2f0YqS-OUviH9sQNUDgXJhOP3fld3htEqqO")))
             } catch (ex: Exception) {
-                Toast.makeText(context!!, "暂不支持此方式！", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context!!, "This method is not supported.", Toast.LENGTH_SHORT).show()
             }
             */
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("http://vtools.omarea.com/")))
-            Toast.makeText(context!!, "暂不支持直接调起，请保存收款码然后使用微信扫码（在扫一扫界面从相册选择图片）！", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context!!, "Direct launch is not supported. Save the payment code and scan it in WeChat (choose the image from the gallery).", Toast.LENGTH_SHORT).show()
         }
 
         bindClickEvent(binding.navGesture)
@@ -69,7 +69,7 @@ class FragmentDonate : androidx.fragment.app.Fragment(), View.OnClickListener {
     override fun onClick(v: View?) {
         v?.run {
             if (!CheckRootStatus.lastCheckResult && "root".equals(getTag())) {
-                Toast.makeText(context, "没有获得ROOT权限，不能使用本功能", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Root permission not granted; this feature is unavailable.", Toast.LENGTH_SHORT).show()
                 return
             }
 

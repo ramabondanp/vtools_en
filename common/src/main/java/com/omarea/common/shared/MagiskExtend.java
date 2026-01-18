@@ -66,8 +66,8 @@ public class MagiskExtend {
                     "name=" + moduleTitle + "\\n" +
                     "version=v1\\n" +
                     "versionCode=1\\n" +
-                    "author=嘟嘟ski\\n" +
-                    "description=用于将第三方应用转换成系统应用的模块，由Scene创建并添加\n" +
+                    "author=DuduSki\\n" +
+                    "description=Module for converting third-party apps to system apps, created and added by Scene\n" +
                     "minMagisk=17000\\n";
 
             if (MagiskVersion < 19) {
@@ -128,31 +128,31 @@ public class MagiskExtend {
 
     public static void magiskModuleInstall(Context context) {
         String moduleProp = "id=scene_systemless\n" +
-                "name=Scene的附加模块\n" +
+                "name=Scene add-on module\n" +
                 "version=v1\n" +
                 "versionCode=1\n" +
-                "author=嘟嘟ski\n" +
-                "description=Scene提供的Magisk拓展模块，从而在不修改系统文件的情况下，更改一些参数\n" +
+                "author=DuduSki\n" +
+                "description=Magisk extension module provided by Scene to change some parameters without modifying system files\n" +
                 "minMagisk=17000\n";
         String systemProp = "# This file will be read by resetprop\n" +
-                "# 示例: 更改 dpi\n" +
+                "# Example: change dpi\n" +
                 "# ro.sf.lcd_density=410\n" +
                 "# vendor.display.lcd_density=410\n";
         String service = "#!/system/bin/sh\n" +
-                "# 请不要硬编码/magisk/modname/...;相反，请使用$MODDIR/...\n" +
-                "# 这将使您的脚本兼容，即使Magisk以后改变挂载点\n" +
+                "# Do not hardcode /magisk/modname/...; use $MODDIR/... instead\n" +
+                "# This keeps your script compatible even if Magisk changes mount points later\n" +
                 "MODDIR=${0%/*}\n" +
                 "\n" +
-                "# 该脚本将在设备开机后作为延迟服务启动\n" +
+                "# This script will run as a late-start service after boot\n" +
                 "\n" +
-                "# 下面，你也可以添加一些自己的代码" +
+                "# You can add your own code below" +
                 "\n";
         String fsPostData = "#!/system/bin/sh\n" +
-                "# 请不要硬编码/magisk/modname/...;相反，请使用$MODDIR/...\n" +
-                "# 这将使您的脚本兼容，即使Magisk以后改变挂载点\n" +
+                "# Do not hardcode /magisk/modname/...; use $MODDIR/... instead\n" +
+                "# This keeps your script compatible even if Magisk changes mount points later\n" +
                 "MODDIR=${0%/*}\n" +
                 "\n" +
-                "# 此脚本将在post-fs-data模式下执行\n";
+                "# This script runs in post-fs-data mode\n";
 
         if (MagiskVersion < 19) {
             if (!RootFile.INSTANCE.fileExists("/data/adb/magisk.img")) {

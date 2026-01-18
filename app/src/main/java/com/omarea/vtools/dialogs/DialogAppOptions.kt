@@ -65,7 +65,7 @@ open class DialogAppOptions(protected final var context: Activity, protected var
             dialog.dismiss()
             buildAll()
         }
-        dialogView.findViewById<TextView>(R.id.app_options_title).text = "请选择操作"
+        dialogView.findViewById<TextView>(R.id.app_options_title).text = "Select action"
 
         dialogView.findViewById<View>(R.id.app_options_app_freeze).setOnClickListener {
             dialog.dismiss()
@@ -97,7 +97,7 @@ open class DialogAppOptions(protected final var context: Activity, protected var
         }
         dialogView.findViewById<View>(R.id.app_options_uninstall).visibility = View.GONE
 
-        dialogView.findViewById<TextView>(R.id.app_options_title).setText("请选择操作")
+        dialogView.findViewById<TextView>(R.id.app_options_title).setText("Select action")
 
         dialogView.findViewById<View>(R.id.app_options_app_freeze).setOnClickListener {
             dialog.dismiss()
@@ -158,7 +158,7 @@ open class DialogAppOptions(protected final var context: Activity, protected var
         val layoutInflater = LayoutInflater.from(context)
         val dialog = layoutInflater.inflate(R.layout.dialog_loading, null)
         val textView = (dialog.findViewById(R.id.dialog_text) as TextView)
-        textView.text = "正在获取权限"
+        textView.text = "Requesting permissions"
         val alert = DialogHelper.customDialog(context, dialog, false)
         AsynSuShellUnit(ProgressHandler(dialog, alert, handler)).exec(sb.toString()).waitFor()
     }
@@ -172,15 +172,15 @@ open class DialogAppOptions(protected final var context: Activity, protected var
             super.handleMessage(msg)
             if (msg.obj != null) {
                 if (msg.what == 0) {
-                    textView.text = "正在执行操作..."
+                    textView.text = "Performing operation..."
                 } else if (msg.what == 5) {
                     error.append(msg.obj)
                     error.append("\n")
                 } else if (msg.what == 10) {
                     if (msg.obj == true) {
-                        textView.text = "操作完成！"
+                        textView.text = "Operation completed!"
                     } else {
-                        textView.text = "出现异常！"
+                        textView.text = "An error occurred!"
                     }
                     handler.postDelayed({
                         alert.dismiss()
@@ -190,7 +190,7 @@ open class DialogAppOptions(protected final var context: Activity, protected var
                     val obj = msg.obj.toString()
                     if (obj.contains("[operation completed]")) {
                         progressBar.progress = 100
-                        textView.text = "操作完成！"
+                        textView.text = "Operation completed!"
                         handler.postDelayed({
                             try {
                                 alert.dismiss()
@@ -199,28 +199,28 @@ open class DialogAppOptions(protected final var context: Activity, protected var
                             }
                             if (error.isNotBlank()) {
                                 val context: Context = alert.context
-                                DialogHelper.alert(context, "出现了一些错误", error.toString())
+                                DialogHelper.alert(context, "Some errors occurred", error.toString())
                             }
                         }, 1200)
                         handler.handleMessage(handler.obtainMessage(2))
                     } else if (Regex("^\\[.*]\$").matches(obj)) {
                         progressBar.progress = msg.what
                         val txt = obj
-                                .replace("[copy ", "[复制 ")
-                                .replace("[uninstall ", "[卸载 ")
-                                .replace("[install ", "[安装 ")
-                                .replace("[restore ", "[还原 ")
-                                .replace("[backup ", "[备份 ")
-                                .replace("[unhide ", "[显示 ")
-                                .replace("[hide ", "[隐藏 ")
-                                .replace("[delete ", "[删除 ")
-                                .replace("[disable ", "[禁用 ")
-                                .replace("[enable ", "[启用 ")
-                                .replace("[trim caches ", "[清除缓存 ")
-                                .replace("[clear ", "[清除数据 ")
-                                .replace("[skip ", "[跳过 ")
-                                .replace("[link ", "[链接 ")
-                                .replace("[compile ", "[编译 ")
+                                .replace("[copy ", "[Copy ")
+                                .replace("[uninstall ", "[Uninstall ")
+                                .replace("[install ", "[Install ")
+                                .replace("[restore ", "[Restore ")
+                                .replace("[backup ", "[Backup ")
+                                .replace("[unhide ", "[Show ")
+                                .replace("[hide ", "[Hide ")
+                                .replace("[delete ", "[Delete ")
+                                .replace("[disable ", "[Disable ")
+                                .replace("[enable ", "[Enable ")
+                                .replace("[trim caches ", "[Trim caches ")
+                                .replace("[clear ", "[Clear data ")
+                                .replace("[skip ", "[Skip ")
+                                .replace("[link ", "[Link ")
+                                .replace("[compile ", "[Compile ")
                         textView.text = txt
                     }
                 }
@@ -228,7 +228,7 @@ open class DialogAppOptions(protected final var context: Activity, protected var
         }
 
         init {
-            textView.text = "正在获取权限"
+            textView.text = "Requesting permissions"
         }
     }
 
@@ -250,7 +250,7 @@ open class DialogAppOptions(protected final var context: Activity, protected var
      */
     protected fun backupAll() {
         val view = context.layoutInflater.inflate(R.layout.dialog_app_backup_mode, null)
-        view.findViewById<TextView>(R.id.confirm_message).text = "备份选中的 ${apps.size} 个应用和数据？"
+        view.findViewById<TextView>(R.id.confirm_message).text = "Back up the selected ${apps.size} apps and data?"
 
         val dialog = DialogHelper.customDialog(context, view)
 
@@ -295,10 +295,10 @@ open class DialogAppOptions(protected final var context: Activity, protected var
     }
 
     /**
-     * 还原选中的应用
+     * Restore selected apps
      */
     protected fun restoreAll(apk: Boolean = true) {
-        confirm("还原应用", "还原选中的 ${apps.size} 个应用和数据？") {
+        confirm("Restore apps", "Restore the selected ${apps.size} apps and data?") {
             _restoreAll(apk)
         }
     }
@@ -343,7 +343,7 @@ open class DialogAppOptions(protected final var context: Activity, protected var
     protected fun modifyStateAll() {
         val view = context.layoutInflater.inflate(R.layout.dialog_app_disable_mode, null)
         val dialog = DialogHelper.customDialog(context, view)
-        view.findViewById<TextView>(R.id.confirm_message).text = "选中了 ${apps.size} 个应用，你希望把它们的状态改成？"
+        view.findViewById<TextView>(R.id.confirm_message).text = "Selected ${apps.size} apps. What state should they be set to?"
 
         val switchSuspend = view.findViewById<CompoundButton>(R.id.disable_suspend)
         val switchFreeze = view.findViewById<CompoundButton>(R.id.disable_freeze)
@@ -410,14 +410,14 @@ open class DialogAppOptions(protected final var context: Activity, protected var
     }
 
     /**
-     * 删除选中的应用
+     * Delete selected apps
      */
     protected fun deleteAll() {
-        confirm("删除应用", "已选择 ${apps.size} 个应用，删除系统应用可能导致功能不正常，甚至无法开机，确定要继续删除？") {
+        confirm("Delete apps", "Selected ${apps.size} apps. Deleting system apps may break functionality or prevent boot. Continue?") {
             if (isMagisk() && !MagiskExtend.moduleInstalled() && (isTmpfs("/system/app") || isTmpfs("/system/priv-app"))) {
                 DialogHelper.confirm(context,
-                        "Magisk 副作用警告",
-                        "检测到你正在使用Magisk作为ROOT权限管理器，并且/system/app和/system/priv-app目录已被某些模块修改，这可能导致这些目录被Magisk劫持并且无法写入！！",
+                        "Magisk side effects warning",
+                        "Detected Magisk as the root manager, and /system/app and /system/priv-app have been modified by some modules. These directories may be hijacked by Magisk and not writable.",
                         DialogHelper.DialogButton(context.getString(R.string.btn_continue), {
                             _deleteAll()
                         }))
@@ -453,15 +453,15 @@ open class DialogAppOptions(protected final var context: Activity, protected var
         sb.append("echo '[operation completed]'\n")
         execShell(sb)
         if (useMagisk) {
-            DialogHelper.helpInfo(context, "已通过Magisk完成操作，请重启手机~", "")
+            DialogHelper.helpInfo(context, "Operation completed via Magisk. Please reboot.", "")
         }
     }
 
     /**
-     * 删除备份
+     * Delete backups
      */
     protected fun deleteBackupAll() {
-        confirm("删除备份", "永久删除这些备份文件？") {
+        confirm("Delete backups", "Permanently delete these backup files?") {
             _deleteBackupAll()
         }
     }
@@ -488,11 +488,11 @@ open class DialogAppOptions(protected final var context: Activity, protected var
     }
 
     /**
-     * 清除数据
+     * Clear data
      */
     protected fun clearAll() {
         val view = context.layoutInflater.inflate(R.layout.dialog_app_clear_mode, null)
-        view.findViewById<TextView>(R.id.confirm_message).text = "确定将选中的 ${apps.size} 个应用数据清空？"
+        view.findViewById<TextView>(R.id.confirm_message).text = "Clear data for the selected ${apps.size} apps?"
 
         val dialog = DialogHelper.customDialog(context, view)
         val userOnly = view.findViewById<CompoundButton>(R.id.clear_user_only)
@@ -514,7 +514,7 @@ open class DialogAppOptions(protected final var context: Activity, protected var
         if (um != null) {
             uid = um.getSerialNumberForUser(userHandle)
         } else {
-            Toast.makeText(context, "获取用户ID失败！", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Failed to get user ID!", Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -535,11 +535,11 @@ open class DialogAppOptions(protected final var context: Activity, protected var
     }
 
     /**
-     * 卸载选中
+     * Uninstall selected apps
      */
     protected fun uninstallAll() {
         val view = context.layoutInflater.inflate(R.layout.dialog_app_uninstall_mode, null)
-        view.findViewById<TextView>(R.id.confirm_message).text = "确定卸载选中的 ${apps.size} 个应用？"
+        view.findViewById<TextView>(R.id.confirm_message).text = "Uninstall the selected ${apps.size} apps?"
 
         val dialog = DialogHelper.customDialog(context, view)
         val userOnly = view.findViewById<CompoundButton>(R.id.uninstall_user_only)
@@ -556,11 +556,11 @@ open class DialogAppOptions(protected final var context: Activity, protected var
     }
 
     /**
-     * 卸载选中
+     * Uninstall selected system apps
      */
     protected fun uninstallAllSystem(updated: Boolean) {
         val view = context.layoutInflater.inflate(R.layout.dialog_app_uninstall_mode, null)
-        view.findViewById<TextView>(R.id.confirm_message).text = "确定卸载选中的 ${apps.size} 个系统应用？"
+        view.findViewById<TextView>(R.id.confirm_message).text = "Uninstall the selected ${apps.size} system apps?"
 
         val dialog = DialogHelper.customDialog(context, view)
         val userOnly = view.findViewById<CompoundButton>(R.id.uninstall_user_only)
@@ -596,7 +596,7 @@ open class DialogAppOptions(protected final var context: Activity, protected var
                 val uid = um.getSerialNumberForUser(userHandle)
                 _uninstallAllOnlyUser(uid, keepData)
             } else {
-                Toast.makeText(context, "获取用户ID失败！", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Failed to get user ID!", Toast.LENGTH_SHORT).show()
             }
         } else {
             val sb = StringBuilder()
@@ -636,7 +636,7 @@ open class DialogAppOptions(protected final var context: Activity, protected var
 
     protected fun buildAll() {
         val view = context.layoutInflater.inflate(R.layout.dialog_app_dex2oat_mode, null)
-        view.findViewById<TextView>(R.id.confirm_message).text = "dex2oat编译可提升(低端机)运行应用时的响应速度，但会显著增加存储空间占用。\n\n确定为选中的 ${apps.size} 个应用进行dex2oat编译吗？"
+        view.findViewById<TextView>(R.id.confirm_message).text = "dex2oat compilation can improve app responsiveness on low-end devices but increases storage usage.\n\nCompile for the selected ${apps.size} apps?"
         val switchEverything = view.findViewById<CompoundButton>(R.id.dex2oat_everything)
         val switchForce = view.findViewById<CompoundButton>(R.id.dex2oat_force)
 
@@ -657,7 +657,7 @@ open class DialogAppOptions(protected final var context: Activity, protected var
 
     private fun buildAll(mode: String, forced: Boolean) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-            Toast.makeText(context, "该功能只支持Android N（7.0）以上的系统！", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "This feature requires Android N (7.0)+.", Toast.LENGTH_SHORT).show()
             return
         }
         val sb = StringBuilder()

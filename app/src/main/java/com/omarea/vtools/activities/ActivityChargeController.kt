@@ -169,8 +169,8 @@ class ActivityChargeController : ActivityBase() {
         }
         binding.btnBatteryHistoryDel.setOnClickListener {
             DialogHelper.confirm(this,
-                    "需要重启",
-                    "删除电池使用记录需要立即重启手机，是否继续？",
+                    "Reboot required",
+                    "Deleting battery usage records requires an immediate reboot. Continue?",
                     {
                         KeepShellPublic.doCmdSync(
                                 "rm -f /data/system/batterystats-checkin.bin;" +
@@ -217,7 +217,7 @@ class ActivityChargeController : ActivityBase() {
         binding.batteryNightMode.setOnClickListener {
             val checked = (it as CompoundButton).isChecked
             if (checked && !spf.getBoolean(SpfConfig.CHARGE_SPF_QC_BOOSTER, false)) {
-                Toast.makeText(this.context, "需要开启 " + getString(R.string.battery_qc_charger), Toast.LENGTH_LONG).show()
+                Toast.makeText(this.context, "You need to enable " + getString(R.string.battery_qc_charger), Toast.LENGTH_LONG).show()
                 it.isChecked = false
             } else {
                 spf.edit().putBoolean(SpfConfig.CHARGE_SPF_NIGHT_MODE, checked).apply()

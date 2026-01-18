@@ -224,7 +224,7 @@ class ActivityCpuControl : ActivityBase() {
     private fun bindGPUConfig() {
         if (supportedGPU) {
             binding.gpuMinFreq.setOnClickListener {
-                openMultiplePicker("选择GPU最小频率",
+                openMultiplePicker("Select GPU minimum frequency",
                         parseGPUFreqList(adrenoFreqs),
                         adrenoFreqs.indexOf(status.adrenoMinFreq),
                         object : PickerCallback {
@@ -238,7 +238,7 @@ class ActivityCpuControl : ActivityBase() {
                         })
             }
             binding.gpuMaxFreq.setOnClickListener {
-                openMultiplePicker("选择GPU最大频率",
+                openMultiplePicker("Select GPU maximum frequency",
                         parseGPUFreqList(adrenoFreqs),
                         adrenoFreqs.indexOf(status.adrenoMaxFreq),
                         object : PickerCallback {
@@ -252,7 +252,7 @@ class ActivityCpuControl : ActivityBase() {
                         })
             }
             binding.gpuGovernor.setOnClickListener {
-                openMultiplePicker("选择GPU调度",
+                openMultiplePicker("Select GPU governor",
                         string2SelectItem(adrenoGovernors),
                         adrenoGovernors.indexOf(status.adrenoGovernor),
                         object : PickerCallback {
@@ -267,7 +267,7 @@ class ActivityCpuControl : ActivityBase() {
             }
             if (adrenoGPU) {
                 binding.adrenoGpuMinPl.setOnClickListener {
-                    openMultiplePicker("选择GPU最小功耗级别",
+                    openMultiplePicker("Select GPU minimum power level",
                             string2SelectItem(adrenoPLevels),
                             adrenoPLevels.indexOf(status.adrenoMinPL),
                             object : PickerCallback {
@@ -281,7 +281,7 @@ class ActivityCpuControl : ActivityBase() {
                     })
                 }
                 binding.adrenoGpuMaxPl.setOnClickListener {
-                    openMultiplePicker("选择GPU最大功耗级别",
+                    openMultiplePicker("Select GPU maximum power level",
                             string2SelectItem(adrenoPLevels),
                             adrenoPLevels.indexOf(status.adrenoMaxPL),
                             object : PickerCallback {
@@ -295,7 +295,7 @@ class ActivityCpuControl : ActivityBase() {
                     })
                 }
                 binding.adrenoGpuDefaultPl.setOnClickListener {
-                    openMultiplePicker("选择GPU默认功耗级别",
+                    openMultiplePicker("Select GPU default power level",
                             string2SelectItem(adrenoPLevels),
                             adrenoPLevels.indexOf(status.adrenoDefaultPL),
                             object : PickerCallback {
@@ -326,7 +326,7 @@ class ActivityCpuControl : ActivityBase() {
     private fun bindCpuSetConfig(currentState: String, callback: PickerCallback2) {
         if (currentState.isNotEmpty()) {
             val coreState = parseCpuset(currentState)
-            openMultiplePicker("选择要使用的核心",
+            openMultiplePicker("Select cores to use",
                     getCoreList(coreState),
                     object: PickerCallback2 {
                         override fun onSelected(result: BooleanArray) {
@@ -401,7 +401,7 @@ class ActivityCpuControl : ActivityBase() {
 
         cluster_min_freq.setOnClickListener {
             val freqs = getClusterFreqs(cluster)
-            openMultiplePicker("选择最小频率",
+            openMultiplePicker("Select minimum frequency",
                     parseFreqList(freqs),
                     freqs.indexOf(getApproximation(freqs, status.cpuClusterStatuses[cluster].min_freq)),
                     object: PickerCallback {
@@ -417,7 +417,7 @@ class ActivityCpuControl : ActivityBase() {
 
         cluster_max_freq.setOnClickListener {
             val freqs = getClusterFreqs(cluster)
-            openMultiplePicker("选择最大频率",
+            openMultiplePicker("Select maximum frequency",
                     parseFreqList(freqs),
                     freqs.indexOf(getApproximation(freqs, status.cpuClusterStatuses[cluster].max_freq)),
                     object: PickerCallback {
@@ -434,7 +434,7 @@ class ActivityCpuControl : ActivityBase() {
         // cluster_little_governor.onItemSelectedListener = ItemSelected(R.id.cluster_little_governor, next)
         cluster_governor.setOnClickListener {
             val governors = getClusterGovernors(cluster)
-            openMultiplePicker("选择调度模式",
+            openMultiplePicker("Select governor",
                     string2SelectItem(governors),
                     governors.indexOf(status.cpuClusterStatuses[cluster].governor),
                     object: PickerCallback {
@@ -457,11 +457,11 @@ class ActivityCpuControl : ActivityBase() {
                 for (param in status.cpuClusterStatuses[cluster].governor_params) {
                     msg.append("\n")
                     msg.append(param.key)
-                    msg.append("：")
+                    msg.append(":")
                     msg.append(param.value)
                     msg.append("\n")
                 }
-                DialogHelper.helpInfo(this, "调度器参数", msg.toString())
+                DialogHelper.helpInfo(this, "Governor parameters", msg.toString())
             }
         }
     }
@@ -735,8 +735,8 @@ class ActivityCpuControl : ActivityBase() {
         val dynamic = AccessibleServiceHelper().serviceRunning(context) && globalSPF.getBoolean(SpfConfig.GLOBAL_SPF_DYNAMIC_CONTROL, SpfConfig.GLOBAL_SPF_DYNAMIC_CONTROL_DEFAULT)
         if (dynamic && (cpuModeName == null)) {
             DialogHelper.helpInfo(this,
-                    "请注意",
-                    "检测到你已开启“动态响应”，你手动对CPU、GPU的修改随时可能被覆盖。\n\n同时，手动调整参数还可能对“动态响应”的工作造成不利影响！").setCancelable(false)
+                    "Please note",
+                    "Dynamic Response is enabled, so your manual CPU/GPU changes may be overwritten at any time.\n\nManual tuning may also negatively affect Dynamic Response.").setCancelable(false)
         }
     }
 
@@ -757,11 +757,11 @@ class ActivityCpuControl : ActivityBase() {
     private fun saveBootConfig() {
         if (cpuModeName != null) {
             if (!CpuConfigStorage(context).saveCpuConfig(status, cpuModeName)) {
-                Toast.makeText(context, "保存配置文件失败！", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Failed to save config file!", Toast.LENGTH_SHORT).show()
             }
         } else {
             if (!CpuConfigStorage(context).saveCpuConfig(if (binding.cpuApplyOnboot.isChecked) status else null)) {
-                Toast.makeText(context, "保存配置文件失败！", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Failed to save config file!", Toast.LENGTH_SHORT).show()
                 binding.cpuApplyOnboot.isChecked = false
             }
         }
@@ -773,7 +773,7 @@ class ActivityCpuControl : ActivityBase() {
         if (this.cpuModeName == null) {
             title = getString(R.string.menu_core_control)
         } else {
-            title = "自定义[" + ModeSwitcher.getModName("" + cpuModeName) + "]"
+            title = "Custom [" + ModeSwitcher.getModName("" + cpuModeName) + "]"
         }
 
         loadBootConfig()

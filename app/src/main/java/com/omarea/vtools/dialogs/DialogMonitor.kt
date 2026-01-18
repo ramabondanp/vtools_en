@@ -78,7 +78,7 @@ class DialogMonitor(var context: Activity) {
                         FloatFpsWatch(context).showPopupWindow()
                     } else {
                         isChecked = false
-                        Scene.toast("请在系统设置里激活[Scene - 场景模式]辅助服务", Toast.LENGTH_SHORT)
+                        Scene.toast("Please enable the [Scene - Scene Mode] accessibility service in system settings", Toast.LENGTH_SHORT)
                     }
                     */
                 } else {

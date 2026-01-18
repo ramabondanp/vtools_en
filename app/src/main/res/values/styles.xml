@@ -123,9 +123,9 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <!--activity 对话框样式  -->
+    <!-- Activity dialog style -->
     <style name="FloatActivity" parent="Theme.AppCompat.Light">
-        <!-- float_box为我们定义的窗口背景-->
+        <!-- float_box is the custom window background -->
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:opacity">@integer/opacity</item>
     </style>

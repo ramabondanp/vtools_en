@@ -94,7 +94,7 @@ class FloatMonitorThreads(private val mContext: Context) {
             }
         } else {
             handle.post {
-                textView.text = "未能获取当前应用进程，请检查辅助服务是否激活！"
+                textView.text = "Unable to get current app process. Please check whether the accessibility service is enabled."
             }
         }
     }

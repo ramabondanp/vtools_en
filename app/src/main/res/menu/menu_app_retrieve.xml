@@ -5,5 +5,5 @@
     <item
         android:id="@+id/action_retrieve"
         android:orderInCategory="100"
-        android:title="找回应用" />
+        android:title="Recover apps" />
 </menu>

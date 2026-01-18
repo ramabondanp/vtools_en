@@ -41,7 +41,7 @@ class ActivityQuickStart : Activity() {
 
         val extras = intent.extras
         if (extras == null || !extras.containsKey("packageName")) {
-            updateStartStateText("无效的快捷方式！")
+            updateStartStateText("Invalid shortcut!")
         } else {
             appPackageName = intent.getStringExtra("packageName")!!;
             val pm = packageManager
@@ -64,7 +64,7 @@ class ActivityQuickStart : Activity() {
     private class CheckRootSuccess(context: ActivityQuickStart, private var appPackageName: String) : Runnable {
         private var context: WeakReference<ActivityQuickStart>;
         override fun run() {
-            context.get()?.updateStartStateText("正在启动应用...")
+            context.get()?.updateStartStateText("Launching app...")
             context.get()!!.hasRoot = true
 
             if (appPackageName.equals("com.android.vending")) {
@@ -95,7 +95,7 @@ class ActivityQuickStart : Activity() {
                 return
             }
         } catch (ex: Exception) {
-            updateStartStateText("启动应用失败！")
+            updateStartStateText("Failed to launch app!")
         }
 
         var appInfo: ApplicationInfo? = null
@@ -104,9 +104,9 @@ class ActivityQuickStart : Activity() {
         } catch (ex: Exception) {
         }
         if (appInfo == null) {
-            updateStartStateText("应用似乎已被卸载！")
+            updateStartStateText("The app seems to be uninstalled!")
         } else {
-            updateStartStateText("启动应用失败！")
+            updateStartStateText("Failed to launch app!")
         }
     }
 

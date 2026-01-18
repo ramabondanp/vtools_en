@@ -47,7 +47,7 @@ class CompileService : IntentService("vtools-compile") {
 
     private fun updateNotification(title: String, text: String) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            nm.createNotificationChannel(NotificationChannel("vtool-compile", "后台编译", NotificationManager.IMPORTANCE_LOW))
+            nm.createNotificationChannel(NotificationChannel("vtool-compile", "Background compile", NotificationManager.IMPORTANCE_LOW))
             nm.notify(990, NotificationCompat.Builder(this, "vtool-compile").setSmallIcon(R.drawable.process)
                     .setContentTitle(title)
                     .setContentText(text)
@@ -60,7 +60,7 @@ class CompileService : IntentService("vtools-compile") {
     private fun updateNotification(title: String, text: String, total: Int, current: Int, autoCancel: Boolean = true) {
         val builder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             if (!channelCreated) {
-                nm.createNotificationChannel(NotificationChannel("vtool-compile", "后台编译", NotificationManager.IMPORTANCE_LOW))
+                nm.createNotificationChannel(NotificationChannel("vtool-compile", "Background compile", NotificationManager.IMPORTANCE_LOW))
                 channelCreated = true
             }
             NotificationCompat.Builder(this, "vtool-compile")
@@ -136,7 +136,7 @@ class CompileService : IntentService("vtools-compile") {
             }
             keepShell.tryExit()
             compileCanceled = true
-            Scene.Companion.toast("重置过程中手机会有点卡，请耐心等待~", Toast.LENGTH_LONG)
+            Scene.Companion.toast("The phone may lag during reset. Please wait...", Toast.LENGTH_LONG)
         } else {
             for (packageName in packageNames) {
                 if (true) {

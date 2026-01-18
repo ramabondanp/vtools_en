@@ -165,7 +165,7 @@ class ActivityMain : ActivityBase() {
                 DialogHelper.alert(
                         this,
                         getString(R.string.sorry),
-                        "启动应用失败\n" + ex.message
+                        "Failed to start app\n" + ex.message
                 ) {
                     recreate()
                 }

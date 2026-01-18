@@ -69,7 +69,7 @@ class ActivityAppRetrieve : ActivityBase() {
     }
 
     private fun loadData() {
-        progressBarDialog.showDialog("正在获取应用状态")
+        progressBarDialog.showDialog("Fetching app status")
 
         GlobalScope.launch(Dispatchers.Main) {
             // 获得已卸载的应用（包括：隐藏的、卸载的）
@@ -146,7 +146,7 @@ class ActivityAppRetrieve : ActivityBase() {
                             msg.append("\n")
                         }
 
-                        DialogHelper.helpInfo(this, "以下应用未能恢复", msg.toString() + "\n\n可尝试在Recovery(TWRP)模式备份并删除 /data/system/users/0/package-restrictions.xml")
+                        DialogHelper.helpInfo(this, "The following apps could not be restored", msg.toString() + "\n\nYou can try backing up and deleting /data/system/users/0/package-restrictions.xml in Recovery (TWRP) mode.")
 
                         if (uninstalledApp.size != items.size) {
                             loadData()

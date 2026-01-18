@@ -170,7 +170,7 @@ class FloatTaskManager(private val context: Context) {
         process_filter.setOnClickListener {
             filterMode = if (filterMode == AdapterProcessMini.FILTER_ANDROID) AdapterProcessMini.FILTER_ALL else AdapterProcessMini.FILTER_ANDROID
             (process_list.adapter as AdapterProcessMini).updateFilterMode(filterMode)
-            process_filter.text = if (filterMode == AdapterProcessMini.FILTER_ANDROID) "应用" else "全部"
+            process_filter.text = if (filterMode == AdapterProcessMini.FILTER_ANDROID) "Apps" else "All"
         }
 
         var lastClick: Int? = null

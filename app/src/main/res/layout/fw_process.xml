@@ -35,7 +35,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="进程管理"
+                android:text="Process manager"
                 android:textSize="11dp" />
 
             <TextView
@@ -43,7 +43,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="2dp"
-                android:text="应用"
+                android:text="Apps"
                 android:textSize="11dp" />
 
             <ImageButton

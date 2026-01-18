@@ -258,13 +258,13 @@ class DialogSingleAppOptions(context: Activity, var app: AppInfo, handler: Handl
     private fun copyPackageName() {
         val cm = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         cm.text = app.packageName
-        Toast.makeText(context, "已复制：${app.packageName}", Toast.LENGTH_LONG).show()
+        Toast.makeText(context, "Copied: ${app.packageName}", Toast.LENGTH_LONG).show()
     }
 
     private fun copyInstallPath() {
         val cm = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         cm.text = app.path
-        Toast.makeText(context, "已复制：${app.path}", Toast.LENGTH_LONG).show()
+        Toast.makeText(context, "Copied: ${app.path}", Toast.LENGTH_LONG).show()
     }
 
     private fun showInMarket() {
@@ -312,9 +312,9 @@ class DialogSingleAppOptions(context: Activity, var app: AppInfo, handler: Handl
             MagiskExtend.createFileReplaceModule(outPutPath, appDir, app.packageName, app.appName)
         }
         if (result) {
-            DialogHelper.helpInfo(context, "已通过Magisk完成操作，请重启手机~", "")
+            DialogHelper.helpInfo(context, "Operation completed via Magisk. Please reboot.", "")
         } else {
-            DialogHelper.helpInfo(context, "Magisk镜像空间不足，操作失败！~", "")
+            DialogHelper.helpInfo(context, "Magisk image has insufficient space. Operation failed.", "")
         }
     }
 
@@ -322,13 +322,13 @@ class DialogSingleAppOptions(context: Activity, var app: AppInfo, handler: Handl
         val magiskSupported = MagiskExtend.magiskSupported()
         if (!magiskSupported && isMagisk() && isTmpfs("/system/app")) {
             DialogHelper.helpInfo(context,
-                    "Magisk 副作用警告",
-                    "检测到你正在使用Magisk，并使用了一些会添加系统应用的模块，这导致/system/app被Magisk劫持并且无法写入！！"
+                    "Magisk side effects warning",
+                    "Detected Magisk with modules that add system apps, which causes /system/app to be hijacked by Magisk and not writable."
             )
             return
         }
         val view = context.layoutInflater.inflate(R.layout.dialog_app_trans_mode, null)
-        view.findViewById<TextView>(R.id.confirm_message).text = "部分应用迁移到系统目录会无法运行。\n\n此外，你需要解锁System分区，或安装Magisk(19.3+)。\n\n转换完成后，请重启手机！"
+        view.findViewById<TextView>(R.id.confirm_message).text = "Some apps won't run after moving to the system directory.\n\nAlso, you need to unlock the system partition or install Magisk (19.3+).\n\nPlease reboot after conversion!"
         val switchCreateModule = view.findViewById<CompoundButton>(R.id.trans_create_module)
         switchCreateModule.isEnabled = magiskSupported
         switchCreateModule.isChecked = magiskSupported

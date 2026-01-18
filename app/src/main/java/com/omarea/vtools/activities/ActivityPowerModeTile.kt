@@ -23,13 +23,13 @@ class ActivityPowerModeTile : AppCompatActivity() {
                 val overlayPermission = Intent().addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 overlayPermission.action = "android.settings.APPLICATION_DETAILS_SETTINGS"
                 overlayPermission.data = Uri.fromParts("package", this.packageName, null)
-                Toast.makeText(this, "为Scene授权显示悬浮窗权限，从而在应用中快速切换模式！", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Grant Scene overlay permission to switch modes quickly in apps.", Toast.LENGTH_SHORT).show();
             } else {
                 FloatPowercfgSelector(this.applicationContext).open(this.packageName)
             }
 
         } else {
-            Toast.makeText(this, "性能配置未完成，无法使用快捷切换！", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Performance config is incomplete; quick switch is unavailable.", Toast.LENGTH_SHORT).show();
         }
         finish()
     }

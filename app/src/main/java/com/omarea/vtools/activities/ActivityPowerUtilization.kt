@@ -81,7 +81,7 @@ class ActivityPowerUtilization : ActivityBase() {
         when (item.itemId) {
             R.id.action_delete -> {
                 BatteryHistoryStore(context).clearData()
-                Toast.makeText(context, "统计记录已清理", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Stats cleared", Toast.LENGTH_SHORT).show()
                 updateUI()
             }
         }

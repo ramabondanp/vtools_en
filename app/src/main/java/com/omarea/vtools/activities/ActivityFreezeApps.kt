@@ -227,7 +227,7 @@ class ActivityFreezeApps : ActivityBase() {
         }
         view.findViewById<View>(R.id.app_options_uninstall).setOnClickListener {
             dialog.dismiss()
-            DialogHelper.confirm(this, "确认卸载？", "目标应用：${appInfo.appName}", {
+            DialogHelper.confirm(this, "Confirm uninstall?", "Target app: ${appInfo.appName}", {
                 removeAndUninstall(appInfo)
                 loadData()
             })

@@ -82,14 +82,14 @@
                         style="@style/textTitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="黑名单应用" />
+                        android:text="Blacklisted apps" />
 
                     <TextView
                         style="@style/textSmall"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:text="禁止在部分应用中查找和点击跳过按钮" />
+                        android:text="Disable searching and clicking the Skip button in some apps" />
                 </LinearLayout>
 
                 <ImageView

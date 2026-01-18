@@ -71,7 +71,7 @@ class ActivityAppXposedDetails : ActivityBase() {
                 val intent = Intent(Intent.ACTION_VIEW, uri)
                 startActivity(intent)
             } catch (ex: Exception) {
-                Toast.makeText(context, "启动在线页面失败！", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Failed to open online page!", Toast.LENGTH_SHORT).show()
             }
         })
     }
@@ -114,7 +114,7 @@ class ActivityAppXposedDetails : ActivityBase() {
                     if (sceneConfigInfo.dpi >= 96) {
                         binding.appDetailsDpi.text = sceneConfigInfo.dpi.toString()
                     } else {
-                        binding.appDetailsDpi.text = "默认"
+                        binding.appDetailsDpi.text = "Default"
                     }
                 }
             } catch (ex: Exception) {
@@ -137,7 +137,7 @@ class ActivityAppXposedDetails : ActivityBase() {
                 throw Exception("")
             }
         } catch (ex: Exception) {
-            Toast.makeText(applicationContext, "连接到“Scene-高级设定”插件失败，请不要阻止插件自启动！", Toast.LENGTH_LONG).show()
+            Toast.makeText(applicationContext, "Failed to connect to the \"Scene - Advanced Settings\" plugin. Please do not block it from auto-starting!", Toast.LENGTH_LONG).show()
         }
     }
 
@@ -252,7 +252,7 @@ class ActivityAppXposedDetails : ActivityBase() {
             if (sceneConfigInfo.dpi >= 96) {
                 binding.appDetailsDpi.text = sceneConfigInfo.dpi.toString()
             } else {
-                binding.appDetailsDpi.text = "默认"
+                binding.appDetailsDpi.text = "Default"
             }
             binding.appDetailsDpi.setOnClickListener {
                 var dialog: DialogHelper.DialogWrap? = null
@@ -263,7 +263,7 @@ class ActivityAppXposedDetails : ActivityBase() {
                         setText(sceneConfigInfo.dpi.toString())
                     }
                 }
-                dialog = DialogHelper.confirm(this, "请输入DPI", "", view, DialogHelper.DialogButton(getString(R.string.btn_confirm), {
+                dialog = DialogHelper.confirm(this, "Enter DPI", "", view, DialogHelper.DialogButton(getString(R.string.btn_confirm), {
                     val dpiText = inputDpi.text.toString()
                     if (dpiText.isEmpty()) {
                         sceneConfigInfo.dpi = 0
@@ -271,11 +271,11 @@ class ActivityAppXposedDetails : ActivityBase() {
                         try {
                             val dpi = dpiText.toInt()
                             if (dpi < 96 && dpi != 0) {
-                                Toast.makeText(applicationContext, "DPI的值必须大于96", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(applicationContext, "DPI must be greater than 96", Toast.LENGTH_SHORT).show()
                             } else {
                                 sceneConfigInfo.dpi = dpi
                                 if (dpi == 0) {
-                                    binding.appDetailsDpi.text = "默认"
+                                    binding.appDetailsDpi.text = "Default"
                                 } else
                                     binding.appDetailsDpi.text = dpi.toString()
                                 dialog?.dismiss()
@@ -312,7 +312,7 @@ class ActivityAppXposedDetails : ActivityBase() {
         try {
             packageInfo = packageManager.getPackageInfo(app, 0)
         } catch (ex: Exception) {
-            Toast.makeText(applicationContext, "所选的应用已被卸载！", Toast.LENGTH_SHORT).show()
+            Toast.makeText(applicationContext, "Selected app has been uninstalled!", Toast.LENGTH_SHORT).show()
         }
         if (packageInfo == null) {
             finish()

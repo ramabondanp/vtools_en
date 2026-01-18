@@ -21,12 +21,12 @@ class DialogAppOrientation(var context: Activity, val current: Int?, val iResult
 
         fun getName(value: Int?): String {
             return when (value) {
-                ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED -> "默认"
-                ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR -> "强制旋转"
-                ActivityInfo.SCREEN_ORIENTATION_FULL_USER -> "自动旋转"
-                ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE -> "强制横屏"
-                ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT -> "强制竖屏"
-                else -> "未知设置"
+                ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED -> "Default"
+                ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR -> "Force rotate"
+                ActivityInfo.SCREEN_ORIENTATION_FULL_USER -> "Auto rotate"
+                ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE -> "Force landscape"
+                ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT -> "Force portrait"
+                else -> "Unknown setting"
             }
         }
     }

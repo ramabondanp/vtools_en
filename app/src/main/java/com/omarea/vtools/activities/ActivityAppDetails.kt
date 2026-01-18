@@ -108,7 +108,7 @@ class ActivityAppDetails : ActivityBase() {
 
         binding.appDetailsDynamic.setOnClickListener {
             if (!dynamicCpu) {
-                DialogHelper.helpInfo(this, "", "请先回到功能列表，进入 [性能配置] 功能，开启 [动态响应] 功能")
+                DialogHelper.helpInfo(this, "", "Go back to the feature list, open [Performance config], and enable [Dynamic Response].")
                 return@setOnClickListener
             }
 
@@ -136,7 +136,7 @@ class ActivityAppDetails : ActivityBase() {
         binding.appDetailsCgroupMem.setOnClickListener {
             val utlis = CGroupMemoryUtlis(this)
             if (!utlis.isSupported) {
-                DialogHelper.helpInfo(this, "", "抱歉，您的内核不支持该功能特性~")
+                DialogHelper.helpInfo(this, "", "Sorry, your kernel does not support this feature.")
                 return@setOnClickListener
             }
             DialogAppCGroupMem(this, sceneConfigInfo.fgCGroupMem, object : DialogAppCGroupMem.IResultCallback {
@@ -152,7 +152,7 @@ class ActivityAppDetails : ActivityBase() {
         binding.appDetailsCgroupMem2.setOnClickListener {
             val utlis = CGroupMemoryUtlis(this)
             if (!utlis.isSupported) {
-                DialogHelper.helpInfo(this, "", "抱歉，您的内核不支持该功能特性~")
+                DialogHelper.helpInfo(this, "", "Sorry, your kernel does not support this feature.")
                 return@setOnClickListener
             }
 
@@ -169,7 +169,7 @@ class ActivityAppDetails : ActivityBase() {
             DialogAppBoostPolicy(this, sceneConfigInfo.dynamicBoostMem, object : DialogAppBoostPolicy.IResultCallback {
                 override fun onChange(enabled: Boolean) {
                     sceneConfigInfo.dynamicBoostMem = enabled
-                    (it as TextView).text = if (enabled) "已启用" else "未启用"
+                    (it as TextView).text = if (enabled) "Enabled" else "Disabled"
                     _result = RESULT_OK
                 }
             }).show()
@@ -301,7 +301,7 @@ class ActivityAppDetails : ActivityBase() {
         try {
             packageInfo = packageManager.getPackageInfo(app, 0)
         } catch (ex: Exception) {
-            Toast.makeText(applicationContext, "所选的应用已被卸载！", Toast.LENGTH_SHORT).show()
+            Toast.makeText(applicationContext, "Selected app has been uninstalled!", Toast.LENGTH_SHORT).show()
         }
         if (packageInfo == null) {
             finish()
@@ -317,7 +317,7 @@ class ActivityAppDetails : ActivityBase() {
 
         binding.appDetailsCgroupMem.text = DialogAppCGroupMem.Transform(this).getName(sceneConfigInfo.fgCGroupMem)
         binding.appDetailsCgroupMem2.text = DialogAppCGroupMem.Transform(this).getName(sceneConfigInfo.bgCGroupMem)
-        binding.appDetailsBoostMem.text = if (sceneConfigInfo.dynamicBoostMem) "已启用" else "未启用"
+        binding.appDetailsBoostMem.text = if (sceneConfigInfo.dynamicBoostMem) "Enabled" else "Disabled"
 
         if (immersivePolicyControl.isFullScreen(app)) {
             binding.appDetailsHidenav.isChecked = true

@@ -51,7 +51,7 @@ class DialogXposedGlobalConfig(var context: Activity) {
             if (xposedExtension.setGlobalConfig(globalConfig)) {
                 xposedExtension.unbindService()
             } else {
-                Toast.makeText(context, "保存配置失败！", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Failed to save configuration!", Toast.LENGTH_SHORT).show()
             }
         }
     }

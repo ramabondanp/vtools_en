@@ -56,7 +56,7 @@ class BackupRestoreUtils(var context: Activity) {
     //显示进度条
     fun showProgressBar() {
         myHandler.post {
-            dialog.showDialog("正在执行操作...")
+            dialog.showDialog("Working...")
         }
     }
 
@@ -94,15 +94,15 @@ class BackupRestoreUtils(var context: Activity) {
     internal inner class FlashImgThread(var inputPath: String, var outputPath: String) : Thread() {
         override fun run() {
             if (!isSupport() || !RootFile.itemExists(outputPath)) {
-                showMsg("暂不支持您的设备！", true)
+                showMsg("Your device is not supported.", true)
                 return
             }
-            showMsg("即将刷入\n$inputPath\n请勿操作手机！", true)
+            showMsg("About to flash\n$inputPath\nPlease do not use the phone!", true)
             showProgressBar()
             if (KeepShellPublic.doCmdSync("dd if=\"$inputPath\" of=$outputPath") != "error") {
-                showMsg("操作成功！", true)
+                showMsg("Operation succeeded!", true)
             } else {
-                showMsg("镜像刷入失败", true)
+                showMsg("Image flash failed", true)
             }
             hideProgressBar()
         }
@@ -130,14 +130,14 @@ class BackupRestoreUtils(var context: Activity) {
             val outPath = "${CommonCmds.SDCardDir}/$outputName.img"
 
             if (!isSupport() || !RootFile.itemExists(inputPath)) {
-                showMsg("暂不支持您的设备！", true)
+                showMsg("Your device is not supported.", true)
                 return
             }
             showProgressBar()
             if (KeepShellPublic.doCmdSync("dd if=$inputPath of=$outPath\n") != "error") {
-                showMsg("分区镜像导出成功，已保存为$outPath ！", true)
+                showMsg("Partition image exported successfully, saved to $outPath!", true)
             } else {
-                showMsg("分区镜像导出失败！", true)
+                showMsg("Partition image export failed!", true)
             }
             hideProgressBar()
         }

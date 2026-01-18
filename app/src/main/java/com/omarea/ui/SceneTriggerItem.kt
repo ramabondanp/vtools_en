@@ -50,28 +50,28 @@ class SceneTriggerItem : LinearLayout {
             triggerInfo.events.forEach {
                 when (it) {
                     EventType.BOOT_COMPLETED -> {
-                        buffer.append("开机完成")
+                        buffer.append("Boot completed")
                     }
                     EventType.APP_SWITCH -> {
-                        buffer.append("应用切换")
+                        buffer.append("App switch")
                     }
                     EventType.SCREEN_OFF -> {
-                        buffer.append("屏幕关闭")
+                        buffer.append("Screen off")
                     }
                     EventType.SCREEN_ON -> {
-                        buffer.append("屏幕打开")
+                        buffer.append("Screen on")
                     }
                     EventType.BATTERY_CHANGED -> {
-                        buffer.append("电池变化")
+                        buffer.append("Battery changed")
                     }
                     EventType.BATTERY_LOW -> {
-                        buffer.append("电量不足")
+                        buffer.append("Low battery")
                     }
                     EventType.POWER_DISCONNECTED -> {
-                        buffer.append("充电器移除")
+                        buffer.append("Charger disconnected")
                     }
                     EventType.POWER_CONNECTED -> {
-                        buffer.append("充电器连接")
+                        buffer.append("Charger connected")
                     }
                     else -> {
                     }
@@ -97,22 +97,22 @@ class SceneTriggerItem : LinearLayout {
                     null -> {
                     }
                     TaskAction.STANDBY_MODE_ON -> {
-                        buffer.append("休眠模式 √")
+                        buffer.append("Sleep mode ON")
                     }
                     TaskAction.STANDBY_MODE_OFF -> {
-                        buffer.append("休眠模式 ×")
+                        buffer.append("Sleep mode OFF")
                     }
                     TaskAction.FSTRIM -> {
-                        buffer.append("FSTRIM √")
+                        buffer.append("FSTRIM ON")
                     }
                     TaskAction.POWER_OFF -> {
-                        buffer.append("自动关机 √")
+                        buffer.append("Auto shutdown ON")
                     }
                     TaskAction.ZEN_MODE_OFF -> {
-                        buffer.append("勿扰模式 ×")
+                        buffer.append("Do Not Disturb OFF")
                     }
                     TaskAction.ZEN_MODE_ON -> {
-                        buffer.append("勿扰模式 √")
+                        buffer.append("Do Not Disturb ON")
                     }
                 }
                 buffer.append("     ")

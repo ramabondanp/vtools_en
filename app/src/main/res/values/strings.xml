@@ -604,7 +604,7 @@
 
     <string name="kr_apps_google_settings">Google settings</string>
 
-    <string name="kr_apps_google_settings_desc">本功能为了方便隐藏了“Google设置”的定制系统，打开“Google设置”</string>
+    <string name="kr_apps_google_settings_desc">Open "Google settings" on custom ROMs where it is hidden</string>
 
     <string name="kr_apps_google_subscribe">Google Subscription management</string>
 
@@ -684,7 +684,7 @@
 
     <string name="kr_dev_notch_style">Notch shape</string>
 
-    <string name="kr_dev_notch_style_hole">居中打孔屏</string>
+    <string name="kr_dev_notch_style_hole">Centered punch-hole screen</string>
 
     <string name="kr_dev_ota">Install OTA package</string>
 
@@ -836,7 +836,7 @@
 
     <string name="kr_ui_split_view">Forced split screen</string>
 
-    <string name="kr_ui_split_view_desc">适用于Android 7.0+，同开发者设置中的“强制将Activity设为可调整大小”选项。开启此项，从而对声明支持分屏的应用进行分屏操作！</string>
+    <string name="kr_ui_split_view_desc">For Android 7.0+, same as "Force activities to be resizable" in Developer options. Enable this to allow split-screen for apps that declare support.</string>
 
     <string name="kr_vivo">vivo</string>
 
