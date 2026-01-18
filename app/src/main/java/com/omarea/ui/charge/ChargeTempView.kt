@@ -55,6 +55,15 @@ class ChargeTempView : View {
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         val samples = storage.temperature
+        if (samples.isEmpty()) {
+            val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                color = Color.parseColor("#888888")
+                textAlign = Paint.Align.CENTER
+                textSize = dp2px(this@ChargeTempView.context, 12f).toFloat()
+            }
+            canvas.drawText("No data", (width / 2f), (height / 2f), paint)
+            return
+        }
         samples.sortBy { it.capacity }
         // Toast.makeText(context, "" + samples.map { "" + it.capacity + ":" + it.temperature }.joinToString(",    "), Toast.LENGTH_SHORT).show()
 
@@ -70,14 +79,13 @@ class ChargeTempView : View {
         val textSize = dpSize * 8.5f
         paint.textSize = textSize
 
-        val minTemperature = samples.map { it.temperature }.min()
-        val maxTemperature = samples.map { it.temperature }.max()
+        val minTemperature = samples.map { it.temperature }.minOrNull()
+        val maxTemperature = samples.map { it.temperature }.maxOrNull()
 
         val innerPadding = dpSize * 24f
-        val yAxisWidth = paint.measureText(maxTemperature.toString()  + "°C")
-
         val minY = 30
         val maxY = if (maxTemperature != null && maxTemperature > 50) (maxTemperature.toInt() + 2) else 51
+        val yAxisWidth = paint.measureText((maxTemperature ?: minY).toString() + "°C")
 
         val ratioX = (this.width - innerPadding - yAxisWidth) * 1.0 / 100 // 横向比率
         val ratioY = ((this.height - innerPadding - innerPadding) * 1.0 / (maxY - minY)).toFloat() // 纵向比率

@@ -85,6 +85,15 @@ class ChargeTimeView : View {
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         val samples = storage.chargeTime()
+        if (samples.isEmpty()) {
+            val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                color = Color.parseColor("#888888")
+                textAlign = Paint.Align.CENTER
+                textSize = dp2px(this@ChargeTimeView.context, 12f).toFloat()
+            }
+            canvas.drawText("No data", (width / 2f), (height / 2f), paint)
+            return
+        }
         samples.sortBy { it.capacity }
 
         val paint = Paint()
@@ -93,8 +102,8 @@ class ChargeTimeView : View {
         val dpSize = dp2px(this.context, 1f)
         val innerPadding = dpSize * 24f
 
-        val startTime = samples.map { it.startTime }.min()
-        val maxTime = samples.map { it.endTime }.max()
+        val startTime = samples.map { it.startTime }.minOrNull()
+        val maxTime = samples.map { it.endTime }.maxOrNull()
 
         val maxTimeMinutes:Double = (if (startTime != null && maxTime != null) {
             (maxTime - startTime) / 60000.0

@@ -51,6 +51,15 @@ class ChargeCurveView : View {
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         val samples = storage.statistics()
+        if (samples.isEmpty()) {
+            val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                color = Color.parseColor("#888888")
+                textAlign = Paint.Align.CENTER
+                textSize = dp2px(this@ChargeCurveView.context, 12f).toFloat()
+            }
+            canvas.drawText("No data", (width / 2f), (height / 2f), paint)
+            return
+        }
 
         val potintRadius = 12f
         val paint = Paint()
@@ -59,7 +68,7 @@ class ChargeCurveView : View {
         val dpSize = dp2px(this.context, 1f)
         val innerPadding = dpSize * 24f
 
-        val maxIO = samples.map { it.io }.max()
+        val maxIO = samples.map { it.io }.maxOrNull()
         var maxAmpere = if (maxIO != null) (maxIO / 1000 + 1) else 10
         if (maxAmpere < 3) {
             maxAmpere = 3
