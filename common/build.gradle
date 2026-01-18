@@ -1,10 +1,12 @@
 apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-android'
 
 android {
     namespace "com.omarea.common"
     compileSdkVersion 34
+    buildFeatures {
+        viewBinding true
+    }
 
     defaultConfig {
         minSdkVersion 21

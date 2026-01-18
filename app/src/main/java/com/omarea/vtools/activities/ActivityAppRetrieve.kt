@@ -20,7 +20,7 @@ import com.omarea.library.basic.UninstalledApp
 import com.omarea.model.AppInfo
 import com.omarea.ui.AdapterAppList
 import com.omarea.vtools.R
-import kotlinx.android.synthetic.main.activity_app_retrieve.*
+import com.omarea.vtools.databinding.ActivityAppRetrieveBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -32,6 +32,7 @@ class ActivityAppRetrieve : ActivityBase() {
     private val handler = Handler(Looper.getMainLooper())
     private lateinit var pm: PackageManager
     private val keepShell = KeepShell()
+    private lateinit var binding: ActivityAppRetrieveBinding
 
     override fun onDestroy() {
         keepShell.tryExit()
@@ -46,13 +47,14 @@ class ActivityAppRetrieve : ActivityBase() {
     @SuppressLint("ApplySharedPref")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_app_retrieve)
+        binding = ActivityAppRetrieveBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         setBackArrow()
 
         pm = packageManager
         progressBarDialog = ProgressBarDialog(this)
-        hidden_app.addHeaderView(this.layoutInflater.inflate(R.layout.list_header_app, null))
-        fab_confirm.setOnClickListener {
+        binding.hiddenApp.addHeaderView(this.layoutInflater.inflate(R.layout.list_header_app, null))
+        binding.fabConfirm.setOnClickListener {
             this.onConfirm()
         }
     }
@@ -78,11 +80,11 @@ class ActivityAppRetrieve : ActivityBase() {
                 appList.add(getAppInfo(it))
             }
             progressBarDialog.hideDialog()
-            if (hidden_app != null) {
+            if (binding.hiddenApp != null) {
                 val adapterObj = AdapterAppList(context, appList)
-                hidden_app.adapter = adapterObj
+                binding.hiddenApp.adapter = adapterObj
                 adapterAppList = WeakReference(adapterObj)
-                hidden_app.onItemClickListener = AdapterView.OnItemClickListener { _, itemView, postion, _ ->
+                binding.hiddenApp.onItemClickListener = AdapterView.OnItemClickListener { _, itemView, postion, _ ->
                     if (postion == 0) {
                         val checkBox = itemView.findViewById(R.id.select_state_all) as CheckBox
                         checkBox.isChecked = !checkBox.isChecked
@@ -93,7 +95,7 @@ class ActivityAppRetrieve : ActivityBase() {
                     } else {
                         val checkBox = itemView.findViewById(R.id.select_state) as CheckBox
                         checkBox.isChecked = !checkBox.isChecked
-                        val all = hidden_app.findViewById<CheckBox>(R.id.select_state_all)
+                        val all = binding.hiddenApp.findViewById<CheckBox>(R.id.select_state_all)
                         if (adapterAppList?.get() != null) {
                             all.isChecked = adapterAppList?.get()!!.getIsAllSelected()
                         }

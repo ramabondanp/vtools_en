@@ -19,7 +19,7 @@ import com.omarea.model.TimingTaskInfo
 import com.omarea.scene_mode.TimingTaskManager
 import com.omarea.store.TimingTaskStorage
 import com.omarea.vtools.R
-import kotlinx.android.synthetic.main.activity_timing_task.*
+import com.omarea.vtools.databinding.ActivityTimingTaskBinding
 import java.io.File
 import java.io.FilenameFilter
 import java.net.URLDecoder
@@ -28,11 +28,13 @@ import kotlin.collections.ArrayList
 
 class ActivityTimingTask : ActivityBase() {
     private lateinit var timingTaskInfo: TimingTaskInfo
+    private lateinit var binding: ActivityTimingTaskBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.activity_timing_task)
+        binding = ActivityTimingTaskBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         setBackArrow()
 
         // 读取或初始化任务模型
@@ -48,29 +50,29 @@ class ActivityTimingTask : ActivityBase() {
         timingTaskInfo = if (task == null) TimingTaskInfo(taskId) else task
 
         // 时间选择
-        taks_trigger_time.setOnClickListener {
+        binding.taksTriggerTime.setOnClickListener {
             TimePickerDialog(this, TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
-                taks_trigger_time.setText(String.format(getString(R.string.format_hh_mm), hourOfDay, minute))
+                binding.taksTriggerTime.setText(String.format(getString(R.string.format_hh_mm), hourOfDay, minute))
                 timingTaskInfo.triggerTimeMinutes = hourOfDay * 60 + minute
             }, timingTaskInfo.triggerTimeMinutes / 60, timingTaskInfo.triggerTimeMinutes % 60, true).show()
         }
 
         // 设定单选关系
-        oneOf(task_standby_on, task_standby_off)
-        oneOf(task_zen_mode_on, task_zen_mode_off)
-        oneOf(task_after_screen_off, task_before_execute_confirm)
-        oneOf(task_battery_capacity_require, task_charge_only)
+        oneOf(binding.taskStandbyOn, binding.taskStandbyOff)
+        oneOf(binding.taskZenModeOn, binding.taskZenModeOff)
+        oneOf(binding.taskAfterScreenOff, binding.taskBeforeExecuteConfirm)
+        oneOf(binding.taskBatteryCapacityRequire, binding.taskChargeOnly)
 
         // 更新选中状态
         updateUI()
 
         // 勿扰模式
-        task_zen_mode.visibility = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) View.VISIBLE else View.GONE
+        binding.taskZenMode.visibility = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) View.VISIBLE else View.GONE
         // 待机模式
-        task_standby_mode.visibility = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) View.VISIBLE else View.GONE
+        binding.taskStandbyMode.visibility = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) View.VISIBLE else View.GONE
 
         // 自定义动作点击
-        task_custom_edit.setOnClickListener {
+        binding.taskCustomEdit.setOnClickListener {
             customEditClick()
         }
     }
@@ -125,38 +127,38 @@ class ActivityTimingTask : ActivityBase() {
 
     private fun updateUI() {
         timingTaskInfo.run {
-            system_scene_task_enable.isChecked = enabled && (expireDate < 1 || expireDate > System.currentTimeMillis())
+            binding.systemSceneTaskEnable.isChecked = enabled && (expireDate < 1 || expireDate > System.currentTimeMillis())
 
             // 触发时间
             val hourOfDay = triggerTimeMinutes / 60
             val minute = triggerTimeMinutes % 60
-            taks_trigger_time.setText(String.format(getString(R.string.format_hh_mm), hourOfDay, minute))
+            binding.taksTriggerTime.setText(String.format(getString(R.string.format_hh_mm), hourOfDay, minute))
 
             // 重复周期
             if (expireDate > 0) {
-                taks_once.isChecked = true
+                binding.taksOnce.isChecked = true
             } else {
-                taks_repeat.isChecked = true
+                binding.taksRepeat.isChecked = true
             }
 
             // 额外条件
-            task_after_screen_off.isChecked = afterScreenOff
-            task_before_execute_confirm.isChecked = beforeExecuteConfirm
-            task_battery_capacity_require.isChecked = batteryCapacityRequire > -0
-            task_battery_capacity.text = batteryCapacityRequire.toString()
-            task_charge_only.isChecked = chargeOnly
+            binding.taskAfterScreenOff.isChecked = afterScreenOff
+            binding.taskBeforeExecuteConfirm.isChecked = beforeExecuteConfirm
+            binding.taskBatteryCapacityRequire.isChecked = batteryCapacityRequire > -0
+            binding.taskBatteryCapacity.text = batteryCapacityRequire.toString()
+            binding.taskChargeOnly.isChecked = chargeOnly
 
             // 功能动作
             taskActions?.run {
-                task_standby_on.isChecked = contains(TaskAction.STANDBY_MODE_ON)
-                task_standby_off.isChecked = contains(TaskAction.STANDBY_MODE_OFF)
-                task_zen_mode_on.isChecked = contains(TaskAction.ZEN_MODE_ON)
-                task_zen_mode_off.isChecked = contains(TaskAction.ZEN_MODE_OFF)
+                binding.taskStandbyOn.isChecked = contains(TaskAction.STANDBY_MODE_ON)
+                binding.taskStandbyOff.isChecked = contains(TaskAction.STANDBY_MODE_OFF)
+                binding.taskZenModeOn.isChecked = contains(TaskAction.ZEN_MODE_ON)
+                binding.taskZenModeOff.isChecked = contains(TaskAction.ZEN_MODE_OFF)
             }
 
             customTaskActions?.run {
                 val str = this.map { it.Name }.toTypedArray().joinToString("\n\n").trim()
-                task_custom_actions.text = str
+                binding.taskCustomActions.text = str
             }
         }
     }
@@ -202,17 +204,17 @@ class ActivityTimingTask : ActivityBase() {
 
     // 保存并关闭界面
     private fun saveConfigAndFinish() {
-        timingTaskInfo.enabled = system_scene_task_enable.isChecked
-        timingTaskInfo.expireDate = if (taks_repeat.isChecked) 0 else (GetUpTime(timingTaskInfo.triggerTimeMinutes).nextGetUpTime)
-        timingTaskInfo.afterScreenOff = task_after_screen_off.isChecked
-        timingTaskInfo.beforeExecuteConfirm = task_before_execute_confirm.isChecked
-        timingTaskInfo.chargeOnly = task_charge_only.isChecked
-        timingTaskInfo.batteryCapacityRequire = if (task_battery_capacity_require.isChecked) (task_battery_capacity.text).toString().toInt() else 0
+        timingTaskInfo.enabled = binding.systemSceneTaskEnable.isChecked
+        timingTaskInfo.expireDate = if (binding.taksRepeat.isChecked) 0 else (GetUpTime(timingTaskInfo.triggerTimeMinutes).nextGetUpTime)
+        timingTaskInfo.afterScreenOff = binding.taskAfterScreenOff.isChecked
+        timingTaskInfo.beforeExecuteConfirm = binding.taskBeforeExecuteConfirm.isChecked
+        timingTaskInfo.chargeOnly = binding.taskChargeOnly.isChecked
+        timingTaskInfo.batteryCapacityRequire = if (binding.taskBatteryCapacityRequire.isChecked) (binding.taskBatteryCapacity.text).toString().toInt() else 0
         timingTaskInfo.taskActions = ArrayList<TaskAction>().apply {
-            task_standby_on.isChecked && add(TaskAction.STANDBY_MODE_ON)
-            task_standby_off.isChecked && add(TaskAction.STANDBY_MODE_OFF)
-            task_zen_mode_on.isChecked && add(TaskAction.ZEN_MODE_ON)
-            task_zen_mode_off.isChecked && add(TaskAction.ZEN_MODE_OFF)
+            binding.taskStandbyOn.isChecked && add(TaskAction.STANDBY_MODE_ON)
+            binding.taskStandbyOff.isChecked && add(TaskAction.STANDBY_MODE_OFF)
+            binding.taskZenModeOn.isChecked && add(TaskAction.ZEN_MODE_ON)
+            binding.taskZenModeOff.isChecked && add(TaskAction.ZEN_MODE_OFF)
         }
         // timingTaskInfo.taskId = taskId
 

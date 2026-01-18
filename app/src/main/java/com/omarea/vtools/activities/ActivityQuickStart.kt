@@ -15,16 +15,18 @@ import com.omarea.permissions.CheckRootStatus
 import com.omarea.scene_mode.SceneMode
 import com.omarea.store.SpfConfig
 import com.omarea.vtools.R
-import kotlinx.android.synthetic.main.activity_quick_start.*
+import com.omarea.vtools.databinding.ActivityQuickStartBinding
 import java.lang.ref.WeakReference
 
 class ActivityQuickStart : Activity() {
     lateinit var appPackageName: String
+    private lateinit var binding: ActivityQuickStartBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.activity_quick_start)
+        binding = ActivityQuickStartBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         actionBar?.setDisplayHomeAsUpEnabled(true)
 
         //  得到当前界面的装饰视图
@@ -39,7 +41,7 @@ class ActivityQuickStart : Activity() {
 
         val extras = intent.extras
         if (extras == null || !extras.containsKey("packageName")) {
-            start_state_text.text = "无效的快捷方式！"
+            updateStartStateText("无效的快捷方式！")
         } else {
             appPackageName = intent.getStringExtra("packageName")!!;
             val pm = packageManager
@@ -62,7 +64,7 @@ class ActivityQuickStart : Activity() {
     private class CheckRootSuccess(context: ActivityQuickStart, private var appPackageName: String) : Runnable {
         private var context: WeakReference<ActivityQuickStart>;
         override fun run() {
-            context.get()!!.start_state_text.text = "正在启动应用..."
+            context.get()?.updateStartStateText("正在启动应用...")
             context.get()!!.hasRoot = true
 
             if (appPackageName.equals("com.android.vending")) {
@@ -93,7 +95,7 @@ class ActivityQuickStart : Activity() {
                 return
             }
         } catch (ex: Exception) {
-            start_state_text.text = "启动应用失败！"
+            updateStartStateText("启动应用失败！")
         }
 
         var appInfo: ApplicationInfo? = null
@@ -102,9 +104,9 @@ class ActivityQuickStart : Activity() {
         } catch (ex: Exception) {
         }
         if (appInfo == null) {
-            start_state_text.text = "应用似乎已被卸载！"
+            updateStartStateText("应用似乎已被卸载！")
         } else {
-            start_state_text.text = "启动应用失败！"
+            updateStartStateText("启动应用失败！")
         }
     }
 
@@ -121,5 +123,9 @@ class ActivityQuickStart : Activity() {
 
         val disableSeLinux = globalConfig.getBoolean(SpfConfig.GLOBAL_SPF_DISABLE_ENFORCE, false)
         CheckRootStatus(this, next, disableSeLinux).forceGetRoot()
+    }
+
+    private fun updateStartStateText(text: String) {
+        binding.startStateText.text = text
     }
 }

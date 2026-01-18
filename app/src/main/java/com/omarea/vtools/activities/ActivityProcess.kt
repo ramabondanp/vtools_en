@@ -18,13 +18,16 @@ import com.omarea.ui.AdapterProcess
 import com.omarea.utils.AppListHelper
 import com.omarea.vtools.R
 import com.omarea.vtools.dialogs.DialogSingleAppOptions
-import kotlinx.android.synthetic.main.activty_process.*
+import com.omarea.vtools.databinding.ActivtyProcessBinding
 import java.util.*
 
 class ActivityProcess : ActivityBase() {
+    private lateinit var binding: ActivtyProcessBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activty_process)
+        binding = ActivtyProcessBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         setBackArrow()
 
@@ -39,15 +42,15 @@ class ActivityProcess : ActivityBase() {
         supported = processUtils.supported()
 
         if (supported) {
-            process_unsupported.visibility = View.GONE
-            process_view.visibility = View.VISIBLE
+            binding.processUnsupported.visibility = View.GONE
+            binding.processView.visibility = View.VISIBLE
         } else {
-            process_unsupported.visibility = View.VISIBLE
-            process_view.visibility = View.GONE
+            binding.processUnsupported.visibility = View.VISIBLE
+            binding.processView.visibility = View.GONE
         }
 
         if (supported) {
-            process_list.adapter = AdapterProcess(context).apply {
+            binding.processList.adapter = AdapterProcess(context).apply {
                 // 使用跳转时带过来的搜索关键字
                 var name = intent?.extras?.getString("name")
                 if (name != null) {
@@ -56,31 +59,31 @@ class ActivityProcess : ActivityBase() {
                     }
                     updateKeywords(name)
                     updateFilterMode(AdapterProcess.FILTER_ANDROID)
-                    process_filter.setSelection(2)
-                    process_search.setText(name)
+                    binding.processFilter.setSelection(2)
+                    binding.processSearch.setText(name)
                 }
             }
-            process_list.setOnItemClickListener { _, _, position, _ ->
-                openProcessDetail((process_list.adapter as AdapterProcess).getItem(position))
+            binding.processList.setOnItemClickListener { _, _, position, _ ->
+                openProcessDetail((binding.processList.adapter as AdapterProcess).getItem(position))
             }
         }
 
         // 搜索关键字
-        process_search.setOnEditorActionListener { v, actionId, _ ->
+        binding.processSearch.setOnEditorActionListener { v, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                (process_list.adapter as AdapterProcess?)?.updateKeywords(v.text.toString())
+                (binding.processList.adapter as AdapterProcess?)?.updateKeywords(v.text.toString())
                 return@setOnEditorActionListener true
             }
             false
         }
 
         // 排序方式
-        process_sort_mode.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        binding.processSortMode.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                (process_list.adapter as AdapterProcess?)?.updateSortMode(when (position) {
+                (binding.processList.adapter as AdapterProcess?)?.updateSortMode(when (position) {
                     0 -> AdapterProcess.SORT_MODE_CPU
                     1 -> AdapterProcess.SORT_MODE_RES
                     2 -> AdapterProcess.SORT_MODE_PID
@@ -90,12 +93,12 @@ class ActivityProcess : ActivityBase() {
         }
 
         // 过滤筛选
-        process_filter.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        binding.processFilter.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                (process_list.adapter as AdapterProcess?)?.updateFilterMode(when (position) {
+                (binding.processList.adapter as AdapterProcess?)?.updateFilterMode(when (position) {
                     0 -> AdapterProcess.FILTER_ANDROID_USER
                     1 -> AdapterProcess.FILTER_ANDROID_SYSTEM
                     2 -> AdapterProcess.FILTER_ANDROID
@@ -111,7 +114,7 @@ class ActivityProcess : ActivityBase() {
     private fun updateData() {
         val data = processUtils.allProcess
         handle.post {
-            (process_list?.adapter as AdapterProcess?)?.setList(data)
+            (binding.processList.adapter as AdapterProcess?)?.setList(data)
         }
     }
 

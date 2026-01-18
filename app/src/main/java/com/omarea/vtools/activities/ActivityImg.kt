@@ -15,12 +15,13 @@ import com.omarea.common.ui.DialogHelper
 import com.omarea.shell_utils.BackupRestoreUtils
 import com.omarea.utils.CommonCmds
 import com.omarea.vtools.R
-import kotlinx.android.synthetic.main.activity_img.*
+import com.omarea.vtools.databinding.ActivityImgBinding
 import java.io.File
 import java.util.*
 
 
 class ActivityImg : ActivityBase() {
+    private lateinit var binding: ActivityImgBinding
     private fun createItem(title: String, desc: String, key: String): HashMap<String, Any> {
         val item = HashMap<String, Any>()
         item.put("Title", title)
@@ -37,7 +38,8 @@ class ActivityImg : ActivityBase() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_img)
+        binding = ActivityImgBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         setBackArrow()
 
@@ -71,10 +73,10 @@ class ActivityImg : ActivityBase() {
                 arrayOf("Title", "Desc"),
                 intArrayOf(R.id.Title, R.id.Desc)
         )
-        img_action_listview.adapter = mSimpleAdapter
+        binding.imgActionListview.adapter = mSimpleAdapter
 
 
-        img_action_listview.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
+        binding.imgActionListview.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
             val key = listItem.get(position).get("Key")
             when (key) {
                 "dump-boot" -> backupImg(BOOT_IMG)

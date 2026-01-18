@@ -8,10 +8,11 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.omarea.model.TaskAction
 import com.omarea.model.TimingTaskInfo
-import com.omarea.vtools.R
-import kotlinx.android.synthetic.main.list_scene_task_item.view.*
+import com.omarea.vtools.databinding.ListSceneTaskItemBinding
 
 class SceneTaskItem : LinearLayout {
+    private var binding: ListSceneTaskItemBinding? = null
+
     constructor(context: Context) : super(context) {
         setLayout(context)
     }
@@ -25,21 +26,22 @@ class SceneTaskItem : LinearLayout {
     constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int) : super(context, attrs, defStyleAttr, defStyleRes) {}
 
     private fun setLayout(context: Context) {
-        LayoutInflater.from(context).inflate(R.layout.list_scene_task_item, this, true)
+        binding = ListSceneTaskItemBinding.inflate(LayoutInflater.from(context), this, true)
     }
 
     private fun setLayout(context: Context, taskInfo: TimingTaskInfo) {
         setLayout(context)
 
+        val binding = binding ?: return
         if (taskInfo.taskName.isNullOrEmpty()) {
-            system_scene_task_name.text = "未命名任务"
+            binding.systemSceneTaskName.text = "未命名任务"
         } else {
-            system_scene_task_name.text = taskInfo.taskName
+            binding.systemSceneTaskName.text = taskInfo.taskName
         }
 
         val timePrefix = if (taskInfo.expireDate < 1) ("每天，") else ""
-        system_scene_task_time.text = (if (taskInfo.enabled) "● " else "○ ") + timePrefix + getTimeStr(taskInfo)
-        system_scene_task_content.text = getTaskContentText(taskInfo)
+        binding.systemSceneTaskTime.text = (if (taskInfo.enabled) "● " else "○ ") + timePrefix + getTimeStr(taskInfo)
+        binding.systemSceneTaskContent.text = getTaskContentText(taskInfo)
     }
 
     private fun getTimeStr(taskInfo: TimingTaskInfo): String {

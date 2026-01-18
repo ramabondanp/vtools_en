@@ -29,7 +29,7 @@ import com.omarea.krscript.ui.PageMenuLoader
 import com.omarea.krscript.ui.ParamsFileChooserRender
 import com.omarea.vtools.R
 import com.projectkr.shell.OpenPageHelper
-import kotlinx.android.synthetic.main.activity_action_page.*
+import com.omarea.vtools.databinding.ActivityActionPageBinding
 
 class ActionPage : ActivityBase() {
     private val progressBarDialog = ProgressBarDialog(this)
@@ -37,10 +37,12 @@ class ActionPage : ActivityBase() {
     private var handler = Handler(Looper.getMainLooper())
     private lateinit var currentPageConfig: PageNode
     private var autoRunItemId = ""
+    private lateinit var binding: ActivityActionPageBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_action_page)
+        binding = ActivityActionPageBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         setBackArrow()
 
         /*
@@ -194,7 +196,7 @@ class ActionPage : ActivityBase() {
     }
 
     private fun addFab(menuOption: PageMenuOption) {
-        action_page_fab.run {
+        binding.actionPageFab.run {
             visibility = View.VISIBLE
             setOnClickListener {
                 onMenuItemClick(menuOption)

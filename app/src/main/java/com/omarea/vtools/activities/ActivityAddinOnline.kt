@@ -26,7 +26,7 @@ import com.omarea.library.calculator.Flags
 import com.omarea.scene_mode.CpuConfigInstaller
 import com.omarea.scene_mode.ModeSwitcher
 import com.omarea.vtools.R
-import kotlinx.android.synthetic.main.activity_addin_online.*
+import com.omarea.vtools.databinding.ActivityAddinOnlineBinding
 import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
@@ -35,6 +35,8 @@ import java.nio.charset.Charset
 import java.util.zip.ZipInputStream
 
 class ActivityAddinOnline : ActivityBase() {
+    private lateinit var binding: ActivityAddinOnlineBinding
+
     override fun onPostResume() {
         super.onPostResume()
         delegate.onPostResume()
@@ -44,7 +46,8 @@ class ActivityAddinOnline : ActivityBase() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.activity_addin_online)
+        binding = ActivityAddinOnlineBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
@@ -61,18 +64,18 @@ class ActivityAddinOnline : ActivityBase() {
         if (this.intent.extras != null) {
             val extraData = intent.extras
             if (extraData?.containsKey("url") == true) {
-                vtools_online.loadUrl(extraData.getString("url")!!)
+                binding.vtoolsOnline.loadUrl(extraData.getString("url")!!)
             } else {
-                vtools_online.loadUrl("https://helloklf.github.io/vtools-online.html#/scripts")
+                binding.vtoolsOnline.loadUrl("https://helloklf.github.io/vtools-online.html#/scripts")
             }
         } else {
-            vtools_online.loadUrl("https://helloklf.github.io/vtools-online.html#/scripts")
+            binding.vtoolsOnline.loadUrl("https://helloklf.github.io/vtools-online.html#/scripts")
         }
         val context = this@ActivityAddinOnline
         val progressBarDialog = ProgressBarDialog(context)
 
         // 处理alert、confirm
-        vtools_online.webChromeClient = object : WebChromeClient() {
+        binding.vtoolsOnline.webChromeClient = object : WebChromeClient() {
             override fun onJsAlert(view: WebView?, url: String?, message: String?, result: JsResult?): Boolean {
                 DialogHelper.animDialog(
                         AlertDialog.Builder(context)
@@ -103,7 +106,7 @@ class ActivityAddinOnline : ActivityBase() {
         }
 
         // 处理loading、文件下载
-        vtools_online.setWebViewClient(object : WebViewClient() {
+        binding.vtoolsOnline.setWebViewClient(object : WebViewClient() {
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
                 progressBarDialog.hideDialog()
@@ -125,7 +128,7 @@ class ActivityAddinOnline : ActivityBase() {
                     // https://raw.githubusercontent.com/yc9559/cpufreq-interactive-opt/master/vtools-powercfg/20180603/sd_845/powercfg.apk 然后重定向到具体文件
                     if (url.startsWith("https://github.com/yc9559/cpufreq-interactive-opt/") && url.contains("vtools-powercfg") && url.endsWith("powercfg.apk")) {
                         val configPath = url.substring(url.indexOf("vtools-powercfg"))
-                        DialogHelper.animDialog(AlertDialog.Builder(vtools_online.context)
+                        DialogHelper.animDialog(AlertDialog.Builder(binding.vtoolsOnline.context)
                                 .setTitle("可用的配置脚本")
                                 .setMessage("在当前页面上检测到可用于性能调节的配置脚本，是否立即将其安装到本地？\n\n配置：$configPath\n\n作者：yc9559\n\n")
                                 .setPositiveButton(R.string.btn_confirm) { _, _ ->
@@ -139,7 +142,7 @@ class ActivityAddinOnline : ActivityBase() {
                         // v2
                         // https://github.com/yc9559/wipe-v2/releases/download/0.1.190503-dev/sdm625.zip
                         val configPath = url.substring(url.lastIndexOf("/") + 1).replace(".zip", "")
-                        DialogHelper.animDialog(AlertDialog.Builder(vtools_online.context)
+                        DialogHelper.animDialog(AlertDialog.Builder(binding.vtoolsOnline.context)
                                 .setTitle("配置安装提示")
                                 .setMessage("你刚刚点击的内容，似乎是一个可用于性能调节的配置脚本，是否立即将其安装到本地？\n\n配置：$configPath\n\n作者：yc9559\n\n")
                                 .setPositiveButton(R.string.btn_confirm) { _, _ ->
@@ -170,15 +173,15 @@ class ActivityAddinOnline : ActivityBase() {
             }
         })
 
-        vtools_online.settings.javaScriptEnabled = true
-        vtools_online.settings.setLoadWithOverviewMode(true);
-        vtools_online.settings.setUseWideViewPort(true);
+        binding.vtoolsOnline.settings.javaScriptEnabled = true
+        binding.vtoolsOnline.settings.setLoadWithOverviewMode(true);
+        binding.vtoolsOnline.settings.setUseWideViewPort(true);
 
-        val url = vtools_online.url
+        val url = binding.vtoolsOnline.url
         if (url != null) {
             if (url.startsWith("https://vtools.oss-cn-beijing.aliyuncs.com/") || url.startsWith("https://vtools.omarea.com/")) {
                 // 添加kr-script for web
-                WebViewInjector(vtools_online,
+                WebViewInjector(binding.vtoolsOnline,
                         object : ParamsFileChooserRender.FileChooserInterface {
                             override fun openFileChooser(fileSelectedInterface: ParamsFileChooserRender.FileSelectedInterface): Boolean {
                                 return chooseFilePath(fileSelectedInterface)
@@ -186,12 +189,12 @@ class ActivityAddinOnline : ActivityBase() {
                         }).inject(this, false)
             }
         }
-        vtools_online.addJavascriptInterface(object {
+        binding.vtoolsOnline.addJavascriptInterface(object {
             @JavascriptInterface
             public fun setStatusBarColor(colorStr: String): Boolean {
                 try {
                     val color = Color.parseColor(colorStr)
-                    vtools_online.post {
+                    binding.vtoolsOnline.post {
                         window.statusBarColor = color
                         if (Build.VERSION.SDK_INT >= 23) {
                             if (Color.red(color) > 180 && Color.green(color) > 180 && Color.blue(color) > 180) {
@@ -211,7 +214,7 @@ class ActivityAddinOnline : ActivityBase() {
             public fun setNavigationBarColor(colorStr: String): Boolean {
                 try {
                     val color = Color.parseColor(colorStr)
-                    vtools_online.post {
+                    binding.vtoolsOnline.post {
                         window.navigationBarColor = color
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                             if (Color.red(color) > 180 && Color.green(color) > 180 && Color.blue(color) > 180) {
@@ -231,7 +234,7 @@ class ActivityAddinOnline : ActivityBase() {
             @JavascriptInterface
             public fun showToast(str: String) {
                 try {
-                    vtools_online.post {
+                    binding.vtoolsOnline.post {
                         Toast.makeText(context, str, Toast.LENGTH_LONG).show()
                     }
                 } catch (ex: java.lang.Exception) {
@@ -241,8 +244,8 @@ class ActivityAddinOnline : ActivityBase() {
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-        if (keyCode == KeyEvent.KEYCODE_BACK && vtools_online.canGoBack()) {
-            vtools_online.goBack()
+        if (keyCode == KeyEvent.KEYCODE_BACK && binding.vtoolsOnline.canGoBack()) {
+            binding.vtoolsOnline.goBack()
             return true
         } else {
             return super.onKeyDown(keyCode, event)
@@ -261,7 +264,7 @@ class ActivityAddinOnline : ActivityBase() {
                 val reader = conn.getInputStream().bufferedReader(Charset.forName("UTF-8"))
                 val powercfg = reader.readText()
                 if (powercfg.startsWith("#!/") && CpuConfigInstaller().installCustomConfig(this, powercfg, ModeSwitcher.SOURCE_SCENE_ONLINE)) {
-                    vtools_online.post {
+                    binding.vtoolsOnline.post {
                         DialogHelper.animDialog(AlertDialog.Builder(this)
                                 .setTitle("配置文件已安装")
                                 .setPositiveButton(R.string.btn_confirm) { _, _ ->
@@ -270,15 +273,15 @@ class ActivityAddinOnline : ActivityBase() {
                                 }).setCancelable(false)
                     }
                 } else {
-                    vtools_online.post {
+                    binding.vtoolsOnline.post {
                         Toast.makeText(applicationContext, "下载配置文件失败或文件无效！", Toast.LENGTH_LONG).show()
                     }
                 }
-                vtools_online.post {
+                binding.vtoolsOnline.post {
                     progressBarDialog.hideDialog()
                 }
             } catch (ex: Exception) {
-                vtools_online.post {
+                binding.vtoolsOnline.post {
                     progressBarDialog.hideDialog()
                     Toast.makeText(applicationContext, "下载配置文件失败！", Toast.LENGTH_LONG).show()
                 }
@@ -310,7 +313,7 @@ class ActivityAddinOnline : ActivityBase() {
                             val byteArray = zipInputStream.readBytes()
                             val powercfg = byteArray.toString(Charset.defaultCharset())
                             if (powercfg.startsWith("#!/") && CpuConfigInstaller().installCustomConfig(this, powercfg, ModeSwitcher.SOURCE_SCENE_ONLINE)) {
-                                vtools_online.post {
+                                binding.vtoolsOnline.post {
                                     DialogHelper.animDialog(AlertDialog.Builder(this)
                                             .setTitle("配置文件已安装")
                                             .setPositiveButton(R.string.btn_confirm) { _, _ ->
@@ -319,11 +322,11 @@ class ActivityAddinOnline : ActivityBase() {
                                             }).setCancelable(false)
                                 }
                             } else {
-                                vtools_online.post {
+                                binding.vtoolsOnline.post {
                                     Toast.makeText(applicationContext, "下载配置文件失败或文件无效！", Toast.LENGTH_LONG).show()
                                 }
                             }
-                            vtools_online.post {
+                            binding.vtoolsOnline.post {
                                 progressBarDialog.hideDialog()
                             }
                             break
@@ -335,7 +338,7 @@ class ActivityAddinOnline : ActivityBase() {
                     throw IOException("文件存储失败")
                 }
             } catch (ex: Exception) {
-                vtools_online.post {
+                binding.vtoolsOnline.post {
                     progressBarDialog.hideDialog()
                     Toast.makeText(applicationContext, "下载配置文件失败！", Toast.LENGTH_LONG).show()
                 }
@@ -389,9 +392,9 @@ class ActivityAddinOnline : ActivityBase() {
     }
 
     override fun onDestroy() {
-        vtools_online.clearCache(true)
-        vtools_online.removeAllViews()
-        vtools_online.destroy()
+        binding.vtoolsOnline.clearCache(true)
+        binding.vtoolsOnline.removeAllViews()
+        binding.vtoolsOnline.destroy()
         super.onDestroy()
     }
 

@@ -34,7 +34,7 @@ import com.omarea.ui.UMExpandLayout
 import com.omarea.utils.AppListHelper
 import com.omarea.vtools.R
 import com.omarea.xposed.XposedCheck
-import kotlinx.android.synthetic.main.activity_freeze_apps.*
+import com.omarea.vtools.databinding.ActivityFreezeAppsBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -45,11 +45,13 @@ class ActivityFreezeApps : ActivityBase() {
     private var handler: Handler = Handler(Looper.getMainLooper())
     private lateinit var config: SharedPreferences
     private var useSuspendMode = false
+    private lateinit var binding: ActivityFreezeAppsBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.activity_freeze_apps)
+        binding = ActivityFreezeAppsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         setBackArrow()
 
         onViewCreated()
@@ -96,7 +98,7 @@ class ActivityFreezeApps : ActivityBase() {
         processBarDialog.showDialog()
 
         // 点击应用图标
-        freeze_apps.setOnItemClickListener { parent, itemView, position, _ ->
+        binding.freezeApps.setOnItemClickListener { parent, itemView, position, _ ->
             val appInfo = (parent.adapter.getItem(position) as AppInfo)
             if (appInfo.packageName == "plus") {
                 addFreezeAppDialog()
@@ -109,24 +111,24 @@ class ActivityFreezeApps : ActivityBase() {
         }
 
         // 长按图标
-        freeze_apps.setOnItemLongClickListener { parent, itemView, position, _ ->
+        binding.freezeApps.setOnItemLongClickListener { parent, itemView, position, _ ->
             val item = (parent.adapter.getItem(position) as AppInfo)
             showOptions(item)
             true
         }
 
         // 菜单按钮
-        freeze_menu.setOnClickListener {
+        binding.freezeMenu.setOnClickListener {
             freezeOptionsDialog()
         }
 
         loadData()
 
-        freeze_apps_search.addTextChangedListener(object : TextWatcher {
+        binding.freezeAppsSearch.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun afterTextChanged(s: Editable?) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                (freeze_apps.adapter as Filterable).getFilter().filter(if (s == null) "" else s.toString())
+                (binding.freezeApps.adapter as Filterable).getFilter().filter(if (s == null) "" else s.toString())
             }
         })
     }
@@ -167,7 +169,7 @@ class ActivityFreezeApps : ActivityBase() {
 
                 handler.post {
                     try {
-                        freeze_apps.adapter = AdapterFreezeApp(this.applicationContext, freezeAppsInfo)
+                        binding.freezeApps.adapter = AdapterFreezeApp(this.applicationContext, freezeAppsInfo)
                         processBarDialog.hideDialog()
 
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) { // 即时是Oreo也可能出现获取不到已添加的快捷方式的情况，例如换了第三方桌面
@@ -326,7 +328,7 @@ class ActivityFreezeApps : ActivityBase() {
             enableApp(appInfo)
             appInfo.enabled = true
             appInfo.suspended = false
-            (freeze_apps?.adapter as AdapterFreezeApp?)?.notifyDataSetChanged()
+            (binding.freezeApps.adapter as AdapterFreezeApp?)?.notifyDataSetChanged()
         }
         SceneMode.getCurrentInstance()?.setFreezeAppLeaveTime(appInfo.packageName)
         try {

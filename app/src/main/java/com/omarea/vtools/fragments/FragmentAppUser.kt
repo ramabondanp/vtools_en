@@ -18,15 +18,17 @@ import com.omarea.model.AppInfo
 import com.omarea.ui.AdapterAppList
 import com.omarea.utils.AppListHelper
 import com.omarea.vtools.R
+import com.omarea.vtools.databinding.FragmentAppListBinding
 import com.omarea.vtools.dialogs.DialogAppOptions
 import com.omarea.vtools.dialogs.DialogSingleAppOptions
-import kotlinx.android.synthetic.main.fragment_app_list.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.lang.ref.WeakReference
 
 class FragmentAppUser(private val myHandler: Handler) : androidx.fragment.app.Fragment() {
+    private var _binding: FragmentAppListBinding? = null
+    private val binding get() = _binding!!
     private lateinit var processBarDialog: ProgressBarDialog
     private lateinit var appListHelper: AppListHelper
     private var appList: ArrayList<AppInfo>? = null
@@ -37,13 +39,14 @@ class FragmentAppUser(private val myHandler: Handler) : androidx.fragment.app.Fr
         processBarDialog = ProgressBarDialog(activity!!, "FragmentAppUser")
         appListHelper = AppListHelper(context!!)
 
-        return inflater.inflate(R.layout.fragment_app_list, container, false)
+        _binding = FragmentAppListBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        app_list.addHeaderView(this.layoutInflater.inflate(R.layout.list_header_app, null))
+        binding.appList.addHeaderView(this.layoutInflater.inflate(R.layout.list_header_app, null))
 
         val onItemLongClick = AdapterView.OnItemLongClickListener { parent, _, position, id ->
             if (position < 1)
@@ -54,8 +57,8 @@ class FragmentAppUser(private val myHandler: Handler) : androidx.fragment.app.Fr
             true
         }
 
-        app_list.onItemLongClickListener = onItemLongClick
-        fab_apps.setOnClickListener {
+        binding.appList.onItemLongClickListener = onItemLongClick
+        binding.fabApps.setOnClickListener {
             getSelectedAppShowOptions(activity!!)
         }
 
@@ -63,7 +66,7 @@ class FragmentAppUser(private val myHandler: Handler) : androidx.fragment.app.Fr
     }
 
     private fun getSelectedAppShowOptions(activity: Activity) {
-        var adapter = app_list.adapter
+        var adapter = binding.appList.adapter
         adapter = (adapter as HeaderViewListAdapter).wrappedAdapter
         val selectedItems = (adapter as AdapterAppList).getSelectedItems()
         if (selectedItems.size == 0) {
@@ -83,9 +86,7 @@ class FragmentAppUser(private val myHandler: Handler) : androidx.fragment.app.Fr
         GlobalScope.launch(Dispatchers.Main) {
             appList = appListHelper.getUserAppList()
             processBarDialog.hideDialog()
-            app_list?.run {
-                setListData(appList, this)
-            }
+            setListData(appList, binding.appList)
         }
     }
 
@@ -113,11 +114,11 @@ class FragmentAppUser(private val myHandler: Handler) : androidx.fragment.app.Fr
                             all.isChecked = adapterAppList.get()!!.getIsAllSelected()
                         }
                     }
-                    fab_apps.visibility = if (adapterAppList.get()?.hasSelected() == true) View.VISIBLE else View.GONE
+                    binding.fabApps.visibility = if (adapterAppList.get()?.hasSelected() == true) View.VISIBLE else View.GONE
                 }
                 val all = lv.findViewById<CheckBox>(R.id.select_state_all)
                 all.isChecked = false
-                fab_apps.visibility = View.GONE
+                binding.fabApps.visibility = View.GONE
             } catch (ex: Exception) {
             }
         }
@@ -130,13 +131,16 @@ class FragmentAppUser(private val myHandler: Handler) : androidx.fragment.app.Fr
         set (value) {
             if (keywords != value) {
                 keywords = value
-                app_list?.run {
-                    setListData(appList, this)
-                }
+                setListData(appList, binding.appList)
             }
         }
 
     fun reloadList() {
         setList()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

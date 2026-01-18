@@ -20,7 +20,7 @@ import com.omarea.store.BatteryHistoryStore
 import com.omarea.ui.power.AdapterBatteryStats
 import com.omarea.vtools.R
 import com.omarea.vtools.dialogs.DialogElectricityUnit
-import kotlinx.android.synthetic.main.activity_power_utilization.*
+import com.omarea.vtools.databinding.ActivityPowerUtilizationBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -29,37 +29,39 @@ import kotlin.math.abs
 
 class ActivityPowerUtilization : ActivityBase() {
     private lateinit var storage: BatteryHistoryStore
+    private lateinit var binding: ActivityPowerUtilizationBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_power_utilization)
+        binding = ActivityPowerUtilizationBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         setBackArrow()
         storage = BatteryHistoryStore(context)
 
-        electricity_adj_unit.setOnClickListener {
+        binding.electricityAdjUnit.setOnClickListener {
             DialogElectricityUnit().showDialog(this)
         }
-        more_charge.setOnClickListener {
+        binding.moreCharge.setOnClickListener {
             val intent = Intent(context, ActivityCharge::class.java)
             startActivity(intent)
         }
         GlobalScope.launch(Dispatchers.Main) {
             if (BatteryUtils().qcSettingSupport() || batteryUtils.bpSettingSupport()) {
-                charge_controller.visibility = View.VISIBLE
-                charge_controller.setOnClickListener {
+                binding.chargeController.visibility = View.VISIBLE
+                binding.chargeController.setOnClickListener {
                     val intent = Intent(context, ActivityChargeController::class.java)
                     startActivity(intent)
                 }
             }
         }
-        battery_stats.layoutManager = LinearLayoutManager(this).apply {
+        binding.batteryStats.layoutManager = LinearLayoutManager(this).apply {
             orientation = LinearLayoutManager.VERTICAL
             isSmoothScrollbarEnabled = false
         }
 
         // 切换阶梯模式
-        view_time_title.setOnClickListener {
-            view_time.setLadder(!view_time.getLadder())
+        binding.viewTimeTitle.setOnClickListener {
+            binding.viewTime.setLadder(!binding.viewTime.getLadder())
         }
     }
 
@@ -99,28 +101,28 @@ class ActivityPowerUtilization : ActivityBase() {
         val sampleTime = 6
 
         handler.post {
-            battery_stats.adapter = AdapterBatteryStats(context, (data.filter {
+            binding.batteryStats.adapter = AdapterBatteryStats(context, (data.filter {
                 // 仅显示运行时间超过2分钟的应用数据，避免误差过大
                 (it.count * sampleTime) > 120
             }))
 
-            view_time.invalidate()
+            binding.viewTime.invalidate()
 
             if (kernelCapacity > -1) {
                 val str = "$kernelCapacity%"
                 val ss = SpannableString(str)
                 if (str.contains(".")) {
-                    val small = AbsoluteSizeSpan((battery_capacity.textSize * 0.45).toInt(), false)
+                    val small = AbsoluteSizeSpan((binding.batteryCapacity.textSize * 0.45).toInt(), false)
                     ss.setSpan(small, str.indexOf("."), str.lastIndexOf("%"), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-                    val medium = AbsoluteSizeSpan((battery_capacity.textSize * 0.65).toInt(), false)
+                    val medium = AbsoluteSizeSpan((binding.batteryCapacity.textSize * 0.65).toInt(), false)
                     ss.setSpan(medium, str.indexOf("%"), str.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
                 }
-                battery_capacity.text = ss
+                binding.batteryCapacity.text = ss
             } else {
-                battery_capacity.text = "" + level + "%"
+                binding.batteryCapacity.text = "" + level + "%"
             }
 
-            battery_status.text = (when (GlobalStatus.batteryStatus) {
+            binding.batteryStatus.text = (when (GlobalStatus.batteryStatus) {
                 BatteryManager.BATTERY_STATUS_DISCHARGING -> {
                     getString(R.string.battery_status_discharging)
                 }
@@ -138,9 +140,9 @@ class ActivityPowerUtilization : ActivityBase() {
                 }
                 else -> getString(R.string.battery_status_unknown)
             })
-            battery_voltage.text = "${voltage}v"
-            battery_temperature.text =  "$temp°C"
-            battery_size.text = batteryMAH
+            binding.batteryVoltage.text = "${voltage}v"
+            binding.batteryTemperature.text =  "$temp°C"
+            binding.batterySize.text = batteryMAH
         }
 
         updateMaxState()
@@ -167,16 +169,16 @@ class ActivityPowerUtilization : ActivityBase() {
 
         handler.post {
             try {
-                battery_max_output.setData(batteryOutputMax.toFloat(), batteryOutputMax - maxOutput.toFloat())
-                battery_max_output_text.text = maxOutput.toString() + " mA"
-                battery_max_intput.setData(batteryInputMax.toFloat(), batteryInputMax - maxInput.toFloat())
-                battery_max_intput_text.text = maxInput.toString() + " mA"
+                binding.batteryMaxOutput.setData(batteryOutputMax.toFloat(), batteryOutputMax - maxOutput.toFloat())
+                binding.batteryMaxOutputText.text = maxOutput.toString() + " mA"
+                binding.batteryMaxIntput.setData(batteryInputMax.toFloat(), batteryInputMax - maxInput.toFloat())
+                binding.batteryMaxIntputText.text = maxInput.toString() + " mA"
                 if (maxTemperature < 0) {
-                    battery_max_temperature.setData(batteryTemperatureMax.toFloat(), batteryTemperatureMax.toFloat())
+                    binding.batteryMaxTemperature.setData(batteryTemperatureMax.toFloat(), batteryTemperatureMax.toFloat())
                 } else {
-                    battery_max_temperature.setData(batteryTemperatureMax.toFloat(), batteryTemperatureMax - maxTemperature.toFloat())
+                    binding.batteryMaxTemperature.setData(batteryTemperatureMax.toFloat(), batteryTemperatureMax - maxTemperature.toFloat())
                 }
-                battery_max_temperature_text.text = maxTemperature.toString() + "°C"
+                binding.batteryMaxTemperatureText.text = maxTemperature.toString() + "°C"
             } catch (ex: Exception) {
             }
         }

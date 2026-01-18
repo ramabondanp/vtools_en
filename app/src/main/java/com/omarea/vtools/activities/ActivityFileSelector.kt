@@ -11,7 +11,7 @@ import com.omarea.common.ui.ProgressBarDialog
 import com.omarea.ui.AdapterFileSelector
 import com.omarea.utils.CommonCmds
 import com.omarea.vtools.R
-import kotlinx.android.synthetic.main.activity_file_selector.*
+import com.omarea.vtools.databinding.ActivityFileSelectorBinding
 import java.io.File
 
 class ActivityFileSelector : ActivityBase() {
@@ -24,10 +24,12 @@ class ActivityFileSelector : ActivityBase() {
     var extension = ""
     var mode = MODE_FILE
     var start = ""
+    private lateinit var binding: ActivityFileSelectorBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_file_selector)
+        binding = ActivityFileSelectorBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
@@ -105,7 +107,7 @@ class ActivityFileSelector : ActivityBase() {
             } else {
                 AdapterFileSelector.FileChooser(startDir, onSelected, ProgressBarDialog(this), extension)
             }
-            file_selector_list.adapter = adapterFileSelector
+            binding.fileSelectorList.adapter = adapterFileSelector
         }
     }
 }

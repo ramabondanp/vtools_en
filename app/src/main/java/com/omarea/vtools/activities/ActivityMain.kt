@@ -30,10 +30,11 @@ import com.omarea.vtools.R
 import com.omarea.vtools.dialogs.DialogMonitor
 import com.omarea.vtools.dialogs.DialogPower
 import com.omarea.vtools.fragments.*
-import kotlinx.android.synthetic.main.activity_main.*
+import com.omarea.vtools.databinding.ActivityMainBinding
 
 class ActivityMain : ActivityBase() {
     private lateinit var globalSPF: SharedPreferences
+    private lateinit var binding: ActivityMainBinding
 
     private class ThermalCheckThread(private var context: Activity) : Thread() {
         private fun deleteThermalCopyWarn(onYes: Runnable) {
@@ -129,12 +130,13 @@ class ActivityMain : ActivityBase() {
             globalSPF.edit().putInt(SpfConfig.GLOBAL_SPF_CURRENT_NOW_UNIT, ElectricityUnit().getDefaultElectricityUnit(this)).apply()
         }
 
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
 
-        val tabIconHelper2 = TabIconHelper2(tab_list, tab_content, this, supportFragmentManager, R.layout.list_item_tab2)
+        val tabIconHelper2 = TabIconHelper2(binding.tabList, binding.tabContent, this, supportFragmentManager, R.layout.list_item_tab2)
         tabIconHelper2.newTabSpec(getString(R.string.app_nav), getDrawable(R.drawable.app_menu)!!, FragmentNav.createPage(themeMode))
         tabIconHelper2.newTabSpec(getString(R.string.app_home), getDrawable(R.drawable.app_home)!!, (if (CheckRootStatus.lastCheckResult) {
             FragmentHome()
@@ -143,8 +145,8 @@ class ActivityMain : ActivityBase() {
         }))
         tabIconHelper2.newTabSpec(getString(R.string.app_tuner), getDrawable(R.drawable.app_settings)!!, FragmentCpuModes())
         tabIconHelper2.newTabSpec(getString(R.string.app_donate), getDrawable(R.drawable.app_like)!!, FragmentDonate())
-        tab_content.adapter = tabIconHelper2.adapter
-        tab_list.getTabAt(1)?.select() // 默认选中第二页
+        binding.tabContent.adapter = tabIconHelper2.adapter
+        binding.tabList.getTabAt(1)?.select() // 默认选中第二页
 
         if (CheckRootStatus.lastCheckResult) {
             try {
@@ -171,13 +173,13 @@ class ActivityMain : ActivityBase() {
             ThermalCheckThread(this).start()
         }
 
-        action_graph.setOnClickListener {
+        binding.actionGraph.setOnClickListener {
             actionGraph()
         }
-        action_power.setOnClickListener {
+        binding.actionPower.setOnClickListener {
             DialogPower(this).showPowerMenu()
         }
-        action_settings.setOnClickListener {
+        binding.actionSettings.setOnClickListener {
             startActivity(Intent(this.applicationContext, ActivityOtherSettings::class.java))
         }
     }

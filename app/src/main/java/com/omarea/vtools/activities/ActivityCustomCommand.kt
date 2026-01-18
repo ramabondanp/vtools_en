@@ -6,25 +6,28 @@ import android.widget.Toast
 import com.omarea.common.shared.FileWrite
 import com.omarea.common.ui.DialogHelper
 import com.omarea.vtools.R
-import kotlinx.android.synthetic.main.activity_custom_command.*
+import com.omarea.vtools.databinding.ActivityCustomCommandBinding
 import java.io.File
 import java.net.URLEncoder
 import java.nio.charset.Charset
 
 class ActivityCustomCommand : ActivityBase() {
+    private lateinit var binding: ActivityCustomCommandBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_custom_command)
+        binding = ActivityCustomCommandBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         setBackArrow()
 
-        btn_run.setOnClickListener {
+        binding.btnRun.setOnClickListener {
             runCommand()
         }
 
-        btn_confirm.setOnClickListener {
-            val title = command_title.text?.toString()
-            val script = command_script.text?.toString()
+        binding.btnConfirm.setOnClickListener {
+            val title = binding.commandTitle.text?.toString()
+            val script = binding.commandScript.text?.toString()
             if (title.isNullOrEmpty()) {
                 Toast.makeText(this, "先输入一个标题吧！", Toast.LENGTH_SHORT).show()
             } else if (script.isNullOrEmpty()) {

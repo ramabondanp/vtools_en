@@ -26,9 +26,9 @@ import com.omarea.store.SpfConfig
 import com.omarea.ui.AdapterSceneMode
 import com.omarea.utils.AppListHelper
 import com.omarea.vtools.R
+import com.omarea.vtools.databinding.ActivityAppConfig2Binding
 import com.omarea.vtools.dialogs.DialogAppOrientation
 import com.omarea.vtools.dialogs.DialogAppPowerConfig
-import kotlinx.android.synthetic.main.activity_app_config2.*
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -41,10 +41,12 @@ class ActivityAppConfig2 : ActivityBase() {
     private var installedList: ArrayList<AppInfo>? = null
     private var displayList: ArrayList<AppInfo>? = null
     private lateinit var sceneConfigStore: SceneConfigStore
+    private lateinit var binding: ActivityAppConfig2Binding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_app_config2)
+        binding = ActivityAppConfig2Binding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         setBackArrow()
         globalSPF = context!!.getSharedPreferences(SpfConfig.GLOBAL_SPF, Context.MODE_PRIVATE)
@@ -87,7 +89,7 @@ class ActivityAppConfig2 : ActivityBase() {
         }
 
 
-        scene_app_list.setOnItemClickListener { parent, view2, position, _ ->
+        binding.sceneAppList.setOnItemClickListener { parent, view2, position, _ ->
             try {
                 val item = (parent.adapter.getItem(position) as AppInfo)
                 val intent = Intent(this.context, ActivityAppDetails::class.java)
@@ -102,7 +104,7 @@ class ActivityAppConfig2 : ActivityBase() {
         val dynamicControl = globalSPF.getBoolean(SpfConfig.GLOBAL_SPF_DYNAMIC_CONTROL, SpfConfig.GLOBAL_SPF_DYNAMIC_CONTROL_DEFAULT)
 
         if (dynamicControl) {
-            scene_app_list.setOnItemLongClickListener { parent, view, position, id ->
+            binding.sceneAppList.setOnItemLongClickListener { parent, view, position, id ->
                 val item = (parent.adapter.getItem(position) as AppInfo)
                 val app = item.packageName.toString()
                 DialogAppPowerConfig(this,
@@ -125,13 +127,13 @@ class ActivityAppConfig2 : ActivityBase() {
                 true
             }
         } else {
-            scene_app_list.setOnItemLongClickListener { _, _, _, _ ->
+            binding.sceneAppList.setOnItemLongClickListener { _, _, _, _ ->
                 DialogHelper.helpInfo(this, "", "请先回到功能列表，进入 [性能配置] 功能，开启 [动态响应] 功能")
                 true
             }
         }
 
-        config_search_box.setOnEditorActionListener { v, actionId, event ->
+        binding.configSearchBox.setOnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE) {
                 loadList()
                 return@setOnEditorActionListener true
@@ -139,7 +141,7 @@ class ActivityAppConfig2 : ActivityBase() {
             false
         }
 
-        configlist_modes.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        binding.configlistModes.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
 
@@ -147,7 +149,7 @@ class ActivityAppConfig2 : ActivityBase() {
                 loadList()
             }
         }
-        configlist_type.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        binding.configlistType.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
 
@@ -167,7 +169,7 @@ class ActivityAppConfig2 : ActivityBase() {
         if (requestCode == REQUEST_APP_CONFIG && data != null && displayList != null) {
             try {
                 if (resultCode == AppCompatActivity.RESULT_OK) {
-                    val adapter = (scene_app_list.adapter as AdapterSceneMode)
+                    val adapter = (binding.sceneAppList.adapter as AdapterSceneMode)
                     var index = -1
                     val packageName = data.extras!!.getString("app")
                     for (i in 0 until displayList!!.size) {
@@ -180,7 +182,7 @@ class ActivityAppConfig2 : ActivityBase() {
                     }
                     val item = adapter.getItem(index)
                     setAppRowDesc(item)
-                    (scene_app_list.adapter as AdapterSceneMode?)?.run {
+                    (binding.sceneAppList.adapter as AdapterSceneMode?)?.run {
                         updateRow(index, lastClickRow!!)
                     }
                     //loadList(false)
@@ -265,22 +267,22 @@ class ActivityAppConfig2 : ActivityBase() {
                 installedList = ArrayList()/*在数组中存放数据*/
                 installedList = applistHelper.getAll()
             }
-            if (config_search_box == null) {
+            if (binding.configSearchBox == null) {
                 Scene.post {
                     processBarDialog.hideDialog()
                 }
                 return@Runnable
             }
-            val keyword = config_search_box.text.toString().toLowerCase(Locale.getDefault())
+            val keyword = binding.configSearchBox.text.toString().toLowerCase(Locale.getDefault())
             val search = keyword.isNotEmpty()
             var filterMode = ""
             var filterAppType = ""
-            when (configlist_type.selectedItemPosition) {
+            when (binding.configlistType.selectedItemPosition) {
                 0 -> filterAppType = "/data"
                 1 -> filterAppType = "/system"
                 2 -> filterAppType = "*"
             }
-            when (configlist_modes.selectedItemPosition) {
+            when (binding.configlistModes.selectedItemPosition) {
                 0 -> filterMode = "*"
                 1 -> filterMode = ModeSwitcher.POWERSAVE
                 2 -> filterMode = ModeSwitcher.BALANCE
@@ -307,7 +309,7 @@ class ActivityAppConfig2 : ActivityBase() {
             sortAppList(displayList!!)
             Scene.post {
                 processBarDialog.hideDialog()
-                setListData(displayList, scene_app_list)
+                setListData(displayList, binding.sceneAppList)
             }
             onLoading = false
         }).start()

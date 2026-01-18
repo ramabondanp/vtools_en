@@ -15,7 +15,7 @@ import com.omarea.library.shell.BatteryUtils
 import com.omarea.store.ChargeSpeedStore
 import com.omarea.vtools.R
 import com.omarea.vtools.dialogs.DialogElectricityUnit
-import kotlinx.android.synthetic.main.activity_charge.*
+import com.omarea.vtools.databinding.ActivityChargeBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -24,24 +24,26 @@ import java.util.*
 class ActivityCharge : ActivityBase() {
     private lateinit var storage: ChargeSpeedStore
     private var timer: Timer? = null
+    private lateinit var binding: ActivityChargeBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_charge)
+        binding = ActivityChargeBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         setBackArrow()
 
         storage = ChargeSpeedStore(this)
-        electricity_adj_unit.setOnClickListener {
+        binding.electricityAdjUnit.setOnClickListener {
             DialogElectricityUnit().showDialog(this)
         }
-        more_battery_stats.setOnClickListener {
+        binding.moreBatteryStats.setOnClickListener {
             val intent = Intent(context, ActivityPowerUtilization::class.java)
             startActivity(intent)
         }
         GlobalScope.launch(Dispatchers.Main) {
             if (BatteryUtils().qcSettingSupport() || batteryUtils.bpSettingSupport()) {
-                charge_controller.visibility = View.VISIBLE
-                charge_controller.setOnClickListener {
+                binding.chargeController.visibility = View.VISIBLE
+                binding.chargeController.setOnClickListener {
                     val intent = Intent(context, ActivityChargeController::class.java)
                     startActivity(intent)
                 }
@@ -82,11 +84,11 @@ class ActivityCharge : ActivityBase() {
         val batteryMAH = BatteryCapacity().getBatteryCapacity(this).toInt().toString() + "mAh" + "   "
         val voltage = GlobalStatus.batteryVoltage
         hander.post {
-            view_speed.invalidate()
-            view_time.invalidate()
-            view_temperature.invalidate()
+            binding.viewSpeed.invalidate()
+            binding.viewTime.invalidate()
+            binding.viewTemperature.invalidate()
 
-            charge_state.text = (when (GlobalStatus.batteryStatus) {
+            binding.chargeState.text = (when (GlobalStatus.batteryStatus) {
                 BatteryManager.BATTERY_STATUS_DISCHARGING -> {
                     getString(R.string.battery_status_discharging)
                 }
@@ -109,18 +111,18 @@ class ActivityCharge : ActivityBase() {
                 val str = "$kernelCapacity%"
                 val ss = SpannableString(str)
                 if (str.contains(".")) {
-                    val small = AbsoluteSizeSpan((battrystatus_level.textSize * 0.3).toInt(), false)
+                    val small = AbsoluteSizeSpan((binding.battrystatusLevel.textSize * 0.3).toInt(), false)
                     ss.setSpan(small, str.indexOf("."), str.lastIndexOf("%"), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-                    val medium = AbsoluteSizeSpan((battrystatus_level.textSize * 0.5).toInt(), false)
+                    val medium = AbsoluteSizeSpan((binding.battrystatusLevel.textSize * 0.5).toInt(), false)
                     ss.setSpan(medium, str.indexOf("%"), str.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
                 }
-                battrystatus_level.text = ss
+                binding.battrystatusLevel.text = ss
             } else {
-                battrystatus_level.text = "" + level + "%"
+                binding.battrystatusLevel.text = "" + level + "%"
             }
 
-            battery_size.text = batteryMAH
-            battery_status.text =
+            binding.batterySize.text = batteryMAH
+            binding.batteryStatus.text =
                     getString(R.string.battery_temperature) + temp + "°C\n" +
                     getString(R.string.battery_voltage) + voltage + "v\n" +
                     getString(R.string.battery_electricity) + (
@@ -130,7 +132,7 @@ class ActivityCharge : ActivityBase() {
                             ""
                         }) + GlobalStatus.batteryCurrentNow + "mA"
                     )
-            battery_capacity_chart.setData(100f, 100f - level, temp.toFloat())
+            binding.batteryCapacityChart.setData(100f, 100f - level, temp.toFloat())
         }
     }
 }

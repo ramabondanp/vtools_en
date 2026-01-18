@@ -10,16 +10,18 @@ import com.omarea.common.ui.DialogHelper
 import com.omarea.common.ui.ProgressBarDialog
 import com.omarea.ui.AdapterRootFileSelector
 import com.omarea.vtools.R
-import kotlinx.android.synthetic.main.activity_magisk.*
+import com.omarea.vtools.databinding.ActivityMagiskBinding
 import java.io.File
 
 
 class ActivityMagisk : ActivityBase() {
     private var adapterFileSelector: AdapterRootFileSelector? = null
+    private lateinit var binding: ActivityMagiskBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_magisk)
+        binding = ActivityMagiskBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         setBackArrow()
 
@@ -47,23 +49,23 @@ class ActivityMagisk : ActivityBase() {
             return
         }
 
-        magisk_tabhost.setup()
+        binding.magiskTabhost.setup()
 
-        magisk_tabhost.addTab(magisk_tabhost.newTabSpec("system.prop").setContent(R.id.magisk_tab1).setIndicator("属性"))
-        magisk_tabhost.addTab(magisk_tabhost.newTabSpec("system.file").setContent(R.id.magisk_tab2).setIndicator("系统文件"))
-        magisk_tabhost.addTab(magisk_tabhost.newTabSpec("before_start").setContent(R.id.magisk_tab3).setIndicator("启动前"))
-        magisk_tabhost.addTab(magisk_tabhost.newTabSpec("after_start").setContent(R.id.magisk_tab4).setIndicator("启动后"))
-        magisk_tabhost.currentTab = 0
+        binding.magiskTabhost.addTab(binding.magiskTabhost.newTabSpec("system.prop").setContent(R.id.magisk_tab1).setIndicator("属性"))
+        binding.magiskTabhost.addTab(binding.magiskTabhost.newTabSpec("system.file").setContent(R.id.magisk_tab2).setIndicator("系统文件"))
+        binding.magiskTabhost.addTab(binding.magiskTabhost.newTabSpec("before_start").setContent(R.id.magisk_tab3).setIndicator("启动前"))
+        binding.magiskTabhost.addTab(binding.magiskTabhost.newTabSpec("after_start").setContent(R.id.magisk_tab4).setIndicator("启动后"))
+        binding.magiskTabhost.currentTab = 0
 
-        magisk_props.setText(MagiskExtend.getProps())
-        magisk_props_reset.setOnClickListener {
-            magisk_props.setText(MagiskExtend.getProps())
+        binding.magiskProps.setText(MagiskExtend.getProps())
+        binding.magiskPropsReset.setOnClickListener {
+            binding.magiskProps.setText(MagiskExtend.getProps())
         }
-        magisk_props_save.setOnClickListener {
-            if (FileWrite.writePrivateFile((magisk_props.text.toString() + "\n").toByteArray(), "magisk_system.prop", context)) {
+        binding.magiskPropsSave.setOnClickListener {
+            if (FileWrite.writePrivateFile((binding.magiskProps.text.toString() + "\n").toByteArray(), "magisk_system.prop", context)) {
                 val file = FileWrite.getPrivateFilePath(context, "magisk_system.prop")
                 if (MagiskExtend.updateProps(file)) {
-                    magisk_props.setText(MagiskExtend.getProps())
+                    binding.magiskProps.setText(MagiskExtend.getProps())
                     Toast.makeText(context, "已保存更改，重启后生效 ^_~ ", Toast.LENGTH_LONG).show()
                     File(file).delete()
                 } else {
@@ -75,15 +77,15 @@ class ActivityMagisk : ActivityBase() {
         }
 
 
-        magisk_beforestart.setText(MagiskExtend.getFsPostDataSH())
-        magisk_beforestart_reset.setOnClickListener {
-            magisk_beforestart.setText(MagiskExtend.getFsPostDataSH())
+        binding.magiskBeforestart.setText(MagiskExtend.getFsPostDataSH())
+        binding.magiskBeforestartReset.setOnClickListener {
+            binding.magiskBeforestart.setText(MagiskExtend.getFsPostDataSH())
         }
-        magisk_beforestart_save.setOnClickListener {
-            if (FileWrite.writePrivateFile((magisk_beforestart.text.toString() + "\n").toByteArray(), "magisk_post-fs-data.sh", context)) {
+        binding.magiskBeforestartSave.setOnClickListener {
+            if (FileWrite.writePrivateFile((binding.magiskBeforestart.text.toString() + "\n").toByteArray(), "magisk_post-fs-data.sh", context)) {
                 val file = FileWrite.getPrivateFilePath(context, "magisk_post-fs-data.sh")
                 if (MagiskExtend.updateFsPostDataSH(file)) {
-                    magisk_beforestart.setText(MagiskExtend.getFsPostDataSH())
+                    binding.magiskBeforestart.setText(MagiskExtend.getFsPostDataSH())
                     Toast.makeText(context, "已保存更改，重启后生效 ^_~ ", Toast.LENGTH_LONG).show()
                     File(file).delete()
                 } else {
@@ -95,15 +97,15 @@ class ActivityMagisk : ActivityBase() {
         }
 
 
-        magisk_afterstart.setText(MagiskExtend.getServiceSH())
-        magisk_afterstart_reset.setOnClickListener {
-            magisk_afterstart.setText(MagiskExtend.getServiceSH())
+        binding.magiskAfterstart.setText(MagiskExtend.getServiceSH())
+        binding.magiskAfterstartReset.setOnClickListener {
+            binding.magiskAfterstart.setText(MagiskExtend.getServiceSH())
         }
-        magisk_afterstart_save.setOnClickListener {
-            if (FileWrite.writePrivateFile((magisk_afterstart.text.toString() + "\n").toByteArray(), "magisk_service.sh", context)) {
+        binding.magiskAfterstartSave.setOnClickListener {
+            if (FileWrite.writePrivateFile((binding.magiskAfterstart.text.toString() + "\n").toByteArray(), "magisk_service.sh", context)) {
                 val file = FileWrite.getPrivateFilePath(context, "magisk_service.sh")
                 if (MagiskExtend.updateServiceSH(file)) {
-                    magisk_afterstart.setText(MagiskExtend.getServiceSH())
+                    binding.magiskAfterstart.setText(MagiskExtend.getServiceSH())
                     Toast.makeText(context, "已保存更改，重启后生效 ^_~ ", Toast.LENGTH_LONG).show()
                     File(file).delete()
                 } else {
@@ -122,6 +124,6 @@ class ActivityMagisk : ActivityBase() {
                 adapterFileSelector!!.refresh()
             }
         }, false)
-        magisk_files.adapter = adapterFileSelector
+        binding.magiskFiles.adapter = adapterFileSelector
     }
 }

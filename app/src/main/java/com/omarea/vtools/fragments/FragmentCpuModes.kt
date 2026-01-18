@@ -34,12 +34,15 @@ import com.omarea.utils.AccessibleServiceHelper
 import com.omarea.vtools.R
 import com.omarea.vtools.activities.*
 import com.projectkr.shell.OpenPageHelper
-import kotlinx.android.synthetic.main.fragment_cpu_modes.*
+import com.omarea.vtools.databinding.FragmentCpuModesBinding
 import java.io.File
 import java.nio.charset.Charset
 import java.util.*
 
 class FragmentCpuModes : Fragment() {
+    private var _binding: FragmentCpuModesBinding? = null
+    private val binding get() = _binding!!
+
     private var author: String = ""
     private var configFileInstalled: Boolean = false
     private lateinit var modeSwitcher: ModeSwitcher
@@ -55,8 +58,10 @@ class FragmentCpuModes : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? =
-            inflater.inflate(R.layout.fragment_cpu_modes, container, false)
+                              savedInstanceState: Bundle?): View {
+        _binding = FragmentCpuModesBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
     private fun startService() {
         AccessibleServiceHelper().stopSceneModeService(activity!!.applicationContext)
@@ -73,12 +78,12 @@ class FragmentCpuModes : Fragment() {
         globalSPF = context!!.getSharedPreferences(SpfConfig.GLOBAL_SPF, Context.MODE_PRIVATE)
         modeSwitcher = ModeSwitcher()
 
-        bindMode(cpu_config_p0, ModeSwitcher.POWERSAVE)
-        bindMode(cpu_config_p1, ModeSwitcher.BALANCE)
-        bindMode(cpu_config_p2, ModeSwitcher.PERFORMANCE)
-        bindMode(cpu_config_p3, ModeSwitcher.FAST)
+        bindMode(binding.cpuConfigP0, ModeSwitcher.POWERSAVE)
+        bindMode(binding.cpuConfigP1, ModeSwitcher.BALANCE)
+        bindMode(binding.cpuConfigP2, ModeSwitcher.PERFORMANCE)
+        bindMode(binding.cpuConfigP3, ModeSwitcher.FAST)
 
-        dynamic_control.setOnClickListener {
+        binding.dynamicControl.setOnClickListener {
             val value = (it as Switch).isChecked
             if (value && !(modeSwitcher.modeConfigCompleted())) {
                 it.isChecked = false
@@ -91,32 +96,32 @@ class FragmentCpuModes : Fragment() {
                 reStartService()
             }
         }
-        dynamic_control_opts2.initExpand(false)
-        dynamic_control.setOnCheckedChangeListener { _, isChecked ->
-            dynamic_control_opts.visibility = if (isChecked) View.VISIBLE else View.GONE
+        binding.dynamicControlOpts2.initExpand(false)
+        binding.dynamicControl.setOnCheckedChangeListener { _, isChecked ->
+            binding.dynamicControlOpts.visibility = if (isChecked) View.VISIBLE else View.GONE
         }
-        dynamic_control_toggle.setOnClickListener {
-            dynamic_control_opts2.toggleExpand()
-            if (dynamic_control_opts2.isExpand) {
+        binding.dynamicControlToggle.setOnClickListener {
+            binding.dynamicControlOpts2.toggleExpand()
+            if (binding.dynamicControlOpts2.isExpand) {
                 (it as ImageView).setImageDrawable(ContextCompat.getDrawable(context!!, R.drawable.arrow_up))
             } else {
                 (it as ImageView).setImageDrawable(ContextCompat.getDrawable(context!!, R.drawable.arrow_down))
             }
         }
 
-        strict_mode.isChecked = globalSPF.getBoolean(SpfConfig.GLOBAL_SPF_DYNAMIC_CONTROL_STRICT, false)
-        strict_mode.setOnClickListener {
+        binding.strictMode.isChecked = globalSPF.getBoolean(SpfConfig.GLOBAL_SPF_DYNAMIC_CONTROL_STRICT, false)
+        binding.strictMode.setOnClickListener {
             val checked = (it as CompoundButton).isChecked
             globalSPF.edit().putBoolean(SpfConfig.GLOBAL_SPF_DYNAMIC_CONTROL_STRICT, checked).apply()
         }
 
-        delay_switch.isChecked = globalSPF.getBoolean(SpfConfig.GLOBAL_SPF_DYNAMIC_CONTROL_DELAY, false)
-        delay_switch.setOnClickListener {
+        binding.delaySwitch.isChecked = globalSPF.getBoolean(SpfConfig.GLOBAL_SPF_DYNAMIC_CONTROL_DELAY, false)
+        binding.delaySwitch.setOnClickListener {
             val checked = (it as CompoundButton).isChecked
             globalSPF.edit().putBoolean(SpfConfig.GLOBAL_SPF_DYNAMIC_CONTROL_DELAY, checked).apply()
         }
 
-        first_mode.run {
+        binding.firstMode.run {
             when (globalSPF.getString(SpfConfig.GLOBAL_SPF_POWERCFG_FIRST_MODE, ModeSwitcher.BALANCE)) {
                 ModeSwitcher.POWERSAVE -> setSelection(0)
                 ModeSwitcher.BALANCE -> setSelection(1)
@@ -130,7 +135,7 @@ class FragmentCpuModes : Fragment() {
             }
         }
 
-        sleep_mode.run {
+        binding.sleepMode.run {
             when (globalSPF.getString(SpfConfig.GLOBAL_SPF_POWERCFG_SLEEP_MODE, ModeSwitcher.POWERSAVE)) {
                 ModeSwitcher.POWERSAVE -> setSelection(0)
                 ModeSwitcher.BALANCE -> setSelection(1)
@@ -165,17 +170,17 @@ class FragmentCpuModes : Fragment() {
                 }
             }
         }
-        config_author_icon.setOnClickListener(sourceClick)
-        config_author.setOnClickListener(sourceClick)
+        binding.configAuthorIcon.setOnClickListener(sourceClick)
+        binding.configAuthor.setOnClickListener(sourceClick)
 
-        nav_battery_stats.setOnClickListener {
+        binding.navBatteryStats.setOnClickListener {
             val intent = Intent(context, ActivityPowerUtilization::class.java)
             startActivity(intent)
         }
-        nav_app_scene.setOnClickListener {
+        binding.navAppScene.setOnClickListener {
             if (!AccessibleServiceHelper().serviceRunning(context!!)) {
                 startService()
-            } else if (dynamic_control.isChecked) {
+            } else if (binding.dynamicControl.isChecked) {
                 val intent = Intent(context, ActivityAppConfig2::class.java)
                 startActivity(intent)
             } else {
@@ -189,11 +194,11 @@ class FragmentCpuModes : Fragment() {
             }
         }
         // 激活辅助服务按钮
-        nav_scene_service_not_active.setOnClickListener {
+        binding.navSceneServiceNotActive.setOnClickListener {
             startService()
         }
         // 自动跳过广告
-        nav_skip_ad.setOnClickListener {
+        binding.navSkipAd.setOnClickListener {
             if (AccessibleServiceHelper().serviceRunning(context!!)) {
                 val intent = Intent(context, ActivityAutoClick::class.java)
                 startActivity(intent)
@@ -202,9 +207,9 @@ class FragmentCpuModes : Fragment() {
             }
         }
         if (CheckRootStatus.lastCheckResult) {
-            nav_more.visibility = View.VISIBLE
+            binding.navMore.visibility = View.VISIBLE
             if (Build.MANUFACTURER.toLowerCase(Locale.getDefault()) == "xiaomi") {
-                nav_thermal.setOnClickListener {
+                binding.navThermal.setOnClickListener {
                     val pageNode = PageNode("").apply {
                         title = "MUI专属"
                         pageConfigPath = "file:///android_asset/kr-script/miui/miui.xml"
@@ -212,14 +217,14 @@ class FragmentCpuModes : Fragment() {
                     OpenPageHelper(activity!!).openPage(pageNode)
                 }
             } else {
-                nav_thermal.visibility = View.GONE
+                binding.navThermal.visibility = View.GONE
             }
-            nav_processes.setOnClickListener {
+            binding.navProcesses.setOnClickListener {
                 val intent = Intent(context, ActivityProcess::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(intent)
             }
-            nav_freeze.setOnClickListener {
+            binding.navFreeze.setOnClickListener {
                 if (AccessibleServiceHelper().serviceRunning(context!!)) {
                     val intent = Intent(Intent.ACTION_VIEW)
                     intent.setClassName(
@@ -236,8 +241,8 @@ class FragmentCpuModes : Fragment() {
             installConfig(false)
         }
         // 卓越性能 目前仅限888处理器开放
-        extreme_performance.visibility = if (ThermalDisguise().supported()) View.VISIBLE else View.GONE
-        extreme_performance_on.setOnClickListener {
+        binding.extremePerformance.visibility = if (ThermalDisguise().supported()) View.VISIBLE else View.GONE
+        binding.extremePerformanceOn.setOnClickListener {
             val isChecked = (it as CompoundButton).isChecked
             if (isChecked) {
                 ThermalDisguise().disableMessage()
@@ -358,6 +363,7 @@ class FragmentCpuModes : Fragment() {
 
     private fun bindMode(button: View, mode: String) {
         button.setOnClickListener {
+            val binding = _binding ?: return@setOnClickListener
             if (mode == ModeSwitcher.FAST && ModeSwitcher.getCurrentSource() == ModeSwitcher.SOURCE_OUTSIDE_UPERF) {
                 DialogHelper.warning(
                         activity!!,
@@ -365,44 +371,46 @@ class FragmentCpuModes : Fragment() {
                         getString(R.string.schedule_uperf_fast),
                         {
                             modeSwitcher.executePowercfgMode(mode, context!!.packageName)
-                            updateState(cpu_config_p3, ModeSwitcher.FAST)
+                            updateState(binding.cpuConfigP3, ModeSwitcher.FAST)
                         }
                 )
             } else {
                 modeSwitcher.executePowercfgMode(mode, context!!.packageName)
-                updateState(cpu_config_p0, ModeSwitcher.POWERSAVE)
-                updateState(cpu_config_p1, ModeSwitcher.BALANCE)
-                updateState(cpu_config_p2, ModeSwitcher.PERFORMANCE)
-                updateState(cpu_config_p3, ModeSwitcher.FAST)
+                updateState(binding.cpuConfigP0, ModeSwitcher.POWERSAVE)
+                updateState(binding.cpuConfigP1, ModeSwitcher.BALANCE)
+                updateState(binding.cpuConfigP2, ModeSwitcher.PERFORMANCE)
+                updateState(binding.cpuConfigP3, ModeSwitcher.FAST)
             }
         }
     }
 
     private fun updateState() {
+        val binding = _binding ?: return
         val outsideInstalled = configInstaller.outsideConfigInstalled()
         configFileInstalled = outsideInstalled || configInstaller.insideConfigInstalled()
         author = ModeSwitcher.getCurrentSource()
 
-        config_author.text = ModeSwitcher.getCurrentSourceName()
+        binding.configAuthor.text = ModeSwitcher.getCurrentSourceName()
 
-        updateState(cpu_config_p0, ModeSwitcher.POWERSAVE)
-        updateState(cpu_config_p1, ModeSwitcher.BALANCE)
-        updateState(cpu_config_p2, ModeSwitcher.PERFORMANCE)
-        updateState(cpu_config_p3, ModeSwitcher.FAST)
+        updateState(binding.cpuConfigP0, ModeSwitcher.POWERSAVE)
+        updateState(binding.cpuConfigP1, ModeSwitcher.BALANCE)
+        updateState(binding.cpuConfigP2, ModeSwitcher.PERFORMANCE)
+        updateState(binding.cpuConfigP3, ModeSwitcher.FAST)
         val serviceState = AccessibleServiceHelper().serviceRunning(context!!)
         val dynamicControl = globalSPF.getBoolean(SpfConfig.GLOBAL_SPF_DYNAMIC_CONTROL, SpfConfig.GLOBAL_SPF_DYNAMIC_CONTROL_DEFAULT)
-        dynamic_control.isChecked = dynamicControl && serviceState
-        nav_scene_service_not_active.visibility = if (serviceState) View.GONE else View.VISIBLE
+        binding.dynamicControl.isChecked = dynamicControl && serviceState
+        binding.navSceneServiceNotActive.visibility = if (serviceState) View.GONE else View.VISIBLE
 
         if (dynamicControl && !modeSwitcher.modeConfigCompleted()) {
             globalSPF.edit().putBoolean(SpfConfig.GLOBAL_SPF_DYNAMIC_CONTROL, false).apply()
-            dynamic_control.isChecked = false
+            binding.dynamicControl.isChecked = false
             reStartService()
         }
-        dynamic_control_opts.postDelayed({
-            dynamic_control_opts?.visibility = if (dynamic_control.isChecked) View.VISIBLE else View.GONE
+        binding.dynamicControlOpts.postDelayed({
+            val binding = _binding ?: return@postDelayed
+            binding.dynamicControlOpts.visibility = if (binding.dynamicControl.isChecked) View.VISIBLE else View.GONE
         }, 15)
-        extreme_performance_on.isChecked = ThermalDisguise().isDisabled()
+        binding.extremePerformanceOn.isChecked = ThermalDisguise().isDisabled()
     }
 
     private fun updateState(button: View, mode: String) {
@@ -417,7 +425,8 @@ class FragmentCpuModes : Fragment() {
         updateState()
 
         // 如果开启了动态响应 并且配置作者变了，重启后台服务
-        if (dynamic_control.isChecked && !currentAuthor.isEmpty() && currentAuthor != author) {
+        val binding = _binding
+        if (binding != null && binding.dynamicControl.isChecked && !currentAuthor.isEmpty() && currentAuthor != author) {
             reStartService()
         }
     }
@@ -595,5 +604,10 @@ class FragmentCpuModes : Fragment() {
      */
     private fun reStartService() {
         EventBus.publish(EventType.SERVICE_UPDATE)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

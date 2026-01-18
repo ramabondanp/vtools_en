@@ -13,14 +13,18 @@ import android.widget.Toast
 import com.omarea.permissions.CheckRootStatus
 import com.omarea.utils.AlipayDonate
 import com.omarea.vtools.R
-import kotlinx.android.synthetic.main.fragment_donate.*
+import com.omarea.vtools.databinding.FragmentDonateBinding
 
 
 class FragmentDonate : androidx.fragment.app.Fragment(), View.OnClickListener {
+    private var _binding: FragmentDonateBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? =
-            inflater.inflate(R.layout.fragment_donate, container, false)
+                              savedInstanceState: Bundle?): View {
+        _binding = FragmentDonateBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
     override fun onResume() {
         super.onResume()
@@ -31,13 +35,13 @@ class FragmentDonate : androidx.fragment.app.Fragment(), View.OnClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        pay_paypal.setOnClickListener {
+        binding.payPaypal.setOnClickListener {
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://www.paypal.me/duduski")))
         }
-        pay_alipay.setOnClickListener {
+        binding.payAlipay.setOnClickListener {
             AlipayDonate(context!!).jumpAlipay()
         }
-        pay_wxpay.setOnClickListener {
+        binding.payWxpay.setOnClickListener {
             /*
             try {
                 startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("weixin://dl/business/?ticket=wxp://f2f0YqS-OUviH9sQNUDgXJhOP3fld3htEqqO")))
@@ -49,10 +53,10 @@ class FragmentDonate : androidx.fragment.app.Fragment(), View.OnClickListener {
             Toast.makeText(context!!, "暂不支持直接调起，请保存收款码然后使用微信扫码（在扫一扫界面从相册选择图片）！", Toast.LENGTH_SHORT).show()
         }
 
-        bindClickEvent(nav_gesture)
-        bindClickEvent(nav_filter)
-        bindClickEvent(nav_share)
-        bindClickEvent(nav_qq)
+        bindClickEvent(binding.navGesture)
+        bindClickEvent(binding.navFilter)
+        bindClickEvent(binding.navShare)
+        bindClickEvent(binding.navQq)
     }
 
     private fun bindClickEvent(view: View) {
@@ -156,5 +160,10 @@ class FragmentDonate : androidx.fragment.app.Fragment(), View.OnClickListener {
             startActivity(intent)
         } catch (ex: Exception) {
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

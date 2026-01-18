@@ -20,7 +20,7 @@ import com.omarea.store.XposedExtension
 import com.omarea.ui.XposedAppsAdapter
 import com.omarea.utils.AppListHelper
 import com.omarea.vtools.R
-import kotlinx.android.synthetic.main.activity_app_xposed_config.*
+import com.omarea.vtools.databinding.ActivityAppXposedConfigBinding
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -32,10 +32,12 @@ class ActivityAppXposedConfig : ActivityBase() {
     private var installedList: ArrayList<AppInfo>? = null
     private var displayList: ArrayList<AppInfo>? = null
     private lateinit var xposedExtension: XposedExtension
+    private lateinit var binding: ActivityAppXposedConfigBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_app_xposed_config)
+        binding = ActivityAppXposedConfigBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         setBackArrow()
         globalSPF = context!!.getSharedPreferences(SpfConfig.GLOBAL_SPF, Context.MODE_PRIVATE)
@@ -49,7 +51,7 @@ class ActivityAppXposedConfig : ActivityBase() {
         applistHelper = AppListHelper(this)
         globalSPF = getSharedPreferences(SpfConfig.GLOBAL_SPF, Context.MODE_PRIVATE)
 
-        scene_app_list.setOnItemClickListener { parent, view2, position, _ ->
+        binding.sceneAppList.setOnItemClickListener { parent, view2, position, _ ->
             try {
                 val item = (parent.adapter.getItem(position) as AppInfo)
                 val intent = Intent(this.context, ActivityAppXposedDetails::class.java)
@@ -60,7 +62,7 @@ class ActivityAppXposedConfig : ActivityBase() {
             }
         }
 
-        config_search_box.setOnEditorActionListener { v, actionId, event ->
+        binding.configSearchBox.setOnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE) {
                 loadList()
                 return@setOnEditorActionListener true
@@ -68,7 +70,7 @@ class ActivityAppXposedConfig : ActivityBase() {
             false
         }
 
-        configlist_type.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        binding.configlistType.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
 
@@ -87,7 +89,7 @@ class ActivityAppXposedConfig : ActivityBase() {
         if (requestCode == REQUEST_APP_CONFIG && data != null && displayList != null) {
             try {
                 if (resultCode == AppCompatActivity.RESULT_OK) {
-                    val adapter = (scene_app_list.adapter as XposedAppsAdapter)
+                    val adapter = (binding.sceneAppList.adapter as XposedAppsAdapter)
                     var index = -1
                     val packageName = data.extras!!.getString("app")
                     for (i in 0 until displayList!!.size) {
@@ -100,7 +102,7 @@ class ActivityAppXposedConfig : ActivityBase() {
                     }
                     val item = adapter.getItem(index)
                     setAppRowDesc(item)
-                    (scene_app_list.adapter as XposedAppsAdapter?)?.run {
+                    (binding.sceneAppList.adapter as XposedAppsAdapter?)?.run {
                         updateRow(index, lastClickRow!!)
                     }
                     //loadList(false)
@@ -161,16 +163,16 @@ class ActivityAppXposedConfig : ActivityBase() {
                 installedList = ArrayList()/*在数组中存放数据*/
                 installedList = applistHelper.getAll()
             }
-            if (config_search_box == null) {
+            if (binding.configSearchBox == null) {
                 Scene.post {
                     processBarDialog.hideDialog()
                 }
                 return@Runnable
             }
-            val keyword = config_search_box.text.toString().toLowerCase(Locale.getDefault())
+            val keyword = binding.configSearchBox.text.toString().toLowerCase(Locale.getDefault())
             val search = keyword.isNotEmpty()
             var filterAppType = ""
-            when (configlist_type.selectedItemPosition) {
+            when (binding.configlistType.selectedItemPosition) {
                 0 -> filterAppType = "/data"
                 1 -> filterAppType = "/system"
                 2 -> filterAppType = "*"
@@ -191,7 +193,7 @@ class ActivityAppXposedConfig : ActivityBase() {
             sortAppList(displayList!!)
             Scene.post {
                 processBarDialog.hideDialog()
-                setListData(displayList, scene_app_list)
+                setListData(displayList, binding.sceneAppList)
             }
             onLoading = false
         }).start()

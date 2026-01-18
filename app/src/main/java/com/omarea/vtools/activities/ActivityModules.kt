@@ -13,16 +13,19 @@ import com.omarea.krscript.downloader.Downloader
 import com.omarea.library.basic.MagiskModulesRepo
 import com.omarea.ui.AdapterModules
 import com.omarea.vtools.R
-import kotlinx.android.synthetic.main.activty_modules.*
+import com.omarea.vtools.databinding.ActivtyModulesBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.util.*
 
 class ActivityModules : ActivityBase(), AdapterModules.OnItemClickListener {
+    private lateinit var binding: ActivtyModulesBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activty_modules)
+        binding = ActivtyModulesBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         setBackArrow()
 
@@ -34,10 +37,10 @@ class ActivityModules : ActivityBase(), AdapterModules.OnItemClickListener {
     private fun onViewCreated(context: Context) {
         val linearLayoutManager = LinearLayoutManager(this)
         linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
-        module_list.layoutManager = linearLayoutManager
+        binding.moduleList.layoutManager = linearLayoutManager
 
         // 搜索关键字
-        module_search.setOnEditorActionListener { v, actionId, _ ->
+        binding.moduleSearch.setOnEditorActionListener { v, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 // (module_list.adapter as AdapterProcess?)?.updateKeywords(v.text.toString())
                 val text = v.text.toString()
@@ -47,8 +50,8 @@ class ActivityModules : ActivityBase(), AdapterModules.OnItemClickListener {
                     try {
                         val modules = MagiskModulesRepo().query(text)
                         if (!isDestroyed) {
-                            module_list.post {
-                                module_list.adapter = AdapterModules(context, modules).apply {
+                            binding.moduleList.post {
+                                binding.moduleList.adapter = AdapterModules(context, modules).apply {
                                     setOnItemClickListener(this@ActivityModules)
                                 }
                             }
@@ -80,7 +83,7 @@ class ActivityModules : ActivityBase(), AdapterModules.OnItemClickListener {
     }
 
     override fun onItemClick(view: View, position: Int) {
-        val modules = (module_list.adapter as AdapterModules)
+        val modules = (binding.moduleList.adapter as AdapterModules)
         val module = modules.getItem(position)
         // https://github.com/Magisk-Modules-Repo/mtd-ndk/archive/refs/heads/master.zip
         val moduleName = module.substring(0, module.indexOf("/"))

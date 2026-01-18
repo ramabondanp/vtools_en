@@ -25,10 +25,12 @@ import com.omarea.vtools.activities.*
 import com.omarea.vtools.dialogs.DialogXposedGlobalConfig
 import com.omarea.xposed.XposedCheck
 import com.projectkr.shell.OpenPageHelper
-import kotlinx.android.synthetic.main.fragment_nav.*
+import com.omarea.vtools.databinding.FragmentNavBinding
 
 class FragmentNav : Fragment(), View.OnClickListener {
     private lateinit var themeMode: ThemeMode
+    private var _binding: FragmentNavBinding? = null
+    private val binding get() = _binding!!
 
     companion object {
         fun createPage(themeMode: ThemeMode): Fragment {
@@ -39,12 +41,14 @@ class FragmentNav : Fragment(), View.OnClickListener {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? =
-            inflater.inflate(R.layout.fragment_nav, container, false)
+                              savedInstanceState: Bundle?): View {
+        _binding = FragmentNavBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val nav = view.findViewById<LinearLayout>(R.id.nav)
+        val nav = binding.nav
         for (index in 1..nav.childCount) {
             val ele = nav.getChildAt(index)
             if (ele is GridLayout) {
@@ -209,5 +213,10 @@ class FragmentNav : Fragment(), View.OnClickListener {
         } else {
             installVAddin()
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

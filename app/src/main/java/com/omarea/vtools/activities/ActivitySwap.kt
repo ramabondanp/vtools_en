@@ -31,7 +31,7 @@ import com.omarea.library.shell.SwapUtils
 import com.omarea.store.SpfConfig
 import com.omarea.ui.AdapterSwaplist
 import com.omarea.vtools.R
-import kotlinx.android.synthetic.main.activity_swap.*
+import com.omarea.vtools.databinding.ActivitySwapBinding
 import java.util.*
 import kotlin.collections.LinkedHashMap
 
@@ -43,10 +43,12 @@ class ActivitySwap : ActivityBase() {
     private var totalMem = 2048
     private val swapUtils = SwapUtils(Scene.context)
     private val swapModuleUtils = SwapModuleUtils()
+    private lateinit var binding: ActivitySwapBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_swap)
+        binding = ActivitySwapBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         setBackArrow()
 
         swapConfig = getSharedPreferences(SpfConfig.SWAP_SPF, Context.MODE_PRIVATE)
@@ -114,27 +116,27 @@ class ActivitySwap : ActivityBase() {
         processBarDialog = ProgressBarDialog(context)
 
         if (swapModuleUtils.magiskModuleInstalled) {
-            swap_module_installed.visibility = View.VISIBLE
-            swap_module_uninstalled.visibility = View.GONE
+            binding.swapModuleInstalled.visibility = View.VISIBLE
+            binding.swapModuleUninstalled.visibility = View.GONE
         } else {
-            swap_module_installed.visibility = View.GONE
-            swap_module_uninstalled.visibility = View.VISIBLE
+            binding.swapModuleInstalled.visibility = View.GONE
+            binding.swapModuleUninstalled.visibility = View.VISIBLE
         }
 
         if (MagiskExtend.magiskSupported()) {
             val currentVersion = swapModuleUtils.getModuleVersion()
             if (currentVersion < getString(R.string.swap_module_target_version).toInt()) {
-                swap_module_downloadable.visibility = View.VISIBLE
-                swap_module_downloadable.setOnClickListener {
+                binding.swapModuleDownloadable.visibility = View.VISIBLE
+                binding.swapModuleDownloadable.setOnClickListener {
                     swapModuleUpdateDialog()
                 }
             } else {
-                swap_module_downloadable.visibility = View.GONE
+                binding.swapModuleDownloadable.visibility = View.GONE
             }
         }
 
         // 关闭swap
-        btn_swap_close.setOnClickListener {
+        binding.btnSwapClose.setOnClickListener {
             val usedSize = swapUtils.swapUsedSize
             if (usedSize > 500) {
                 DialogHelper.confirm(this,
@@ -150,7 +152,7 @@ class ActivitySwap : ActivityBase() {
         }
 
         // 自动lmk调节
-        swap_auto_lmk.setOnClickListener {
+        binding.swapAutoLmk.setOnClickListener {
             val checked = (it as CompoundButton).isChecked
             swapConfig.edit().putBoolean(SpfConfig.SWAP_SPF_AUTO_LMK, checked).apply()
             if (checked) {
@@ -159,7 +161,7 @@ class ActivitySwap : ActivityBase() {
                 activityManager.getMemoryInfo(info)
                 val utils = LMKUtils()
                 utils.autoSetLMK(info.totalMem)
-                swap_lmk_current.text = utils.getCurrent()
+                binding.swapLmkCurrent.text = utils.getCurrent()
             } else {
                 Toast.makeText(context, "需要重启手机才会恢复默认的LMK参数！", Toast.LENGTH_SHORT).show()
             }
@@ -167,21 +169,21 @@ class ActivitySwap : ActivityBase() {
 
         // 是否支持zram
         if (!swapUtils.zramSupport) {
-            swap_config_zram.visibility = View.GONE
-            zram_stat.visibility = View.GONE
+            binding.swapConfigZram.visibility = View.GONE
+            binding.zramStat.visibility = View.GONE
         }
 
         // swap启动
-        btn_swap_create.setOnClickListener {
+        binding.btnSwapCreate.setOnClickListener {
             swapCreateDialog()
         }
 
         // 调整zram大小操作
-        btn_zram_resize.setOnClickListener {
+        binding.btnZramResize.setOnClickListener {
             zramResizeDialog()
         }
 
-        swappiness_adj.setOnClickListener {
+        binding.swappinessAdj.setOnClickListener {
             swappinessAdjDialog()
         }
     }
@@ -673,71 +675,71 @@ class ActivitySwap : ActivityBase() {
 
         myHandler.post {
             try {
-                txt_swap_size_display.text = swapFileSize.toString() + "MB"
-                swap_usage.setData(swapSize, swapFree)
-                zram_usage.setData(zramSize.toFloat(), zramFree)
+                binding.txtSwapSizeDisplay.text = swapFileSize.toString() + "MB"
+                binding.swapUsage.setData(swapSize, swapFree)
+                binding.zramUsage.setData(zramSize.toFloat(), zramFree)
                 if (swapSize > 0) {
-                    swap_usage_ratio.text = (100 - (swapFree * 100 / swapSize).toInt()).toString() + "%"
+                    binding.swapUsageRatio.text = (100 - (swapFree * 100 / swapSize).toInt()).toString() + "%"
                 } else {
-                    swap_usage_ratio.text = "0%"
+                    binding.swapUsageRatio.text = "0%"
                 }
                 if (zramSize > 0 && zramFree > 0) {
-                    zram_usage_ratio.text = (100 - (zramFree * 100 / zramSize).toInt()).toString() + "%"
+                    binding.zramUsageRatio.text = (100 - (zramFree * 100 / zramSize).toInt()).toString() + "%"
                 } else {
-                    zram_usage_ratio.text = "0%"
+                    binding.zramUsageRatio.text = "0%"
                 }
 
-                swap_swappiness_display.text = swappiness
-                watermark_scale_factor_display.text = watermarkScale
+                binding.swapSwappinessDisplay.text = swappiness
+                binding.watermarkScaleFactorDisplay.text = watermarkScale
 
-                list_swaps.adapter = swaps
+                binding.listSwaps.adapter = swaps
 
-                txt_mem.text = memInfo
+                binding.txtMem.text = memInfo
 
                 if (currentSwap.isNotEmpty()) {
-                    btn_swap_close.visibility = View.VISIBLE
-                    btn_swap_create.visibility = View.GONE
-                    swap_state.text = getString(R.string.swap_state_using)
+                    binding.btnSwapClose.visibility = View.VISIBLE
+                    binding.btnSwapCreate.visibility = View.GONE
+                    binding.swapState.text = getString(R.string.swap_state_using)
                 } else {
-                    btn_swap_close.visibility = View.GONE
-                    btn_swap_create.visibility = View.VISIBLE
+                    binding.btnSwapClose.visibility = View.GONE
+                    binding.btnSwapCreate.visibility = View.VISIBLE
                     if (swapFileExists) {
-                        swap_state.text = getString(R.string.swap_state_created)
+                        binding.swapState.text = getString(R.string.swap_state_created)
                     } else {
-                        swap_state.text = getString(R.string.swap_state_undefined)
+                        binding.swapState.text = getString(R.string.swap_state_undefined)
                     }
                 }
 
                 if (zramEnabled) {
-                    zram_state.text = getString(R.string.swap_state_using)
+                    binding.zramState.text = getString(R.string.swap_state_using)
                 } else {
-                    zram_state.text = getString(R.string.swap_state_created)
+                    binding.zramState.text = getString(R.string.swap_state_created)
                 }
 
-                swap_auto_lmk.isChecked = swapConfig.getBoolean(SpfConfig.SWAP_SPF_AUTO_LMK, false)
+                binding.swapAutoLmk.isChecked = swapConfig.getBoolean(SpfConfig.SWAP_SPF_AUTO_LMK, false)
                 val lmkUtils = LMKUtils()
                 if (lmkUtils.supported() && !swapModuleUtils.magiskModuleInstalled) {
-                    swap_lmk_current.text = lmkUtils.getCurrent()
-                    swap_auto_lmk_wrap.visibility = View.VISIBLE
+                    binding.swapLmkCurrent.text = lmkUtils.getCurrent()
+                    binding.swapAutoLmkWrap.visibility = View.VISIBLE
                 } else {
-                    swap_auto_lmk_wrap.visibility = View.GONE
+                    binding.swapAutoLmkWrap.visibility = View.GONE
                 }
 
-                extra_free_kbytes_display.text = extraFreeKbytes
+                binding.extraFreeKbytesDisplay.text = extraFreeKbytes
 
-                zram0_stat.text = zramStatus
-                txt_swap_io.text = vmStat
+                binding.zram0Stat.text = zramStatus
+                binding.txtSwapIo.text = vmStat
 
-                txt_zram_size_display.text = "${zramSize}MB"
+                binding.txtZramSizeDisplay.text = "${zramSize}MB"
 
-                zram_compact_algorithm.text = compAlgorithm
+                binding.zramCompactAlgorithm.text = compAlgorithm
 
                 if (currentSwap.isNotEmpty()) {
-                    txt_swap_auto_start.text = if (swapConfig.getBoolean(SpfConfig.SWAP_SPF_SWAP, false)) "重启后保持当前设置" else "重启后失效"
+                    binding.txtSwapAutoStart.text = if (swapConfig.getBoolean(SpfConfig.SWAP_SPF_SWAP, false)) "重启后保持当前设置" else "重启后失效"
                 } else {
-                    txt_swap_auto_start.text = "--"
+                    binding.txtSwapAutoStart.text = "--"
                 }
-                txt_zram_auto_start.text = if (swapConfig.getBoolean(SpfConfig.SWAP_SPF_ZRAM, false)) "重启后保持当前设置" else "重启后还原系统设定"
+                binding.txtZramAutoStart.text = if (swapConfig.getBoolean(SpfConfig.SWAP_SPF_ZRAM, false)) "重启后保持当前设置" else "重启后还原系统设定"
             } catch (ex: java.lang.Exception) {
             }
         }

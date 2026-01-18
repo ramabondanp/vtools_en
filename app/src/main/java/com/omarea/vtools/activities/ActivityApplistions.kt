@@ -15,12 +15,13 @@ import com.omarea.vtools.R
 import com.omarea.vtools.fragments.FragmentAppBackup
 import com.omarea.vtools.fragments.FragmentAppSystem
 import com.omarea.vtools.fragments.FragmentAppUser
-import kotlinx.android.synthetic.main.activity_applictions.*
+import com.omarea.vtools.databinding.ActivityApplictionsBinding
 
 class ActivityApplistions : ActivityBase() {
     private var myHandler: Handler = UpdateHandler {
         reloadList()
     }
+    private lateinit var binding: ActivityApplictionsBinding
 
     private val fragmentAppUser = FragmentAppUser(myHandler)
     private val fragmentAppSystem = FragmentAppSystem(myHandler)
@@ -51,30 +52,31 @@ class ActivityApplistions : ActivityBase() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_applictions)
+        binding = ActivityApplictionsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         setBackArrow()
 
-        TabIconHelper2(tab_list, tab_content, this, supportFragmentManager).run {
+        TabIconHelper2(binding.tabList, binding.tabContent, this, supportFragmentManager).run {
             newTabSpec("Installed", ContextCompat.getDrawable(context, R.drawable.tab_app)!!, fragmentAppUser)
             newTabSpec("System", ContextCompat.getDrawable(context, R.drawable.tab_security)!!, fragmentAppSystem)
             newTabSpec("Backups", ContextCompat.getDrawable(context, R.drawable.tab_package)!!, fragmentAppBackup)
-            tab_content.adapter = this.adapter
+            binding.tabContent.adapter = this.adapter
         }
 
-        apps_search_box.setOnEditorActionListener { _, actionId, _ ->
+        binding.appsSearchBox.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_NEXT || actionId == EditorInfo.IME_ACTION_SEARCH) {
-                searchApp(apps_search_box.text)
+                searchApp(binding.appsSearchBox.text)
             }
             true
         }
         var lastInput = 0L
-        apps_search_box.addTextChangedListener(SearchTextWatcher {
+        binding.appsSearchBox.addTextChangedListener(SearchTextWatcher {
             val current = System.currentTimeMillis()
             lastInput = current
             myHandler.postDelayed({
                 if (lastInput == current) {
-                    searchApp(apps_search_box.text)
+                    searchApp(binding.appsSearchBox.text)
                 }
             }, 500)
         })

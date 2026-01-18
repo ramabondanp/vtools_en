@@ -27,17 +27,19 @@ import com.omarea.ui.SceneTriggerItem
 import com.omarea.ui.TabIconHelper
 import com.omarea.utils.AppListHelper
 import com.omarea.vtools.R
-import kotlinx.android.synthetic.main.activity_system_scene.*
+import com.omarea.vtools.databinding.ActivitySystemSceneBinding
 
 class ActivitySystemScene : ActivityBase() {
     private lateinit var processBarDialog: ProgressBarDialog
     private lateinit var globalSPF: SharedPreferences
     private lateinit var chargeConfig: SharedPreferences
     internal val myHandler: Handler = Handler(Looper.getMainLooper())
+    private lateinit var binding: ActivitySystemSceneBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_system_scene)
+        binding = ActivitySystemSceneBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         setBackArrow()
         onViewCreated()
@@ -54,14 +56,14 @@ class ActivitySystemScene : ActivityBase() {
 
     private fun updateCustomList() {
         nextTask = null
-        system_scene_task_list.removeAllViews()
+        binding.systemSceneTaskList.removeAllViews()
         TimingTaskManager(context).listTask().forEach {
             addCustomTaskItemView(it)
             checkNextTask(it)
         }
         updateNextTaskInfo()
 
-        system_scene_trigger_list.removeAllViews()
+        binding.systemSceneTriggerList.removeAllViews()
         TriggerManager(context).list().forEach {
             it?.run {
                 addCustomTriggerView(it)
@@ -79,9 +81,9 @@ class ActivitySystemScene : ActivityBase() {
     }
 
     private fun updateNextTaskInfo() {
-        system_scene_next_content.removeAllViews()
+        binding.systemSceneNextContent.removeAllViews()
         if (nextTask != null) {
-            system_scene_next_content.addView(buildCustomTaskItemView(nextTask!!))
+            binding.systemSceneNextContent.addView(buildCustomTaskItemView(nextTask!!))
         }
     }
 
@@ -91,43 +93,43 @@ class ActivitySystemScene : ActivityBase() {
         globalSPF = getSharedPreferences(SpfConfig.GLOBAL_SPF, Context.MODE_PRIVATE)
         chargeConfig = getSharedPreferences(SpfConfig.CHARGE_SPF, Context.MODE_PRIVATE)
 
-        val tabIconHelper = TabIconHelper(configlist_tabhost, this)
-        configlist_tabhost.setup()
+        val tabIconHelper = TabIconHelper(binding.configlistTabhost, this)
+        binding.configlistTabhost.setup()
 
         tabIconHelper.newTabSpec("系统场景", getDrawable(R.drawable.tab_security)!!, R.id.blacklist_tab3)
         tabIconHelper.newTabSpec("设置", getDrawable(R.drawable.tab_settings)!!, R.id.configlist_tab5)
-        configlist_tabhost.currentTab = 0
-        configlist_tabhost.setOnTabChangedListener { tabId ->
+        binding.configlistTabhost.currentTab = 0
+        binding.configlistTabhost.setOnTabChangedListener { tabId ->
             tabIconHelper.updateHighlight()
         }
 
         if (chargeConfig.getBoolean(SpfConfig.CHARGE_SPF_BP, false)) {
-            system_scene_bp.visibility = View.VISIBLE
+            binding.systemSceneBp.visibility = View.VISIBLE
             val limit = chargeConfig.getInt(SpfConfig.CHARGE_SPF_BP_LEVEL, SpfConfig.CHARGE_SPF_BP_LEVEL_DEFAULT)
-            system_scene_bp_lt.text = (limit - 20).toString() + "%"
-            system_scene_bp_gt.text = limit.toString() + "%"
+            binding.systemSceneBpLt.text = (limit - 20).toString() + "%"
+            binding.systemSceneBpGt.text = limit.toString() + "%"
         }
 
-        system_scene_add_task.setOnClickListener {
+        binding.systemSceneAddTask.setOnClickListener {
             val intent = Intent(this, ActivityTimingTask::class.java)
             startActivity(intent)
         }
 
-        system_scene_add_trigger.setOnClickListener {
+        binding.systemSceneAddTrigger.setOnClickListener {
             val intent = Intent(this, ActivityTrigger::class.java)
             startActivity(intent)
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            system_scene_standby_apps.visibility = View.VISIBLE
-            system_scene_standby_apps.setOnClickListener {
+            binding.systemSceneStandbyApps.visibility = View.VISIBLE
+            binding.systemSceneStandbyApps.setOnClickListener {
                 standbyAppConfig()
             }
         } else {
-            system_scene_standby_apps.visibility = View.GONE
+            binding.systemSceneStandbyApps.visibility = View.GONE
         }
 
-        system_scene_command.setOnClickListener {
+        binding.systemSceneCommand.setOnClickListener {
             val intent = Intent(this, ActivityCustomCommand::class.java)
             startActivity(intent)
         }
@@ -191,7 +193,7 @@ class ActivitySystemScene : ActivityBase() {
     private fun addCustomTaskItemView(timingTaskInfo: TimingTaskInfo) {
         val sceneTaskItem = buildCustomTaskItemView(timingTaskInfo)
 
-        system_scene_task_list.addView(sceneTaskItem)
+        binding.systemSceneTaskList.addView(sceneTaskItem)
         sceneTaskItem.setOnClickListener {
             val intent = Intent(this, ActivityTimingTask::class.java)
             intent.putExtra("taskId", timingTaskInfo.taskId)
@@ -211,7 +213,7 @@ class ActivitySystemScene : ActivityBase() {
         itemView.setLayoutParams(LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT))
         itemView.isClickable = true
 
-        system_scene_trigger_list.addView(itemView)
+        binding.systemSceneTriggerList.addView(itemView)
 
         itemView.setOnClickListener {
             val intent = Intent(this, ActivityTrigger::class.java)

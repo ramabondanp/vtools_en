@@ -23,7 +23,7 @@ import com.omarea.permissions.CheckRootStatus
 import com.omarea.permissions.WriteSettings
 import com.omarea.store.SpfConfig
 import com.omarea.vtools.R
-import kotlinx.android.synthetic.main.activity_start_splash.*
+import com.omarea.vtools.databinding.ActivityStartSplashBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -35,6 +35,7 @@ class ActivityStartSplash : Activity() {
     }
 
     private lateinit var globalSPF: SharedPreferences
+    private lateinit var binding: ActivityStartSplashBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         globalSPF = getSharedPreferences(SpfConfig.GLOBAL_SPF, Context.MODE_PRIVATE)
@@ -42,7 +43,8 @@ class ActivityStartSplash : Activity() {
         val themeMode = ThemeSwitch.switchTheme(this)
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.activity_start_splash)
+        binding = ActivityStartSplashBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         updateThemeStyle(themeMode)
 
         checkPermissions()
@@ -98,11 +100,11 @@ class ActivityStartSplash : Activity() {
      */
     private fun updateThemeStyle(themeMode: ThemeMode) {
         if (themeMode.isDarkMode) {
-            splash_root.setBackgroundColor(Color.argb(255, 0, 0, 0))
+            binding.splashRoot.setBackgroundColor(Color.argb(255, 0, 0, 0))
             getWindow().setNavigationBarColor(Color.argb(255, 0, 0, 0))
         } else {
             // getWindow().setNavigationBarColor(getColorAccent())
-            splash_root.setBackgroundColor(Color.argb(255, 255, 255, 255))
+            binding.splashRoot.setBackgroundColor(Color.argb(255, 255, 255, 255))
             getWindow().setNavigationBarColor(Color.argb(255, 255, 255, 255))
         }
 
@@ -130,7 +132,7 @@ class ActivityStartSplash : Activity() {
 
     private class CheckFileWrite(private val context: ActivityStartSplash) : Runnable {
         override fun run() {
-            context.start_state_text.text = "Check and obtain required permissions……"
+            context.updateStartStateText("Check and obtain required permissions……")
             context.hasRoot = true
 
             context.checkFileWrite(InstallBusybox(context))
@@ -139,7 +141,7 @@ class ActivityStartSplash : Activity() {
 
     private class InstallBusybox(private val context: ActivityStartSplash) : Runnable {
         override fun run() {
-            context.start_state_text.text = "Check if Busybox is installed..."
+            context.updateStartStateText("Check if Busybox is installed...")
             Busybox(context).forceInstall {
                 context.startToFinish()
             }
@@ -216,11 +218,15 @@ class ActivityStartSplash : Activity() {
      * 启动完成
      */
     private fun startToFinish() {
-        start_state_text.text = "Completed!"
+        updateStartStateText("Completed!")
 
         val intent = Intent(this.applicationContext, ActivityMain::class.java)
         startActivity(intent)
         finished = true
         finish()
+    }
+
+    private fun updateStartStateText(text: String) {
+        binding.startStateText.text = text
     }
 }

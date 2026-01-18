@@ -17,63 +17,65 @@ import com.omarea.shell_utils.AppErrorLogcatUtils
 import com.omarea.store.SpfConfig
 import com.omarea.utils.CommonCmds
 import com.omarea.vtools.R
-import kotlinx.android.synthetic.main.activity_other_settings.*
+import com.omarea.vtools.databinding.ActivityOtherSettingsBinding
 
 class ActivityOtherSettings : ActivityBase() {
     private lateinit var spf: SharedPreferences
     private var myHandler = Handler(Looper.getMainLooper())
+    private lateinit var binding: ActivityOtherSettingsBinding
 
     override fun onPostResume() {
         super.onPostResume()
         delegate.onPostResume()
 
-        settings_disable_selinux.isChecked = spf.getBoolean(SpfConfig.GLOBAL_SPF_DISABLE_ENFORCE, false)
+        binding.settingsDisableSelinux.isChecked = spf.getBoolean(SpfConfig.GLOBAL_SPF_DISABLE_ENFORCE, false)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         spf = getSharedPreferences(SpfConfig.GLOBAL_SPF, Context.MODE_PRIVATE)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_other_settings)
+        binding = ActivityOtherSettingsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         setBackArrow()
 
-        settings_disable_selinux.setOnClickListener {
-            if (settings_disable_selinux.isChecked) {
+        binding.settingsDisableSelinux.setOnClickListener {
+            if (binding.settingsDisableSelinux.isChecked) {
                 KeepShellPublic.doCmdSync(CommonCmds.DisableSELinux)
                 myHandler.postDelayed({
-                    spf.edit().putBoolean(SpfConfig.GLOBAL_SPF_DISABLE_ENFORCE, settings_disable_selinux.isChecked).apply()
+                    spf.edit().putBoolean(SpfConfig.GLOBAL_SPF_DISABLE_ENFORCE, binding.settingsDisableSelinux.isChecked).apply()
                 }, 10000)
             } else {
                 KeepShellPublic.doCmdSync(CommonCmds.ResumeSELinux)
-                spf.edit().putBoolean(SpfConfig.GLOBAL_SPF_DISABLE_ENFORCE, settings_disable_selinux.isChecked).apply()
+                spf.edit().putBoolean(SpfConfig.GLOBAL_SPF_DISABLE_ENFORCE, binding.settingsDisableSelinux.isChecked).apply()
             }
         }
-        settings_logcat.setOnClickListener {
+        binding.settingsLogcat.setOnClickListener {
             val log = AppErrorLogcatUtils().catLogInfo()
-            settings_log_content.visibility = View.VISIBLE
-            settings_log_content.setText(log)
-            settings_log_content.setSelection(0, log.length)
+            binding.settingsLogContent.visibility = View.VISIBLE
+            binding.settingsLogContent.setText(log)
+            binding.settingsLogContent.setSelection(0, log.length)
         }
 
-        settings_debug_layer.isChecked = spf.getBoolean(SpfConfig.GLOBAL_SPF_SCENE_LOG, false)
-        settings_debug_layer.setOnClickListener {
+        binding.settingsDebugLayer.isChecked = spf.getBoolean(SpfConfig.GLOBAL_SPF_SCENE_LOG, false)
+        binding.settingsDebugLayer.setOnClickListener {
             spf.edit().putBoolean(SpfConfig.GLOBAL_SPF_SCENE_LOG, (it as Switch).isChecked).apply()
 
             EventBus.publish(EventType.SERVICE_DEBUG)
         }
 
-        settings_help_icon.isChecked = spf.getBoolean(SpfConfig.GLOBAL_SPF_HELP_ICON, true)
-        settings_help_icon.setOnClickListener {
+        binding.settingsHelpIcon.isChecked = spf.getBoolean(SpfConfig.GLOBAL_SPF_HELP_ICON, true)
+        binding.settingsHelpIcon.setOnClickListener {
             spf.edit().putBoolean(SpfConfig.GLOBAL_SPF_HELP_ICON, (it as Switch).isChecked).apply()
         }
 
-        settings_auto_exit.isChecked = spf.getBoolean(SpfConfig.GLOBAL_SPF_AUTO_EXIT, true)
-        settings_auto_exit.setOnClickListener {
+        binding.settingsAutoExit.isChecked = spf.getBoolean(SpfConfig.GLOBAL_SPF_AUTO_EXIT, true)
+        binding.settingsAutoExit.setOnClickListener {
             spf.edit().putBoolean(SpfConfig.GLOBAL_SPF_AUTO_EXIT, (it as Switch).isChecked).apply()
         }
 
-        settings_black_notification.isChecked = spf.getBoolean(SpfConfig.GLOBAL_NIGHT_BLACK_NOTIFICATION, false)
-        settings_black_notification.setOnClickListener {
+        binding.settingsBlackNotification.isChecked = spf.getBoolean(SpfConfig.GLOBAL_NIGHT_BLACK_NOTIFICATION, false)
+        binding.settingsBlackNotification.setOnClickListener {
             spf.edit().putBoolean(SpfConfig.GLOBAL_NIGHT_BLACK_NOTIFICATION, (it as Switch).isChecked).apply()
         }
     }
@@ -106,7 +108,7 @@ class ActivityOtherSettings : ActivityBase() {
     override fun onDestroy() {
         super.onDestroy()
 
-        spf.edit().putBoolean(SpfConfig.GLOBAL_SPF_DISABLE_ENFORCE, settings_disable_selinux.isChecked).apply()
+        spf.edit().putBoolean(SpfConfig.GLOBAL_SPF_DISABLE_ENFORCE, binding.settingsDisableSelinux.isChecked).apply()
     }
 
     public override fun onPause() {

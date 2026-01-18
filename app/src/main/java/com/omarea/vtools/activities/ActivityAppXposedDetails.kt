@@ -22,7 +22,7 @@ import com.omarea.ui.IntInputFilter
 import com.omarea.vaddin.IAppConfigAidlInterface
 import com.omarea.vtools.R
 import com.omarea.xposed.XposedCheck
-import kotlinx.android.synthetic.main.activity_app_xposed_details.*
+import com.omarea.vtools.databinding.ActivityAppXposedDetailsBinding
 import org.json.JSONObject
 
 class ActivityAppXposedDetails : ActivityBase() {
@@ -34,6 +34,7 @@ class ActivityAppXposedDetails : ActivityBase() {
     private var vAddinsInstalled = false
     private var aidlConn: IAppConfigAidlInterface? = null
     private lateinit var spfGlobal: SharedPreferences
+    private lateinit var binding: ActivityAppXposedDetailsBinding
 
     fun getAddinVersion(): Int {
         var code = 0
@@ -107,13 +108,13 @@ class ActivityAppXposedDetails : ActivityBase() {
                             }
                         }
                     }
-                    app_details_scrollopt.isChecked = sceneConfigInfo.smoothScroll
-                    app_details_excludetask.isChecked = sceneConfigInfo.excludeRecent
-                    app_details_web_debug.isChecked = sceneConfigInfo.webDebug
+                    binding.appDetailsScrollopt.isChecked = sceneConfigInfo.smoothScroll
+                    binding.appDetailsExcludetask.isChecked = sceneConfigInfo.excludeRecent
+                    binding.appDetailsWebDebug.isChecked = sceneConfigInfo.webDebug
                     if (sceneConfigInfo.dpi >= 96) {
-                        app_details_dpi.text = sceneConfigInfo.dpi.toString()
+                        binding.appDetailsDpi.text = sceneConfigInfo.dpi.toString()
                     } else {
-                        app_details_dpi.text = "默认"
+                        binding.appDetailsDpi.text = "默认"
                     }
                 }
             } catch (ex: Exception) {
@@ -156,21 +157,21 @@ class ActivityAppXposedDetails : ActivityBase() {
      */
     private fun checkXposedState() {
         var allowXposedConfig = XposedCheck.xposedIsRunning()
-        app_details_vaddins_notactive.visibility = if (allowXposedConfig) View.GONE else View.VISIBLE
+        binding.appDetailsVaddinsNotactive.visibility = if (allowXposedConfig) View.GONE else View.VISIBLE
         try {
             vAddinsInstalled = packageManager.getPackageInfo("com.omarea.vaddin", 0) != null
             allowXposedConfig = allowXposedConfig && vAddinsInstalled
         } catch (ex: Exception) {
             vAddinsInstalled = false
         }
-        app_details_vaddins_notinstall.setOnClickListener {
+        binding.appDetailsVaddinsNotinstall.setOnClickListener {
             installVAddin()
         }
         if (vAddinsInstalled && getAddinVersion() < getAddinMinimumVersion()) {
             installVAddin()
         } else if (vAddinsInstalled) {
             // 已安装（获取配置）
-            app_details_vaddins_notinstall.visibility = View.GONE
+            binding.appDetailsVaddinsNotinstall.visibility = View.GONE
             if (aidlConn == null) {
                 bindService()
             } else {
@@ -178,18 +179,19 @@ class ActivityAppXposedDetails : ActivityBase() {
             }
         } else {
             // 未安装（显示未安装）
-            app_details_vaddins_notinstall.visibility = View.VISIBLE
+            binding.appDetailsVaddinsNotinstall.visibility = View.VISIBLE
         }
-        app_details_vaddins_notactive.visibility = if (XposedCheck.xposedIsRunning()) View.GONE else View.VISIBLE
-        app_details_dpi.isEnabled = allowXposedConfig
-        app_details_excludetask.isEnabled = allowXposedConfig
-        app_details_scrollopt.isEnabled = allowXposedConfig
-        app_details_web_debug.isEnabled = allowXposedConfig
+        binding.appDetailsVaddinsNotactive.visibility = if (XposedCheck.xposedIsRunning()) View.GONE else View.VISIBLE
+        binding.appDetailsDpi.isEnabled = allowXposedConfig
+        binding.appDetailsExcludetask.isEnabled = allowXposedConfig
+        binding.appDetailsScrollopt.isEnabled = allowXposedConfig
+        binding.appDetailsWebDebug.isEnabled = allowXposedConfig
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_app_xposed_details)
+        binding = ActivityAppXposedDetailsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
@@ -222,7 +224,7 @@ class ActivityAppXposedDetails : ActivityBase() {
 
         dynamicCpu = spfGlobal.getBoolean(SpfConfig.GLOBAL_SPF_DYNAMIC_CONTROL, SpfConfig.GLOBAL_SPF_DYNAMIC_CONTROL_DEFAULT)
 
-        app_details_icon.setOnClickListener {
+        binding.appDetailsIcon.setOnClickListener {
             try {
                 saveConfig()
                 startActivity(getPackageManager().getLaunchIntentForPackage(app))
@@ -234,25 +236,25 @@ class ActivityAppXposedDetails : ActivityBase() {
         sceneConfigInfo = XposedExtension.AppConfig(app)
         originConfig = XposedExtension.AppConfig(app)
         if (sceneConfigInfo.dpi >= 96) {
-            app_details_dpi.text = sceneConfigInfo.dpi.toString()
+            binding.appDetailsDpi.text = sceneConfigInfo.dpi.toString()
         }
-        app_details_excludetask.setOnClickListener {
+        binding.appDetailsExcludetask.setOnClickListener {
             sceneConfigInfo.excludeRecent = (it as Switch).isChecked
         }
-        app_details_scrollopt.setOnClickListener {
+        binding.appDetailsScrollopt.setOnClickListener {
             sceneConfigInfo.smoothScroll = (it as Switch).isChecked
         }
-        app_details_web_debug.setOnClickListener {
+        binding.appDetailsWebDebug.setOnClickListener {
             sceneConfigInfo.webDebug = (it as Switch).isChecked
         }
 
         if (XposedCheck.xposedIsRunning()) {
             if (sceneConfigInfo.dpi >= 96) {
-                app_details_dpi.text = sceneConfigInfo.dpi.toString()
+                binding.appDetailsDpi.text = sceneConfigInfo.dpi.toString()
             } else {
-                app_details_dpi.text = "默认"
+                binding.appDetailsDpi.text = "默认"
             }
-            app_details_dpi.setOnClickListener {
+            binding.appDetailsDpi.setOnClickListener {
                 var dialog: DialogHelper.DialogWrap? = null
                 val view = layoutInflater.inflate(R.layout.dialog_dpi_input, null)
                 val inputDpi = view.findViewById<EditText>(R.id.input_dpi).apply {
@@ -273,9 +275,9 @@ class ActivityAppXposedDetails : ActivityBase() {
                             } else {
                                 sceneConfigInfo.dpi = dpi
                                 if (dpi == 0) {
-                                    app_details_dpi.text = "默认"
+                                    binding.appDetailsDpi.text = "默认"
                                 } else
-                                    app_details_dpi.text = dpi.toString()
+                                    binding.appDetailsDpi.text = dpi.toString()
                                 dialog?.dismiss()
                             }
                         } catch (ex: Exception) {
@@ -317,9 +319,9 @@ class ActivityAppXposedDetails : ActivityBase() {
             return
         }
         val applicationInfo = packageInfo.applicationInfo
-        app_details_name.text = applicationInfo.loadLabel(packageManager)
-        app_details_packagename.text = packageInfo.packageName
-        app_details_icon.setImageDrawable(applicationInfo.loadIcon(packageManager))
+        binding.appDetailsName.text = applicationInfo.loadLabel(packageManager)
+        binding.appDetailsPackagename.text = packageInfo.packageName
+        binding.appDetailsIcon.setImageDrawable(applicationInfo.loadIcon(packageManager))
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {

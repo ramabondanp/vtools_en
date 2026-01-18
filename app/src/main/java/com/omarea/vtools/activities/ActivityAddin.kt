@@ -10,15 +10,17 @@ import com.omarea.store.SpfConfig
 import com.omarea.vtools.R
 import com.omarea.vtools.addin.DexCompileAddin
 import com.omarea.vtools.addin.Immersive
+import com.omarea.vtools.databinding.ActivityAddinBinding
 import com.omarea.vtools.dialogs.DialogAddinModifyDPI
 import com.omarea.vtools.dialogs.DialogAddinModifyDevice
 import com.omarea.vtools.dialogs.DialogAddinWIFI
 import com.omarea.vtools.dialogs.DialogCustomMAC
-import kotlinx.android.synthetic.main.activity_addin.*
 import java.util.*
 
 
 class ActivityAddin : ActivityBase() {
+    private lateinit var binding: ActivityAddinBinding
+
     private fun createItem(title: String, desc: String, runnable: Runnable?, wran: Boolean = true): HashMap<String, Any> {
         val item = HashMap<String, Any>()
         item.put("Title", title)
@@ -31,11 +33,12 @@ class ActivityAddin : ActivityBase() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_addin)
+        binding = ActivityAddinBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         setBackArrow()
 
-        initAddin(this.addin_system_listview)
+        initAddin(binding.addinSystemListview)
     }
 
     private fun initAddin(view: View) {
@@ -83,8 +86,8 @@ class ActivityAddin : ActivityBase() {
                 arrayOf("Title", "Desc"),
                 intArrayOf(R.id.Title, R.id.Desc)
         )
-        addin_system_listview.adapter = mSimpleAdapter
-        addin_system_listview.onItemClickListener = onActionClick
+        binding.addinSystemListview.adapter = mSimpleAdapter
+        binding.addinSystemListview.onItemClickListener = onActionClick
     }
 
     private var onActionClick = AdapterView.OnItemClickListener { parent, _, position, _ ->

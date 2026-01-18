@@ -18,18 +18,22 @@ import android.widget.TextView
 import android.widget.Toast
 import com.omarea.common.ui.DialogHelper
 import com.omarea.krscript.R
+import com.omarea.krscript.databinding.KrDialogLogBinding
 import com.omarea.krscript.executor.ShellExecutor
 import com.omarea.krscript.model.RunnableNode
 import com.omarea.krscript.model.ShellHandlerBase
-import kotlinx.android.synthetic.main.kr_dialog_log.*
 
 
 class DialogLogFragment : androidx.fragment.app.DialogFragment() {
+    private var _binding: KrDialogLogBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // val view = inflater.inflate(R.layout.kr_dialog_log, container, false)
 
-        currentView = inflater.inflate(R.layout.kr_dialog_log, container)
-        return currentView
+        _binding = KrDialogLogBinding.inflate(inflater, container, false)
+        currentView = binding.root
+        return binding.root
     }
 
     private var running = false
@@ -61,7 +65,7 @@ class DialogLogFragment : androidx.fragment.app.DialogFragment() {
             nodeInfo?.run {
                 // 如果执行完以后需要刷新界面，那么就不允许隐藏日志窗口到后台执行
                 if (reloadPage) {
-                    btn_hide.visibility = View.GONE
+                    binding.btnHide.visibility = View.GONE
                 }
 
                 val shellHandler = openExecutor(this)
@@ -78,20 +82,20 @@ class DialogLogFragment : androidx.fragment.app.DialogFragment() {
     private fun openExecutor(nodeInfo: RunnableNode): ShellHandlerBase? {
         var forceStopRunnable: Runnable? = null
 
-        btn_hide.setOnClickListener {
+        binding.btnHide.setOnClickListener {
             closeView()
         }
-        btn_exit.setOnClickListener {
+        binding.btnExit.setOnClickListener {
             if (running) {
                 forceStopRunnable?.run()
             }
             closeView()
         }
 
-        btn_copy.setOnClickListener {
+        binding.btnCopy.setOnClickListener {
             try {
                 val myClipboard: ClipboardManager = this.context!!.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                val myClip: ClipData = ClipData.newPlainText("text", shell_output.text.toString())
+                val myClip: ClipData = ClipData.newPlainText("text", binding.shellOutput.text.toString())
                 myClipboard.setPrimaryClip(myClip)
                 Toast.makeText(context, getString(R.string.copy_success), Toast.LENGTH_SHORT).show()
             } catch (ex: Exception) {
@@ -99,36 +103,34 @@ class DialogLogFragment : androidx.fragment.app.DialogFragment() {
             }
         }
         if (nodeInfo.interruptable) {
-            btn_hide?.visibility = View.VISIBLE
-            btn_exit?.visibility = View.VISIBLE
+            binding.btnHide.visibility = View.VISIBLE
+            binding.btnExit.visibility = View.VISIBLE
         } else {
-            btn_hide?.visibility = View.GONE
-            btn_exit?.visibility = View.GONE
+            binding.btnHide.visibility = View.GONE
+            binding.btnExit.visibility = View.GONE
         }
 
         if (!nodeInfo.title.isEmpty()) {
-            title.text = nodeInfo.title
+            binding.title.text = nodeInfo.title
         } else {
-            title.visibility = View.GONE
+            binding.title.visibility = View.GONE
         }
 
         if (!nodeInfo.desc.isEmpty()) {
-            desc.text = nodeInfo.desc
+            binding.desc.text = nodeInfo.desc
         } else {
-            desc.visibility = View.GONE
+            binding.desc.visibility = View.GONE
         }
 
-        action_progress.isIndeterminate = true
+        binding.actionProgress.isIndeterminate = true
         return MyShellHandler(object : IActionEventHandler {
             override fun onCompleted() {
                 running = false
 
                 onExit.run()
-                if (btn_hide != null) {
-                    btn_hide.visibility = View.GONE
-                    btn_exit.visibility = View.VISIBLE
-                    action_progress.visibility = View.GONE
-                }
+                binding.btnHide.visibility = View.GONE
+                binding.btnExit.visibility = View.VISIBLE
+                binding.actionProgress.visibility = View.GONE
 
                 isCancelable = true
             }
@@ -143,14 +145,14 @@ class DialogLogFragment : androidx.fragment.app.DialogFragment() {
                 running = true
 
                 if (nodeInfo.interruptable && forceStop != null) {
-                    btn_exit.visibility = View.VISIBLE
+                    binding.btnExit.visibility = View.VISIBLE
                 } else {
-                    btn_exit.visibility = View.GONE
+                    binding.btnExit.visibility = View.GONE
                 }
                 forceStopRunnable = forceStop
             }
 
-        }, shell_output, action_progress)
+        }, binding.shellOutput, binding.actionProgress)
     }
 
     @FunctionalInterface
@@ -263,6 +265,11 @@ class DialogLogFragment : androidx.fragment.app.DialogFragment() {
         super.onDismiss(dialog)
         onDismissRunnable?.run()
         onDismissRunnable = null
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     companion object {

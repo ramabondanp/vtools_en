@@ -22,13 +22,14 @@ import com.omarea.store.CpuConfigStorage
 import com.omarea.store.SpfConfig
 import com.omarea.utils.AccessibleServiceHelper
 import com.omarea.vtools.R
-import kotlinx.android.synthetic.main.activity_cpu_control.*
+import com.omarea.vtools.databinding.ActivityCpuControlBinding
 import java.util.*
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 class ActivityCpuControl : ActivityBase() {
+    private lateinit var binding: ActivityCpuControlBinding
     // 应用到指定的配置模式
     private var cpuModeName: String? = null
 
@@ -77,25 +78,25 @@ class ActivityCpuControl : ActivityBase() {
         handler.post {
             try {
                 if (exynosHMP || exynosCpuhotplugSupport) {
-                    cpu_exynos.visibility = View.VISIBLE
-                    exynos_cpuhotplug.isEnabled = exynosCpuhotplugSupport
-                    exynos_hmp_up.isEnabled = exynosHMP
-                    exynos_hmp_down.isEnabled = exynosHMP
-                    exynos_hmp_booster.isEnabled = exynosHMP
+                    binding.cpuExynos.visibility = View.VISIBLE
+                    binding.exynosCpuhotplug.isEnabled = exynosCpuhotplugSupport
+                    binding.exynosHmpUp.isEnabled = exynosHMP
+                    binding.exynosHmpDown.isEnabled = exynosHMP
+                    binding.exynosHmpBooster.isEnabled = exynosHMP
                 } else {
-                    cpu_exynos.visibility = View.GONE
+                    binding.cpuExynos.visibility = View.GONE
                 }
 
                 if (supportedGPU) {
-                    gpu_params.visibility = View.VISIBLE
+                    binding.gpuParams.visibility = View.VISIBLE
                     if (adrenoGPU) {
-                        adreno_gpu_power.visibility = View.VISIBLE
+                        binding.adrenoGpuPower.visibility = View.VISIBLE
                     } else {
-                        adreno_gpu_power.visibility = View.GONE
+                        binding.adrenoGpuPower.visibility = View.GONE
                     }
                 } else {
-                    gpu_params.visibility = View.GONE
-                    adreno_gpu_power.visibility = View.GONE
+                    binding.gpuParams.visibility = View.GONE
+                    binding.adrenoGpuPower.visibility = View.GONE
                 }
 
                 for (i in 0 until coreCount) {
@@ -105,7 +106,7 @@ class ActivityCpuControl : ActivityBase() {
                     val params = GridLayout.LayoutParams()
                     params.height = GridLayout.LayoutParams.WRAP_CONTENT
                     params.width = GridLayout.LayoutParams.MATCH_PARENT
-                    cpu_cores.addView(checkBox, params)
+                    binding.cpuCores.addView(checkBox, params)
                 }
 
                 bindEvent()
@@ -143,13 +144,13 @@ class ActivityCpuControl : ActivityBase() {
     @SuppressLint("InflateParams")
     private fun bindEvent() {
         try {
-            thermal_core_control.setOnClickListener {
+            binding.thermalCoreControl.setOnClickListener {
                 thermalControlUtils.setCoreControlState((it as CheckBox).isChecked)
             }
-            thermal_vdd.setOnClickListener {
+            binding.thermalVdd.setOnClickListener {
                 thermalControlUtils.setVDDRestrictionState((it as CheckBox).isChecked)
             }
-            thermal_paramters.setOnClickListener {
+            binding.thermalParamters.setOnClickListener {
                 thermalControlUtils.setTheramlState((it as CheckBox).isChecked)
             }
 
@@ -171,7 +172,7 @@ class ActivityCpuControl : ActivityBase() {
             bindExynosConfig()
             bindCpuSetConfig()
 
-            cpu_apply_onboot.setOnClickListener {
+            binding.cpuApplyOnboot.setOnClickListener {
                 saveBootConfig()
             }
         } catch (ex: Exception) {
@@ -222,7 +223,7 @@ class ActivityCpuControl : ActivityBase() {
 
     private fun bindGPUConfig() {
         if (supportedGPU) {
-            gpu_min_freq.setOnClickListener {
+            binding.gpuMinFreq.setOnClickListener {
                 openMultiplePicker("选择GPU最小频率",
                         parseGPUFreqList(adrenoFreqs),
                         adrenoFreqs.indexOf(status.adrenoMinFreq),
@@ -236,7 +237,7 @@ class ActivityCpuControl : ActivityBase() {
                             }
                         })
             }
-            gpu_max_freq.setOnClickListener {
+            binding.gpuMaxFreq.setOnClickListener {
                 openMultiplePicker("选择GPU最大频率",
                         parseGPUFreqList(adrenoFreqs),
                         adrenoFreqs.indexOf(status.adrenoMaxFreq),
@@ -250,7 +251,7 @@ class ActivityCpuControl : ActivityBase() {
                             }
                         })
             }
-            gpu_governor.setOnClickListener {
+            binding.gpuGovernor.setOnClickListener {
                 openMultiplePicker("选择GPU调度",
                         string2SelectItem(adrenoGovernors),
                         adrenoGovernors.indexOf(status.adrenoGovernor),
@@ -265,7 +266,7 @@ class ActivityCpuControl : ActivityBase() {
                         })
             }
             if (adrenoGPU) {
-                adreno_gpu_min_pl.setOnClickListener {
+                binding.adrenoGpuMinPl.setOnClickListener {
                     openMultiplePicker("选择GPU最小功耗级别",
                             string2SelectItem(adrenoPLevels),
                             adrenoPLevels.indexOf(status.adrenoMinPL),
@@ -277,9 +278,9 @@ class ActivityCpuControl : ActivityBase() {
                                         setText(it as TextView?, result)
                                     }
                                 }
-                            })
+                    })
                 }
-                adreno_gpu_max_pl.setOnClickListener {
+                binding.adrenoGpuMaxPl.setOnClickListener {
                     openMultiplePicker("选择GPU最大功耗级别",
                             string2SelectItem(adrenoPLevels),
                             adrenoPLevels.indexOf(status.adrenoMaxPL),
@@ -291,9 +292,9 @@ class ActivityCpuControl : ActivityBase() {
                                         setText(it as TextView?, result)
                                     }
                                 }
-                            })
+                    })
                 }
-                adreno_gpu_default_pl.setOnClickListener {
+                binding.adrenoGpuDefaultPl.setOnClickListener {
                     openMultiplePicker("选择GPU默认功耗级别",
                             string2SelectItem(adrenoPLevels),
                             adrenoPLevels.indexOf(status.adrenoDefaultPL),
@@ -312,14 +313,14 @@ class ActivityCpuControl : ActivityBase() {
     }
 
     private fun bindExynosConfig() {
-        exynos_cpuhotplug.setOnClickListener {
+        binding.exynosCpuhotplug.setOnClickListener {
             CpuFrequencyUtil.setExynosHotplug((it as CheckBox).isChecked)
         }
-        exynos_hmp_booster.setOnClickListener {
+        binding.exynosHmpBooster.setOnClickListener {
             CpuFrequencyUtil.setExynosBooster((it as CheckBox).isChecked)
         }
-        exynos_hmp_up.setOnSeekBarChangeListener(OnSeekBarChangeListener(true, CpuFrequencyUtil))
-        exynos_hmp_down.setOnSeekBarChangeListener(OnSeekBarChangeListener(false, CpuFrequencyUtil))
+        binding.exynosHmpUp.setOnSeekBarChangeListener(OnSeekBarChangeListener(true, CpuFrequencyUtil))
+        binding.exynosHmpDown.setOnSeekBarChangeListener(OnSeekBarChangeListener(false, CpuFrequencyUtil))
     }
 
     private fun bindCpuSetConfig(currentState: String, callback: PickerCallback2) {
@@ -337,7 +338,7 @@ class ActivityCpuControl : ActivityBase() {
     }
 
     private fun bindCpuSetConfig() {
-        cpuset_bg.setOnClickListener {
+        binding.cpusetBg.setOnClickListener {
             bindCpuSetConfig(status.cpusetBackground, object: PickerCallback2 {
                 override fun onSelected(result: BooleanArray) {
                     status.cpusetBackground = parseCpuset(result)
@@ -345,7 +346,7 @@ class ActivityCpuControl : ActivityBase() {
                 }
             })
         }
-        cpuset_system_bg.setOnClickListener {
+        binding.cpusetSystemBg.setOnClickListener {
             bindCpuSetConfig(status.cpusetSysBackground, object: PickerCallback2 {
                 override fun onSelected(result: BooleanArray) {
                     status.cpusetSysBackground = parseCpuset(result)
@@ -353,7 +354,7 @@ class ActivityCpuControl : ActivityBase() {
                 }
             })
         }
-        cpuset_foreground.setOnClickListener {
+        binding.cpusetForeground.setOnClickListener {
             bindCpuSetConfig(status.cpusetForeground, object: PickerCallback2 {
                 override fun onSelected(result: BooleanArray) {
                     status.cpusetForeground = parseCpuset(result)
@@ -361,7 +362,7 @@ class ActivityCpuControl : ActivityBase() {
                 }
             })
         }
-        cpuset_top_app.setOnClickListener {
+        binding.cpusetTopApp.setOnClickListener {
             bindCpuSetConfig(status.cpusetTopApp, object: PickerCallback2 {
                 override fun onSelected(result: BooleanArray) {
                     status.cpusetTopApp = parseCpuset(result)
@@ -389,7 +390,7 @@ class ActivityCpuControl : ActivityBase() {
 
     private fun bindClusterConfig(cluster: Int) {
         val view = View.inflate(context, R.layout.fragment_cpu_cluster, null)
-        cpu_cluster_list.addView(view)
+        binding.cpuClusterList.addView(view)
         view.findViewById<TextView>(R.id.cluster_title).text = "CPU - Cluster $cluster"
         view.tag = "cluster_$cluster"
 
@@ -659,7 +660,7 @@ class ActivityCpuControl : ActivityBase() {
         try {
             for (cluster in 0 until clusterCount) {
                 if (status.cpuClusterStatuses.size > cluster) {
-                    val cluster_view = cpu_cluster_list.findViewWithTag<View>("cluster_" + cluster)
+                    val cluster_view = binding.cpuClusterList.findViewWithTag<View>("cluster_" + cluster)
                     val cluster_min_freq = cluster_view.findViewById<TextView>(R.id.cluster_min_freq)
                     val cluster_max_freq = cluster_view.findViewById<TextView>(R.id.cluster_max_freq)
                     val cluster_governor = cluster_view.findViewById<TextView>(R.id.cluster_governor)
@@ -671,52 +672,52 @@ class ActivityCpuControl : ActivityBase() {
             }
 
             if (qualcommThermalSupported) {
-                qualcomm_thermal.visibility = View.VISIBLE
+                binding.qualcommThermal.visibility = View.VISIBLE
                 if (status.coreControl.isEmpty()) {
-                    thermal_core_control.isEnabled = false
+                    binding.thermalCoreControl.isEnabled = false
                 }
-                thermal_core_control.isChecked = status.coreControl == "1"
+                binding.thermalCoreControl.isChecked = status.coreControl == "1"
 
                 if (status.vdd.isEmpty()) {
-                    thermal_vdd.isEnabled = false
+                    binding.thermalVdd.isEnabled = false
                 }
-                thermal_vdd.isChecked = status.vdd == "1"
+                binding.thermalVdd.isChecked = status.vdd == "1"
 
 
                 if (status.msmThermal.isEmpty()) {
-                    thermal_paramters.isEnabled = false
+                    binding.thermalParamters.isEnabled = false
                 }
-                thermal_paramters.isChecked = status.msmThermal == "Y"
+                binding.thermalParamters.isChecked = status.msmThermal == "Y"
             } else {
-                qualcomm_thermal.visibility = View.GONE
+                binding.qualcommThermal.visibility = View.GONE
             }
 
-            exynos_hmp_down.progress = status.exynosHmpDown
-            exynos_hmp_down_text.text = status.exynosHmpDown.toString()
-            exynos_hmp_up.progress = status.exynosHmpUP
-            exynos_hmp_up_text.text = status.exynosHmpUP.toString()
-            exynos_cpuhotplug.isChecked = status.exynosHotplug
-            exynos_hmp_booster.isChecked = status.exynosHmpBooster
+            binding.exynosHmpDown.progress = status.exynosHmpDown
+            binding.exynosHmpDownText.text = status.exynosHmpDown.toString()
+            binding.exynosHmpUp.progress = status.exynosHmpUP
+            binding.exynosHmpUpText.text = status.exynosHmpUP.toString()
+            binding.exynosCpuhotplug.isChecked = status.exynosHotplug
+            binding.exynosHmpBooster.isChecked = status.exynosHmpBooster
 
             if (supportedGPU) {
                 if (adrenoGPU) {
-                    adreno_gpu_default_pl.text = status.adrenoDefaultPL
-                    adreno_gpu_min_pl.text = status.adrenoMinPL
-                    adreno_gpu_max_pl.text = status.adrenoMaxPL
+                    binding.adrenoGpuDefaultPl.text = status.adrenoDefaultPL
+                    binding.adrenoGpuMinPl.text = status.adrenoMinPL
+                    binding.adrenoGpuMaxPl.text = status.adrenoMaxPL
                 }
-                gpu_min_freq.text = subGPUFreqStr(status.adrenoMinFreq)
-                gpu_max_freq.text = subGPUFreqStr(status.adrenoMaxFreq)
-                gpu_governor.text = status.adrenoGovernor
+                binding.gpuMinFreq.text = subGPUFreqStr(status.adrenoMinFreq)
+                binding.gpuMaxFreq.text = subGPUFreqStr(status.adrenoMaxFreq)
+                binding.gpuGovernor.text = status.adrenoGovernor
             }
 
             for (i in 0 until coreCount) {
                 cores[i].isChecked = status.coreOnline[i]
             }
 
-            cpuset_bg.text = status.cpusetBackground
-            cpuset_system_bg.text = status.cpusetSysBackground
-            cpuset_foreground.text = status.cpusetForeground
-            cpuset_top_app.text = status.cpusetTopApp
+            binding.cpusetBg.text = status.cpusetBackground
+            binding.cpusetSystemBg.text = status.cpusetSysBackground
+            binding.cpusetForeground.text = status.cpusetForeground
+            binding.cpusetTopApp.text = status.cpusetTopApp
         } catch (ex: Exception) {
         }
     }
@@ -742,14 +743,14 @@ class ActivityCpuControl : ActivityBase() {
     private fun loadBootConfig() {
         val storage = CpuConfigStorage(context)
         statusOnBoot = storage.load(cpuModeName)
-        cpu_apply_onboot.isChecked = statusOnBoot != null
+        binding.cpuApplyOnboot.isChecked = statusOnBoot != null
 
         if (cpuModeName != null) {
-            cpu_apply_boot.visibility = View.GONE
+            binding.cpuApplyBoot.visibility = View.GONE
 
             ModeSwitcher().executePowercfgMode(cpuModeName!!, packageName)
 
-            cpu_help_text.visibility = View.GONE
+            binding.cpuHelpText.visibility = View.GONE
         }
     }
 
@@ -759,9 +760,9 @@ class ActivityCpuControl : ActivityBase() {
                 Toast.makeText(context, "保存配置文件失败！", Toast.LENGTH_SHORT).show()
             }
         } else {
-            if (!CpuConfigStorage(context).saveCpuConfig(if (cpu_apply_onboot.isChecked) status else null)) {
+            if (!CpuConfigStorage(context).saveCpuConfig(if (binding.cpuApplyOnboot.isChecked) status else null)) {
                 Toast.makeText(context, "保存配置文件失败！", Toast.LENGTH_SHORT).show()
-                cpu_apply_onboot.isChecked = false
+                binding.cpuApplyOnboot.isChecked = false
             }
         }
     }
@@ -813,7 +814,8 @@ class ActivityCpuControl : ActivityBase() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_cpu_control)
+        binding = ActivityCpuControlBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         setBackArrow()
         this.onViewCreated()
