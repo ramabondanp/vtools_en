@@ -2,10 +2,10 @@ package com.omarea.vtools.activities
 
 import android.Manifest
 import android.app.Activity
-import android.app.UiModeManager
 import android.app.WallpaperManager
 import android.content.Context
 import android.content.SharedPreferences
+import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
@@ -44,8 +44,8 @@ object ThemeSwitch {
         }
 
         if (theme < 0) {
-            val uiModeManager = activity.applicationContext.getSystemService(Context.UI_MODE_SERVICE) as UiModeManager
-            themeMode.isDarkMode = uiModeManager.nightMode == UiModeManager.MODE_NIGHT_YES
+            themeMode.isDarkMode = (activity.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) ==
+                Configuration.UI_MODE_NIGHT_YES
 
             val themeId = when (theme) {
                 -2 -> {
@@ -61,14 +61,12 @@ object ThemeSwitch {
                     R.style.AppThemeWhite
                 }
                 else -> {
-                    // AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
                     if (themeMode.isDarkMode) {
                         themeMode.isLightStatusBar = false
-                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
                         R.style.AppThemeNoActionBarNight
                     } else {
                         themeMode.isLightStatusBar = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
                         R.style.AppThemeWhite
                     }
                 }
