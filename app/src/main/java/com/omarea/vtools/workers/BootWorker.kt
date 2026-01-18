@@ -7,6 +7,7 @@ import android.app.NotificationManager
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Build
+import android.content.pm.ServiceInfo
 import androidx.core.app.NotificationCompat
 import androidx.work.ForegroundInfo
 import androidx.work.Worker
@@ -241,7 +242,12 @@ class BootWorker(
 
     private fun setForegroundNotice(text: String) {
         if (!foregroundStarted) {
-            setForegroundAsync(ForegroundInfo(NOTIFICATION_ID, buildNotification(text)))
+            val type = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC
+            } else {
+                0
+            }
+            setForegroundAsync(ForegroundInfo(NOTIFICATION_ID, buildNotification(text), type))
             foregroundStarted = true
         } else {
             updateNotification(text)
