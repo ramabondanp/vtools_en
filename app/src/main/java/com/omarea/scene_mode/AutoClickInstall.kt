@@ -33,12 +33,13 @@ class AutoClickInstall : AutoClickBase() {
 
     fun packageinstallerAutoClick(service: AccessibilityService, event: AccessibilityEvent) {
         if (!service.getSharedPreferences(SpfConfig.GLOBAL_SPF, Context.MODE_PRIVATE)
-                        .getBoolean(SpfConfig.GLOBAL_SPF_AUTO_INSTALL, false) || event.source == null)
+                        .getBoolean(SpfConfig.GLOBAL_SPF_AUTO_INSTALL, false))
             return
+        val source = event.source ?: return
 
         try {
             for (ki in autoClickKeyWords.indices) {
-                val nextNodes = event.source.findAccessibilityNodeInfosByText(autoClickKeyWords[ki])
+                val nextNodes = source.findAccessibilityNodeInfosByText(autoClickKeyWords[ki])
                 if (nextNodes != null && !nextNodes.isEmpty()) {
                     var node: AccessibilityNodeInfo
                     for (i in nextNodes.indices) {
@@ -60,7 +61,7 @@ class AutoClickInstall : AutoClickBase() {
 
             for (ki in autoClickKeyWords.indices) {
 
-                val nodes = event.source.findAccessibilityNodeInfosByText(autoClickKeyWords2[ki])
+                val nodes = source.findAccessibilityNodeInfosByText(autoClickKeyWords2[ki])
                 if (nodes != null && !nodes.isEmpty()) {
                     var node: AccessibilityNodeInfo
                     for (i in nodes.indices) {
@@ -83,11 +84,12 @@ class AutoClickInstall : AutoClickBase() {
 
     fun miuiUsbInstallAutoClick(service: AccessibilityService, event: AccessibilityEvent) {
         if (!service.getSharedPreferences(SpfConfig.GLOBAL_SPF, Context.MODE_PRIVATE)
-                        .getBoolean(SpfConfig.GLOBAL_SPF_AUTO_INSTALL, false) || event.source == null)
+                        .getBoolean(SpfConfig.GLOBAL_SPF_AUTO_INSTALL, false))
             return
+        val source = event.source ?: return
 
         try {
-            val next2Nodes = event.source.findAccessibilityNodeInfosByText("继续安装")
+            val next2Nodes = source.findAccessibilityNodeInfosByText("继续安装")
             if (next2Nodes != null && !next2Nodes.isEmpty()) {
                 var node: AccessibilityNodeInfo
                 for (i in next2Nodes.indices) {

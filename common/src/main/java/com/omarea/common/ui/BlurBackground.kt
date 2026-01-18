@@ -23,7 +23,8 @@ class BlurBackground(private val activity: Activity) {
     private fun captureScreen(activity: Activity): Bitmap? {
         activity.window.decorView.destroyDrawingCache() //先清理屏幕绘制缓存(重要)
         activity.window.decorView.isDrawingCacheEnabled = true
-        var bmp: Bitmap = activity.window.decorView.drawingCache
+        val cache = activity.window.decorView.drawingCache ?: return null
+        var bmp: Bitmap = cache
         //获取原图尺寸
         originalW = bmp.getWidth()
         originalH = bmp.getHeight()
@@ -99,12 +100,13 @@ class BlurBackground(private val activity: Activity) {
 
     private fun handleBlur() {
         dialogBg?.run {
-            var bp = captureScreen(activity)
+            val captured = captureScreen(activity) ?: return
+            val blurred = blur(captured) ?: return
+            var bp = blurred
             if (bp == null) {
                 return
             }
 
-            bp = blur(bp) //对屏幕截图模糊处理
             //将模糊处理后的图恢复到原图尺寸并显示出来
             bp = Bitmap.createScaledBitmap(bp, originalW, originalH, false)
             setImageBitmap(bp)

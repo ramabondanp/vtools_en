@@ -98,6 +98,11 @@ object ThemeSwitch {
                 themeMode.isDarkMode = true
             } else {
                 val wallpaperDrawable = wallpaper.drawable
+                        ?: run {
+                            themeMode.isDarkMode = true
+                            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                            return themeMode
+                        }
 
                 // 深色的静态壁纸
                 if (isDarkColor(wallpaperDrawable)) {

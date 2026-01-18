@@ -630,12 +630,8 @@ class PageConfigReader {
                     }
                     "align" -> {
                         when (attrValue) {
-                            "left" -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                                textRow.align = Layout.Alignment.ALIGN_LEFT
-                            }
-                            "right" -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                                textRow.align = Layout.Alignment.ALIGN_RIGHT
-                            }
+                            "left" -> textRow.align = Layout.Alignment.ALIGN_NORMAL
+                            "right" -> textRow.align = Layout.Alignment.ALIGN_OPPOSITE
                             "center" -> textRow.align = Layout.Alignment.ALIGN_CENTER
                             "normal" -> textRow.align = Layout.Alignment.ALIGN_NORMAL
                         }

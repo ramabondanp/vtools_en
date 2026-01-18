@@ -3,7 +3,8 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion 28
+    namespace "com.omarea.krscript"
+    compileSdkVersion 34
 
     defaultConfig {
         minSdkVersion 21
@@ -25,7 +26,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
     // testImplementation 'junit:junit:4.13-beta-3'
     // androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     // androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
