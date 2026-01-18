@@ -136,7 +136,9 @@ internal class AlwaysNotification(
         }
         notification =
                 builder.setSmallIcon(if (false) R.drawable.fanbox else icon)
-                        .setContent(remoteViews)
+                        .setCustomContentView(remoteViews)
+                        .setCustomBigContentView(remoteViews)
+                        .setStyle(NotificationCompat.DecoratedCustomViewStyle())
                         .setWhen(System.currentTimeMillis())
                         .setAutoCancel(true)
                         .setOngoing(false)
