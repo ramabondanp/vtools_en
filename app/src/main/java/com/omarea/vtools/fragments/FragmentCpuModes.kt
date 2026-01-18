@@ -208,7 +208,7 @@ class FragmentCpuModes : Fragment() {
         }
         if (CheckRootStatus.lastCheckResult) {
             binding.navMore.visibility = View.VISIBLE
-            if (Build.MANUFACTURER.toLowerCase(Locale.getDefault()) == "xiaomi") {
+            if (Build.MANUFACTURER.lowercase(Locale.getDefault()) == "xiaomi") {
                 binding.navThermal.setOnClickListener {
                     val pageNode = PageNode("").apply {
                         title = "MUI专属"

@@ -31,7 +31,7 @@ class AdapterModules(private val context: Context, private val list: ArrayList<S
         if (keywords.isEmpty()) {
             return spannableString
         }
-        val index = str.toLowerCase(Locale.getDefault()).indexOf(keywords.toLowerCase(Locale.getDefault()))
+        val index = str.lowercase(Locale.getDefault()).indexOf(keywords.lowercase(Locale.getDefault()))
         if (index < 0)
             return spannableString
 

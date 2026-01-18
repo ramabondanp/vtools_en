@@ -27,8 +27,10 @@ import com.omarea.store.SpfConfig
 import com.omarea.utils.AccessibleServiceHelper
 import com.omarea.vtools.R
 import com.omarea.vtools.databinding.ActivityStartSplashBinding
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -39,6 +41,7 @@ class ActivityStartSplash : Activity() {
 
     private lateinit var globalSPF: SharedPreferences
     private lateinit var binding: ActivityStartSplashBinding
+    private val uiScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         globalSPF = getSharedPreferences(SpfConfig.GLOBAL_SPF, Context.MODE_PRIVATE)
@@ -159,7 +162,7 @@ class ActivityStartSplash : Activity() {
      */
     private fun checkFileWrite(next: Runnable) {
         val activity = this
-        GlobalScope.launch(Dispatchers.Main) {
+        uiScope.launch {
             if (hasRoot) {
                 GeneralPermissions(activity).grantPermissions()
                 val serviceHelper = AccessibleServiceHelper()
@@ -244,5 +247,10 @@ class ActivityStartSplash : Activity() {
 
     private fun updateStartStateText(text: String) {
         binding.startStateText.text = text
+    }
+
+    override fun onDestroy() {
+        uiScope.cancel()
+        super.onDestroy()
     }
 }

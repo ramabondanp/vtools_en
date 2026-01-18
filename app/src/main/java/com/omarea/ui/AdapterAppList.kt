@@ -15,11 +15,15 @@ import android.widget.TextView
 import com.omarea.library.basic.AppInfoLoader
 import com.omarea.model.AppInfo
 import com.omarea.vtools.R
-import kotlinx.coroutines.*
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.util.ArrayList
 import java.util.HashMap
 import kotlin.Comparator
 
+@OptIn(DelicateCoroutinesApi::class)
 class AdapterAppList(private val context: Context, apps: ArrayList<AppInfo>, private var keywords: String = "") : BaseAdapter() {
     private val list: ArrayList<AppInfo>?
     private val appInfoLoader = AppInfoLoader(context)
@@ -71,13 +75,13 @@ class AdapterAppList(private val context: Context, apps: ArrayList<AppInfo>, pri
     }
 
     private fun keywordSearch(item: AppInfo, text: String): Boolean {
-        return item.packageName.toLowerCase().contains(text)
-                || item.appName.toLowerCase().contains(text)
-                || item.path.toString().toLowerCase().contains(text)
+        return item.packageName.lowercase().contains(text)
+                || item.appName.lowercase().contains(text)
+                || item.path.toString().lowercase().contains(text)
     }
 
     private fun filterAppList(appList: ArrayList<AppInfo>, keywords: String): ArrayList<AppInfo> {
-        val text = keywords.toLowerCase()
+        val text = keywords.lowercase()
         if (text.isEmpty())
             return appList
         return ArrayList(appList.filter { item ->
@@ -120,11 +124,10 @@ class AdapterAppList(private val context: Context, apps: ArrayList<AppInfo>, pri
 
     private fun keywordHightLight(str: String): SpannableString {
         val spannableString = SpannableString(str)
-        var index = 0
         if (keywords.isEmpty()) {
             return spannableString;
         }
-        index = str.toLowerCase().indexOf(keywords.toLowerCase());
+        val index = str.lowercase().indexOf(keywords.lowercase());
         if (index < 0)
             return spannableString
 
@@ -177,7 +180,7 @@ class AdapterAppList(private val context: Context, apps: ArrayList<AppInfo>, pri
             }
 
             //为checkbox添加复选监听,把当前位置的checkbox的状态存进一个HashMap里面
-            itemChecke?.setOnCheckedChangeListener { buttonView, isChecked ->
+            itemChecke?.setOnCheckedChangeListener { _, isChecked ->
                 states[position] = isChecked
             }
             //从hashmap里面取出我们的状态值,然后赋值给listview对应位置的checkbox

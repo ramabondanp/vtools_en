@@ -398,7 +398,7 @@ class FragmentHome : androidx.fragment.app.Fragment() {
                 mGpuInfo?.run {
                     binding.homeGpuInfoText.text = "$glVendor $glRender\n$glVersion"
                 }
-                binding.cpuSocPlatform.text = platform.toUpperCase(Locale.getDefault()) + " (" + coreCount + " Cores)"
+                binding.cpuSocPlatform.text = platform.uppercase(Locale.getDefault()) + " (" + coreCount + " Cores)"
             } catch (ex: Exception) {
 
             }

@@ -36,12 +36,12 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@id/btn_cancel"
+            android:id="@+id/btn_cancel"
             style="@style/dialogCancelBtn"
             android:text="@string/btn_cancel" />
 
         <Button
-            android:id="@id/btn_confirm"
+            android:id="@+id/btn_confirm"
             style="@style/dialogConfirmBtn"
             android:text="@string/btn_confirm" />
     </LinearLayout>

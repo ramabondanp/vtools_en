@@ -202,7 +202,7 @@ open class ModeSwitcher {
                 SOURCE_SCENE_CUSTOM -> {
                     val cpuConfigStorage = CpuConfigStorage(Scene.context)
                     if (cpuConfigStorage.exists(mode)) {
-                        cpuConfigStorage.applyCpuConfig(Scene.context, mode)
+                        cpuConfigStorage.applyCpuConfig(mode)
                         setCurrentPowercfg(mode)
                     } else {
                         Log.e("Scene", "" + mode + "Profile lost!")

@@ -40,7 +40,7 @@ class DialogCustomMAC(private var context: Context) {
         }
 
         DialogHelper.confirm(context, "CUSTOM WIFI MAC", "", dialog, {
-            val mac = macInput.text.trim().replace(Regex("-"), ":").toLowerCase()
+            val mac = macInput.text.trim().replace(Regex("-"), ":").lowercase()
             if (!Regex("[\\w\\d]{2}:[\\w\\d]{2}:[\\w\\d]{2}:[\\w\\d]{2}:[\\w\\d]{2}:[\\w\\d]{2}$", RegexOption.IGNORE_CASE).matches(mac)) {
                 Toast.makeText(context, "The entered MAC address is invalid, the format should be like ec:d0:9f:af:95:01", Toast.LENGTH_LONG).show()
                 return@confirm

@@ -142,14 +142,14 @@ open class DialogAppOptions(protected final var context: Activity, protected var
 
     protected fun isMagisk(): Boolean {
         val keepShell = KeepShell(false)
-        val result = keepShell.doCmdSync("su -v").toUpperCase(Locale.getDefault()).contains("MAGISKSU")
+        val result = keepShell.doCmdSync("su -v").uppercase(Locale.getDefault()).contains("MAGISKSU")
         keepShell.tryExit()
         return result
     }
 
     protected fun isTmpfs(dir: String): Boolean {
         val keepShell = KeepShell(false)
-        val result = keepShell.doCmdSync("df | grep tmpfs | grep \"$dir\"").toUpperCase(Locale.getDefault()).trim().isNotEmpty()
+        val result = keepShell.doCmdSync("df | grep tmpfs | grep \"$dir\"").uppercase(Locale.getDefault()).trim().isNotEmpty()
         keepShell.tryExit()
         return result
     }

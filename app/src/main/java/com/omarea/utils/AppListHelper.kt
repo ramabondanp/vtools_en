@@ -240,7 +240,7 @@ class AppListHelper(private val context: Context, private val getTags: Boolean =
         }
 
         val files = dir.listFiles { name ->
-            name.extension.toLowerCase() == "apk"
+            name.extension.lowercase() == "apk"
         }
 
         if (files == null) {

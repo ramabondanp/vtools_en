@@ -42,7 +42,7 @@ class ScreenState(private var context: Context) : BroadcastReceiver() {
                         if (ms == lastChange) {
                             try {
                                 val mKeyguardManager = p0!!.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
-                                if (!(mKeyguardManager.isKeyguardLocked || mKeyguardManager.inKeyguardRestrictedInputMode())) {
+                                if (!(mKeyguardManager.isKeyguardLocked || mKeyguardManager.isDeviceLocked)) {
                                     EventBus.publish(EventType.SCREEN_ON)
                                 }
                             } catch (ex: Exception) {

@@ -20,6 +20,7 @@ import com.omarea.store.SpfConfig
 import com.omarea.utils.CommonCmds
 import com.omarea.vtools.AccessibilityScenceMode
 import com.omarea.vtools.R
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -30,6 +31,7 @@ import kotlin.collections.ArrayList
  *
  * Created by helloklf on 2016/10/1.
  */
+@OptIn(DelicateCoroutinesApi::class)
 class AppSwitchHandler(private var context: AccessibilityScenceMode, override val isAsync: Boolean = false) : ModeSwitcher(), IEventReceiver {
     private var lastPackage: String? = null
     private var lastModePackage: String? = "com.system.ui"
@@ -80,7 +82,7 @@ class AppSwitchHandler(private var context: AccessibilityScenceMode, override va
                     scheduleAtFixedRate(object : TimerTask() {
                         private var ticks = 0
                         override fun run() {
-                            updateModeNoitfy(true) // 耗电统计 定时更新通知显示
+                            updateModeNoitfy() // 耗电统计 定时更新通知显示
 
                             ticks += interval
                             ticks %= 60
@@ -178,7 +180,7 @@ class AppSwitchHandler(private var context: AccessibilityScenceMode, override va
     /**
      * 更新通知
      */
-    private fun updateModeNoitfy(saveLog: Boolean = false) {
+    private fun updateModeNoitfy() {
         if (screenOn) {
             notifyHelper.notify()
         }

@@ -3,7 +3,10 @@ package com.omarea.vtools
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import com.omarea.vtools.services.BootService
+import androidx.work.ExistingWorkPolicy
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+import com.omarea.vtools.workers.BootWorker
 
 
 class ReceiverBoot : BroadcastReceiver() {
@@ -18,8 +21,8 @@ class ReceiverBoot : BroadcastReceiver() {
         bootCompleted = true
 
         try {
-            val service = Intent(context, BootService::class.java)
-            context.startService(service)
+            val request = OneTimeWorkRequestBuilder<BootWorker>().build()
+            WorkManager.getInstance(context).enqueueUniqueWork("boot-worker", ExistingWorkPolicy.KEEP, request)
         } catch (ex: Exception) {
         }
     }

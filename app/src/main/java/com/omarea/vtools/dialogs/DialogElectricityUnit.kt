@@ -22,7 +22,7 @@ class DialogElectricityUnit {
 
         val batteryManager = context.getSystemService(Context.BATTERY_SERVICE) as BatteryManager
         var currentNow = batteryManager.getLongProperty(BatteryManager.BATTERY_PROPERTY_CURRENT_NOW)
-        val defaultUnit = if (Build.MANUFACTURER.toUpperCase() == "XIAOMI") {
+        val defaultUnit = if (Build.MANUFACTURER.uppercase() == "XIAOMI") {
             SpfConfig.GLOBAL_SPF_CURRENT_NOW_UNIT_DEFAULT
         } else {
             if (GlobalStatus.batteryStatus == BatteryManager.BATTERY_STATUS_DISCHARGING) {

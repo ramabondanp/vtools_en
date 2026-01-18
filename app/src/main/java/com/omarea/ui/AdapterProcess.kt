@@ -69,11 +69,11 @@ class AdapterProcess(private val context: Context,
     }
 
     private fun keywordSearch(item: ProcessInfo, text: String): Boolean {
-        return item.friendlyName.toString().toLowerCase().contains(text) || item.name.toString().toLowerCase().contains(text) || item.user.toString().toLowerCase().contains(text) || item.command.toString().toLowerCase().contains(text) || item.cmdline.toString().toLowerCase().contains(text)
+        return item.friendlyName.toString().lowercase().contains(text) || item.name.toString().lowercase().contains(text) || item.user.toString().lowercase().contains(text) || item.command.toString().lowercase().contains(text) || item.cmdline.toString().lowercase().contains(text)
     }
 
     private fun filterAppList(): ArrayList<ProcessInfo> {
-        val text = keywords.toLowerCase()
+        val text = keywords.lowercase()
         val keywordsEmpty = text.isEmpty()
         return ArrayList(processes.filter { it ->
             (keywordsEmpty || keywordSearch(it, text)) && (
@@ -177,7 +177,7 @@ class AdapterProcess(private val context: Context,
         if (keywords.isEmpty()) {
             return spannableString;
         }
-        index = str.toLowerCase().indexOf(keywords.toLowerCase())
+        index = str.lowercase().indexOf(keywords.lowercase())
         if (index < 0)
             return spannableString
 

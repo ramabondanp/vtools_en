@@ -183,7 +183,7 @@ class AdapterProcessMini(private val context: Context,
         if (keywords.isEmpty()) {
             return spannableString;
         }
-        index = str.toLowerCase().indexOf(keywords.toLowerCase())
+        index = str.lowercase().indexOf(keywords.lowercase())
         if (index < 0)
             return spannableString
 

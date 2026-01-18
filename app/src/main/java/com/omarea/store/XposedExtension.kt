@@ -96,7 +96,7 @@ public class XposedExtension(private val context: Context) {
 
     public fun getAppConfig(appConfig: AppConfig): AppConfig? {
         try {
-            val configJson = current!!.getStringValue(appConfig.packageName, "{}")
+            val configJson = current!!.getStringValue(appConfig.packageName, "{}") as String
             val config = JSONObject(configJson)
             for (key in config.keys()) {
                 when (key) {
@@ -130,10 +130,7 @@ public class XposedExtension(private val context: Context) {
                     put("smoothScroll", appConfig.smoothScroll)
                     put("webDebug", appConfig.webDebug)
                 }.toString(0)
-
-                current?.run {
-                    return setStringValue(appConfig.packageName, config)
-                }
+                return current?.setStringValue(appConfig.packageName, config) == true
             } catch (ex: java.lang.Exception) {
             }
         }
@@ -143,15 +140,12 @@ public class XposedExtension(private val context: Context) {
     public fun getGlobalConfig(): GlobalConfig? {
         if (current != null) {
             try {
-                current?.run {
-                    val config = GlobalConfig()
-                    config.hideSuIcon = getBooleanValue("com.android.systemui_hide_su", false)
-                    config.fgNotificationDisable = getBooleanValue("android_dis_service_foreground", false)
-                    config.reverseOptimizer = getBooleanValue("reverse_optimizer", false)
-                    config.androidScroll = getBooleanValue("android_scroll", false)
-
-                    return config
-                }
+                val config = GlobalConfig()
+                config.hideSuIcon = current?.getBooleanValue("com.android.systemui_hide_su", false) == true
+                config.fgNotificationDisable = current?.getBooleanValue("android_dis_service_foreground", false) == true
+                config.reverseOptimizer = current?.getBooleanValue("reverse_optimizer", false) == true
+                config.androidScroll = current?.getBooleanValue("android_scroll", false) == true
+                return config
             } catch (ex: java.lang.Exception) {
             }
         }
@@ -161,13 +155,11 @@ public class XposedExtension(private val context: Context) {
     public fun setGlobalConfig(globalConfig: GlobalConfig): Boolean {
         if (current != null) {
             try {
-                current?.run {
-                    aidlConn!!.setBooleanValue("com.android.systemui_hide_su", globalConfig.hideSuIcon)
-                    aidlConn!!.setBooleanValue("android_dis_service_foreground", globalConfig.fgNotificationDisable)
-                    aidlConn!!.setBooleanValue("reverse_optimizer", globalConfig.reverseOptimizer)
-                    aidlConn!!.setBooleanValue("android_scroll", globalConfig.androidScroll)
-                    return true
-                }
+                aidlConn!!.setBooleanValue("com.android.systemui_hide_su", globalConfig.hideSuIcon)
+                aidlConn!!.setBooleanValue("android_dis_service_foreground", globalConfig.fgNotificationDisable)
+                aidlConn!!.setBooleanValue("reverse_optimizer", globalConfig.reverseOptimizer)
+                aidlConn!!.setBooleanValue("android_scroll", globalConfig.androidScroll)
+                return true
             } catch (ex: java.lang.Exception) {
             }
         }

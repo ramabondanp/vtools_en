@@ -26,8 +26,10 @@ import com.omarea.scene_mode.AutoSkipAd
 import com.omarea.store.SpfConfig
 import com.omarea.utils.AutoSkipCloudData
 import com.omarea.vtools.popup.FloatLogView
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.collections.ArrayList
@@ -70,6 +72,7 @@ public class AccessibilityScenceMode : AccessibilityService(), IEventReceiver {
     internal var appSwitchHandler: AppSwitchHandler? = null
 
     private lateinit var spf: SharedPreferences
+    private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     // 跳过广告功能需要忽略的App
     private var skipAdIgnoredApps = ArrayList<String>().apply {
@@ -203,7 +206,7 @@ public class AccessibilityScenceMode : AccessibilityService(), IEventReceiver {
         }
 
         // 获取输入法
-        GlobalScope.launch(Dispatchers.IO) {
+        serviceScope.launch {
             inputMethods = InputMethodApp(applicationContext).getInputMethods()
             skipAdIgnoredApps.addAll(LauncherApps(applicationContext).launcherApps)
             skipAdIgnoredApps.addAll(inputMethods)
@@ -519,7 +522,7 @@ public class AccessibilityScenceMode : AccessibilityService(), IEventReceiver {
     private val windowIdCaches = LruCache<Int, String>(10)
     // 利用协程分析窗口
     private fun windowAnalyse(windowInfo: AccessibilityWindowInfo, tid: Long) {
-        GlobalScope.launch(Dispatchers.IO) {
+        serviceScope.launch {
             var root: AccessibilityNodeInfo? = null
             val windowId = windowInfo.id
             val wp = (try {
@@ -631,6 +634,8 @@ public class AccessibilityScenceMode : AccessibilityService(), IEventReceiver {
     }
 
     override fun onDestroy() {
+        serviceScope.cancel()
         this.destroy()
+        super.onDestroy()
     }
 }

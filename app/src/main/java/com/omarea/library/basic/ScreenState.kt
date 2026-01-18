@@ -4,6 +4,7 @@ import android.app.KeyguardManager
 import android.content.Context
 import android.os.Build
 import android.view.Display
+import android.hardware.display.DisplayManager
 import android.view.WindowManager
 
 class ScreenState(private var context: Context) {
@@ -17,16 +18,21 @@ class ScreenState(private var context: Context) {
 
     fun isScreenLocked(): Boolean {
         val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-        val display = windowManager.defaultDisplay
+        val display = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            val displayManager = context.getSystemService(Context.DISPLAY_SERVICE) as DisplayManager
+            displayManager.getDisplay(Display.DEFAULT_DISPLAY) ?: run {
+                @Suppress("DEPRECATION")
+                windowManager.defaultDisplay
+            }
+        } else {
+            @Suppress("DEPRECATION")
+            windowManager.defaultDisplay
+        }
         if (screenOffStatus.contains(display.state)) {
             return true
         }
 
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            mKeyguardManager.isDeviceLocked || mKeyguardManager.isKeyguardLocked
-        } else {
-            mKeyguardManager.inKeyguardRestrictedInputMode() || mKeyguardManager.isDeviceLocked || mKeyguardManager.isKeyguardLocked
-        }
+        return mKeyguardManager.isDeviceLocked || mKeyguardManager.isKeyguardLocked
     }
 
     fun isScreenOn(): Boolean {

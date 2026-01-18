@@ -273,7 +273,7 @@ class ActivityAppConfig2 : ActivityBase() {
                 }
                 return@Runnable
             }
-            val keyword = binding.configSearchBox.text.toString().toLowerCase(Locale.getDefault())
+            val keyword = binding.configSearchBox.text.toString().lowercase(Locale.getDefault())
             val search = keyword.isNotEmpty()
             var filterMode = ""
             var filterAppType = ""
@@ -296,7 +296,7 @@ class ActivityAppConfig2 : ActivityBase() {
                 val item = installedList!![i]
                 setAppRowDesc(item)
                 val packageName = item.packageName.toString()
-                if (search && !(packageName.toLowerCase(Locale.getDefault()).contains(keyword) || item.appName.toString().toLowerCase(Locale.getDefault()).contains(keyword))) {
+                if (search && !(packageName.lowercase(Locale.getDefault()).contains(keyword) || item.appName.toString().lowercase(Locale.getDefault()).contains(keyword))) {
                     continue
                 } else {
                     if (filterMode == "*" || filterMode == spfPowercfg.getString(packageName, "")) {

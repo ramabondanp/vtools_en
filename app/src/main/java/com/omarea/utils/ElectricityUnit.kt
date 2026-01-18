@@ -11,7 +11,7 @@ class ElectricityUnit {
     public fun getDefaultElectricityUnit(context: Context): Int {
         val batteryManager = context.getSystemService(Context.BATTERY_SERVICE) as BatteryManager
         val currentNow = batteryManager.getLongProperty(BatteryManager.BATTERY_PROPERTY_CURRENT_NOW)
-        return if (Build.MANUFACTURER.toUpperCase(Locale.getDefault()) == "XIAOMI") {
+        return if (Build.MANUFACTURER.uppercase(Locale.getDefault()) == "XIAOMI") {
             SpfConfig.GLOBAL_SPF_CURRENT_NOW_UNIT_DEFAULT
         } else {
             if (GlobalStatus.batteryStatus == BatteryManager.BATTERY_STATUS_DISCHARGING) {

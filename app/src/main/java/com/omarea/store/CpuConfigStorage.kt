@@ -11,7 +11,7 @@ import java.io.File
  * 存储和读取CPU配置，在开机自启动时用于修改CPU频率和调度
  * Created by Hello on 2018/08/04.
  */
-class CpuConfigStorage(private val context: Context) : ObjectStorage<CpuStatus>(context) {
+class CpuConfigStorage(context: Context) : ObjectStorage<CpuStatus>(context) {
     private val defaultFile = "cpuconfig.dat"
     fun default(): String {
         return defaultFile
@@ -28,7 +28,7 @@ class CpuConfigStorage(private val context: Context) : ObjectStorage<CpuStatus>(
     }
 
     // 应用CPU配置参数
-    fun applyCpuConfig(context: Context, configFile: String? = null) {
+    fun applyCpuConfig(configFile: String? = null) {
         val name = if (configFile == null) defaultFile else configFile
 
         val cacheName = getCacheName(name)

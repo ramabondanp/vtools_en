@@ -44,7 +44,7 @@ class AutoClickInstall : AutoClickBase() {
                     var node: AccessibilityNodeInfo
                     for (i in nextNodes.indices) {
                         node = nextNodes[i]
-                        if (node.className.toString().toLowerCase(Locale.getDefault()).contains("button") && node.isEnabled) {
+                        if (node.className.toString().lowercase(Locale.getDefault()).contains("button") && node.isEnabled) {
                             if (node.text.trim().toString() != autoClickKeyWords[ki])
                                 continue
                             super.clickNode(node) || super.tryTouchNodeRect(node, service)
@@ -66,7 +66,7 @@ class AutoClickInstall : AutoClickBase() {
                     var node: AccessibilityNodeInfo
                     for (i in nodes.indices) {
                         node = nodes[i]
-                        if (node.className.toString().toLowerCase(Locale.getDefault()).contains("button")) {
+                        if (node.className.toString().lowercase(Locale.getDefault()).contains("button")) {
                             if (!node.isEnabled) {
                                 node.isEnabled = true
                             }
@@ -94,7 +94,7 @@ class AutoClickInstall : AutoClickBase() {
                 var node: AccessibilityNodeInfo
                 for (i in next2Nodes.indices) {
                     node = next2Nodes[i]
-                    if (node.className.toString().toLowerCase(Locale.getDefault()).contains("button")) {
+                    if (node.className.toString().lowercase(Locale.getDefault()).contains("button")) {
                         if (!node.isEnabled) {
                             node.isEnabled = true
                         }

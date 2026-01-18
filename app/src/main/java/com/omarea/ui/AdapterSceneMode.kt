@@ -47,13 +47,13 @@ class AdapterSceneMode(private val context: Context, apps: ArrayList<AppInfo>, p
     }
 
     private fun keywordSearch(item: AppInfo, text: String): Boolean {
-        return item.packageName.toLowerCase(Locale.getDefault()).contains(text)
-                || item.appName.toLowerCase(Locale.getDefault()).contains(text)
-                || item.path.toString().toLowerCase(Locale.getDefault()).contains(text)
+        return item.packageName.lowercase(Locale.getDefault()).contains(text)
+                || item.appName.lowercase(Locale.getDefault()).contains(text)
+                || item.path.toString().lowercase(Locale.getDefault()).contains(text)
     }
 
     private fun filterAppList(appList: ArrayList<AppInfo>, keywords: String): ArrayList<AppInfo> {
-        val text = keywords.toLowerCase(Locale.getDefault())
+        val text = keywords.lowercase(Locale.getDefault())
         if (text.isEmpty())
             return appList
         return ArrayList(appList.filter { item ->
@@ -66,7 +66,7 @@ class AdapterSceneMode(private val context: Context, apps: ArrayList<AppInfo>, p
         if (keywords.isEmpty()) {
             return spannableString
         }
-        val index = str.toLowerCase(Locale.getDefault()).indexOf(keywords.toLowerCase(Locale.getDefault()))
+        val index = str.lowercase(Locale.getDefault()).indexOf(keywords.lowercase(Locale.getDefault()))
         if (index < 0)
             return spannableString
 

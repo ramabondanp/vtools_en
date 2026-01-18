@@ -86,7 +86,7 @@ class ActivityAppXposedDetails : ActivityBase() {
                     }
                     installVAddin()
                 } else {
-                    val configJson = aidlConn!!.getStringValue(app, "{}")
+                    val configJson = aidlConn!!.getStringValue(app, "{}") as String
                     val config = JSONObject(configJson)
                     for (key in config.keys()) {
                         when (key) {

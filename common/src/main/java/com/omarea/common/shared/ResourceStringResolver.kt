@@ -28,7 +28,7 @@ open class ResourceStringResolver(protected val context: Context) {
         }
         if (separator != null) {
             val resources = context.resources
-            val type = row.substring(1, row.indexOf(separator)).toLowerCase(Locale.ENGLISH)
+            val type = row.substring(1, row.indexOf(separator)).lowercase(Locale.ENGLISH)
             val name = row.substring(row.indexOf(separator) + 1)
 
             try {
@@ -52,7 +52,7 @@ open class ResourceStringResolver(protected val context: Context) {
         val replaced = inlineRegex.replace(originRow) { match ->
             val raw = match.value
             val separatorIndex = raw.indexOf(':').takeIf { it >= 0 } ?: raw.indexOf('/')
-            val type = raw.substring(1, separatorIndex).toLowerCase(Locale.ENGLISH)
+            val type = raw.substring(1, separatorIndex).lowercase(Locale.ENGLISH)
             val name = raw.substring(separatorIndex + 1)
             try {
                 val id = resources.getIdentifier(name, type, context.packageName)

@@ -169,7 +169,7 @@ class ActivityAppXposedConfig : ActivityBase() {
                 }
                 return@Runnable
             }
-            val keyword = binding.configSearchBox.text.toString().toLowerCase(Locale.getDefault())
+            val keyword = binding.configSearchBox.text.toString().lowercase(Locale.getDefault())
             val search = keyword.isNotEmpty()
             var filterAppType = ""
             when (binding.configlistType.selectedItemPosition) {
@@ -181,7 +181,7 @@ class ActivityAppXposedConfig : ActivityBase() {
             for (i in installedList!!.indices) {
                 val item = installedList!![i]
                 val packageName = item.packageName
-                if (search && !(packageName.toLowerCase(Locale.getDefault()).contains(keyword) || item.appName.toLowerCase(Locale.getDefault()).contains(keyword))) {
+                if (search && !(packageName.lowercase(Locale.getDefault()).contains(keyword) || item.appName.lowercase(Locale.getDefault()).contains(keyword))) {
                     continue
                 } else {
                     if (filterAppType == "*" || item.path.startsWith(filterAppType)) {

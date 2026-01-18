@@ -12,6 +12,7 @@ android {
     buildFeatures {
         dataBinding true
         viewBinding true
+        aidl true
     }
     signingConfigs {
         omarea_Signing {
@@ -21,12 +22,12 @@ android {
             storePassword 'asdf1234'
         }
     }
-    compileSdkVersion 34
+    compileSdk 34
     defaultConfig {
         resConfigs "en"
         applicationId "com.omarea.vtools"
-        minSdkVersion 23
-        targetSdkVersion 34
+        minSdk 23
+        targetSdk 34
         versionCode generateVersionCode()
         versionName "r" + generateVersionCode()
         externalNativeBuild {
@@ -62,6 +63,13 @@ android {
             jniDebuggable = false
         }
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
     productFlavors {
     }
     /*
@@ -87,7 +95,7 @@ dependencies {
     // compileOnly 'de.robv.android.xposed:api:82:sources'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation fileTree(include: ['*.jar'], exclude: ['XposedBridgeAPI-82.jar'], dir: 'libs')
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.google.android.material:material:1.9.0'
@@ -110,6 +118,7 @@ dependencies {
     // implementation files('libs/crimson.jar')
 
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.12'
+    implementation 'androidx.work:work-runtime-ktx:2.9.0'
 }
 repositories {
     mavenCentral()

@@ -3,7 +3,7 @@
 
     <integer name="opacity">0</integer>
 
-    <string name="format_hh_mm">%02d:%02d</string>
+    <string name="format_hh_mm" formatted="false">%02d:%02d</string>
     <string name="btn_cancel">Cancel</string>
     <string name="btn_not_now">Back</string>
     <string name="btn_delete">Delete</string>
@@ -137,7 +137,7 @@
     <string name="battery_pd_active_unknown">Unknown</string>
     <string name="battery_uevent_title">$ bms/uevent</string>
     <string name="battery_usb_uevent_title">$ usb/uevent</string>
-    <string name="battery_night_mode_time">%02d:%02d</string>
+    <string name="battery_night_mode_time" formatted="false">%02d:%02d</string>
     <string name="battery_night_mode">Dynamic charging speed</string>
     <string name="battery_night_mode_desc">$ slow charge when close to full \n\n and actively reduce charge speed at night</string>
     <string name="battery_time_get_up">Wake up time</string>
@@ -152,7 +152,7 @@
     <string name="battery_bp_desc">Stop charging after reaching the specified power \n\nNote: Long-term use may lead to power display inaccuracy</string>
     <string name="battery_bp_level_desc">Power limit value (%)</string>
     <string name="battery_qc_charger">Charging speed regulation</string>
-    <string name="battery_bp_status">Stop charging when %d%% is reached, resume below %d%%</string>
+    <string name="battery_bp_status" formatted="false">Stop charging when %d%% is reached, resume below %d%%</string>
     <string name="battery_qc_charger_desc">Adjust the charge speed limit. Crazy to adjust high meaningless, because it will not achieve the actual effect, please adjust the value within the effective range \n\n Note: the upper value is for reference only, please take the actual charging speed shall prevail!</string>
     <string name="battery_charge_disabled">Charging function is disabled!</string>
     <string name="battery_charge_resumed">Charging function has been restored!</string>
@@ -290,9 +290,9 @@
     <string name="swap_outside_effect3">3. Adjust VM parameters to improve the enthusiasm of ZRAM and Swapfile use</string>
     <string name="swap_module_install_desc">After downloading the module, please brush in Magisk Manager by yourself, and restart the phone!</string>
     <string name="swap_zram_stat_desc">ZRAM compression rate is usually between 20~45%</string>
-    <string name="swap_zram_stat_format">Data compression algorithm: %s\nOriginal data size: %s\nCompressed size: %s\nPhysical memory usage: %s\nMaximum memory usage: %s\nMemory Occupation limit: %s\nCompression rate: %s</string>
-    <string name="swap_zram_stat_format2">Data compression algorithm: %s\noriginal data size: %s\ncompressed size: %s\ncompression rate　　　:%s</string>
-    <string name="swap_zram_writback_stat">ZRAM Writeback\nWriteback block: %s\nWritten back: %dMB\nTotal read: %dMB\nTotal writeback:%dMB</string>
+    <string name="swap_zram_stat_format" formatted="false">Data compression algorithm: %s\nOriginal data size: %s\nCompressed size: %s\nPhysical memory usage: %s\nMaximum memory usage: %s\nMemory Occupation limit: %s\nCompression rate: %s</string>
+    <string name="swap_zram_stat_format2" formatted="false">Data compression algorithm: %s\noriginal data size: %s\ncompressed size: %s\ncompression rate　　　:%s</string>
+    <string name="swap_zram_writback_stat" formatted="false">ZRAM Writeback\nWriteback block: %s\nWritten back: %dMB\nTotal read: %dMB\nTotal writeback:%dMB</string>
     <string name="swap_zram_compact_algorithm">compression algorithm</string>
     <string name="swap_state_undefined">not created</string>
     <string name="swap_state_created">not started </string>
@@ -326,6 +326,7 @@
     <string name="fast_short">Extreme speed</string>
     <string name="app_selected_none">None of the apps are selected! </string>
     <string name="help">help</string>
+    <string name="help_title">Help</string>
     <string name="warn">Warning</string>
     <string name="more">Learn more</string>
     <string name="kepp_state">Keep state</string>

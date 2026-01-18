@@ -42,7 +42,7 @@ class AdapterFreezeApp(private val context: Context, private var apps: ArrayList
                 results.values = list
                 results.count = list.size
             } else {
-                val prefixString = prefix.toLowerCase(Locale.getDefault())
+                val prefixString = prefix.lowercase(Locale.getDefault())
 
                 val values: ArrayList<AppInfo>
                 synchronized(adapter.mLock) {
@@ -54,7 +54,7 @@ class AdapterFreezeApp(private val context: Context, private var apps: ArrayList
 
                 for (i in 0 until count) {
                     val value = values[i]
-                    val valueText = value.appName.toLowerCase(Locale.getDefault())
+                    val valueText = value.appName.lowercase(Locale.getDefault())
 
                     if (valueText.contains(prefixString)) {
                         newValues.add(value)
