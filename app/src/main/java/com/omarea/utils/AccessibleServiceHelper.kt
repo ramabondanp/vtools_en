@@ -20,6 +20,11 @@ class AccessibleServiceHelper {
         return AccessibilityServiceUtils().stopService("${context.packageName}/${AccessibilityScenceMode::class.java.name}")
     }
 
+    // 启动场景模式服务
+    fun startSceneModeService(context: Context): Boolean {
+        return AccessibilityServiceUtils().startService("${context.packageName}/${AccessibilityScenceMode::class.java.name}")
+    }
+
     fun serviceRunning(context: Context, serviceName: String): Boolean {
         return AccessibleServiceState().serviceRunning(context, serviceName)
     }

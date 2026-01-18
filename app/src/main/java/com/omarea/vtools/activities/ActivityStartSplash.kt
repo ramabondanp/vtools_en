@@ -24,6 +24,7 @@ import com.omarea.permissions.Busybox
 import com.omarea.permissions.CheckRootStatus
 import com.omarea.permissions.WriteSettings
 import com.omarea.store.SpfConfig
+import com.omarea.utils.AccessibleServiceHelper
 import com.omarea.vtools.R
 import com.omarea.vtools.databinding.ActivityStartSplashBinding
 import kotlinx.coroutines.Dispatchers
@@ -161,6 +162,10 @@ class ActivityStartSplash : Activity() {
         GlobalScope.launch(Dispatchers.Main) {
             if (hasRoot) {
                 GeneralPermissions(activity).grantPermissions()
+                val serviceHelper = AccessibleServiceHelper()
+                if (!serviceHelper.serviceRunning(activity)) {
+                    serviceHelper.startSceneModeService(activity)
+                }
             }
 
             if (!(checkPermission(Manifest.permission.READ_EXTERNAL_STORAGE) && checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE))) {

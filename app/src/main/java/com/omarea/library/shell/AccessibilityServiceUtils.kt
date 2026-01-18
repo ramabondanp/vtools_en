@@ -39,4 +39,25 @@ class AccessibilityServiceUtils {
         }
         return true
     }
+
+    fun startService(serviceName: String): Boolean {
+        val servicesStr = KeepShellPublic.doCmdSync("settings get secure enabled_accessibility_services").trim()
+        val existing = servicesStr
+            .split(":")
+            .map { it.trim() }
+            .filter { it.isNotEmpty() && it != "null" }
+        if (!existing.contains(serviceName)) {
+            val updated = if (existing.isEmpty()) {
+                serviceName
+            } else {
+                existing.joinToString(":") + ":" + serviceName
+            }
+            KeepShellPublic.doCmdSync(
+                "settings put secure enabled_accessibility_services $updated\nsettings put secure accessibility_enabled 1"
+            )
+        } else {
+            KeepShellPublic.doCmdSync("settings put secure accessibility_enabled 1")
+        }
+        return true
+    }
 }
