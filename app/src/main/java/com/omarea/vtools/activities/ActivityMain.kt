@@ -29,7 +29,10 @@ import com.omarea.utils.Update
 import com.omarea.vtools.R
 import com.omarea.vtools.dialogs.DialogMonitor
 import com.omarea.vtools.dialogs.DialogPower
-import com.omarea.vtools.fragments.*
+import com.omarea.vtools.fragments.FragmentCpuModes
+import com.omarea.vtools.fragments.FragmentHome
+import com.omarea.vtools.fragments.FragmentNav
+import com.omarea.vtools.fragments.FragmentNotRoot
 import com.omarea.vtools.databinding.ActivityMainBinding
 
 class ActivityMain : ActivityBase() {
@@ -144,7 +147,6 @@ class ActivityMain : ActivityBase() {
             FragmentNotRoot()
         }))
         tabIconHelper2.newTabSpec(getString(R.string.app_tuner), getDrawable(R.drawable.app_settings)!!, FragmentCpuModes())
-        tabIconHelper2.newTabSpec(getString(R.string.app_donate), getDrawable(R.drawable.app_like)!!, FragmentDonate())
         binding.tabContent.adapter = tabIconHelper2.adapter
         binding.tabList.getTabAt(1)?.select() // 默认选中第二页
 

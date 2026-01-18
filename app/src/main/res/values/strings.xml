@@ -83,7 +83,6 @@
     <string name="settings_black_notification_desc">Show Scene\'s resident notifications as black background when the system is in night mode (no need to turn on this option under normal conditions)</string>
 
     <string name="menu_home">Overview</string>
-    <string name="menu_paypal">Donate</string>
     <string name="menu_scene_mode">Scene mode</string>
     <string name="menu_app_scene">App scene</string>
     <string name="menu_system_scene">System scene </string>
@@ -889,7 +888,6 @@
     <string name="magisk_install_title">Scene add-on module</string>
     <string name="cache_recycle">Recycle cache</string>
     <string name="dynamic_auto_disabled">Profile not detected, dynamic response has been automatically disabled!</string>
-    <string name="app_donate">Reward</string>
     <string name="app_nav">Features</string>
     <string name="app_home">Overview</string>
     <string name="app_tuner">Adjust</string>
