@@ -122,7 +122,7 @@ internal class AlwaysNotification(
                 context,
                 0,
                 Intent(context, ReceiverSceneMode::class.java).putExtra("packageName", packageName),
-                PendingIntent.FLAG_UPDATE_CURRENT)
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
         val icon = getModIcon(mode)
         notificationManager = context.getSystemService(Service.NOTIFICATION_SERVICE) as NotificationManager
