@@ -26,10 +26,8 @@ then
             echo -n $(echo ${col:3}'|')
           ;;
           "width="*)
-            echo -n $(echo ${col:6})
           ;;
           "height="*)
-            echo -n x$(echo ${col:7})
           ;;
           "refreshRate="*)
             echo ' '$(echo ${col:12} | cut -f1 -d '.')Hz
@@ -53,10 +51,8 @@ else
         # echo $col
         case "$col" in
           "width="*)
-            echo -n $(echo ${col:6})
           ;;
           "height="*)
-            echo -n x$(echo ${col:7})
           ;;
           "fps="*)
             echo ' '$(echo ${col:4} | cut -f1 -d '.')Hz
@@ -67,4 +63,3 @@ else
     fi
   done
 fi
-

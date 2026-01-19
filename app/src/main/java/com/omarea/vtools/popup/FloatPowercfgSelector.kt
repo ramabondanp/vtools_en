@@ -10,6 +10,8 @@ import android.view.*
 import android.view.WindowManager.LayoutParams
 import android.widget.*
 import com.omarea.Scene
+import com.omarea.common.shared.FileWrite
+import com.omarea.common.shell.KeepShellPublic
 import com.omarea.data.EventBus
 import com.omarea.data.EventType
 import com.omarea.library.permissions.NotificationListener
@@ -32,6 +34,7 @@ class FloatPowercfgSelector(context: Context) {
     private val mContext: Context = context.applicationContext
     private var mView: View? = null
     private var modeSwitcher = ModeSwitcher()
+    private data class RefreshMode(val id: Int, val label: String)
 
     /**
      * 显示弹出框
@@ -139,10 +142,91 @@ class FloatPowercfgSelector(context: Context) {
         val btn_gamemode = view.findViewById<TextView>(R.id.btn_gamemode)
         val btn_fastmode = view.findViewById<TextView>(R.id.btn_fastmode)
         val btn_ignore = view.findViewById<TextView>(R.id.btn_ignore)
+        val refreshRateRow = view.findViewById<LinearLayout>(R.id.fw_refresh_rate_row)
+        val refreshRateButtons = view.findViewById<LinearLayout>(R.id.fw_refresh_rate_buttons)
+        val refreshRateViewRow = view.findViewById<LinearLayout>(R.id.fw_refresh_rate_view_row)
+        val refreshRateViewButtons = view.findViewById<LinearLayout>(R.id.fw_refresh_rate_view_buttons)
 
         if (!context.getSharedPreferences(SpfConfig.GLOBAL_SPF, Context.MODE_PRIVATE).getBoolean(SpfConfig.GLOBAL_SPF_NIGHT_MODE, false)) {
             view.findViewById<LinearLayout>(R.id.popup_window).setBackgroundColor(Color.WHITE)
             titleView.setTextColor(Color.BLACK)
+        }
+
+        GlobalScope.launch(Dispatchers.IO) {
+            val modes = loadRefreshModes(context)
+            GlobalScope.launch(Dispatchers.Main) {
+                if (modes.isNotEmpty()) {
+                    refreshRateButtons.removeAllViews()
+                    val paddingH = (6 * context.resources.displayMetrics.density).toInt()
+                    val paddingV = (4 * context.resources.displayMetrics.density).toInt()
+                    var selectedId = getActiveRefreshModeId() ?: modes.firstOrNull()?.id
+
+                    val updateSelection = {
+                        for (i in 0 until refreshRateButtons.childCount) {
+                            val button = refreshRateButtons.getChildAt(i) as TextView
+                            val isSelected = (button.tag as? Int) == selectedId
+                            button.setTextColor(if (isSelected) Color.WHITE else 0x66ffffff)
+                        }
+                    }
+
+                    modes.forEach { mode ->
+                        val button = TextView(context)
+                        button.text = mode.label
+                        button.tag = mode.id
+                        button.setPadding(paddingH, paddingV, paddingH, paddingV)
+                        button.setBackgroundResource(R.drawable.powercfg_balance)
+                        button.textSize = 12f
+                        button.setTextColor(0x66ffffff)
+                        button.setOnClickListener {
+                            selectedId = mode.id
+                            updateSelection()
+                            KeepShellPublic.doCmdSync("service call SurfaceFlinger 1035 i32 ${mode.id}")
+                        }
+                        val params = LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.WRAP_CONTENT,
+                            LinearLayout.LayoutParams.WRAP_CONTENT
+                        )
+                        params.marginEnd = (6 * context.resources.displayMetrics.density).toInt()
+                        button.layoutParams = params
+                        refreshRateButtons.addView(button)
+                    }
+                    updateSelection()
+                } else {
+                    refreshRateRow.visibility = View.GONE
+                }
+                refreshRateViewButtons.removeAllViews()
+                val paddingH = (6 * context.resources.displayMetrics.density).toInt()
+                val paddingV = (4 * context.resources.displayMetrics.density).toInt()
+                val offButton = TextView(context)
+                offButton.text = "OFF"
+                offButton.setPadding(paddingH, paddingV, paddingH, paddingV)
+                offButton.setBackgroundResource(R.drawable.powercfg_balance)
+                offButton.textSize = 12f
+                offButton.setTextColor(Color.WHITE)
+                offButton.setOnClickListener {
+                    KeepShellPublic.doCmdSync("service call SurfaceFlinger 1034 i32 0")
+                }
+
+                val onButton = TextView(context)
+                onButton.text = "ON"
+                onButton.setPadding(paddingH, paddingV, paddingH, paddingV)
+                onButton.setBackgroundResource(R.drawable.powercfg_balance)
+                onButton.textSize = 12f
+                onButton.setTextColor(Color.WHITE)
+                onButton.setOnClickListener {
+                    KeepShellPublic.doCmdSync("service call SurfaceFlinger 1034 i32 1")
+                }
+
+                val params = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                )
+                params.marginEnd = (6 * context.resources.displayMetrics.density).toInt()
+                offButton.layoutParams = params
+                onButton.layoutParams = params
+                refreshRateViewButtons.addView(offButton)
+                refreshRateViewButtons.addView(onButton)
+            }
         }
 
         val updateUI = Runnable {
@@ -311,6 +395,33 @@ class FloatPowercfgSelector(context: Context) {
         updateUI.run()
         return view
     }
+
+    private fun loadRefreshModes(context: Context): List<RefreshMode> {
+        val scriptPath = FileWrite.writePrivateShellFile("kr-script/display/display_modes.sh", "display_modes.sh", context)
+        if (scriptPath.isNullOrEmpty()) {
+            return emptyList()
+        }
+        val output = KeepShellPublic.doCmdSync("sh $scriptPath 2>/dev/null").trim()
+        if (output.isEmpty()) {
+            return emptyList()
+        }
+        return output.split("\n").mapNotNull { line ->
+            val parts = line.split("|", limit = 2)
+            if (parts.size != 2) {
+                return@mapNotNull null
+            }
+            val id = parts[0].trim().toIntOrNull() ?: return@mapNotNull null
+            val label = parts[1].trim()
+            RefreshMode(id, label)
+        }
+    }
+
+    private fun getActiveRefreshModeId(): Int? {
+        val output = KeepShellPublic.doCmdSync("dumpsys display").trim()
+        val activeSf = Regex("mActiveSfDisplayMode=DisplayMode\\{id=([0-9]+)").find(output)?.groupValues?.getOrNull(1)?.toIntOrNull()
+        return activeSf
+    }
+
 
     // 设置悬浮窗状态
     private fun setDialogState (view: View) {
