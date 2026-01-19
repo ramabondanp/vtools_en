@@ -111,9 +111,6 @@ internal class AlwaysNotification(
             setTextViewText(R.id.notify_title, getAppName(packageName))
             setTextViewText(R.id.notify_text, getModName(mode))
             setTextViewText(R.id.notify_battery_text, "$batteryIO ${GlobalStatus.batteryCapacity}% $batteryTemp")
-            if (modeImage != null) {
-                setImageViewBitmap(R.id.notify_mode, modeImage)
-            }
             if (batteryImage != null) {
                 setImageViewBitmap(R.id.notify_battery_icon, batteryImage)
             }
