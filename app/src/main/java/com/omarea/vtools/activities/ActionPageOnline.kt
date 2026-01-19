@@ -21,6 +21,7 @@ import android.view.View
 import android.view.WindowManager
 import android.webkit.*
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.Toolbar
 import com.omarea.common.shared.FilePathResolver
 import com.omarea.common.ui.DialogHelper
@@ -35,6 +36,19 @@ import java.util.*
 class ActionPageOnline : ActivityBase() {
     private val progressBarDialog = ProgressBarDialog(this)
     private lateinit var binding: ActivityActionPageOnlineBinding
+    private var fileSelectedInterface: ParamsFileChooserRender.FileSelectedInterface? = null
+
+    private val fileChooserLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        val resultUri = if (result.resultCode == Activity.RESULT_OK) result.data?.data else null
+        if (fileSelectedInterface != null) {
+            if (resultUri != null) {
+                fileSelectedInterface?.onFileSelected(getPath(resultUri))
+            } else {
+                fileSelectedInterface?.onFileSelected(null)
+            }
+        }
+        fileSelectedInterface = null
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -222,8 +236,6 @@ class ActionPageOnline : ActivityBase() {
                 }).inject(this, url.startsWith("file:///android_asset"))
     }
 
-    private var fileSelectedInterface: ParamsFileChooserRender.FileSelectedInterface? = null
-    private val ACTION_FILE_PATH_CHOOSER = 65400
     private fun chooseFilePath(fileSelectedInterface: ParamsFileChooserRender.FileSelectedInterface): Boolean {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE), 2);
@@ -234,29 +246,13 @@ class ActionPageOnline : ActivityBase() {
                 val intent = Intent(Intent.ACTION_GET_CONTENT);
                 intent.setType("*/*")
                 intent.addCategory(Intent.CATEGORY_OPENABLE);
-                startActivityForResult(intent, ACTION_FILE_PATH_CHOOSER);
                 this.fileSelectedInterface = fileSelectedInterface
+                fileChooserLauncher.launch(intent)
                 return true;
             } catch (ex: java.lang.Exception) {
                 return false
             }
         }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == ACTION_FILE_PATH_CHOOSER) {
-            val result = if (data == null || resultCode != Activity.RESULT_OK) null else data.data
-            if (fileSelectedInterface != null) {
-                if (result != null) {
-                    val absPath = getPath(result)
-                    fileSelectedInterface?.onFileSelected(absPath)
-                } else {
-                    fileSelectedInterface?.onFileSelected(null)
-                }
-            }
-            this.fileSelectedInterface = null
-        }
-        super.onActivityResult(requestCode, resultCode, data)
     }
 
     private fun getPath(uri: Uri): String? {

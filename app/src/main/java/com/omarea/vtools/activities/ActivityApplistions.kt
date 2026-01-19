@@ -57,11 +57,10 @@ class ActivityApplistions : ActivityBase() {
 
         setBackArrow()
 
-        TabIconHelper2(binding.tabList, binding.tabContent, this, supportFragmentManager).run {
+        TabIconHelper2(binding.tabList, binding.tabContent, this).run {
             newTabSpec("Installed", ContextCompat.getDrawable(context, R.drawable.tab_app)!!, fragmentAppUser)
             newTabSpec("System", ContextCompat.getDrawable(context, R.drawable.tab_security)!!, fragmentAppSystem)
             newTabSpec("Backups", ContextCompat.getDrawable(context, R.drawable.tab_package)!!, fragmentAppBackup)
-            binding.tabContent.adapter = this.adapter
         }
 
         binding.appsSearchBox.setOnEditorActionListener { _, actionId, _ ->

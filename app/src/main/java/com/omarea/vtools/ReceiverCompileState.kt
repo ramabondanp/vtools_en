@@ -1,6 +1,5 @@
 package com.omarea.vtools
 
-import android.app.IntentService
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.BroadcastReceiver
@@ -18,19 +17,15 @@ class ReceiverCompileState : BroadcastReceiver() {
     }
 
     init {
-        nm = Scene.context.getSystemService(IntentService.NOTIFICATION_SERVICE) as NotificationManager
+        nm = Scene.context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     }
 
     private fun updateNotification(title: String, text: String, total: Int, current: Int, autoCancel: Boolean = true) {
-        val builder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            if (!channelCreated) {
-                nm.createNotificationChannel(NotificationChannel("vtool-compile", "Background compile", NotificationManager.IMPORTANCE_LOW))
-                channelCreated = true
-            }
-            NotificationCompat.Builder(Scene.context, "vtool-compile")
-        } else {
-            NotificationCompat.Builder(Scene.context)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !channelCreated) {
+            nm.createNotificationChannel(NotificationChannel("vtool-compile", "Background compile", NotificationManager.IMPORTANCE_LOW))
+            channelCreated = true
         }
+        val builder = NotificationCompat.Builder(Scene.context, "vtool-compile")
 
         nm.notify(990, builder
                 .setSmallIcon(R.drawable.process)

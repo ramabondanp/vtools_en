@@ -65,7 +65,7 @@
             android:tint="?android:textColorPrimary" />
     </LinearLayout>
 
-    <androidx.viewpager.widget.ViewPager
+    <androidx.viewpager2.widget.ViewPager2
         android:paddingTop="@dimen/activity_vertical_margin"
         android:id="@+id/tab_content"
         android:layout_width="match_parent"

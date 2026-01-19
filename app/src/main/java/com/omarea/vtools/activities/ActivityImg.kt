@@ -9,6 +9,7 @@ import android.os.StatFs
 import android.widget.AdapterView
 import android.widget.SimpleAdapter
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import com.omarea.Scene
 import com.omarea.common.shared.FilePathResolver
 import com.omarea.common.ui.DialogHelper
@@ -22,6 +23,40 @@ import java.util.*
 
 class ActivityImg : ActivityBase() {
     private lateinit var binding: ActivityImgBinding
+    private var pendingFlashType: Int? = null
+    private var useInnerFileChooser = false
+
+    private val flashPickerLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        val requestCode = pendingFlashType ?: return@registerForActivityResult
+        pendingFlashType = null
+        if (result.resultCode != Activity.RESULT_OK) {
+            return@registerForActivityResult
+        }
+        val data = result.data
+        if (data == null) {
+            Toast.makeText(this, "Selected file not found!", Toast.LENGTH_SHORT).show()
+            return@registerForActivityResult
+        }
+        if (Build.VERSION.SDK_INT >= 30 && !useInnerFileChooser) {
+            val absPath = FilePathResolver().getPath(this, data.data)
+            if (absPath != null) {
+                if (absPath.endsWith(".img")) {
+                    flash(absPath, requestCode)
+                } else {
+                    Toast.makeText(this, "Invalid file (should be a .img file)!", Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                Toast.makeText(this, "Selected file not found!", Toast.LENGTH_SHORT).show()
+            }
+        } else {
+            if (data.extras?.containsKey("file") == true) {
+                val path = data.extras!!.getString("file")!!
+                flash(path, requestCode)
+            } else {
+                Toast.makeText(this, "Selected file not found!", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
     private fun createItem(title: String, desc: String, key: String): HashMap<String, Any> {
         val item = HashMap<String, Any>()
         item.put("Title", title)
@@ -133,15 +168,18 @@ class ActivityImg : ActivityBase() {
     private val PERSIST_IMG = 3
 
     private fun chooseImgToFlash(type: Int) {
+        pendingFlashType = type
         if (Build.VERSION.SDK_INT >= 30) {
+            useInnerFileChooser = false
             val intent = Intent(Intent.ACTION_GET_CONTENT)
             intent.type = "*/*"
             intent.addCategory(Intent.CATEGORY_OPENABLE)
-            startActivityForResult(intent, type)
+            flashPickerLauncher.launch(intent)
         } else {
+            useInnerFileChooser = true
             val intent = Intent(this, ActivityFileSelector::class.java)
             intent.putExtra("extension", "img")
-            startActivityForResult(intent, type)
+            flashPickerLauncher.launch(intent)
         }
     }
 
@@ -169,28 +207,4 @@ class ActivityImg : ActivityBase() {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK && data != null) {
-            if (Build.VERSION.SDK_INT >= 30) {
-                val absPath = FilePathResolver().getPath(this, data.data)
-                if (absPath != null) {
-                    if (absPath.endsWith(".img")) {
-                        flash(absPath, requestCode)
-                    } else {
-                        Toast.makeText(this, "Invalid file (should be a .img file)!", Toast.LENGTH_SHORT).show()
-                    }
-                } else {
-                    Toast.makeText(this, "Selected file not found!", Toast.LENGTH_SHORT).show()
-                }
-            } else {
-                if (data.extras?.containsKey("file") == true) {
-                    val path = data.extras!!.getString("file")!!
-                    flash(path, requestCode)
-                } else {
-                    Toast.makeText(this, "Selected file not found!", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
-    }
 }

@@ -1,6 +1,7 @@
 package com.omarea.scene_mode
 
 import android.content.Intent
+import android.app.PendingIntent
 import android.graphics.drawable.Icon
 import android.os.Build
 import android.service.quicksettings.Tile
@@ -13,12 +14,16 @@ import com.omarea.vtools.activities.ActivityPowerModeTile
 class SceneTileService : TileService() {
     override fun onClick() {
         // sendBroadcast(Intent(this, ReceiverSceneMode::class.java).putExtra("packageName", packageName))
-        startActivityAndCollapse(
-                Intent(this, ActivityPowerModeTile::class.java)
-                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        .addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
-                        .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
-        )
+        val intent = Intent(this, ActivityPowerModeTile::class.java)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                .addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+                .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+            startActivityAndCollapse(pendingIntent)
+        } else {
+            startActivityAndCollapse(intent)
+        }
         super.onClick()
     }
 

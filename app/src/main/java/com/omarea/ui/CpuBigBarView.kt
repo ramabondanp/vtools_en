@@ -5,6 +5,7 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
+import androidx.core.content.ContextCompat
 import com.omarea.vtools.R
 import java.util.concurrent.LinkedBlockingQueue
 
@@ -70,9 +71,9 @@ class CpuBigBarView : View {
         val barWidth = strokeWidth
         for (ratio in loadHisotry) {
             if (ratio > 85) {
-                mainPaint!!.color = resources.getColor(R.color.color_load_veryhight)
+                mainPaint!!.color = ContextCompat.getColor(context, R.color.color_load_veryhight)
             } else if (ratio > 65) {
-                mainPaint!!.color = resources.getColor(R.color.color_load_hight)
+                mainPaint!!.color = ContextCompat.getColor(context, R.color.color_load_hight)
             } else {
                 mainPaint!!.color = accentColor
             }

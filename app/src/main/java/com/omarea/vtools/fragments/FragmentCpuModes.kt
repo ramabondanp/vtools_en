@@ -14,6 +14,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.omarea.Scene
@@ -385,32 +386,32 @@ class FragmentCpuModes : Fragment() {
     }
 
     private fun updateState() {
-        val binding = _binding ?: return
+        val viewBinding = _binding ?: return
         val outsideInstalled = configInstaller.outsideConfigInstalled()
         configFileInstalled = outsideInstalled || configInstaller.insideConfigInstalled()
         author = ModeSwitcher.getCurrentSource()
 
-        binding.configAuthor.text = ModeSwitcher.getCurrentSourceName()
+        viewBinding.configAuthor.text = ModeSwitcher.getCurrentSourceName()
 
-        updateState(binding.cpuConfigP0, ModeSwitcher.POWERSAVE)
-        updateState(binding.cpuConfigP1, ModeSwitcher.BALANCE)
-        updateState(binding.cpuConfigP2, ModeSwitcher.PERFORMANCE)
-        updateState(binding.cpuConfigP3, ModeSwitcher.FAST)
+        updateState(viewBinding.cpuConfigP0, ModeSwitcher.POWERSAVE)
+        updateState(viewBinding.cpuConfigP1, ModeSwitcher.BALANCE)
+        updateState(viewBinding.cpuConfigP2, ModeSwitcher.PERFORMANCE)
+        updateState(viewBinding.cpuConfigP3, ModeSwitcher.FAST)
         val serviceState = AccessibleServiceHelper().serviceRunning(context!!)
         val dynamicControl = globalSPF.getBoolean(SpfConfig.GLOBAL_SPF_DYNAMIC_CONTROL, SpfConfig.GLOBAL_SPF_DYNAMIC_CONTROL_DEFAULT)
-        binding.dynamicControl.isChecked = dynamicControl && serviceState
-        binding.navSceneServiceNotActive.visibility = if (serviceState) View.GONE else View.VISIBLE
+        viewBinding.dynamicControl.isChecked = dynamicControl && serviceState
+        viewBinding.navSceneServiceNotActive.visibility = if (serviceState) View.GONE else View.VISIBLE
 
         if (dynamicControl && !modeSwitcher.modeConfigCompleted()) {
             globalSPF.edit().putBoolean(SpfConfig.GLOBAL_SPF_DYNAMIC_CONTROL, false).apply()
-            binding.dynamicControl.isChecked = false
+            viewBinding.dynamicControl.isChecked = false
             reStartService()
         }
-        binding.dynamicControlOpts.postDelayed({
-            val binding = _binding ?: return@postDelayed
-            binding.dynamicControlOpts.visibility = if (binding.dynamicControl.isChecked) View.VISIBLE else View.GONE
+        viewBinding.dynamicControlOpts.postDelayed({
+            val postBinding = _binding ?: return@postDelayed
+            postBinding.dynamicControlOpts.visibility = if (postBinding.dynamicControl.isChecked) View.VISIBLE else View.GONE
         }, 15)
-        binding.extremePerformanceOn.isChecked = ThermalDisguise().isDisabled()
+        viewBinding.extremePerformanceOn.isChecked = ThermalDisguise().isDisabled()
     }
 
     private fun updateState(button: View, mode: String) {
@@ -433,58 +434,49 @@ class FragmentCpuModes : Fragment() {
 
     private val configInstaller = CpuConfigInstaller()
 
-    private val REQUEST_POWERCFG_FILE = 1
-    private val REQUEST_POWERCFG_ONLINE = 2
     // 是否使用内置的文件选择器
     private var useInnerFileChooser = false
+    private val configFileLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode != Activity.RESULT_OK) {
+            return@registerForActivityResult
+        }
+        val data = result.data ?: return@registerForActivityResult
+        val context = context ?: return@registerForActivityResult
+        // 安卓原生文件选择器
+        if (Build.VERSION.SDK_INT >= 30 && !useInnerFileChooser) {
+            val absPath = FilePathResolver().getPath(activity, data.data)
+            if (absPath != null) {
+                if (absPath.endsWith(".sh")) {
+                    installLocalConfig(absPath)
+                } else {
+                    Toast.makeText(context, "Invalid file (should be a .sh file)!", Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                Toast.makeText(context, "Selected file not found!", Toast.LENGTH_SHORT).show()
+            }
+        } else { // Scene内置文件选择器
+            if (data.extras?.containsKey("file") != true) {
+                return@registerForActivityResult
+            }
+            val path = data.extras!!.getString("file")!!
+            installLocalConfig(path)
+        }
+    }
     private fun chooseLocalConfig() {
-        val action = REQUEST_POWERCFG_FILE
         if (Build.VERSION.SDK_INT >= 30 && !Environment.isExternalStorageManager()) {
             useInnerFileChooser = false
             val intent = Intent(Intent.ACTION_GET_CONTENT)
             intent.type = "*/*"
             intent.addCategory(Intent.CATEGORY_OPENABLE)
-            startActivityForResult(intent, action)
+            configFileLauncher.launch(intent)
         } else {
             useInnerFileChooser = true
             try {
                 val intent = Intent(this.context, ActivityFileSelector::class.java)
                 intent.putExtra("extension", "sh")
-                startActivityForResult(intent, action)
+                configFileLauncher.launch(intent)
             } catch (ex: Exception) {
                 Toast.makeText(context, "Failed to launch built-in file picker!", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_POWERCFG_FILE) {
-            if (resultCode == Activity.RESULT_OK && data != null) {
-                // 安卓原生文件选择器
-                if (Build.VERSION.SDK_INT >= 30 && !useInnerFileChooser) {
-                    val absPath = FilePathResolver().getPath(this.activity, data.data)
-                    if (absPath != null) {
-                        if (absPath.endsWith(".sh")) {
-                            installLocalConfig(absPath)
-                        } else {
-                            Toast.makeText(context, "Invalid file (should be a .sh file)!", Toast.LENGTH_SHORT).show()
-                        }
-                    } else {
-                        Toast.makeText(context, "Selected file not found!", Toast.LENGTH_SHORT).show()
-                    }
-                } else { // Scene内置文件选择器
-                    if (data.extras?.containsKey("file") != true) {
-                        return
-                    }
-                    val path = data.extras!!.getString("file")!!
-                    installLocalConfig(path)
-                }
-            }
-            return
-        } else if (requestCode == REQUEST_POWERCFG_ONLINE) {
-            if (resultCode == Activity.RESULT_OK) {
-                configInstalled()
             }
         }
     }

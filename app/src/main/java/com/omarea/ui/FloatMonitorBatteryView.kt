@@ -10,6 +10,7 @@ import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
 import android.view.animation.DecelerateInterpolator
+import androidx.core.content.ContextCompat
 import com.omarea.vtools.R
 
 
@@ -176,13 +177,13 @@ class FloatMonitorBatteryView : View {
         if (temperature >= 48 || ratioState < 11) {
             cyclePaint!!.color = Color.rgb(255, 15, 0)
         } else if (temperature > 44 || ratio < 16) {
-            cyclePaint!!.color = resources.getColor(R.color.color_load_veryhight)
+            cyclePaint!!.color = ContextCompat.getColor(context, R.color.color_load_veryhight)
         } else if (temperature > 41 || ratio < 31) {
-            cyclePaint!!.color = resources.getColor(R.color.color_load_hight)
+            cyclePaint!!.color = ContextCompat.getColor(context, R.color.color_load_hight)
         } else if (temperature > 20) {
-            cyclePaint!!.color = resources.getColor(R.color.color_load_mid)
+            cyclePaint!!.color = ContextCompat.getColor(context, R.color.color_load_mid)
         } else {
-            cyclePaint!!.color = resources.getColor(R.color.color_load_low)
+            cyclePaint!!.color = ContextCompat.getColor(context, R.color.color_load_low)
         }
 
         /*

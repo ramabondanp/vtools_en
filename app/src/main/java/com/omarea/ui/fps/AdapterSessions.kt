@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.omarea.model.FpsWatchSession
 import com.omarea.vtools.R
@@ -42,13 +43,7 @@ class AdapterSessions(private val context: Context, private val list: ArrayList<
     }
 
     private fun getResourceColor(colorId: Int): Int {
-        val theme = context.theme
-        val resources = context.resources
-        return if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-            resources.getColor(colorId, theme)
-        } else {
-            resources.getColor(colorId)
-        }
+        return ContextCompat.getColor(context, colorId)
     }
 
     // private val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS")

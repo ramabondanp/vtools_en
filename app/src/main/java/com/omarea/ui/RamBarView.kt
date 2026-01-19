@@ -6,6 +6,7 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
+import androidx.core.content.ContextCompat
 import com.omarea.vtools.R
 
 
@@ -129,9 +130,9 @@ class RamBarView : View {
                     mHeight / 2f, mHeight / 2f,
                     this)
             if (ratio > 89) {
-                color = resources.getColor(R.color.color_load_veryhight)
+                color = ContextCompat.getColor(context, R.color.color_load_veryhight)
             } else if (ratio > 80) {
-                color = resources.getColor(R.color.color_load_hight)
+                color = ContextCompat.getColor(context, R.color.color_load_hight)
             } else {
                 color = accentColor
             }

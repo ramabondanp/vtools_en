@@ -14,6 +14,7 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.omarea.model.AppInfo
 import com.omarea.scene_mode.ModeSwitcher
@@ -93,13 +94,7 @@ class AdapterSceneMode2(private val context: Context, apps: ArrayList<AppInfo>, 
     }
 
     private fun getResourceColor(colorId: Int): Int {
-        val theme = context.theme
-        val resources = context.resources
-        return if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-            resources.getColor(colorId, theme)
-        } else {
-            resources.getColor(colorId)
-        }
+        return ContextCompat.getColor(context, colorId)
     }
 
     private val colors = HashMap<String, Int>().apply {

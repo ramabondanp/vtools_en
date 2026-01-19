@@ -1,9 +1,10 @@
 package com.omarea.scene_mode
 
-import android.app.IntentService
+import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.os.BatteryManager
+import android.os.IBinder
 import android.widget.Toast
 import com.omarea.data.EventBus
 import com.omarea.data.EventType
@@ -11,9 +12,25 @@ import com.omarea.data.GlobalStatus
 import com.omarea.data.IEventReceiver
 import com.omarea.library.basic.ScreenState
 import com.omarea.store.TimingTaskStorage
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 
-class SceneTaskIntentService : IntentService("SceneTaskIntentService") {
-    override fun onHandleIntent(intent: Intent?) {
+class SceneTaskIntentService : Service() {
+    private val serviceJob = SupervisorJob()
+    private val serviceScope = CoroutineScope(Dispatchers.IO + serviceJob)
+
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        serviceScope.launch {
+            handleIntent(intent)
+            stopSelfResult(startId)
+        }
+        return START_NOT_STICKY
+    }
+
+    private fun handleIntent(intent: Intent?) {
         intent?.run {
             val taskId = if (intent.hasExtra("taskId")) intent.getStringExtra("taskId") else null
             taskId?.run {
@@ -21,6 +38,13 @@ class SceneTaskIntentService : IntentService("SceneTaskIntentService") {
             }
         }
     }
+
+    override fun onDestroy() {
+        serviceScope.cancel()
+        super.onDestroy()
+    }
+
+    override fun onBind(intent: Intent?): IBinder? = null
 
     private fun executeTask(taskId: String) {
         val context = this

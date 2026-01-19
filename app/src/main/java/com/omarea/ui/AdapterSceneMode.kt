@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import com.omarea.common.ui.OverScrollListView
 import com.omarea.library.basic.AppInfoLoader
 import com.omarea.model.AppInfo
@@ -99,13 +100,7 @@ class AdapterSceneMode(private val context: Context, apps: ArrayList<AppInfo>, p
     }
 
     private fun getResourceColor(colorId: Int): Int {
-        val theme = context.theme
-        val resources = context.resources
-        return if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-            resources.getColor(colorId, theme)
-        } else {
-            resources.getColor(colorId)
-        }
+        return ContextCompat.getColor(context, colorId)
     }
 
     private val colors = HashMap<String, Int>().apply {

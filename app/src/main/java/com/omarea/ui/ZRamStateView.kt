@@ -8,6 +8,7 @@ import android.graphics.Paint
 import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
+import androidx.core.content.ContextCompat
 import com.omarea.vtools.R
 
 
@@ -152,9 +153,9 @@ class ZRamStateView : View {
     private fun drawCycle(canvas: Canvas) {
         val startPercent = -90f
         val color = if (ratio > 89) {
-            resources.getColor(R.color.color_load_veryhight)
+            ContextCompat.getColor(context, R.color.color_load_veryhight)
         } else if (ratio > 80) {
-            resources.getColor(R.color.color_load_hight)
+            ContextCompat.getColor(context, R.color.color_load_hight)
         } else {
             accentColor
         }

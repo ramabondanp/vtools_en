@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -9,288 +10,24 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <TabHost
-        android:id="@+id/configlist_tabhost"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/layout_app_bar"
-        android:focusable="false">
+        android:orientation="vertical">
 
-        <LinearLayout
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/system_scene_pager"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="0dp"
+            android:layout_weight="1" />
 
-            <FrameLayout
-                android:id="@android:id/tabcontent"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1">
-
-                <com.omarea.common.ui.OverScrollView
-                    android:id="@+id/blacklist_tab3"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <LinearLayout
-                            android:id="@+id/system_scene_bp"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:visibility="gone">
-
-                            <LinearLayout
-                                style="@style/ListCardItem"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:gravity="center_vertical"
-                                android:orientation="horizontal"
-                                android:padding="12dp">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/system_scene_battery_right" />
-
-                                <TextView
-                                    android:id="@+id/system_scene_bp_gt"
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginStart="@dimen/activity_horizontal_margin"
-                                    android:layout_weight="1"
-                                    android:text="--" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/system_scene_stop_charge"
-                                    android:textAlignment="center"
-                                    android:textColor="?android:colorAccent" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                style="@style/ListCardItem"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:gravity="center_vertical"
-                                android:orientation="horizontal"
-                                android:padding="12dp">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/system_scene_battery_left" />
-
-                                <TextView
-                                    android:id="@+id/system_scene_bp_lt"
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginStart="@dimen/activity_horizontal_margin"
-                                    android:layout_weight="1"
-                                    android:text="--" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/system_scene_resume_charge"
-                                    android:textAlignment="center"
-                                    android:textColor="?android:colorAccent" />
-                            </LinearLayout>
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/system_scene_next"
-                            style="@style/ListCardItemClickable"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-
-                            <TextView
-                                style="@style/textTitle"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/system_scene_next_task" />
-
-                            <FrameLayout
-                                android:id="@+id/system_scene_next_content"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="8dp" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            style="@style/ListCardItem"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:paddingBottom="0dp">
-
-                            <TextView
-                                style="@style/textTitle"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/system_scene_timing_task" />
-
-                            <LinearLayout
-                                android:id="@+id/system_scene_task_list"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="8dp"
-                                android:orientation="vertical">
-
-                            </LinearLayout>
-
-                            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                                android:id="@+id/system_scene_add_task"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_horizontal"
-                                android:layout_marginTop="8dp"
-                                android:layout_marginBottom="8dp"
-                                android:src="@drawable/add" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            style="@style/ListCardItemLast"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:paddingBottom="0dp">
-
-                            <TextView
-                                style="@style/textTitle"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/system_scene_trigger" />
-
-                            <LinearLayout
-                                android:id="@+id/system_scene_trigger_list"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="8dp"
-                                android:orientation="vertical">
-
-                            </LinearLayout>
-
-                            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                                android:id="@+id/system_scene_add_trigger"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_horizontal"
-                                android:layout_marginTop="8dp"
-                                android:layout_marginBottom="8dp"
-                                android:src="@drawable/add" />
-                        </LinearLayout>
-                    </LinearLayout>
-                </com.omarea.common.ui.OverScrollView>
-
-                <com.omarea.common.ui.OverScrollView
-                    android:id="@+id/configlist_tab5"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <LinearLayout
-                            android:id="@+id/system_scene_standby_apps"
-                            style="@style/ListCardItemClickable"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal">
-
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    style="@style/textTitle"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:text="Standby mode list" />
-
-                                <TextView
-                                    style="@style/textSmall"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="4dp"
-                                    android:text="Set the standby mode to hibernate the application" />
-                            </LinearLayout>
-
-                            <ImageView
-                                android:layout_width="30dp"
-                                android:layout_height="30dp"
-                                android:alpha="0.8"
-                                android:padding="5dp"
-                                android:src="@drawable/kr_picker"
-                                android:tint="?android:colorAccent" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/system_scene_command"
-                            style="@style/ListCardItemClickable"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal">
-
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    style="@style/textTitle"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:text="Adding custom commands" />
-
-                                <TextView
-                                    style="@style/textSmall"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="4dp"
-                                    android:text="Extend system scenario functionality with custom script content" />
-                            </LinearLayout>
-
-                            <ImageView
-                                android:layout_width="30dp"
-                                android:layout_height="30dp"
-                                android:alpha="0.8"
-                                android:padding="5dp"
-                                android:src="@drawable/kr_arrow"
-                                android:tint="?android:colorAccent" />
-                        </LinearLayout>
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:padding="20dp"
-                            android:text="Stay tuned for more features!"
-                            android:textAlignment="center" />
-                    </LinearLayout>
-                </com.omarea.common.ui.OverScrollView>
-            </FrameLayout>
-
-            <TabWidget
-                android:id="@android:id/tabs"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/tab_widget_background" />
-
-        </LinearLayout>
-
-    </TabHost>
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/system_scene_tabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/tab_widget_background"
+            app:tabIndicatorColor="?attr/colorAccent" />
+    </LinearLayout>
 
 </RelativeLayout>

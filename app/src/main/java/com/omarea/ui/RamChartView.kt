@@ -7,6 +7,7 @@ import android.graphics.Paint
 import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
+import androidx.core.content.ContextCompat
 import com.omarea.vtools.R
 
 
@@ -136,9 +137,9 @@ class RamChartView : View {
             return
         }
         if (ratio > 89) {
-            cyclePaint!!.color = resources.getColor(R.color.color_load_veryhight)
+            cyclePaint!!.color = ContextCompat.getColor(context, R.color.color_load_veryhight)
         } else if (ratio > 80) {
-            cyclePaint!!.color = resources.getColor(R.color.color_load_hight)
+            cyclePaint!!.color = ContextCompat.getColor(context, R.color.color_load_hight)
         } else {
             cyclePaint!!.color = accentColor
         }

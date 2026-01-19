@@ -107,15 +107,11 @@ class TaskActionsExecutor(
 
     private var channelCreated = false
     private fun updateNotification(text: String) {
-        val notic = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            if (!channelCreated) {
-                nm.createNotificationChannel(NotificationChannel("vtools-task", context.getString(R.string.notice_channel_task), NotificationManager.IMPORTANCE_LOW))
-                channelCreated = true
-            }
-            NotificationCompat.Builder(context, "vtools-task")
-        } else {
-            NotificationCompat.Builder(context)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !channelCreated) {
+            nm.createNotificationChannel(NotificationChannel("vtools-task", context.getString(R.string.notice_channel_task), NotificationManager.IMPORTANCE_LOW))
+            channelCreated = true
         }
+        val notic = NotificationCompat.Builder(context, "vtools-task")
         nm.notify(920, notic.setSmallIcon(R.drawable.ic_clock).setWhen(System.currentTimeMillis()).setContentTitle(context.getString(R.string.notice_channel_task)).setContentText(text).build())
     }
 

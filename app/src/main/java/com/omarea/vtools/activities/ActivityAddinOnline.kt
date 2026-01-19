@@ -16,13 +16,15 @@ import android.view.View
 import android.view.WindowManager
 import android.webkit.*
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import com.omarea.common.shared.FilePathResolver
 import com.omarea.common.shared.FileWrite
 import com.omarea.common.ui.DialogHelper
 import com.omarea.common.ui.ProgressBarDialog
 import com.omarea.krscript.WebViewInjector
 import com.omarea.krscript.ui.ParamsFileChooserRender
-import com.omarea.library.calculator.Flags
 import com.omarea.scene_mode.CpuConfigInstaller
 import com.omarea.scene_mode.ModeSwitcher
 import com.omarea.vtools.R
@@ -36,6 +38,19 @@ import java.util.zip.ZipInputStream
 
 class ActivityAddinOnline : ActivityBase() {
     private lateinit var binding: ActivityAddinOnlineBinding
+    private var fileSelectedInterface: ParamsFileChooserRender.FileSelectedInterface? = null
+
+    private val fileChooserLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        val resultUri = if (result.resultCode == Activity.RESULT_OK) result.data?.data else null
+        if (fileSelectedInterface != null) {
+            if (resultUri != null) {
+                fileSelectedInterface?.onFileSelected(getPath(resultUri))
+            } else {
+                fileSelectedInterface?.onFileSelected(null)
+            }
+        }
+        fileSelectedInterface = null
+    }
 
     override fun onPostResume() {
         super.onPostResume()
@@ -49,16 +64,13 @@ class ActivityAddinOnline : ActivityBase() {
         binding = ActivityAddinOnlineBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         window.statusBarColor = Color.WHITE
         window.navigationBarColor = Color.WHITE
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
-        } else if (Build.VERSION.SDK_INT >= 23) {
-            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-        }
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+        val insetsController = WindowInsetsControllerCompat(window, window.decorView)
+        insetsController.isAppearanceLightStatusBars = true
+        insetsController.isAppearanceLightNavigationBars = true
 
 
         if (this.intent.extras != null) {
@@ -77,7 +89,7 @@ class ActivityAddinOnline : ActivityBase() {
         // 处理alert、confirm
         binding.vtoolsOnline.webChromeClient = object : WebChromeClient() {
             override fun onJsAlert(view: WebView?, url: String?, message: String?, result: JsResult?): Boolean {
-                DialogHelper.animDialog(
+                val dialog = DialogHelper.animDialog(
                         AlertDialog.Builder(context)
                                 .setMessage(message)
                                 .setPositiveButton(R.string.btn_confirm, { _, _ -> })
@@ -85,12 +97,13 @@ class ActivityAddinOnline : ActivityBase() {
                                     result?.confirm()
                                 }
                                 .create()
-                )?.setCancelable(false)
+                )
+                dialog?.setCancelable(false)
                 return true // super.onJsAlert(view, url, message, result)
             }
 
             override fun onJsConfirm(view: WebView?, url: String?, message: String?, result: JsResult?): Boolean {
-                DialogHelper.animDialog(
+                val dialog = DialogHelper.animDialog(
                         AlertDialog.Builder(context)
                                 .setMessage(message)
                                 .setPositiveButton(R.string.btn_confirm) { _, _ ->
@@ -100,7 +113,8 @@ class ActivityAddinOnline : ActivityBase() {
                                     result?.cancel()
                                 }
                                 .create()
-                )?.setCancelable(false)
+                )
+                dialog?.setCancelable(false)
                 return true // super.onJsConfirm(view, url, message, result)
             }
         }
@@ -137,7 +151,7 @@ class ActivityAddinOnline : ActivityBase() {
                                 }
                                 .setNeutralButton(R.string.btn_cancel) { _, _ ->
                                     view.loadUrl(url)
-                                })?.setCancelable(false)
+                                }).setCancelable(false)
                     } else if (url.startsWith("https://github.com/yc9559/wipe-v2/releases/download/") && url.endsWith(".zip")) {
                         // v2
                         // https://github.com/yc9559/wipe-v2/releases/download/0.1.190503-dev/sdm625.zip
@@ -151,7 +165,7 @@ class ActivityAddinOnline : ActivityBase() {
                                 }
                                 .setNeutralButton(R.string.btn_cancel) { _, _ ->
                                     view.loadUrl(url)
-                                })?.setCancelable(false)
+                                }).setCancelable(false)
                     } else {
                         view.loadUrl(url)
                     }
@@ -160,6 +174,8 @@ class ActivityAddinOnline : ActivityBase() {
                 return false
             }
 
+            @Deprecated("Deprecated in WebViewClient", level = DeprecationLevel.WARNING)
+            @Suppress("DEPRECATION")
             override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
                 return tryGetPowercfg(view, url)
             }
@@ -196,13 +212,9 @@ class ActivityAddinOnline : ActivityBase() {
                     val color = Color.parseColor(colorStr)
                     binding.vtoolsOnline.post {
                         window.statusBarColor = color
-                        if (Build.VERSION.SDK_INT >= 23) {
-                            if (Color.red(color) > 180 && Color.green(color) > 180 && Color.blue(color) > 180) {
-                                window.decorView.systemUiVisibility = Flags(window.decorView.systemUiVisibility).addFlag(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR)
-                            } else {
-                                window.decorView.systemUiVisibility = Flags(window.decorView.systemUiVisibility).removeFlag(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR)
-                            }
-                        }
+                        val controller = WindowInsetsControllerCompat(window, window.decorView)
+                        val isLight = Color.red(color) > 180 && Color.green(color) > 180 && Color.blue(color) > 180
+                        controller.isAppearanceLightStatusBars = isLight
                     }
                     return true
                 } catch (ex: java.lang.Exception) {
@@ -216,13 +228,9 @@ class ActivityAddinOnline : ActivityBase() {
                     val color = Color.parseColor(colorStr)
                     binding.vtoolsOnline.post {
                         window.navigationBarColor = color
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                            if (Color.red(color) > 180 && Color.green(color) > 180 && Color.blue(color) > 180) {
-                                window.decorView.systemUiVisibility = Flags(window.decorView.systemUiVisibility).addFlag(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR)
-                            } else {
-                                window.decorView.systemUiVisibility = Flags(window.decorView.systemUiVisibility).removeFlag(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR)
-                            }
-                        }
+                        val controller = WindowInsetsControllerCompat(window, window.decorView)
+                        val isLight = Color.red(color) > 180 && Color.green(color) > 180 && Color.blue(color) > 180
+                        controller.isAppearanceLightNavigationBars = isLight
                     }
 
                     return true
@@ -346,8 +354,6 @@ class ActivityAddinOnline : ActivityBase() {
         }).start()
     }
 
-    private var fileSelectedInterface: ParamsFileChooserRender.FileSelectedInterface? = null
-    private val ACTION_FILE_PATH_CHOOSER = 65400
     private fun chooseFilePath(fileSelectedInterface: ParamsFileChooserRender.FileSelectedInterface): Boolean {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE), 2);
@@ -358,29 +364,13 @@ class ActivityAddinOnline : ActivityBase() {
                 val intent = Intent(Intent.ACTION_GET_CONTENT);
                 intent.setType("*/*")
                 intent.addCategory(Intent.CATEGORY_OPENABLE);
-                startActivityForResult(intent, ACTION_FILE_PATH_CHOOSER);
                 this.fileSelectedInterface = fileSelectedInterface
+                fileChooserLauncher.launch(intent)
                 return true;
             } catch (ex: java.lang.Exception) {
                 return false
             }
         }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == ACTION_FILE_PATH_CHOOSER) {
-            val result = if (data == null || resultCode != Activity.RESULT_OK) null else data.data
-            if (fileSelectedInterface != null) {
-                if (result != null) {
-                    val absPath = getPath(result)
-                    fileSelectedInterface?.onFileSelected(absPath)
-                } else {
-                    fileSelectedInterface?.onFileSelected(null)
-                }
-            }
-            this.fileSelectedInterface = null
-        }
-        super.onActivityResult(requestCode, resultCode, data)
     }
 
     private fun getPath(uri: Uri): String? {

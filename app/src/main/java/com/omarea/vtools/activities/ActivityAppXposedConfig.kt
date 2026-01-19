@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.AdapterView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.omarea.Scene
 import com.omarea.common.ui.OverScrollListView
@@ -33,6 +34,33 @@ class ActivityAppXposedConfig : ActivityBase() {
     private var displayList: ArrayList<AppInfo>? = null
     private lateinit var xposedExtension: XposedExtension
     private lateinit var binding: ActivityAppXposedConfigBinding
+    private var lastClickRow: View? = null
+
+    private val appConfigLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        val data = result.data
+        if (result.resultCode == AppCompatActivity.RESULT_OK && data != null && displayList != null) {
+            try {
+                val adapter = (binding.sceneAppList.adapter as XposedAppsAdapter)
+                var index = -1
+                val packageName = data.extras!!.getString("app")
+                for (i in 0 until displayList!!.size) {
+                    if (displayList!![i].packageName == packageName) {
+                        index = i
+                    }
+                }
+                if (index < 0) {
+                    return@registerForActivityResult
+                }
+                val item = adapter.getItem(index)
+                setAppRowDesc(item)
+                (binding.sceneAppList.adapter as XposedAppsAdapter?)?.run {
+                    updateRow(index, lastClickRow!!)
+                }
+            } catch (ex: Exception) {
+                Log.e("update-list", "" + ex.message)
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,7 +68,7 @@ class ActivityAppXposedConfig : ActivityBase() {
         setContentView(binding.root)
 
         setBackArrow()
-        globalSPF = context!!.getSharedPreferences(SpfConfig.GLOBAL_SPF, Context.MODE_PRIVATE)
+        globalSPF = getSharedPreferences(SpfConfig.GLOBAL_SPF, Context.MODE_PRIVATE)
         xposedExtension = XposedExtension(this)
 
         this.onViewCreated()
@@ -56,13 +84,13 @@ class ActivityAppXposedConfig : ActivityBase() {
                 val item = (parent.adapter.getItem(position) as AppInfo)
                 val intent = Intent(this.context, ActivityAppXposedDetails::class.java)
                 intent.putExtra("app", item.packageName)
-                startActivityForResult(intent, REQUEST_APP_CONFIG)
+                appConfigLauncher.launch(intent)
                 lastClickRow = view2
             } catch (ex: Exception) {
             }
         }
 
-        binding.configSearchBox.setOnEditorActionListener { v, actionId, event ->
+        binding.configSearchBox.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE) {
                 loadList()
                 return@setOnEditorActionListener true
@@ -74,43 +102,11 @@ class ActivityAppXposedConfig : ActivityBase() {
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
 
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, unusedId: Long) {
                 loadList()
             }
         }
 
-    }
-
-    private val REQUEST_APP_CONFIG = 0
-    private var lastClickRow: View? = null
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_APP_CONFIG && data != null && displayList != null) {
-            try {
-                if (resultCode == AppCompatActivity.RESULT_OK) {
-                    val adapter = (binding.sceneAppList.adapter as XposedAppsAdapter)
-                    var index = -1
-                    val packageName = data.extras!!.getString("app")
-                    for (i in 0 until displayList!!.size) {
-                        if (displayList!![i].packageName == packageName) {
-                            index = i
-                        }
-                    }
-                    if (index < 0) {
-                        return
-                    }
-                    val item = adapter.getItem(index)
-                    setAppRowDesc(item)
-                    (binding.sceneAppList.adapter as XposedAppsAdapter?)?.run {
-                        updateRow(index, lastClickRow!!)
-                    }
-                    //loadList(false)
-                }
-            } catch (ex: Exception) {
-                Log.e("update-list", "" + ex.message)
-            }
-        }
     }
 
     private fun sortAppList(list: ArrayList<AppInfo>): ArrayList<AppInfo> {
@@ -162,12 +158,6 @@ class ActivityAppXposedConfig : ActivityBase() {
             if (foreceReload || installedList == null || installedList!!.size == 0) {
                 installedList = ArrayList()/*在数组中存放数据*/
                 installedList = applistHelper.getAll()
-            }
-            if (binding.configSearchBox == null) {
-                Scene.post {
-                    processBarDialog.hideDialog()
-                }
-                return@Runnable
             }
             val keyword = binding.configSearchBox.text.toString().lowercase(Locale.getDefault())
             val search = keyword.isNotEmpty()

@@ -7,6 +7,7 @@ import android.graphics.DashPathEffect
 import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
+import androidx.core.content.ContextCompat
 import com.omarea.store.FpsWatchStore
 import com.omarea.vtools.R
 
@@ -48,7 +49,7 @@ class FpsDataView : View {
         this.activity.theme.resolveAttribute(R.attr.colorAccent, typedValue, true)
         return typedValue.data
         */
-        return resources.getColor(R.color.colorAccent)
+        return ContextCompat.getColor(context, R.color.colorAccent)
     }
 
     /**

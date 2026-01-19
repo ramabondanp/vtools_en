@@ -1,12 +1,13 @@
 package com.omarea.vtools.services
 
-import android.app.IntentService
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
+import android.os.IBinder
 import android.os.PowerManager
 import android.os.PowerManager.PARTIAL_WAKE_LOCK
 import android.widget.Toast
@@ -15,16 +16,24 @@ import com.omarea.Scene
 import com.omarea.common.shared.FileWrite
 import com.omarea.common.shell.KeepShell
 import com.omarea.vtools.R
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 import java.nio.charset.Charset
 import java.util.*
 
 /**
  * 后台编译应用
  */
-class CompileService : IntentService("vtools-compile") {
+class CompileService : Service() {
     companion object {
         var compiling = false
     }
+
+    private val serviceJob = SupervisorJob()
+    private val serviceScope = CoroutineScope(Dispatchers.IO + serviceJob)
 
     private var compileCanceled = false
     private var keepShell = KeepShell(true)
@@ -48,25 +57,19 @@ class CompileService : IntentService("vtools-compile") {
     private fun updateNotification(title: String, text: String) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             nm.createNotificationChannel(NotificationChannel("vtool-compile", "Background compile", NotificationManager.IMPORTANCE_LOW))
-            nm.notify(990, NotificationCompat.Builder(this, "vtool-compile").setSmallIcon(R.drawable.process)
-                    .setContentTitle(title)
-                    .setContentText(text)
-                    .build())
-        } else {
-            nm.notify(990, NotificationCompat.Builder(this).setSmallIcon(R.drawable.process).setSubText(title).setContentText(text).build())
         }
+        nm.notify(990, NotificationCompat.Builder(this, "vtool-compile").setSmallIcon(R.drawable.process)
+                .setContentTitle(title)
+                .setContentText(text)
+                .build())
     }
 
     private fun updateNotification(title: String, text: String, total: Int, current: Int, autoCancel: Boolean = true) {
-        val builder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            if (!channelCreated) {
-                nm.createNotificationChannel(NotificationChannel("vtool-compile", "Background compile", NotificationManager.IMPORTANCE_LOW))
-                channelCreated = true
-            }
-            NotificationCompat.Builder(this, "vtool-compile")
-        } else {
-            NotificationCompat.Builder(this)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !channelCreated) {
+            nm.createNotificationChannel(NotificationChannel("vtool-compile", "Background compile", NotificationManager.IMPORTANCE_LOW))
+            channelCreated = true
         }
+        val builder = NotificationCompat.Builder(this, "vtool-compile")
 
         nm.notify(990, builder
                 .setSmallIcon(R.drawable.process)
@@ -79,8 +82,17 @@ class CompileService : IntentService("vtools-compile") {
 
     private lateinit var mPowerManager: PowerManager
     private lateinit var mWakeLock: PowerManager.WakeLock
-    override fun onHandleIntent(intent: Intent?) {
-        mPowerManager = getSystemService(Context.POWER_SERVICE) as PowerManager;
+
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        serviceScope.launch {
+            handleIntent(intent)
+            stopSelfResult(startId)
+        }
+        return START_NOT_STICKY
+    }
+
+    private fun handleIntent(intent: Intent?) {
+        mPowerManager = getSystemService(Context.POWER_SERVICE) as PowerManager
         /*
             标记值                   CPU  屏幕  键盘
             PARTIAL_WAKE_LOCK       开启  关闭  关闭
@@ -88,7 +100,7 @@ class CompileService : IntentService("vtools-compile") {
             SCREEN_BRIGHT_WAKE_LOCK 开启  变亮  关闭
             FULL_WAKE_LOCK          开启  变亮  变亮
         */
-        mWakeLock = mPowerManager.newWakeLock(PARTIAL_WAKE_LOCK, "scene:CompileService");
+        mWakeLock = mPowerManager.newWakeLock(PARTIAL_WAKE_LOCK, "scene:CompileService")
         mWakeLock.acquire(60 * 60 * 1000) // 默认限制60分钟
 
         nm = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
@@ -169,8 +181,13 @@ class CompileService : IntentService("vtools-compile") {
 
     override fun onDestroy() {
         this.hideNotification()
-        mWakeLock.release()
+        if (this::mWakeLock.isInitialized && mWakeLock.isHeld) {
+            mWakeLock.release()
+        }
 
+        serviceScope.cancel()
         super.onDestroy()
     }
+
+    override fun onBind(intent: Intent?): IBinder? = null
 }

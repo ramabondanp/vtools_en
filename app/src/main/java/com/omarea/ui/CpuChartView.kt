@@ -9,6 +9,7 @@ import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
 import android.view.animation.DecelerateInterpolator
+import androidx.core.content.ContextCompat
 import com.omarea.vtools.R
 
 class CpuChartView : View {
@@ -154,9 +155,9 @@ class CpuChartView : View {
         cyclePaint!!.color = 0x22888888
         canvas.drawArc(RectF(0f, 0f, mRadius, mRadius), 0f, 360f, false, cyclePaint!!)
         if (ratio > 85) {
-            cyclePaint!!.color = resources.getColor(R.color.color_load_veryhight)
+            cyclePaint!!.color = ContextCompat.getColor(context, R.color.color_load_veryhight)
         } else if (ratio > 65) {
-            cyclePaint!!.color = resources.getColor(R.color.color_load_hight)
+            cyclePaint!!.color = ContextCompat.getColor(context, R.color.color_load_hight)
         } else {
             cyclePaint!!.color = accentColor
         }

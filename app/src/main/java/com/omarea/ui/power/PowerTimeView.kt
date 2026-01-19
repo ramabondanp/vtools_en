@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
+import androidx.core.content.ContextCompat
 import com.omarea.model.PowerHistory
 import com.omarea.store.BatteryHistoryStore
 import com.omarea.vtools.R
@@ -41,7 +42,7 @@ class PowerTimeView : View {
         this.activity.theme.resolveAttribute(R.attr.colorAccent, typedValue, true)
         return typedValue.data
         */
-        return resources.getColor(R.color.colorAccent)
+        return ContextCompat.getColor(context, R.color.colorAccent)
     }
 
     /**

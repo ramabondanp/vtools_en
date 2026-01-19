@@ -1,6 +1,7 @@
 package com.omarea.vtools.activities
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
@@ -11,6 +12,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.CompoundButton
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import com.omarea.common.shell.KeepShellPublic
 import com.omarea.common.shell.KernelProrp
 import com.omarea.common.shell.RootFile
@@ -22,10 +24,31 @@ import java.io.File
 import java.nio.charset.Charset
 
 class ActivityMiuiThermal : ActivityBase() {
-    private val REQUEST_CFG_FILE = 1
     private var currentFile = ""
     private var encrypted = true
     private lateinit var binding: ActivityMiuiThermalBinding
+    private val configPickerLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        val data = result.data
+        if (result.resultCode == Activity.RESULT_OK && data?.extras != null) {
+            val fileName = data.extras!!.getString("file")
+            if (!fileName!!.startsWith("thermal")) {
+                currentFile = fileName
+                title = fileName
+
+                try {
+                    readConfig()
+                    encrypted = true
+                } catch (ex: Exception) {
+                    val content = String(File(currentFile).readBytes(), Charset.forName("UTF-8")).trim()
+                    binding.thermalConfig.setText(content)
+                    encrypted = false
+                    return@registerForActivityResult
+                }
+            } else {
+                Toast.makeText(this, "This filename doesn't look like a thermal config file.", Toast.LENGTH_LONG).show()
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,33 +81,9 @@ class ActivityMiuiThermal : ActivityBase() {
                                 val intent = Intent(this.applicationContext, ActivityFileSelector::class.java)
                                 intent.putExtra("extension", "conf")
                                 intent.putExtra("start", options.get(currentIndex))
-                                startActivityForResult(intent, REQUEST_CFG_FILE)
+                                configPickerLauncher.launch(intent)
                             }
                         })
-    }
-
-    @SuppressLint("RestrictedApi")
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_CFG_FILE && data != null && data.extras != null) {
-            val fileName = data.extras!!.getString("file");
-            if (!fileName!!.startsWith("thermal")) {
-                currentFile = fileName
-                title = fileName
-
-                try {
-                    readConfig()
-                    encrypted = true
-                } catch (ex: Exception) {
-                    val content = String(File(currentFile).readBytes(), Charset.forName("UTF-8")).trim()
-                    binding.thermalConfig.setText(content)
-                    encrypted = false
-                    return
-                }
-            } else {
-                Toast.makeText(this, "This filename doesn't look like a thermal config file.", Toast.LENGTH_LONG).show()
-            }
-        }
     }
 
     private fun readConfig() {

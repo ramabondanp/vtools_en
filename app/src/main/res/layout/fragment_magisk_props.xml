@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <EditText
+        android:id="@+id/magisk_props"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="15dp"
+        android:layout_marginBottom="52dp"
+        android:background="@null"
+        android:gravity="top"
+        android:layerType="software"
+        android:textSize="12sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="#33dddddd"
+        android:gravity="end"
+        android:padding="10dp">
+
+        <Button
+            android:id="@+id/magisk_props_reset"
+            style="@style/SceneButton"
+            android:layout_width="wrap_content"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:text="Undo changes" />
+
+        <Button
+            android:id="@+id/magisk_props_save"
+            style="@style/SceneButton"
+            android:layout_width="wrap_content"
+            android:text="Save" />
+    </LinearLayout>
+
+</FrameLayout>
