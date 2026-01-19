@@ -60,8 +60,11 @@ open class AppInfoLoader(private val context: Context, private val cacheSize: In
             var icon: Drawable? = null
             try {
                 val installInfo = pm.getPackageInfo(packageName, 0)
-                icon = installInfo.applicationInfo.loadIcon(pm)
-                saveCache(packageName, icon)
+                val appInfo = installInfo.applicationInfo
+                if (appInfo != null) {
+                    icon = appInfo.loadIcon(pm)
+                    saveCache(packageName, icon)
+                }
             } catch (ex: Exception) {
             } finally {
             }
@@ -78,8 +81,11 @@ open class AppInfoLoader(private val context: Context, private val cacheSize: In
             var name = packageName
             try {
                 val installInfo = pm.getPackageInfo(packageName, 0)
-                name = "" + installInfo.applicationInfo.loadLabel(pm)
-                icon = installInfo.applicationInfo.loadIcon(pm)
+                val appInfo = installInfo.applicationInfo
+                if (appInfo != null) {
+                    name = "" + appInfo.loadLabel(pm)
+                    icon = appInfo.loadIcon(pm)
+                }
                 // saveCache(packageName, icon)
             } catch (ex: Exception) {
             } finally {

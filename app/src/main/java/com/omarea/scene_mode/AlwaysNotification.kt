@@ -46,7 +46,8 @@ internal class AlwaysNotification(
 
     private fun getAppName(packageName: String): CharSequence? {
         try {
-            return context.packageManager.getPackageInfo(packageName, 0).applicationInfo.loadLabel(context.packageManager)
+            val appInfo = context.packageManager.getPackageInfo(packageName, 0).applicationInfo
+            return appInfo?.loadLabel(context.packageManager) ?: packageName
         } catch (ex: Exception) {
             return packageName
         }

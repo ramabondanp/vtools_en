@@ -166,8 +166,12 @@ class ActivityProcess : ActivityBase() {
             var icon: Drawable? = null
             try {
                 val name = if (item.name.contains(":")) item.name.substring(0, item.name.indexOf(":")) else item.name
-                val installInfo = pm!!.getPackageInfo(name, 0)
-                icon = installInfo.applicationInfo.loadIcon(pm)
+                val packageManager = pm ?: return@Runnable
+                val installInfo = packageManager.getPackageInfo(name, 0)
+                val appInfo = installInfo.applicationInfo
+                if (appInfo != null) {
+                    icon = appInfo.loadIcon(packageManager)
+                }
             } catch (ex: Exception) {
             } finally {
                 if (icon != null) {

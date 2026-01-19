@@ -128,7 +128,8 @@ class FloatPowercfgSelector(context: Context) {
         try {
             val pm = context.packageManager
             val packageInfo = pm.getPackageInfo(packageName, 0)
-            titleView.text = packageInfo.applicationInfo.loadLabel(pm).toString()
+            val appInfo = packageInfo.applicationInfo
+            titleView.text = appInfo?.loadLabel(pm)?.toString() ?: packageName
         } catch (ex: Exception) {
             titleView.text = packageName
         }

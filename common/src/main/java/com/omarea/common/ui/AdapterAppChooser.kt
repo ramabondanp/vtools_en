@@ -139,10 +139,15 @@ class AdapterAppChooser(
             if (icon == null && !app.notFound) {
                 try {
                     val installInfo = context.packageManager.getPackageInfo(packageName, 0)
-                    iconCaches.put(
-                            packageName,
-                            installInfo.applicationInfo.loadIcon(context.packageManager)
-                    )
+                    val appInfo = installInfo.applicationInfo
+                    if (appInfo != null) {
+                        iconCaches.put(
+                                packageName,
+                                appInfo.loadIcon(context.packageManager)
+                        )
+                    } else {
+                        app.notFound = true
+                    }
                 } catch (ex: Exception) {
                     app.notFound = true
                 } finally {

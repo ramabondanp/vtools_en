@@ -319,9 +319,10 @@ class ActivityAppXposedDetails : ActivityBase() {
             return
         }
         val applicationInfo = packageInfo.applicationInfo
-        binding.appDetailsName.text = applicationInfo.loadLabel(packageManager)
+        binding.appDetailsName.text = applicationInfo?.loadLabel(packageManager) ?: packageInfo.packageName
         binding.appDetailsPackagename.text = packageInfo.packageName
-        binding.appDetailsIcon.setImageDrawable(applicationInfo.loadIcon(packageManager))
+        val icon = applicationInfo?.loadIcon(packageManager) ?: packageManager.defaultActivityIcon
+        binding.appDetailsIcon.setImageDrawable(icon)
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {

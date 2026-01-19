@@ -308,9 +308,10 @@ class ActivityAppDetails : ActivityBase() {
             return
         }
         val applicationInfo = packageInfo.applicationInfo
-        binding.appDetailsName.text = applicationInfo.loadLabel(packageManager)
+        binding.appDetailsName.text = applicationInfo?.loadLabel(packageManager) ?: packageInfo.packageName
         binding.appDetailsPackagename.text = packageInfo.packageName
-        binding.appDetailsIcon.setImageDrawable(applicationInfo.loadIcon(packageManager))
+        val icon = applicationInfo?.loadIcon(packageManager) ?: packageManager.defaultActivityIcon
+        binding.appDetailsIcon.setImageDrawable(icon)
 
         val firstMode = spfGlobal.getString(SpfConfig.GLOBAL_SPF_POWERCFG_FIRST_MODE, "")
         binding.appDetailsDynamic.text = ModeSwitcher.getModName(powercfg.getString(app, firstMode)!!)

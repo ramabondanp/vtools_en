@@ -252,7 +252,7 @@ class AppListHelper(private val context: Context, private val getTags: Boolean =
             try {
                 val packageInfo = packageManager.getPackageArchiveInfo(absPath, PackageManager.GET_ACTIVITIES)
                 if (packageInfo != null) {
-                    val applicationInfo = packageInfo.applicationInfo
+                    val applicationInfo = packageInfo.applicationInfo ?: continue
                     applicationInfo.sourceDir = absPath
                     applicationInfo.publicSourceDir = absPath
 

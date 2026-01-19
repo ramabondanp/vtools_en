@@ -1,14 +1,6 @@
 apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-
 android {
     namespace "com.omarea.vtools"
-    applicationVariants.all { variant ->
-        variant.outputs.all {
-            def fileName = "Scene" + "_5.0_OpenSource_r${defaultConfig.versionCode}_" + variant.name + ".apk"
-            outputFileName = fileName
-        }
-    }
     buildFeatures {
         dataBinding true
         viewBinding true
@@ -22,7 +14,7 @@ android {
             storePassword 'asdf1234'
         }
     }
-    compileSdk 34
+    compileSdk 36
     defaultConfig {
         resConfigs "en"
         applicationId "com.omarea.vtools"
@@ -42,7 +34,7 @@ android {
     }
     buildTypes {
         release {
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             zipAlignEnabled true
             debuggable false
             jniDebuggable = false
@@ -51,7 +43,7 @@ android {
         release_mini {
             shrinkResources true
             zipAlignEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             minifyEnabled true
             debuggable false
             jniDebuggable = false
@@ -66,9 +58,6 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
-    }
-    kotlinOptions {
-        jvmTarget = "1.8"
     }
     productFlavors {
     }
@@ -87,6 +76,16 @@ android {
         }
     }
     ndkVersion '21.0.6113669'
+}
+
+androidComponents {
+    onVariants(selector().all()) { variant ->
+        variant.outputs.each { output ->
+            def versionCode = output.versionCode.get()
+            def fileName = "Scene" + "_5.0_OpenSource_r${versionCode}_" + variant.name + ".apk"
+            output.outputFileName.set(fileName)
+        }
+    }
 }
 
 dependencies {
@@ -119,7 +118,7 @@ dependencies {
     // implementation files('libs/crimson.jar')
 
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.12'
-    implementation 'androidx.work:work-runtime-ktx:2.9.0'
+    implementation 'androidx.work:work-runtime-ktx:2.10.0'
 }
 repositories {
     mavenCentral()

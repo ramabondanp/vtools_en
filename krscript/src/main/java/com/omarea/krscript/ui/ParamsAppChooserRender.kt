@@ -55,10 +55,11 @@ class ParamsAppChooserRender(private var actionParamInfo: ActionParamInfo, priva
             filter == null || filter.contains(it.packageName)
         }
 
-        val options = ArrayList(packages.map {
+        val options = ArrayList(packages.mapNotNull { pkg ->
+            val appInfo = pkg.applicationInfo ?: return@mapNotNull null
             AdapterAppChooser.AppInfo().apply {
-                appName = "" + it.applicationInfo.loadLabel(pm)
-                packageName = it.packageName
+                appName = "" + appInfo.loadLabel(pm)
+                packageName = pkg.packageName
             }
         })
 

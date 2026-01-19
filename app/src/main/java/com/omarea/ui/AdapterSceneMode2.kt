@@ -60,7 +60,10 @@ class AdapterSceneMode2(private val context: Context, apps: ArrayList<AppInfo>, 
             var icon: Drawable? = null
             try {
                 val installInfo = context.packageManager.getPackageInfo(item.packageName.toString(), 0)
-                icon = installInfo.applicationInfo.loadIcon(context.packageManager)
+                val appInfo = installInfo.applicationInfo
+                if (appInfo != null) {
+                    icon = appInfo.loadIcon(context.packageManager)
+                }
             } catch (ex: Exception) {
                 try {
                     val file = File(item.path.toString())
