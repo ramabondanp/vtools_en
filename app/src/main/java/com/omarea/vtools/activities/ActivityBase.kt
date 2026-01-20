@@ -1,6 +1,7 @@
 package com.omarea.vtools.activities
 
 import android.app.ActivityManager
+import android.content.Intent
 import android.content.res.Configuration
 import android.content.Context
 import android.content.SharedPreferences
@@ -56,7 +57,14 @@ open class ActivityBase : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        // super.onBackPressed()
+        // If this activity is the task root, return to main instead of exiting.
+        if (isTaskRoot && this !is ActivityMain) {
+            val intent = Intent(this, ActivityMain::class.java).apply {
+                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                putExtra(ActivityMain.EXTRA_SELECT_TAB, ActivityMain.lastSelectedTab)
+            }
+            startActivity(intent)
+        }
         // FIX: Activity(IRequestFinishCallback$Stub) 内存泄露
         finishAfterTransition()
     }

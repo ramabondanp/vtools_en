@@ -34,10 +34,21 @@ import com.omarea.vtools.fragments.FragmentHome
 import com.omarea.vtools.fragments.FragmentNav
 import com.omarea.vtools.fragments.FragmentNotRoot
 import com.omarea.vtools.databinding.ActivityMainBinding
+import java.util.ArrayDeque
 
 class ActivityMain : ActivityBase() {
+    companion object {
+        const val EXTRA_SELECT_TAB = "select_tab"
+        const val TAB_NAV = 0
+        const val TAB_HOME = 1
+        const val TAB_TUNER = 2
+        var lastSelectedTab = TAB_HOME
+    }
+
     private lateinit var globalSPF: SharedPreferences
     private lateinit var binding: ActivityMainBinding
+    private val tabHistory = ArrayDeque<Int>()
+    private var suppressTabHistory = false
 
     private class ThermalCheckThread(private var context: Activity) : Thread() {
         private fun deleteThermalCopyWarn(onYes: Runnable) {
@@ -148,7 +159,22 @@ class ActivityMain : ActivityBase() {
         }))
         tabIconHelper2.newTabSpec(getString(R.string.app_tuner), getDrawable(R.drawable.app_settings)!!, FragmentCpuModes())
         binding.tabContent.adapter = tabIconHelper2.adapter
-        binding.tabList.getTabAt(1)?.select() // 默认选中第二页
+        binding.tabList.addOnTabSelectedListener(object : com.google.android.material.tabs.TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: com.google.android.material.tabs.TabLayout.Tab?) {
+                if (suppressTabHistory) {
+                    return
+                }
+                val position = tab?.position ?: return
+                if (tabHistory.peekLast() != position) {
+                    tabHistory.addLast(position)
+                }
+                lastSelectedTab = position
+            }
+
+            override fun onTabUnselected(tab: com.google.android.material.tabs.TabLayout.Tab?) {}
+            override fun onTabReselected(tab: com.google.android.material.tabs.TabLayout.Tab?) {}
+        })
+        setInitialTab(intent?.getIntExtra(EXTRA_SELECT_TAB, TAB_HOME) ?: TAB_HOME)
 
         if (CheckRootStatus.lastCheckResult) {
             try {
@@ -219,6 +245,25 @@ class ActivityMain : ActivityBase() {
         }
     }
 
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        setInitialTab(intent?.getIntExtra(EXTRA_SELECT_TAB, TAB_HOME) ?: TAB_HOME)
+    }
+
+    private fun setInitialTab(index: Int) {
+        if (!::binding.isInitialized) {
+            return
+        }
+        val tabCount = binding.tabList.tabCount
+        val tabIndex = index.coerceIn(0, (tabCount - 1).coerceAtLeast(0))
+        suppressTabHistory = true
+        binding.tabList.getTabAt(tabIndex)?.select()
+        suppressTabHistory = false
+        tabHistory.clear()
+        tabHistory.addLast(tabIndex)
+        lastSelectedTab = tabIndex
+    }
+
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
     }
 
@@ -228,6 +273,18 @@ class ActivityMain : ActivityBase() {
             when {
                 supportFragmentManager.backStackEntryCount > 0 -> {
                     supportFragmentManager.popBackStack()
+                }
+                tabHistory.size > 1 -> {
+                    tabHistory.removeLast()
+                    val previous = tabHistory.peekLast()
+                    if (previous != null) {
+                        suppressTabHistory = true
+                        binding.tabList.getTabAt(previous)?.select()
+                        suppressTabHistory = false
+                        return
+                    }
+                    excludeFromRecent()
+                    super.onBackPressed()
                 }
                 else -> {
                     excludeFromRecent()
