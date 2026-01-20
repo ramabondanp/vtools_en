@@ -105,8 +105,6 @@
     <string name="menu_fps_chart">FPS record</string>
     <string name="menu_app_magisk">Extra Module</string>
     <string name="menu_gesture">Gesture</string>
-    <string name="menu_xposed_app">App settings</string>
-    <string name="menu_xposed_global">Global settings </string>
     <string name="menu_filter">Screen filter</string>
     <string name="menu_img">Backup restore </string>
     <string name="menu_qq">QQ</string>

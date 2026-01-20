@@ -2,7 +2,6 @@ package com.omarea.vtools.fragments
 
 import android.content.ComponentName
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
 import android.view.LayoutInflater
@@ -13,7 +12,6 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.omarea.Scene
-import com.omarea.common.ui.DialogHelper
 import com.omarea.common.ui.ThemeMode
 import com.omarea.kr.KrScriptConfig
 import com.omarea.library.shell.BatteryUtils
@@ -22,8 +20,6 @@ import com.omarea.shell_utils.BackupRestoreUtils
 import com.omarea.utils.AccessibleServiceHelper
 import com.omarea.vtools.R
 import com.omarea.vtools.activities.*
-import com.omarea.vtools.dialogs.DialogXposedGlobalConfig
-import com.omarea.xposed.XposedCheck
 import com.projectkr.shell.OpenPageHelper
 import com.omarea.vtools.databinding.FragmentNavBinding
 
@@ -141,19 +137,6 @@ class FragmentNav : Fragment(), View.OnClickListener {
                     startActivity(intent)
                     return
                 }
-                R.id.nav_xposed_app -> {
-                    xposedCheck {
-                        val intent = Intent(context, ActivityAppXposedConfig::class.java)
-                        startActivity(intent)
-                    }
-                    return
-                }
-                R.id.nav_xposed_global -> {
-                    xposedCheck {
-                        DialogXposedGlobalConfig(activity!!).show()
-                    }
-                    return
-                }
                 R.id.nav_processes -> {
                     val intent = Intent(context, ActivityProcess::class.java)
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -185,35 +168,6 @@ class FragmentNav : Fragment(), View.OnClickListener {
         }
     }
 
-    private fun installVAddin() {
-        DialogHelper.warning(context!!, getString(R.string.scene_addin_miss), getString(R.string.scene_addin_miss_desc), {
-            try {
-                val uri = Uri.parse("http://vtools.omarea.com/")
-                val intent = Intent(Intent.ACTION_VIEW, uri)
-                startActivity(intent)
-            } catch (ex: Exception) {
-                Toast.makeText(context, "Failed to open online page!", Toast.LENGTH_SHORT).show()
-            }
-        })
-    }
-
-    private fun xposedCheck(onPass: Runnable) {
-        var vAddinsInstalled: Boolean
-        try {
-            vAddinsInstalled = context!!.packageManager.getPackageInfo("com.omarea.vaddin", 0) != null
-        } catch (ex: Exception) {
-            vAddinsInstalled = false
-        }
-        if (vAddinsInstalled) {
-            if (XposedCheck.xposedIsRunning()) {
-                onPass.run()
-            } else {
-                Toast.makeText(context, "Please re-enable \"Scene\" in Xposed Manager and reboot the phone.", Toast.LENGTH_LONG).show()
-            }
-        } else {
-            installVAddin()
-        }
-    }
 
     override fun onDestroyView() {
         super.onDestroyView()
