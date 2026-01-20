@@ -117,8 +117,8 @@ dependencies {
     //    }
     // implementation files('libs/crimson.jar')
 
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.12'
-    implementation 'androidx.work:work-runtime-ktx:2.10.0'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.14'
+    implementation 'androidx.work:work-runtime-ktx:2.11.0'
 }
 repositories {
     mavenCentral()
