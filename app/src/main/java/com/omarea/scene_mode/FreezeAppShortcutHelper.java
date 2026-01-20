@@ -178,7 +178,12 @@ public class FreezeAppShortcutHelper {
                 callback.putExtra("packageName", packageName);
 
                 requestCount++;
-                PendingIntent shortcutCallbackIntent = PendingIntent.getBroadcast(context, requestCount, callback, PendingIntent.FLAG_CANCEL_CURRENT);
+                PendingIntent shortcutCallbackIntent = PendingIntent.getBroadcast(
+                        context,
+                        requestCount,
+                        callback,
+                        PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE
+                );
                 // shortcutManager.removeAllDynamicShortcuts();
                 if (shortcutManager.isRequestPinShortcutSupported()) {
                     List<ShortcutInfo> items = shortcutManager.getPinnedShortcuts();

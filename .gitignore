@@ -15,3 +15,8 @@ app/build.gradle
 .cxx
 app/debug/app-debug.apk
 app/debug/output-metadata.json
+
+# Android keystores and signing
+keystore.properties
+*.keystore
+*.jks

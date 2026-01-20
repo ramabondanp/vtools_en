@@ -1,4 +1,12 @@
 apply plugin: 'com.android.application'
+def keystorePropsFile = rootProject.file("keystore.properties")
+def keystoreProps = new Properties()
+if (keystorePropsFile.exists()) {
+    keystoreProps.load(new FileInputStream(keystorePropsFile))
+} else {
+    throw new GradleException("Missing keystore.properties in project root")
+}
+
 android {
     namespace "com.omarea.vtools"
     buildFeatures {
@@ -8,10 +16,10 @@ android {
     }
     signingConfigs {
         omarea_Signing {
-            keyAlias 'genom'
-            keyPassword 'asdf1234'
-            storeFile file('genom.keystore')
-            storePassword 'asdf1234'
+            storeFile rootProject.file(keystoreProps['storeFile'])
+            storePassword keystoreProps['storePassword']
+            keyAlias keystoreProps['keyAlias']
+            keyPassword keystoreProps['keyPassword']
         }
     }
     compileSdk 36
