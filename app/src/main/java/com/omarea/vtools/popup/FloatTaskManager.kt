@@ -15,6 +15,7 @@ import android.widget.Toast
 import com.omarea.Scene
 import com.omarea.library.shell.ProcessUtilsSimple
 import com.omarea.ui.AdapterProcessMini
+import com.omarea.utils.WindowCompatHelper
 import com.omarea.vtools.R
 import java.util.*
 
@@ -57,12 +58,7 @@ class FloatTaskManager(private val context: Context) {
 
         val params = WindowManager.LayoutParams()
         // 类型
-        params.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {//6.0+
-            params.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
-        } else {
-            params.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT
-        }
+        params.type = WindowCompatHelper.overlayWindowType()
         params.format = PixelFormat.TRANSLUCENT
 
         params.width = WindowManager.LayoutParams.WRAP_CONTENT // dp2px(context,180f)
@@ -72,6 +68,7 @@ class FloatTaskManager(private val context: Context) {
         params.x = monitorStorage.getInt("x", 0)
         params.y = monitorStorage.getInt("y", 0)
 
+        @Suppress("DEPRECATION")
         params.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_FULLSCREEN
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
@@ -125,6 +122,7 @@ class FloatTaskManager(private val context: Context) {
         val fw_float_pin = mView?.findViewById<View>(R.id.fw_float_pin)!!
 
         fw_float_pin.setOnLongClickListener {
+            @Suppress("DEPRECATION")
             params.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_FULLSCREEN or WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
             mView!!.setBackgroundColor(Color.argb(128, 255, 255, 255))
             mWindowManager.updateViewLayout(mView, params)

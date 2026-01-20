@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import de.robv.android.xposed.XposedBridge;
+import androidx.core.content.pm.PackageInfoCompat;
 
 public class WeChatLayoutAnalyser {
     // 寻找ScanMaskView的下一个节点（微信7.0）
@@ -80,7 +81,9 @@ public class WeChatLayoutAnalyser {
         int versionCode = 1841; // 微信 8.0.1
         View rootView = wxActivity.getWindow().getDecorView();
         try {
-            versionCode = wxActivity.getPackageManager().getPackageInfo(wxActivity.getPackageName(), 0).versionCode;
+            versionCode = (int) PackageInfoCompat.getLongVersionCode(
+                    wxActivity.getPackageManager().getPackageInfo(wxActivity.getPackageName(), 0)
+            );
         } catch (Exception ignored) {
         }
         return (versionCode >= 1841) ? getScanSharedMaskViewChild(rootView, 0) : getScanMaskViewNext(rootView, 0);

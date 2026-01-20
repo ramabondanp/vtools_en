@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.omarea.vtools.activities
 
 import android.Manifest
@@ -15,13 +17,13 @@ import android.renderscript.Allocation
 import android.renderscript.Element
 import android.renderscript.RenderScript
 import android.renderscript.ScriptIntrinsicBlur
-import android.view.View
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.PermissionChecker
 import com.omarea.common.ui.ThemeMode
 import com.omarea.store.SpfConfig
+import com.omarea.utils.WindowCompatHelper
 import com.omarea.vtools.R
 
 object ThemeSwitch {
@@ -77,11 +79,7 @@ object ThemeSwitch {
             activity.setTheme(themeId)
 
             if (themeMode.isLightStatusBar) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    activity.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
-                } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    activity.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-                }
+                WindowCompatHelper.applyEdgeToEdge(activity.window, lightStatusBars = true, lightNavBars = true)
             }
         } else if (theme == 10) {
             val wallpaper = WallpaperManager.getInstance(activity)
@@ -109,14 +107,10 @@ object ThemeSwitch {
                     // 浅色的静态壁纸
                     themeMode.isDarkMode = false
                     themeMode.isLightStatusBar = true
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        activity.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
-                    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        activity.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-                    }
+                    WindowCompatHelper.applyEdgeToEdge(activity.window, lightStatusBars = true, lightNavBars = true)
 
                     if (!(activity is ActivityMain)) {
-                        activity.window.navigationBarColor = Color.TRANSPARENT
+                        WindowCompatHelper.setSystemBarColors(activity.window, null, Color.TRANSPARENT)
                     }
                 }
 
@@ -165,6 +159,7 @@ object ThemeSwitch {
         return darkPoint > lightPoint
     }
 
+    @Suppress("DEPRECATION")
     private fun rsBlur(source: Bitmap, radius: Int, context: Context): Bitmap {
         val inputBmp = source
         val renderScript = RenderScript.create(context);

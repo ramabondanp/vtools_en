@@ -5,7 +5,6 @@ import android.annotation.SuppressLint
 import android.app.ActivityManager
 import android.content.Context
 import android.graphics.PixelFormat
-import android.graphics.Point
 import android.os.BatteryManager
 import android.os.Build
 import android.os.Handler
@@ -23,6 +22,7 @@ import com.omarea.Scene
 import com.omarea.data.GlobalStatus
 import com.omarea.library.shell.*
 import com.omarea.store.SpfConfig
+import com.omarea.utils.WindowCompatHelper
 import com.omarea.vtools.R
 import java.util.*
 
@@ -61,17 +61,11 @@ public class FloatMonitorMini(private val mContext: Context) {
         val monitorStorage = mContext.getSharedPreferences("float_monitor2_storage", Context.MODE_PRIVATE)
 
         // 类型
-        params.type = LayoutParams.TYPE_SYSTEM_ALERT
-
         // 优先使用辅助服务叠加层（如果是辅助服务Context）
         if (mContext is AccessibilityService) {
             params.type = LayoutParams.TYPE_ACCESSIBILITY_OVERLAY
         } else {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {//6.0+
-                params.type = LayoutParams.TYPE_APPLICATION_OVERLAY
-            } else {
-                params.type = LayoutParams.TYPE_SYSTEM_ALERT
-            }
+            params.type = WindowCompatHelper.overlayWindowType()
         }
         params.format = PixelFormat.TRANSLUCENT
 
@@ -82,6 +76,7 @@ public class FloatMonitorMini(private val mContext: Context) {
         params.x = monitorStorage.getInt("x", 0)
         params.y = monitorStorage.getInt("y", 0)
 
+        @Suppress("DEPRECATION")
         params.flags = LayoutParams.FLAG_NOT_TOUCH_MODAL or LayoutParams.FLAG_NOT_FOCUSABLE or LayoutParams.FLAG_NOT_TOUCHABLE or LayoutParams.FLAG_FULLSCREEN
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
@@ -90,9 +85,7 @@ public class FloatMonitorMini(private val mContext: Context) {
 
         val navHeight = 0
         if (navHeight > 0) {
-            val display = mWindowManager!!.getDefaultDisplay()
-            val p = Point()
-            display.getRealSize(p)
+            val p = WindowCompatHelper.getRealDisplaySize(mWindowManager!!)
             params.y = -navHeight
             params.x = 0
         }

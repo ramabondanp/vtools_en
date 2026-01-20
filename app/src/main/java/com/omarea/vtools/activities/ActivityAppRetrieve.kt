@@ -1,3 +1,5 @@
+@file:OptIn(kotlinx.coroutines.DelicateCoroutinesApi::class)
+
 package com.omarea.vtools.activities
 
 import android.annotation.SuppressLint
@@ -80,25 +82,23 @@ class ActivityAppRetrieve : ActivityBase() {
                 appList.add(getAppInfo(it))
             }
             progressBarDialog.hideDialog()
-            if (binding.hiddenApp != null) {
-                val adapterObj = AdapterAppList(context, appList)
-                binding.hiddenApp.adapter = adapterObj
-                adapterAppList = WeakReference(adapterObj)
-                binding.hiddenApp.onItemClickListener = AdapterView.OnItemClickListener { _, itemView, postion, _ ->
-                    if (postion == 0) {
-                        val checkBox = itemView.findViewById(R.id.select_state_all) as CheckBox
-                        checkBox.isChecked = !checkBox.isChecked
-                        if (adapterAppList?.get() != null) {
-                            adapterAppList?.get()!!.setSelecteStateAll(checkBox.isChecked)
-                            adapterAppList?.get()!!.notifyDataSetChanged()
-                        }
-                    } else {
-                        val checkBox = itemView.findViewById(R.id.select_state) as CheckBox
-                        checkBox.isChecked = !checkBox.isChecked
-                        val all = binding.hiddenApp.findViewById<CheckBox>(R.id.select_state_all)
-                        if (adapterAppList?.get() != null) {
-                            all.isChecked = adapterAppList?.get()!!.getIsAllSelected()
-                        }
+            val adapterObj = AdapterAppList(context, appList)
+            binding.hiddenApp.adapter = adapterObj
+            adapterAppList = WeakReference(adapterObj)
+            binding.hiddenApp.onItemClickListener = AdapterView.OnItemClickListener { _, itemView, postion, _ ->
+                if (postion == 0) {
+                    val checkBox = itemView.findViewById(R.id.select_state_all) as CheckBox
+                    checkBox.isChecked = !checkBox.isChecked
+                    if (adapterAppList?.get() != null) {
+                        adapterAppList?.get()!!.setSelecteStateAll(checkBox.isChecked)
+                        adapterAppList?.get()!!.notifyDataSetChanged()
+                    }
+                } else {
+                    val checkBox = itemView.findViewById(R.id.select_state) as CheckBox
+                    checkBox.isChecked = !checkBox.isChecked
+                    val all = binding.hiddenApp.findViewById<CheckBox>(R.id.select_state_all)
+                    if (adapterAppList?.get() != null) {
+                        all.isChecked = adapterAppList?.get()!!.getIsAllSelected()
                     }
                 }
             }

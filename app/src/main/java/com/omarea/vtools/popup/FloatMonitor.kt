@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.graphics.PixelFormat
-import android.graphics.Point
 import android.graphics.Typeface
 import android.os.BatteryManager
 import android.os.Build
@@ -30,6 +29,7 @@ import com.omarea.library.shell.*
 import com.omarea.store.SpfConfig
 import com.omarea.ui.FloatMonitorBatteryView
 import com.omarea.ui.FloatMonitorChartView
+import com.omarea.utils.WindowCompatHelper
 import com.omarea.vtools.R
 import java.util.*
 
@@ -66,12 +66,7 @@ class FloatMonitor(private val mContext: Context) {
         val monitorStorage = mContext.getSharedPreferences("float_monitor_storage", Context.MODE_PRIVATE)
 
         // 类型
-        params.type = LayoutParams.TYPE_SYSTEM_ALERT
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {//6.0+
-            params.type = LayoutParams.TYPE_APPLICATION_OVERLAY
-        } else {
-            params.type = LayoutParams.TYPE_SYSTEM_ALERT
-        }
+        params.type = WindowCompatHelper.overlayWindowType()
         params.format = PixelFormat.TRANSLUCENT
 
         params.width = LayoutParams.WRAP_CONTENT
@@ -81,6 +76,7 @@ class FloatMonitor(private val mContext: Context) {
         params.x = monitorStorage.getInt("x", 0)
         params.y = monitorStorage.getInt("y", 0)
 
+        @Suppress("DEPRECATION")
         params.flags = LayoutParams.FLAG_NOT_TOUCH_MODAL or LayoutParams.FLAG_NOT_FOCUSABLE or LayoutParams.FLAG_FULLSCREEN
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
@@ -89,9 +85,7 @@ class FloatMonitor(private val mContext: Context) {
 
         val navHeight = 0
         if (navHeight > 0) {
-            val display = mWindowManager!!.getDefaultDisplay()
-            val p = Point()
-            display.getRealSize(p)
+            val p = WindowCompatHelper.getRealDisplaySize(mWindowManager!!)
             params.y = -navHeight
             params.x = 0
         } else {

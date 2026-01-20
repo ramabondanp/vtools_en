@@ -14,6 +14,7 @@ import android.widget.TextView
 import com.omarea.Scene
 import com.omarea.data.GlobalStatus
 import com.omarea.library.shell.ProcessUtilsSimple
+import com.omarea.utils.WindowCompatHelper
 import com.omarea.vtools.R
 import java.util.*
 
@@ -43,13 +44,10 @@ class FloatMonitorThreads(private val mContext: Context) {
         screenOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
 
         // 类型
-        type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT
         if (mContext is AccessibilityService && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
             type = WindowManager.LayoutParams.TYPE_ACCESSIBILITY_OVERLAY
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {//6.0+
-            type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
         } else {
-            type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT
+            type = WindowCompatHelper.overlayWindowType()
         }
 
         format = PixelFormat.TRANSLUCENT

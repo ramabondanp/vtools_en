@@ -290,10 +290,15 @@ class SceneMode private constructor(private val context: AccessibilityScenceMode
     // 是否需要在离开应用时隐藏迷你性能监视器
     private var hideMonitorOnLeave = false
 
+    private fun getLocationProvidersAllowed(): String? {
+        @Suppress("DEPRECATION")
+        return Settings.Secure.getString(contentResolver, Settings.Secure.LOCATION_PROVIDERS_ALLOWED)
+    }
+
     // 备份定位设置
     private fun backupLocationModeState() {
         if (locationMode == "none") {
-            locationMode = Settings.Secure.getString(contentResolver, Settings.Secure.LOCATION_PROVIDERS_ALLOWED)
+            locationMode = getLocationProvidersAllowed() ?: "none"
         }
     }
 
@@ -420,7 +425,7 @@ class SceneMode private constructor(private val context: AccessibilityScenceMode
 
                     if (currentSceneConfig!!.gpsOn) {
                         backupLocationModeState()
-                        val mode = Settings.Secure.getString(contentResolver, Settings.Secure.LOCATION_PROVIDERS_ALLOWED)
+                        val mode = getLocationProvidersAllowed() ?: ""
                         if (!mode.contains("gps")) {
                             LocationHelper().enableGPS()
                         }

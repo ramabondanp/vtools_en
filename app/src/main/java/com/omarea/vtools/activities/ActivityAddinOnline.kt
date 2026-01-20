@@ -27,6 +27,7 @@ import com.omarea.krscript.WebViewInjector
 import com.omarea.krscript.ui.ParamsFileChooserRender
 import com.omarea.scene_mode.CpuConfigInstaller
 import com.omarea.scene_mode.ModeSwitcher
+import com.omarea.utils.WindowCompatHelper
 import com.omarea.vtools.R
 import com.omarea.vtools.databinding.ActivityAddinOnlineBinding
 import java.io.File
@@ -65,8 +66,7 @@ class ActivityAddinOnline : ActivityBase() {
         setContentView(binding.root)
 
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        window.statusBarColor = Color.WHITE
-        window.navigationBarColor = Color.WHITE
+        WindowCompatHelper.setSystemBarColors(window, Color.WHITE, Color.WHITE)
         WindowCompat.setDecorFitsSystemWindows(window, false)
         val insetsController = WindowInsetsControllerCompat(window, window.decorView)
         insetsController.isAppearanceLightStatusBars = true
@@ -211,7 +211,7 @@ class ActivityAddinOnline : ActivityBase() {
                 try {
                     val color = Color.parseColor(colorStr)
                     binding.vtoolsOnline.post {
-                        window.statusBarColor = color
+                        WindowCompatHelper.setSystemBarColors(window, color, null)
                         val controller = WindowInsetsControllerCompat(window, window.decorView)
                         val isLight = Color.red(color) > 180 && Color.green(color) > 180 && Color.blue(color) > 180
                         controller.isAppearanceLightStatusBars = isLight
@@ -227,7 +227,7 @@ class ActivityAddinOnline : ActivityBase() {
                 try {
                     val color = Color.parseColor(colorStr)
                     binding.vtoolsOnline.post {
-                        window.navigationBarColor = color
+                        WindowCompatHelper.setSystemBarColors(window, null, color)
                         val controller = WindowInsetsControllerCompat(window, window.decorView)
                         val isLight = Color.red(color) > 180 && Color.green(color) > 180 && Color.blue(color) > 180
                         controller.isAppearanceLightNavigationBars = isLight

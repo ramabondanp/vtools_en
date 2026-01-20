@@ -29,6 +29,7 @@ import com.omarea.common.ui.ProgressBarDialog
 import com.omarea.krscript.WebViewInjector
 import com.omarea.krscript.downloader.Downloader
 import com.omarea.krscript.ui.ParamsFileChooserRender
+import com.omarea.utils.WindowCompatHelper
 import com.omarea.vtools.R
 import com.omarea.vtools.databinding.ActivityActionPageOnlineBinding
 import java.util.*
@@ -70,10 +71,8 @@ class ActionPageOnline : ActivityBase() {
 
     private fun hideWindowTitle() {
         if (Build.VERSION.SDK_INT >= 21) {
-            val decorView = window.decorView
-            val option = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-            decorView.systemUiVisibility = option
-            window.statusBarColor = Color.TRANSPARENT
+            WindowCompatHelper.applyEdgeToEdge(window, lightStatusBars = false, lightNavBars = false)
+            WindowCompatHelper.setSystemBarColors(window, Color.TRANSPARENT, null)
         }
         val actionBar = supportActionBar
         actionBar!!.hide()
@@ -81,25 +80,15 @@ class ActionPageOnline : ActivityBase() {
 
     private fun setWindowTitleBar() {
         val window = window
+        @Suppress("DEPRECATION")
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
 
-        var flags = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-
-        if (themeMode.isDarkMode) {
-        } else {
-            window.statusBarColor = Color.WHITE
-            window.navigationBarColor = Color.WHITE
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                flags = flags or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
-            } else {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    flags = flags or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-                }
-            }
+        val lightBars = !themeMode.isDarkMode
+        WindowCompatHelper.applyEdgeToEdge(window, lightStatusBars = lightBars, lightNavBars = lightBars)
+        if (lightBars) {
+            WindowCompatHelper.setSystemBarColors(window, Color.WHITE, Color.WHITE)
         }
-        getWindow().decorView.systemUiVisibility = flags
 
         binding.krOnlineRoot.fitsSystemWindows = true
     }

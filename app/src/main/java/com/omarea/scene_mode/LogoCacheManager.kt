@@ -49,6 +49,6 @@ public class LogoCacheManager(private var context: Context) {
         if (bitmap == null) {
             return null
         }
-        return BitmapDrawable(bitmap)
+        return BitmapDrawable(context.resources, bitmap)
     }
 }

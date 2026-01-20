@@ -12,6 +12,7 @@ import android.provider.MediaStore
 import android.util.Log
 import android.widget.Toast
 import androidx.core.content.FileProvider
+import androidx.core.content.pm.PackageInfoCompat
 import com.omarea.common.ui.DialogHelper
 import org.json.JSONObject
 import java.io.BufferedReader
@@ -26,7 +27,7 @@ class Update {
         var code = 0
         try {
             val info = manager.getPackageInfo(context.packageName, 0)
-            code = info.versionCode
+            code = PackageInfoCompat.getLongVersionCode(info).toInt()
         } catch (e: PackageManager.NameNotFoundException) {
             e.printStackTrace()
         }

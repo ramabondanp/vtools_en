@@ -1,10 +1,11 @@
+@file:OptIn(kotlinx.coroutines.DelicateCoroutinesApi::class)
+
 package com.omarea.vtools.popup
 
 import android.accessibilityservice.AccessibilityService
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.PixelFormat
-import android.graphics.Point
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
@@ -29,6 +30,7 @@ import com.omarea.library.shell.SurfaceFlingerFpsUtils2
 import com.omarea.library.shell.GpuUtils
 import com.omarea.scene_mode.ModeSwitcher
 import com.omarea.store.FpsWatchStore
+import com.omarea.utils.WindowCompatHelper
 import com.omarea.vtools.R
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -73,17 +75,11 @@ public class FloatFpsWatch(private val mContext: Context) {
         val params = LayoutParams()
 
         // 类型
-        params.type = LayoutParams.TYPE_SYSTEM_ALERT
-
         // 优先使用辅助服务叠加层（如果是辅助服务Context）
         if (mContext is AccessibilityService) {
             params.type = LayoutParams.TYPE_ACCESSIBILITY_OVERLAY
         } else {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {//6.0+
-                params.type = LayoutParams.TYPE_APPLICATION_OVERLAY
-            } else {
-                params.type = LayoutParams.TYPE_SYSTEM_ALERT
-            }
+            params.type = WindowCompatHelper.overlayWindowType()
         }
         params.format = PixelFormat.TRANSLUCENT
 
@@ -94,6 +90,7 @@ public class FloatFpsWatch(private val mContext: Context) {
         // params.x = 0
         params.y = dp2px(mContext, 55f)
 
+        @Suppress("DEPRECATION")
         params.flags = LayoutParams.FLAG_NOT_TOUCH_MODAL or LayoutParams.FLAG_NOT_FOCUSABLE or LayoutParams.FLAG_FULLSCREEN
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
@@ -102,9 +99,7 @@ public class FloatFpsWatch(private val mContext: Context) {
 
         val navHeight = 0
         if (navHeight > 0) {
-            val display = mWindowManager!!.getDefaultDisplay()
-            val p = Point()
-            display.getRealSize(p)
+            val p = WindowCompatHelper.getRealDisplaySize(mWindowManager!!)
             params.y = -navHeight
             params.x = 0
         }

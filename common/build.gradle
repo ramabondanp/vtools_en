@@ -36,7 +36,6 @@ dependencies {
     // androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     // androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    api files('libs/overscroll-release-v1.1-20160904.jar')
     // implementation files('libs/fastscroll_v1.2_20160903.jar')
 }
 repositories {

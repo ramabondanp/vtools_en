@@ -9,6 +9,7 @@ import android.view.View
 import android.view.WindowManager
 import com.omarea.Scene
 import com.omarea.model.SceneConfigInfo
+import com.omarea.utils.WindowCompatHelper
 
 class FloatScreenRotation(mContext: Context) {
     private var view: View = View(mContext)
@@ -19,13 +20,10 @@ class FloatScreenRotation(mContext: Context) {
         screenOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
 
         // 类型
-        type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT
         if (mContext is AccessibilityService && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
             type = WindowManager.LayoutParams.TYPE_ACCESSIBILITY_OVERLAY
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {//6.0+
-            type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
         } else {
-            type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT
+            type = WindowCompatHelper.overlayWindowType()
         }
 
         format = PixelFormat.TRANSLUCENT

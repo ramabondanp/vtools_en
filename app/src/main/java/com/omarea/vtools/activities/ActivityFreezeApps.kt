@@ -1,3 +1,6 @@
+@file:Suppress("DEPRECATION")
+@file:OptIn(kotlinx.coroutines.DelicateCoroutinesApi::class)
+
 package com.omarea.vtools.activities
 
 import android.content.ComponentName
@@ -63,6 +66,7 @@ class ActivityFreezeApps : ActivityBase() {
         // this.getWindow().setBackgroundDrawable(BitmapDrawable(resources, rsBlur((wallPaper as BitmapDrawable).bitmap, 25)))
     }
 
+    @Suppress("DEPRECATION")
     private fun rsBlur(source: Bitmap, radius: Int): Bitmap {
         val inputBmp = source
         val renderScript = RenderScript.create(this)

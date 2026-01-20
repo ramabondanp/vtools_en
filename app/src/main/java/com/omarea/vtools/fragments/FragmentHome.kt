@@ -1,3 +1,5 @@
+@file:OptIn(kotlinx.coroutines.DelicateCoroutinesApi::class)
+
 package com.omarea.vtools.fragments
 
 import android.annotation.SuppressLint

@@ -6,6 +6,7 @@ import android.content.pm.ApplicationInfo
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.os.Build
+import androidx.core.content.pm.PackageInfoCompat
 import com.omarea.model.AppInfo
 import java.io.File
 import java.util.*
@@ -16,6 +17,9 @@ import java.util.*
  */
 class AppListHelper(private val context: Context, private val getTags: Boolean = true) {
     var packageManager: PackageManager
+    private fun getVersionCode(packageInfo: PackageInfo): Int {
+        return PackageInfoCompat.getLongVersionCode(packageInfo).toInt()
+    }
 
     private fun exclude(packageName: String): Boolean {
         if (
@@ -47,9 +51,9 @@ class AppListHelper(private val context: Context, private val getTags: Boolean =
                 val installInfo = packageManager.getPackageInfo(applicationInfo.packageName, 0)
                 if (installInfo == null)
                     return ""
-                if (backupInfo.versionCode == installInfo.versionCode) {
+                if (getVersionCode(backupInfo) == getVersionCode(installInfo)) {
                     stateTags.append("⭐Backed up ")
-                } else if (backupInfo.versionCode > installInfo.versionCode) {
+                } else if (getVersionCode(backupInfo) > getVersionCode(installInfo)) {
                     stateTags.append("💔Older than backup ")
                 } else {
                     stateTags.append("♻Newer than backup ")
@@ -70,9 +74,9 @@ class AppListHelper(private val context: Context, private val getTags: Boolean =
             val installInfo = packageManager.getPackageInfo(backupInfo.packageName, 0)
             if (installInfo == null)
                 return ""
-            if (backupInfo.versionCode == installInfo.versionCode) {
+            if (getVersionCode(backupInfo) == getVersionCode(installInfo)) {
                 return "⭐Installed "
-            } else if (backupInfo.versionCode > installInfo.versionCode) {
+            } else if (getVersionCode(backupInfo) > getVersionCode(installInfo)) {
                 return "💔Installed older version "
             } else {
                 return "♻Installed newer version "
@@ -151,7 +155,7 @@ class AppListHelper(private val context: Context, private val getTags: Boolean =
         try {
             val packageInfo = packageManager.getPackageInfo(applicationInfo.packageName, 0)
             item.versionName = packageInfo.versionName
-            item.versionCode = packageInfo.versionCode
+            item.versionCode = getVersionCode(packageInfo)
         } catch (ex: Exception) {
         }
 
@@ -207,13 +211,13 @@ class AppListHelper(private val context: Context, private val getTags: Boolean =
             }
             item.stateTags = getTags(applicationInfo)
             item.path = applicationInfo.sourceDir
-            item.updated = isSystemApp(applicationInfo) && file.parent.startsWith("/data")
+            item.updated = isSystemApp(applicationInfo) && file.parent?.startsWith("/data") == true
             // item.appType = if (applicationInfo.sourceDir.startsWith("/system")) Appinfo.AppType.SYSTEM else Appinfo.AppType.USER
             item.appType = if ((applicationInfo.flags and ApplicationInfo.FLAG_SYSTEM) == 0) AppInfo.AppType.USER else AppInfo.AppType.SYSTEM
             try {
                 val packageInfo = packageManager.getPackageInfo(applicationInfo.packageName, 0)
                 item.versionName = packageInfo.versionName
-                item.versionCode = packageInfo.versionCode
+                item.versionCode = getVersionCode(packageInfo)
             } catch (ex: Exception) {
             }
 
@@ -258,12 +262,13 @@ class AppListHelper(private val context: Context, private val getTags: Boolean =
 
                     val item = AppInfo.getItem()
                     item.selected = false
-                    item.appName = applicationInfo.loadLabel(packageManager).toString() + "  (" + packageInfo.versionCode + ")"
+                    val versionCode = getVersionCode(packageInfo)
+                    item.appName = applicationInfo.loadLabel(packageManager).toString() + "  (" + versionCode + ")"
                     item.packageName = applicationInfo.packageName
                     item.path = applicationInfo.sourceDir
                     item.stateTags = checkInstall(packageInfo)
                     item.versionName = packageInfo.versionName
-                    item.versionCode = packageInfo.versionCode
+                    item.versionCode = versionCode
                     item.appType = AppInfo.AppType.BACKUPFILE
                     list.add(item)
                 }

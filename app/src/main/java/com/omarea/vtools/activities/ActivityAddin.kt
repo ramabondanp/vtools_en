@@ -51,7 +51,7 @@ class ActivityAddin : ActivityBase() {
 
             add(createItem(getString(R.string.addin_wifi), getString(R.string.addin_wifi_desc), { DialogAddinWIFI(context).show() }, false))
 
-            add(createItem(getString(R.string.addin_dpi), getString(R.string.addin_dpi_desc), { DialogAddinModifyDPI(context).modifyDPI(activity.windowManager.defaultDisplay, context) }, false))
+            add(createItem(getString(R.string.addin_dpi), getString(R.string.addin_dpi_desc), { DialogAddinModifyDPI(context).modifyDPI(context) }, false))
 
             add(createItem(getString(R.string.addin_deviceinfo), getString(
                     R.string.addin_deviceinfo_desc),

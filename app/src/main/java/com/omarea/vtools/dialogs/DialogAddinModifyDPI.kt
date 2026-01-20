@@ -8,7 +8,6 @@ import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.util.DisplayMetrics
-import android.view.Display
 import android.view.LayoutInflater
 import android.widget.*
 import com.omarea.common.shared.MagiskExtend
@@ -16,6 +15,7 @@ import com.omarea.common.shell.KeepShellPublic
 import com.omarea.common.ui.DialogHelper
 import com.omarea.store.SpfConfig
 import com.omarea.utils.CommonCmds
+import com.omarea.utils.WindowCompatHelper
 import com.omarea.vtools.R
 import java.util.*
 
@@ -53,7 +53,7 @@ class DialogAddinModifyDPI(var context: Activity) {
         return (spf.getInt(BACKUP_SCREEN_DPI, DEFAULT_DPI) * width / spf.getInt(BACKUP_SCREEN_WIDTH, DEFAULT_WIDTH))
     }
 
-    fun modifyDPI(display: Display, context: Activity) {
+    fun modifyDPI(context: Activity) {
         val layoutInflater = LayoutInflater.from(context)
         val dialog = layoutInflater.inflate(R.layout.dialog_addin_dpi, null)
         val dpiInput = dialog.findViewById(R.id.dialog_addin_dpi_dpiinput) as EditText
@@ -62,9 +62,16 @@ class DialogAddinModifyDPI(var context: Activity) {
         val quickChange = dialog.findViewById(R.id.dialog_addin_dpi_quickchange) as CheckBox
 
         val dm = DisplayMetrics()
-        display.getMetrics(dm)
-        val point = Point()
-        display.getRealSize(point)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            val bounds = context.windowManager.currentWindowMetrics.bounds
+            dm.widthPixels = bounds.width()
+            dm.heightPixels = bounds.height()
+            dm.densityDpi = context.resources.displayMetrics.densityDpi
+        } else {
+            @Suppress("DEPRECATION")
+            context.windowManager.defaultDisplay.getMetrics(dm)
+        }
+        val point = WindowCompatHelper.getRealDisplaySize(context.windowManager)
 
         backupDisplay(point, dm, context);
 

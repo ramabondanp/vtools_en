@@ -1,3 +1,5 @@
+@file:OptIn(kotlinx.coroutines.DelicateCoroutinesApi::class)
+
 package com.omarea.vtools.popup
 
 import android.content.Context
@@ -20,6 +22,7 @@ import com.omarea.scene_mode.ModeSwitcher
 import com.omarea.store.SceneConfigStore
 import com.omarea.store.SpfConfig
 import com.omarea.utils.AccessibleServiceHelper
+import com.omarea.utils.WindowCompatHelper
 import com.omarea.vtools.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -56,22 +59,17 @@ class FloatPowercfgSelector(context: Context) {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (Settings.canDrawOverlays(this.mContext)) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {//6.0+
-                    params.type = LayoutParams.TYPE_APPLICATION_OVERLAY
-                } else {
-                    params.type = LayoutParams.TYPE_SYSTEM_ALERT
-                }
+                params.type = WindowCompatHelper.overlayWindowType()
             } else {
                 params.type = LayoutParams.TYPE_ACCESSIBILITY_OVERLAY
             }
         } else {
-            params.type = LayoutParams.TYPE_SYSTEM_ALERT
+            params.type = WindowCompatHelper.overlayWindowType()
         }
 
         // 设置flag
 
         val flags = LayoutParams.FLAG_ALT_FOCUSABLE_IM
-        flags.and(LayoutParams.FLAG_FULLSCREEN)
         // | LayoutParams.FLAG_NOT_FOCUSABLE;
         // 如果设置了LayoutParams.FLAG_NOT_FOCUSABLE，弹出的View收不到Back键的事件
         params.flags = flags

@@ -4,7 +4,6 @@ import android.accessibilityservice.AccessibilityService
 import android.accessibilityservice.AccessibilityServiceInfo
 import android.content.*
 import android.content.res.Configuration
-import android.graphics.Point
 import android.graphics.Rect
 import android.util.LruCache
 import android.view.WindowManager
@@ -25,6 +24,7 @@ import com.omarea.scene_mode.AutoClickInstall
 import com.omarea.scene_mode.AutoSkipAd
 import com.omarea.store.SpfConfig
 import com.omarea.utils.AutoSkipCloudData
+import com.omarea.utils.WindowCompatHelper
 import com.omarea.vtools.popup.FloatLogView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -110,8 +110,7 @@ public class AccessibilityScenceMode : AccessibilityService(), IEventReceiver {
     private fun getDisplaySize() {
         // 重新获取屏幕分辨率
         val wm = getSystemService(Context.WINDOW_SERVICE) as WindowManager
-        val point = Point()
-        wm.defaultDisplay.getRealSize(point)
+        val point = WindowCompatHelper.getRealDisplaySize(wm)
         if (point.x != displayWidth || point.y != displayHeight) {
             displayWidth = point.x
             displayHeight = point.y
