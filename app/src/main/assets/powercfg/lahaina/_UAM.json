@@ -1,0 +1,24 @@
+{
+    "friendly": "暗区突围",
+    "packages": ["com.tencent.mf.uam"],
+    "cpuset": {
+      "heavy_thread": "RHIThread",
+      "heavy_cores": "7",
+      "other": "0-6"
+    },
+    "modes": [{
+      "mode": ["powersave", "balance"],
+      "call": [
+        ["@classical", "cpu0", "74", "63", "3", "1"],
+        ["@classical", "cpu4", "79", "68", "2", "1"],
+        ["@classical", "cpu7", "73", "63", "2", "1"]
+      ]
+    }, {
+      "mode": ["performance"],
+      "call": [
+        ["@classical", "cpu0", "74", "60", "3", "1"],
+        ["@classical", "cpu4", "78", "68", "2", "1"],
+        ["@classical", "cpu7", "70", "60", "2", "1"]
+      ]
+    }]
+  }

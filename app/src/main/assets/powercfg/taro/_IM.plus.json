@@ -1,0 +1,72 @@
+{
+  "friendly": "社交APP",
+  "packages": [
+    "com.tencent.mobileqq",
+    "com.tencent.mm",
+    "com.tencent.tim",
+    "org.telegram.messenger"
+  ],
+  "sensors": [],
+  "modes": [{
+    "mode": ["powersave"],
+    "booster": {
+      "events": ["presets"],
+      "duration": 1500,
+      "idle_delay": 4500,
+      "enter": [
+        ["$cpuset_top", "0-7"],
+        ["$cpuset_fg", "0-7"],
+        ["$cpu_max_0", "1440000"],
+        ["$cpu_max_4", "1766400"],
+        ["$cpu_max_7", "1766400"],
+        ["@uclamp", "0.00~5.00", "0.00~max", "0.00~max"],
+        ["@high_rate", "on"]
+      ],
+      "exit": [
+        ["/sys/devices/system/cpu/cpu_boost/sched_boost_on_input", "0"],
+        ["$cpuset_top", "0-6"],
+        ["$cpuset_fg", "0-6"],
+        ["$cpu_max_0", "1228800"],
+        ["$cpu_max_4", "1555200"],
+        ["$cpu_max_7", "1651200"],
+        ["@uclamp", "0.00~0.00", "0.00~9.00", "0.00~20.0"],
+        ["@high_rate", "off"]
+      ]
+    }
+  },{
+    "mode": ["balance"],
+    "booster": {
+      "events": ["presets"],
+      "duration": 1500,
+      "enter": [
+        ["$cpuset_top", "0-7"],
+        ["$cpuset_fg", "0-7"],
+        ["@uclamp", "0.00~10.00", "0.00~max", "0.00~max"],
+        ["@high_rate", "on"]
+      ],
+      "exit": [
+        ["/sys/devices/system/cpu/cpu_boost/sched_boost_on_input", "0"],
+        ["$cpuset_top", "0-6"],
+        ["$cpuset_fg", "0-6"],
+        ["@uclamp", "0.00~0.00", "0.00~9.00", "0.00~50.0"],
+        ["@high_rate", "off"]
+      ]
+    }
+  },{
+    "mode": ["performance", "fast"],
+    "booster": {
+      "events": ["presets"],
+      "duration": 1500,
+      "enter": [
+        ["$cpuset_top", "0-7"],
+        ["@uclamp", "0.00~max", "1.00~max", "1.00~max"],
+        ["@high_rate", "on"]
+      ],
+      "exit": [
+        ["@uclamp", "0.00~5.00", "0.00~max", "0.00~max"],
+        ["/sys/devices/system/cpu/cpu_boost/sched_boost_on_input", "0"],
+        ["@high_rate", "off"]
+      ]
+    }
+  }]
+}

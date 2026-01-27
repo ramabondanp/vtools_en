@@ -1,0 +1,14 @@
+# cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_frequencies
+# 300000 576000 614400 864000 902400 1363200 1516800 1651200 1804800
+
+# cat /sys/devices/system/cpu/cpu6/cpufreq/scaling_available_frequencies
+# 652800 940800 1094400 1478400 1728000 1900800 2092800 2208000
+
+# cat /sys/devices/system/cpu/cpu7/cpufreq/scaling_available_frequencies
+# 806400 1094400 1401600 1766400 1996800 2188800 2304000 2400000
+
+# cat /sys/class/kgsl/kgsl-3d0/devfreq/available_frequencies
+# 625000000 500000000 400000000 275000000
+
+# cat /sys/class/kgsl/kgsl-3d0/devfreq/available_frequencies
+# 750000000 670000000 625000000 500000000 400000000 275000000

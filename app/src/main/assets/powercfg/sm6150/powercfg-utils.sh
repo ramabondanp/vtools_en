@@ -1,12 +1,3 @@
-# cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_frequencies
-# 300000 576000 768000 1017600 1248000 1324800 1497600 1612800 1708800 1804800
-
-# cat /sys/devices/system/cpu/cpu6/cpufreq/scaling_available_frequencies
-# 300000 652800 806400 979200 1094400 1209600 1324800 1555200 1708800 1843200 1939200 2169600 2208000
-
-# GPU
-# 180000000 267000000 355000000 430000000 565000000 650000000 700000000
-
 # GPU频率表
 gpu_freqs=`cat /sys/class/kgsl/kgsl-3d0/devfreq/available_frequencies`
 # GPU最大频率
@@ -35,41 +26,7 @@ if [[ -f /sys/class/kgsl/kgsl-3d0/num_pwrlevels ]];then
 fi;
 if [[ "$gpu_min_pl" -lt 0 ]];then
   gpu_min_pl=0
-fi;
-
-
-conservative_mode() {
-  local policy=/sys/devices/system/cpu/cpufreq/policy
-  # local down="$1"
-  # local up="$2"
-  #
-  # if [[ "$down" == "" ]]; then
-  #   local down="20"
-  # fi
-  # if [[ "$up" == "" ]]; then
-  #   local up="60"
-  # fi
-
-  for cluster in 0 6; do
-    echo $cluster
-    echo 'conservative' > ${policy}${cluster}/scaling_governor
-    # echo $down > ${policy}${cluster}/conservative/down_threshold
-    # echo $up > ${policy}${cluster}/conservative/up_threshold
-    echo 0 > ${policy}${cluster}/conservative/ignore_nice_load
-    echo 1000 > ${policy}${cluster}/conservative/sampling_rate # 1000us = 1ms
-    echo 2 > ${policy}${cluster}/conservative/freq_step
-  done
-
-  echo $1 > ${policy}0/conservative/down_threshold
-  echo $2 > ${policy}0/conservative/up_threshold
-  echo $1 > ${policy}0/conservative/down_threshold
-  echo $2 > ${policy}0/conservative/up_threshold
-
-  echo $3 > ${policy}6/conservative/down_threshold
-  echo $4 > ${policy}6/conservative/up_threshold
-  echo $3 > ${policy}6/conservative/down_threshold
-  echo $4 > ${policy}6/conservative/up_threshold
-}
+fi
 
 core_online=(1 1 1 1 1 1 1 1)
 set_core_online() {
@@ -85,6 +42,7 @@ restore_core_online() {
 }
 
 reset_basic_governor() {
+  stop_scene_scheduler
   set_core_online
 
   # CPU
@@ -95,7 +53,7 @@ reset_basic_governor() {
     echo 'schedutil' > /sys/devices/system/cpu/cpufreq/policy0/scaling_governor
   fi
   if [[ ! "$governor6" = "schedutil" ]]; then
-    echo 'schedutil' > /sys/devices/system/cpu/cpufreq/policy4/scaling_governor
+    echo 'schedutil' > /sys/devices/system/cpu/cpufreq/policy6/scaling_governor
   fi
 
   # GPU
@@ -166,14 +124,38 @@ set_input_boost_freq() {
   local ms="$3"
   echo "0:$c0 1:$c0 2:$c0 3:$c0 4:$c0 5:$c0 6:$c1 7:$c1" > /sys/module/cpu_boost/parameters/input_boost_freq
   echo $ms > /sys/module/cpu_boost/parameters/input_boost_ms
+  if [[ "$ms" -gt 0 ]]; then
+    echo 1 > /sys/module/cpu_boost/parameters/sched_boost_on_input
+  else
+    echo 0 > /sys/module/cpu_boost/parameters/sched_boost_on_input
+  fi
 }
 
 set_cpu_freq() {
-  echo "0:$2 1:$2 2:$2 3:$2 4:$2 5:$2 6:$4 7:$4" > /sys/module/msm_performance/parameters/cpu_max_freq
-  echo $1 > /sys/devices/system/cpu/cpufreq/policy0/scaling_min_freq
-  echo $2 > /sys/devices/system/cpu/cpufreq/policy0/scaling_max_freq
-  echo $3 > /sys/devices/system/cpu/cpufreq/policy6/scaling_min_freq
-  echo $4 > /sys/devices/system/cpu/cpufreq/policy6/scaling_max_freq
+  echo "0:4294967295 1:4294967295 2:4294967295 3:4294967295 4:4294967295 5:4294967295 6:4294967295 7:4294967295" > /sys/module/msm_performance/parameters/cpu_max_freq
+  echo "0:0 1:0 2:0 3:0 4:0 5:0 6:0 7:0" > /sys/module/msm_performance/parameters/cpu_min_freq
+
+  set_value $1 /sys/devices/system/cpu/cpufreq/policy0/scaling_min_freq
+  set_value $2 /sys/devices/system/cpu/cpufreq/policy0/scaling_max_freq
+  set_value $1 /sys/devices/system/cpu/cpufreq/policy0/scaling_min_freq
+
+  set_value $3 /sys/devices/system/cpu/cpufreq/policy6/scaling_min_freq
+  set_value $3 /sys/devices/system/cpu/cpufreq/policy6/scaling_min_freq
+  set_value $4 /sys/devices/system/cpu/cpufreq/policy6/scaling_max_freq
+}
+
+ufshc_perf(){
+  if [[ "$1" == "on" ]];then
+    echo 0 > /sys/devices/platform/soc/1d84000.ufshc/clkscale_enable
+    echo 0 > /sys/devices/platform/soc/1d84000.ufshc/clkgate_enable
+    echo 0 > /sys/devices/platform/soc/1d84000.ufshc/hibern8_on_idle_enable
+    echo 300000000 > /sys/class/devfreq/1d84000.ufshc/min_freq
+  else
+    echo 1 > /sys/devices/platform/soc/1d84000.ufshc/clkscale_enable
+    echo 1 > /sys/devices/platform/soc/1d84000.ufshc/clkgate_enable
+    echo 1 > /sys/devices/platform/soc/1d84000.ufshc/hibern8_on_idle_enable
+    echo 37500000 > /sys/class/devfreq/1d84000.ufshc/min_freq
+  fi
 }
 
 sched_config() {
@@ -214,6 +196,39 @@ set_gpu_min_freq() {
   # gpu_max_freq=`cat /sys/class/kgsl/kgsl-3d0/devfreq/max_freq`
   # gpu_min_freq=`cat /sys/class/kgsl/kgsl-3d0/devfreq/min_freq`
   # echo "Frequency: ${gpu_min_freq} ~ ${gpu_max_freq}"
+}
+
+cpu6_core_ctl(){
+  cpu6_core_ctl_dir=/sys/devices/system/cpu/cpu6/core_ctl
+  if [[ "$1" == "on" ]];then
+    echo 10 > $cpu6_core_ctl_dir/offline_delay_ms
+    echo 1 1 > $cpu6_core_ctl_dir/not_preferred
+    echo 1 > $cpu6_core_ctl_dir/enable
+    echo 2 > $cpu6_core_ctl_dir/max_cpus
+    echo 0 > $cpu6_core_ctl_dir/min_cpus
+    # echo 4294967295 > $cpu6_core_ctl_dir/nr_prev_assist_thresh
+    echo 2 > $cpu6_core_ctl_dir/task_thres
+    echo 30 > $cpu6_core_ctl_dir/busy_down_thres
+    echo 50 > $cpu6_core_ctl_dir/busy_up_thres
+  else
+    echo 0 > $cpu6_core_ctl_dir/enable
+  fi
+}
+cpu0_core_ctl(){
+  cpu0_core_ctl_dir=/sys/devices/system/cpu/cpu0/core_ctl
+  if [[ "$1" == "on" ]];then
+    echo 50 > $cpu0_core_ctl_dir/offline_delay_ms
+    echo 0 1 1 1 1 1 > $cpu0_core_ctl_dir/not_preferred
+    echo 1 > $cpu0_core_ctl_dir/enable
+    echo 6 > $cpu0_core_ctl_dir/max_cpus
+    echo 1 > $cpu0_core_ctl_dir/min_cpus
+    # echo 4294967295 > $cpu0_core_ctl_dir/nr_prev_assist_thresh
+    # echo 3 > $cpu0_core_ctl_dir/task_thres
+    echo 5 > $cpu0_core_ctl_dir/busy_down_thres
+    echo 15 > $cpu0_core_ctl_dir/busy_up_thres
+  else
+    echo 0 > $cpu0_core_ctl_dir/enable
+  fi
 }
 
 ctl_on() {
@@ -350,40 +365,6 @@ yuan_shen_opt_run() {
   fi
 }
 
-# WangZheRongYao
-sgame_opt_run() {
-  local game="tmgp.sgame"
-  if [[ $(getprop vtools.powercfg_app | grep $game) == "" ]]; then
-    return
-  fi
-
-  # top -H -p $(pgrep -ef tmgp.sgame)
-  # pid=$(pgrep -ef $game)
-  pid=$(pgrep -ef $game)
-  # mask=`echo "obase=16;$((num=2#01111111))" | bc` # 7F (cpu 6-0)
-
-  if [[ "$pid" != "" ]]; then
-    heavy_tid=$(top -H -b -q -n 1 -m 5 -p $pid | grep 'Thread-' | egrep  -o '[0-9]{1,}' | head -n 1)
-    for tid in $(ls "/proc/$pid/task/"); do
-      if [[ "$heavy_tid" == "$tid" ]]; then
-        taskset -p "C0" "$tid" > /dev/null 2>&1
-      elif [[ -f "/proc/$pid/task/$tid/comm" ]]; then
-        comm=$(cat /proc/$pid/task/$tid/comm)
-        case "$comm" in
-         "UnityMain"|"UnityGfx"|"CoreThread"*|"NativeThread")
-           # set cpu6-7
-           taskset -p "C0" "$tid" > /dev/null 2>&1
-         ;;
-         *)
-           # set cpu0-5
-           taskset -p "3F" "$tid" > /dev/null 2>&1
-         ;;
-        esac
-      fi
-    done
-  fi
-}
-
 # watch_app [on_tick] [on_change]
 watch_app() {
   local interval=120
@@ -431,70 +412,88 @@ watch_app() {
   done
 }
 
+stop_scene_scheduler(){
+  killall 'scene-scheduler' 2>/dev/null
+}
+scene_scheduler() {
+  SCDIR=${0%/*}
+  killall 'scene-scheduler' 2>/dev/null
+  # echo $SCDIR/scene-scheduler -c="$SCDIR/profile.json" -p="$1" -m="$2" > /cache/scene-scheduler.log
+  $SCDIR/scene-scheduler -p="$1" -m="$2" -c="$SCDIR/profile.json" >/dev/null 2>&1 &
+}
+
 adjustment_by_top_app() {
   case "$top_app" in
     # YuanShen
     "com.miHoYo.Yuanshen" | "com.miHoYo.ys.mi" | "com.miHoYo.ys.bilibili")
-        ctl_off cpu0
-        ctl_off cpu6
-        set_cpu_freq 1708800 2500000 1209600 2750000
-        set_hispeed_freq 0 0
-        if [[ "$action" = "powersave" ]]; then
-          sched_boost 0 0
-          stune_top_app 0 0
-          sched_config "50 80" "67 95" "300" "400"
-          gpu_pl_up 2
-          sched_limit 5000 0 5000 0
-        elif [[ "$action" = "balance" ]]; then
-          sched_boost 1 0
-          stune_top_app 1 10
-          sched_config "50 68" "67 80" "300" "400"
-          gpu_pl_up 2
-          sched_limit 5000 0 5000 0
-        elif [[ "$action" = "performance" ]]; then
-          sched_boost 1 0
-          stune_top_app 1 10
-          gpu_pl_up 3
-          sched_limit 5000 0 5000 0
-        elif [[ "$action" = "fast" ]]; then
-          sched_boost 1 0
-          stune_top_app 1 100
-          gpu_pl_up 3
-          sched_limit 5000 0 10000 0
-        fi
-        cpuset '0-1' '0-3' '0-7' '0-7'
-        watch_app yuan_shen_opt_run &
+      set_hispeed_freq 0 0
+      devfreq_performance
+      if [[ "$action" = "powersave" ]]; then
+        sched_boost 0 0
+        stune_top_app 0 0
+        sched_config "50 80" "67 95" "300" "400"
+        gpu_pl_up 2
+        sched_limit 5000 0 5000 0
+        set_cpu_freq 1708800 2500000 1708800 2750000
+      elif [[ "$action" = "balance" ]]; then
+        sched_boost 1 0
+        stune_top_app 0 20
+        sched_config "50 68" "67 80" "300" "400"
+        gpu_pl_up 2
+        sched_limit 5000 0 5000 0
+        set_cpu_freq 1804800 2500000 1939200 2750000
+      elif [[ "$action" = "performance" ]]; then
+        sched_boost 1 0
+        stune_top_app 0 100
+        gpu_pl_up 3
+        sched_limit 5000 0 5000 0
+        set_cpu_freq 1804800 2500000 2169600 2750000
+      elif [[ "$action" = "fast" ]]; then
+        sched_boost 1 0
+        stune_top_app 0 100
+        gpu_pl_up 3
+        sched_limit 5000 0 10000 0
+        set_cpu_freq 1804800 2500000 2208000 2750000
+      elif [[ "$1" = "pedestal" ]]; then
+        sched_boost 1 0
+        stune_top_app 0 100
+      fi
+      cpuset '0' '0' '0-7' '0-7'
+      # scene_scheduler "$top_app" "$action"
     ;;
 
     # Wang Zhe Rong Yao
     "com.tencent.tmgp.sgame")
-        ctl_off cpu0
-        ctl_off cpu6
+      ctl_off cpu0
+      ctl_off cpu6
+      set_hispeed_freq 0 0
+      cpuset '0' '0' '0-7' '0-7'
+      if [[ "$action" = "powersave" ]]; then
+        sched_config "52 55" "69 67" "300" "400"
+        sched_boost 1 0
+        stune_top_app 0 10
         set_cpu_freq 1708800 2500000 1209600 2750000
-        set_hispeed_freq 0 0
-        if [[ "$action" = "powersave" ]]; then
-          sched_config "52 55" "69 67" "300" "400"
-          sched_boost 1 0
-          stune_top_app 0 0
-          cpuset '0-1' '0-1' '0-2' '0-7'
-        elif [[ "$action" = "balance" ]]; then
-          sched_config "50 55" "65 65" "300" "400"
-          sched_boost 1 0
-          stune_top_app 0 1
-          cpuset '0-1' '0-1' '0-2' '0-7'
-        elif [[ "$action" = "performance" ]]; then
-          sched_config "45 55" "55 65" "300" "400"
-          sched_boost 1 0
-          stune_top_app 1 20
-          cpuset '0-1' '0-1' '0-1' '0-7'
-        elif [[ "$action" = "fast" ]]; then
-          sched_config "40 55" "50 63" "300" "400"
-          sched_boost 1 1
-          stune_top_app 1 100
-          cpuset '0-1' '0-1' '0-1' '0-7'
-        fi
-        # 这个策略很好，但是会被系统(游戏)覆盖，甚至互斥产生负面作用
-        # watch_app sgame_opt_run &
+      elif [[ "$action" = "balance" ]]; then
+        sched_config "50 55" "65 65" "300" "400"
+        sched_boost 1 0
+        stune_top_app 0 30
+        set_cpu_freq 1804800 2500000 1708800 2750000
+      elif [[ "$action" = "performance" ]]; then
+        sched_config "45 55" "55 65" "300" "400"
+        sched_boost 1 0
+        stune_top_app 0 100
+        set_cpu_freq 1804800 2500000 1939200 2750000
+      elif [[ "$action" = "fast" ]]; then
+        sched_config "40 55" "50 63" "300" "400"
+        sched_boost 1 2
+        stune_top_app 0 100
+        set_cpu_freq 1804800 2500000 2208000 2750000
+      elif [[ "$1" = "pedestal" ]]; then
+        sched_boost 1 0
+        stune_top_app 0 100
+      fi
+      # 这个策略很好，但是会被系统(游戏)覆盖，甚至互斥产生负面作用
+      # scene_scheduler "$top_app" "$action"
     ;;
 
     # XianYu, TaoBao, Browser, TieBa Fast, TieBa、JingDong、TianMao、Mei Tuan、PuPuChaoShi
@@ -502,7 +501,7 @@ adjustment_by_top_app() {
       if [[ "$action" == "powersave" ]]; then
         sched_config "45 62" "55 75" "85" "100"
       else
-        sched_boost 1 1
+        sched_boost 1 2
         stune_top_app 1 1
         sched_config "45 62" "55 75" "85" "100"
       fi
@@ -518,7 +517,7 @@ adjustment_by_top_app() {
         stune_top_app 1 1
         sched_config "40 50" "50 65" "85" "100"
       else
-        sched_boost 1 1
+        sched_boost 1 2
         stune_top_app 1 1
         sched_config "40 50" "50 65" "85" "100"
       fi
@@ -533,7 +532,7 @@ adjustment_by_top_app() {
       elif [[ "$action" == "performance" ]]; then
         sched_config "35 52" "45 65" "65" "80"
       else
-        sched_boost 1 1
+        sched_boost 1 2
         stune_top_app 1 1
         sched_config "45 62" "55 75" "85" "100"
       fi
@@ -545,7 +544,7 @@ adjustment_by_top_app() {
     ;;
 
     # DouYin, BiliBili
-    "com.ss.android.ugc.aweme" | "tv.danmaku.bili")
+    "com.ss.android.ugc.aweme"|"com.ss.android.ugc.aweme.lite"|"tv.danmaku.bili")
       ctl_on cpu0
       ctl_on cpu7
       echo 0-3 > /dev/cpuset/foreground/cpus
@@ -563,14 +562,10 @@ adjustment_by_top_app() {
         stune_top_app 1 0
         echo 0-7 > /dev/cpuset/top-app/cpus
       elif [[ "$action" = "fast" ]]; then
-        sched_boost 1 1
+        sched_boost 1 2
         stune_top_app 1 10
         echo 0-7 > /dev/cpuset/top-app/cpus
       fi
-      pgrep -f $top_app | while read pid; do
-        # echo $pid > /dev/cpuset/foreground/cgroup.procs
-        echo $pid > /dev/stune/background/cgroup.procs
-      done
 
       sched_config "85 85" "100 100" "240" "400"
     ;;
@@ -579,4 +574,5 @@ adjustment_by_top_app() {
       echo '未适配的应用'
     ;;
   esac
+  scene_scheduler "$top_app" "$action"
 }

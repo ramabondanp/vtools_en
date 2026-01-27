@@ -1,0 +1,53 @@
+{
+  "friendly": "相机",
+  "packages": [
+    "com.tencent.mm.plugin.recordvideo.activity.MMRecordUI",
+    "com.tencent.aelight.camera.aebase.QIMCameraCaptureActivity",
+    "dov.com.qq.im.QIMCameraCaptureActivity",
+    "com.googleCamera.Wichaya8",
+    "com.accordion.analogcam.cn",
+    "org.codeaurora.snapcam",
+    "com.android.camera",
+    "com.xiaomi.scanner",
+    "com.blink.academy.protake",
+    "com.benqu.wuta",
+    "com.gorgeous.lite",
+    "com.kwai.m2u",
+    "com.meitu.meiyancamera",
+    "com.yiruike.sodacn.android",
+    "com.lemon.faceu",
+    "com.mt.mtxx.mtxx"
+  ],
+  "call": [
+    ["@preset", "perf_normal"],
+    ["@cpuset", "0-1", "3-4", "0-7", "0-7"],
+    ["@high_rate", "off"]
+  ],
+  "modes": [{
+    "mode": ["powersave", "balance"],
+    "booster": {
+      "events": ["presets"],
+      "duration": 3000,
+      "idle_delay": 8000,
+      "enter": [
+        ["@cpu_freq", "cpu0", "1500MHz", "max"],
+        ["@cpu_freq", "cpu4", "1800MHz", "2.65Ghz"],
+        ["@cpu_freq", "cpu7", "1800MHz", "2.65Ghz"],
+        ["$max_cpus_cpu7", "1"]
+      ],
+      "exit": [
+        ["@cpu_freq", "cpu0", "min", "1500MHz"],
+        ["@cpu_freq", "cpu4", "min", "1800MHz"],
+        ["@cpu_freq", "cpu7", "1300000", "1500MHz"],
+        ["$max_cpus_cpu7", "0"]
+      ]
+    }
+  }],
+  "booster": {
+    "events": ["touch", "buttons"],
+    "duration": 2000,
+    "idle_delay": 2000,
+    "enter": [ ["@high_rate", "on"] ],
+    "exit": [ ["@high_rate", "off"] ]
+  }
+}

@@ -1,0 +1,451 @@
+{
+  "platform": "mt6893",
+  "platform_name": "D1200",
+  "framework": 130,
+  "alias": {
+    "min_cpu_freq": "/proc/ppm/policy/hard_userlimit_min_cpu_freq",
+    "max_cpu_freq": "/proc/ppm/policy/hard_userlimit_max_cpu_freq",
+    "gpu_dvfs_margin": "/sys/kernel/ged/hal/timer_base_dvfs_margin",
+    "gpu_max_opp": "/sys/kernel/ged/hal/custom_upbound_gpu_freq",
+    "util_max_top": "/dev/stune/top-app/schedtune.util.max",
+    "util_max_fg": "/dev/stune/foreground/schedtune.util.max",
+    "util_max_bg": "/dev/stune/background/schedtune.util.max",
+    "util_min_top": "/dev/stune/top-app/schedtune.util.min",
+    "util_min_fg": "/dev/stune/foreground/schedtune.util.min",
+    "util_min_bg": "/dev/stune/background/schedtune.util.min",
+    "deisolation": "/sys/devices/system/cpu/sched/set_sched_deisolation",
+    "fpsgo_enable": "/sys/kernel/fpsgo/common/fpsgo_enable",
+    "stune_boost": "/dev/stune/top-app/schedtune.boost",
+    "dram_boost": "/sys/devices/platform/boot_dramboost/dramboost/dramboost"
+  },
+  "features": {
+    "high_rate": {
+      "enable": true,
+      "enable_control": "/data/local/tmp/scene_refresh_rate",
+      "device_policy": [{
+        "device": "RE5469", "name": "Realme GT NEO+", "enable": true,
+        "mode_high_rate": "0", "mode_low_rate": "1"
+      }]
+    }
+  },
+  "schemes": {
+    "powersave": {
+      "call": [
+        ["@perf_turbo", "mt6893", "off", "27"],
+        ["@thermal_threshold", "-1"],
+        ["@high_rate", "off", "3000"]
+      ]
+    },
+    "balance": {
+      "call": [
+        ["@perf_turbo", "mt6893", "on", "19"],
+        ["@thermal_threshold", "-1"],
+        ["@high_rate", "on"]
+      ]
+    },
+    "performance": {
+      "call": [
+        ["@perf_turbo", "mt6893", "extreme", "0"],
+        ["@thermal_threshold", "-1"],
+        ["@high_rate", "on"]
+      ]
+    },
+    "fast": {
+      "call": [
+        ["@perf_turbo", "mt6893", "extreme", "0"],
+        ["@thermal_threshold", "-1"],
+        ["@high_rate", "on"]
+      ]
+    },
+    "pedestal": {
+      "call": [
+        ["@perf_turbo", "mt6893", "extreme", "0"],
+        ["@thermal_threshold", "-1"],
+        ["@high_rate", "on"]
+      ]
+    }
+  },
+  "apps": [
+    {
+      "friendly": "机动都市阿尔法",
+      "packages": ["com.netease.jddsaef", "com.netease.g93na", "com.netease.g93natw"],
+      "import": "_NeteaseJDDS.json"
+    },
+    {
+      "friendly": "原神",
+      "packages": [
+        "com.miHoYo.Yuanshen",
+        "com.miHoYo.ys.mi",
+        "com.miHoYo.ys.bilibili",
+        "com.miHoYo.GenshinImpact"
+      ],
+      "import": "_GenshinImpact.json"
+    },
+    {
+      "friendly": "幻塔",
+      "packages": [
+        "com.dw.h5yvzr.yt",
+        "com.pwrd.hotta.laohu",
+        "com.hottagames.hotta.bilibili",
+        "com.hottagames.hotta.mi"
+      ],
+      "import": "_Hotta.json"
+    },
+    {
+      "friendly": "和平精英",
+      "packages": ["com.tencent.tmgp.pubgmhd",  "com.tencent.ig"],
+      "import": "_PUBG.json"
+    },
+    {
+      "friendly": "王者荣耀/LOL",
+      "packages": ["com.tencent.tmgp.sgame", "com.garena.game.kgtw", "com.tencent.lolm"],
+      "import": "_SGAME.json"
+    },
+    {
+      "friendly": "APEX",
+      "packages": ["com.levelinfinite.apexlegendsmobile", "com.ea.gp.apexlegendsmobilefps", "com.tw.fivexgames.apexlegendsmobile"],
+      "call": [
+        ["$dcs_mode", "0"],
+        ["$mi_thermal", "13"],
+        ["@high_rate", "off"]
+      ],
+      "affinity": {
+        "heavy_thread": "Thread-",
+        "heavy_mask": "80",
+        "comm": {
+          "70": ["RHIThread", "RenderThread", "TaskGraphNP", "NativeThread", "MainThread-UE4"]
+        },
+        "other": "7F"
+      }
+    },
+    {
+      "friendly": "抖音、西瓜、快手",
+      "packages": ["com.ss.android.ugc.aweme", "com.ss.android.ugc.aweme.lite", "com.ss.android.article.video", "com.smile.gifmaker"],
+      "import": "_ShortVideo.json"
+    },
+    {
+      "friendly": "视频应用",
+      "packages": [
+        "tv.danmaku.bili", "com.bilibili.app.in",
+        "com.google.android.youtube",
+        "com.tencent.qqlive",
+        "com.ss.android.article.video",
+        "com.qiyi.video",
+        "com.qiyi.video.lite",
+        "com.qiyi.video.sdkplayer",
+        "com.dianshijia.newlive",
+        "com.duowan.kiwi",
+        "air.tv.douyu.android",
+        "com.douyu.rush",
+        "com.youku.phone",
+        "org.telegram.messenger",
+        "com.hunantv.imgo.activity"
+      ],
+      "import": "_Video.json"
+    },
+    {
+      "friendly": "社交APP",
+      "packages": [
+        "com.tencent.mobileqq",
+        "com.tencent.mm",
+        "com.tencent.tim",
+        "org.telegram.messenger"
+      ],
+      "import": "_IM.json"
+    },
+    {
+      "friendly": "极速响应",
+      "packages": [
+        "com.miui.home",
+        "com.meizu.flyme.launcher",
+        "net.oneplus.launcher",
+        "com.oppo.launcher",
+        "ch.deletescape.lawnchair.ci",
+        "com.mi.android.globallauncher",
+        "com.teslacoilsw.launcher",
+        "com.android.quicksearchbox",
+        "net.oneplus.h2launcher",
+        "com.oneplus.hydrogen.launcher",
+        "com.microsoft.launcher",
+        "org.lineageos.trebuchet",
+        "org.mokee.lawnchair",
+        "com.google.android.apps.nexuslauncher"
+      ],
+      "stop_on": [],
+      "sensors": [],
+      "modes": [{
+        "mode": ["powersave"],
+        "booster": {
+          "events": ["presets"],
+          "duration": 3000,
+          "idle_delay": 2000,
+          "enter": [
+            ["$cpuset_top", "0-7"],
+            ["$cpuset_fg", "0-7"],
+            ["$min_cpu_freq", "0 1250000|1 1335000|2 1482000"],
+            ["$max_cpu_freq", "0 2000000|1 1985000|2 2284000"],
+            ["$gpu_dvfs_margin", "40"],
+            ["$util_max_top", "1024"],
+            ["$util_max_bg", "1024"],
+            ["$util_max_fg", "1024"],
+            ["$deisolation", "4|5|6|7"],
+            ["@high_rate", "on"]
+          ],
+          "exit": [
+            ["$min_cpu_freq", "0 500000|1 437000|2 659000"],
+            ["$max_cpu_freq", "0 1725000|1 1622000|2 1632000"],
+            ["$gpu_dvfs_margin", "10"],
+            ["$deisolation", "4|5|6|7"],
+            ["@high_rate", "off"]
+          ]
+        }
+      },{
+        "mode": ["balance"],
+        "booster": {
+          "events": ["presets"],
+          "duration": 3000,
+          "idle_delay": 2000,
+          "enter": [
+            ["$cpuset_top", "0-7"],
+            ["$cpuset_fg", "0-7"],
+            ["$min_cpu_freq", "0 1250000|1 1335000|2 1482000"],
+            ["$max_cpu_freq", "0 2000000|1 2200000|2 2600000"],
+            ["$gpu_dvfs_margin", "50"],
+            ["$deisolation", "4|5|6|7"],
+            ["@high_rate", "on"]
+          ],
+          "exit": [
+            ["$min_cpu_freq", "0 500000|1 437000|2 659000"],
+            ["$max_cpu_freq", "0 1800000|1 1985000|2 2284000"],
+            ["$gpu_dvfs_margin", "10"],
+            ["$deisolation", "4|5|6|7"],
+            ["@high_rate", "off"]
+          ]
+        }
+      },{
+        "mode": ["performance"],
+        "booster": {
+          "events": ["presets"],
+          "duration": 4000,
+          "idle_delay": 2000,
+          "enter": [
+            ["$cpuset_top", "0-7"],
+            ["$cpuset_fg", "0-7"],
+            ["$min_cpu_freq", "0 1625000|1 1624000|2 1632000"],
+            ["$max_cpu_freq", "0 2000000|1 2600000|2 3000000"],
+            ["$gpu_dvfs_margin", "70"],
+            ["$deisolation", "4|5|6|7"],
+            ["@high_rate", "on"]
+          ],
+          "exit": [
+            ["$min_cpu_freq", "0 500000|1 437000|2 659000"],
+            ["$max_cpu_freq", "0 2000000|1 2354000|2 2713000"],
+            ["$gpu_dvfs_margin", "15"],
+            ["$deisolation", "4|5|6|7"],
+            ["@high_rate", "off"]
+          ]
+        }
+      },{
+        "mode": ["fast"],
+        "booster": {
+          "events": ["presets"],
+          "duration": 4000,
+          "idle_delay": 2000,
+          "enter": [
+            ["$gpu_dvfs_margin", "130"],
+            ["$deisolation", "4|5|6|7"],
+            ["@high_rate", "off"]
+          ],
+          "exit": [
+            ["$gpu_dvfs_margin", "35"],
+            ["$deisolation", "4|5|6|7"],
+            ["@high_rate", "off"]
+          ]
+        }
+      }]
+    },
+    {
+      "friendly": "扫码",
+      "packages": [
+        "com.tencent.mm.plugin.scanner.ui.BaseScanUI",
+        "com.tencent.mobileqq.olympic.activity.ScanTorchActivity",
+        "com.tencent.mobileqq.olympic.activity.ScanTorchActivity",
+        "com.alipay.mobile.scan.as.main.MainCaptureActivity",
+        "com.jd.lib.scan.lib.zxing.client.android.CaptureActivity",
+        "com.etao.feimagesearch.capture.CaptureActivity"
+      ],
+      "call": [
+        ["$util_max_top", "1024"],
+        ["$util_max_bg", "100"],
+        ["$util_max_fg", "1024"],
+        ["@cpuset", "0", "0-4", "0-7", "0-7"],
+        ["$max_cpu_freq", "0 2000000|1 2600000|2 2600000"],
+        ["$min_cpu_freq", "0 1725000|1 1855000|2 1820000"],
+        ["$mi_thermal", "10"]
+      ],
+      "modes": [{
+        "mode": ["*"],
+        "booster": {
+          "events": ["presets"],
+          "duration": 2000,
+          "idle_delay": 2000,
+          "enter": [ ["@high_rate", "on"] ],
+          "exit": [ ["@high_rate", "off"] ]
+        }
+      }]
+    },
+    {
+      "friendly": "相机",
+      "packages": [
+        "com.tencent.mm.plugin.recordvideo.activity.MMRecordUI",
+        "com.tencent.aelight.camera.aebase.QIMCameraCaptureActivity",
+        "dov.com.qq.im.QIMCameraCaptureActivity",
+        "com.googleCamera.Wichaya8",
+        "com.accordion.analogcam.cn",
+        "org.codeaurora.snapcam",
+        "com.android.camera",
+        "com.xiaomi.scanner",
+        "com.blink.academy.protake",
+        "com.benqu.wuta",
+        "com.gorgeous.lite",
+        "com.kwai.m2u",
+        "com.meitu.meiyancamera",
+        "com.yiruike.sodacn.android",
+        "com.lemon.faceu",
+        "com.mt.mtxx.mtxx"
+      ],
+      "call": [
+        ["$util_max_top", "1024"],
+        ["$util_max_bg", "100"],
+        ["$util_max_fg", "1024"],
+        ["@cpuset", "0-1", "0-4", "0-7", "0-7"]
+      ],
+      "modes": [{
+        "mode": ["powersave", "balance"],
+        "booster": {
+          "events": ["presets"],
+          "duration": 3000,
+          "idle_delay": 4000,
+          "enter": [
+            ["$max_cpu_freq", "0 2000000|1 2600000|2 2600000"],
+            ["$min_cpu_freq", "0 1725000|1 1855000|2 1820000"],
+            ["@high_rate", "on"]
+          ],
+          "exit": [
+            ["$max_cpu_freq", "0 2000000|1 1985000|2 2141000"],
+            ["$min_cpu_freq", "0 1000000|1 700000|2 659000"],
+            ["@high_rate", "off"]
+          ]
+        }
+      }, {
+        "mode": ["*"],
+        "booster": {
+          "events": ["presets"],
+          "duration": 2000,
+          "idle_delay": 2000,
+          "enter": [ ["@high_rate", "on"] ],
+          "exit": [ ["@high_rate", "off"] ]
+        }
+      }]
+    },
+    {
+      "friendly": "狗屎/毒瘤",
+      "packages": [
+        "com.tencent.mm:appbrand",
+        "com.tencent.mm:toolsmp"
+      ],
+      "modes": [{
+        "mode": ["powersave", "balance"],
+        "call": [
+          ["$stune_top_boost", "10"],
+          ["$util_max_top", "1024"],
+          ["$util_max_bg", "100"],
+          ["$util_max_fg", "1024"],
+          ["@cpuset", "0", "0-4", "0-7", "0-7"],
+          ["$max_cpu_freq", "0 2000000|1 2400000|2 2400000"],
+          ["$min_cpu_freq", "0 1450000|1 1046000|2 1108000"],
+          ["$mi_thermal", "10"]
+        ],
+        "booster": {
+          "events": ["presets"],
+          "duration": 2000,
+          "idle_delay": 2000,
+          "enter": [ ["@high_rate", "on"] ],
+          "exit": [ ["@high_rate", "off"] ]
+        }
+      }, {
+        "mode": ["*"],
+        "booster": {
+          "events": ["presets"],
+          "duration": 2000,
+          "idle_delay": 2000,
+          "enter": [ ["@high_rate", "on"] ],
+          "exit": [ ["@high_rate", "off"] ]
+        }
+      }]
+    },
+    {
+      "friendly": "备份还原",
+      "packages": ["com.miui.huanji", "com.miui.backup"],
+      "call": [
+        ["@uclamp", "0.00~max", "0.00~max", "0.00~max"],
+        ["@high_rate", "off", "2000"]
+      ]
+    },
+    {
+      "friendly": "All",
+      "packages": ["*"],
+      "modes": [{
+        "mode": ["powersave"],
+        "booster": {
+          "events": ["touch", "buttons", "synaptics", "uinput-fpc", "gpio-keys"],
+          "duration": 5000,
+          "idle_delay": 2000,
+          "enter": [
+            ["$stune_top_boost", "10"],
+            ["$util_max_top", "1024"],
+            ["$util_max_bg", "100"],
+            ["$util_max_fg", "1024"],
+            ["$deisolation", "4|5|6|7"],
+            ["@high_rate", "on"]
+          ],
+          "exit": [
+            ["$deisolation", "4|5|6|7"],
+            ["@high_rate", "off"]
+          ]
+        }
+      }, {
+        "mode": ["balance"],
+        "booster": {
+          "events": ["touch", "buttons", "synaptics", "uinput-fpc", "gpio-keys"],
+          "duration": 3000,
+          "idle_delay": 2000,
+          "enter": [
+            ["$stune_top_boost", "10"],
+            ["$deisolation", "4|5|6|7"],
+            ["@high_rate", "on"]
+          ],
+          "exit": [
+            ["$deisolation", "4|5|6|7"],
+            ["@high_rate", "off", "5000"]
+          ]
+        }
+      }, {
+        "mode": ["performance", "fast", "pedestal"],
+        "disable": true,
+        "booster": {
+          "events": ["touch", "buttons", "synaptics", "uinput-fpc", "gpio-keys"],
+          "duration": 2000,
+          "enter": [
+            ["$stune_top_boost", "100"],
+            ["$sched_boost", "2"],
+            ["$deisolation", "4|5|6|7"]
+          ],
+          "exit": [
+            ["$deisolation", "4|5|6|7"]
+          ]
+        }
+      }]
+    }
+  ]
+}

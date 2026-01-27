@@ -1,0 +1,112 @@
+{
+  "friendly": "All",
+  "packages": ["*"],
+  "modes": [{
+    "mode": ["powersave"],
+    "booster": {
+      "events": ["presets"],
+      "duration": 1500,
+      "idle_delay": 4000,
+      "enter": [
+        ["$dcs_mode", "0"],
+        ["@cpuset", "0-2", "3-4", "0-7", "0-7"],
+        ["$cpu_min_0", "#500000"],
+        ["$cpu_min_4", "#700000"],
+        ["$core_ctl_4", "0"], ["$core_ctl_7", "0"],
+        ["$uclamp_bg_max", "max"],
+        ["$uclamp_fg_max", "max"],
+        ["$uclamp_top_max", "max"],
+        ["@high_rate", "on"]
+      ],
+      "exit": [
+        ["$dcs_mode", "1"],
+        ["@cpuset", "0-2", "0-3", "0-3", "0-6"],
+        ["$cpu_min_0", "#200000"],
+        ["$cpu_min_4", "#400000"],
+        ["$core_ctl_4", "0"], ["$core_ctl_7", "1"],
+        ["$uclamp_bg_max", "3.00"],
+        ["$uclamp_fg_max", "20.00"],
+        ["$uclamp_top_max", "30.00"],
+        ["@high_rate", "off", "500"]
+      ]
+    },
+    "sensors": [{
+      "disable": true,
+      "sensor": "/sys/kernel/ged/hal/gpu_utilization:0",
+      "interval": 5000,
+      "props": ["$dcs_mode", "$ged_kpi"],
+      "rules": [
+        { "threshold": [-1, 50], "values": ["1", "1"] },
+        { "threshold": [40, -1], "values": ["0", "0"] }
+      ]
+    }]
+  }, {
+    "mode": ["balance"],
+    "booster": {
+      "events": ["presets"],
+      "duration": 2000,
+      "idle_delay": 5000,
+      "enter": [
+        ["$dcs_mode", "0"],
+        ["@cpuset", "", "", "0-7", ""],
+        ["$cpu_min_0", "#500000"],
+        ["$cpu_min_4", "#700000"],
+        ["@preset", "perf_active"],
+        ["@high_rate", "on"]
+      ],
+      "exit": [
+        ["$dcs_mode", "1"],
+        ["@cpuset", "", "", "0-6", ""],
+        ["@preset", "perf_fg_opt"],
+        ["$cpu_min_0", "#20000"],
+        ["@high_rate", "off"]
+      ]
+    },
+    "sensors": [{
+      "disable": true,
+      "sensor": "/sys/kernel/ged/hal/gpu_utilization:0",
+      "interval": 5000,
+      "props": ["$dcs_mode", "$ged_kpi"],
+      "rules": [
+        { "threshold": [-1, 50], "values": ["1", "1"] },
+        { "threshold": [40, -1], "values": ["0", "0"] }
+      ]
+    }]
+  }, {
+    "mode": ["performance"],
+    "booster": {
+      "events": ["presets"],
+      "duration": 2000,
+      "enter": [
+        ["$uclamp_fg_min", "0.05"],
+        ["$uclamp_top_min", "0.25"]
+      ],
+      "exit": [
+        ["$uclamp_fg_min", "0.00"],
+        ["$uclamp_top_min", "0.00"]
+      ]
+    }
+  }, {
+    "mode": ["fast"],
+    "booster": {
+      "events": ["presets"],
+      "duration": 2000,
+      "enter": [
+        ["$uclamp_fg_min", "max"],
+        ["$uclamp_top_min", "max"]
+      ]
+    }
+  }, {
+    "mode": ["pedestal"],
+    "sensors": [{
+      "sensor": "/sys/class/power_supply/battery/temperature",
+      "interval": 15000,
+      "rules": [
+        { "threshold": [-1, 44], "enter": [["@charge", "suspend"]] },
+        { "threshold": [44, 31], "enter": [["@charge", "suspend"]] },
+        { "threshold": [41, 38], "enter": [["@charge", "normal"]] },
+        { "threshold": [38, -1], "enter": [["@charge", "normal"]] }
+      ]
+    }]
+  }]
+}

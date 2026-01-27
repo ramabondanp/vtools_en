@@ -1,0 +1,51 @@
+{
+  "friendly": "APEX",
+  "packages": ["com.levelinfinite.apexlegendsmobile", "com.ea.gp.apexlegendsmobilefps", "com.tw.fivexgames.apexlegendsmobile"],
+  "call": [
+    ["$mi_thermal", "13"],
+    ["@gpu_freq", "min", "740MHz"]
+  ],
+  "affinity": {
+    "heavy_thread": "Thread-",
+    "heavy_mask": "80",
+    "comm": {
+      "70": ["RHIThread", "RenderThread", "TaskGraphNP", "NativeThread", "MainThread-UE4"]
+    },
+    "other": "7F"
+  },
+  "modes": [{
+    "mode": ["powersave"],
+    "call": [
+      ["@cpu_freq", "policy0", "1.2Ghz", "max"],
+      ["@cpu_freq", "policy4", "710400", "1881600"],
+      ["@cpu_freq", "policy7", "844800", "2035200"],
+      ["@uclamp", "0.00~9.00", "0.00~max", "0.00~max"]
+    ]
+  }, {
+    "mode": ["balance"],
+    "call": [
+      ["@cpu_freq", "policy0", "1.2Ghz", "max"],
+      ["@cpu_freq", "policy4", "1000MHz", "1900000"],
+      ["@cpu_freq", "policy7", "1000MHz", "2200000"],
+      ["@uclamp", "0.00~max", "0.00~max", "0.00~max"]
+    ]
+  },{
+    "mode": ["performance"],
+    "call": [
+      ["@cpu_freq", "policy0", "1497600", "max"],
+      ["@cpu_freq", "policy4", "1440MHz", "2419200"],
+      ["@cpu_freq", "policy7", "1555200", "2496000"],
+      ["@uclamp", "0.00~max", "0.00~max", "0.00~max"]
+    ]
+  },{
+    "mode": ["fast"],
+    "call": [
+      ["@uclamp", "0.00~max", "0.00~max", "2.0~max"]
+    ]
+  },{
+    "mode": ["pedestal"],
+    "call": [
+      ["@uclamp", "0.00~max", "0.0~max", "9.0~max"]
+    ]
+  }]
+}

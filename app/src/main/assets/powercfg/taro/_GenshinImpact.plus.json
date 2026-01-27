@@ -1,0 +1,183 @@
+{
+  "friendly": "原神",
+  "packages": [
+    "com.miHoYo.Yuanshen",
+    "com.miHoYo.ys.mi",
+    "com.miHoYo.ys.bilibili",
+    "com.miHoYo.GenshinImpact"
+  ],
+  "call": [
+    ["@uclamp", "0.00~5.00", "0.00~max", "0.00~max"],
+    ["@cpuset", "1", "0-2", "0-5", "0-7"],
+    ["@high_rate", "off", "3000"]
+  ],
+  "affinity": {
+    "cpuset_mode": "coexist",
+    "unity_main": "80",
+    "comm": {
+      "70": ["UnityGfx", "UnityMultiRende", "UnityPreload", "Worker Thread"],
+      "7F": ["UnityChoreograp", "AsyncReadManage", "NativeThread"],
+      "F": ["MIHOYO_NETWORK", "Audio", "tp_schedule", "FMOD"]
+    },
+    "other": "f"
+  },
+  "modes": [
+    {
+      "mode": ["powersave"],
+      "call": [
+        ["@cpu_freq", "cpu0", "1075200", "1478400"],
+        ["@cpu_freq", "cpu4", "633600", "1651200"],
+        ["@cpu_freq", "cpu7", "806400", "1958400"],
+        ["$core_ctl_7", "0"],
+        ["@classical", "cpu0", "88", "74", "4", "1"],
+        ["@classical", "cpu4", "90", "82", "3", "1"],
+        ["@classical", "cpu7", "83", "72", "2", "1"]
+      ],
+      "sensors": [
+        {
+          "sensor": "cpu",
+          "interval": 100,
+          "props": ["$cpu_max_4", "$cpu_max_7"],
+          "rules": [
+            { "threshold": [   -1, 92000], "values": ["1766400", "1766400"] },
+            { "threshold": [92000, 85000], "values": ["1881600", "1881600"] },
+            { "threshold": [84000, 81000], "values": ["1996800", "1996800"] },
+            { "threshold": [82000, 76000], "values": ["1996800", "2131200"] },
+            { "threshold": [75000,    -1], "values": ["2112000", "2246400"] }
+          ]
+        }
+      ],
+      "booster": {
+        "events": ["presets"],
+        "duration": 30000,
+        "idle": 30000,
+        "enter": [
+          ["$uclamp_fg_max", "max"],
+          ["$uclamp_top_max", "max"],
+          ["$uclamp_bg_max", "max"],
+          ["$cpuset_top", "0-7"]
+        ],
+        "exit": [
+          ["$cpuset_top", "1-4"],
+          ["$uclamp_fg_max", "0.00"],
+          ["$uclamp_top_max", "0.00"],
+          ["$uclamp_bg_max", "0.00"]
+        ]
+      }
+    },
+    {
+      "mode": ["balance"],
+      "call": [
+        ["@cpu_freq", "cpu0", "1075200", "1574400"],
+        ["@cpu_freq", "cpu4", "633600", "1766400"],
+        ["@cpu_freq", "cpu7", "806400", "2169600"],
+        ["@classical", "cpu0", "80", "63", "5", "1"],
+        ["@classical", "cpu4", "85", "79", "4", "1"],
+        ["@classical", "cpu7", "80", "70", "2", "1"]
+      ],
+      "sensors": [
+        {
+          "sensor": "cpu",
+          "interval": 100,
+          "props": ["$cpu_max_4", "$cpu_max_7"],
+          "rules": [
+            { "threshold": [   -1, 94000], "values": ["1996800", "1881600"] },
+            { "threshold": [94000, 88000], "values": ["2227200", "1996800"] },
+            { "threshold": [87000, 81000], "values": ["2342400", "2246400"] },
+            { "threshold": [80000,    -1], "values": ["2457600", "2361600"] }
+          ]
+        }
+      ],
+      "booster": {
+        "events": ["presets"],
+        "duration": 30000,
+        "idle": 30000,
+        "enter": [
+          ["$cpuset_top", "0-7"],
+          ["$uclamp_fg_max", "max"],
+          ["$uclamp_top_max", "max"],
+          ["$uclamp_bg_max", "max"]
+        ],
+        "exit": [
+          ["$cpuset_top", "1-5"],
+          ["$uclamp_fg_max", "1.00"],
+          ["$uclamp_top_max", "1.00"],
+          ["$uclamp_bg_max", "0.00"]
+        ]
+      }
+    },
+    {
+      "mode": ["performance"],
+      "call": [
+        ["@cpu_freq", "cpu0", "1056000", "1555200"],
+        ["@cpu_freq", "cpu4", "633600", "2457600"],
+        ["@cpu_freq", "cpu7", "787200", "2592000"],
+        ["@sched_limit", "0 6000", "0 16000", "0 16000"]
+      ],
+      "sensors": [
+        {
+          "sensor": "cpu",
+          "interval": 100,
+          "props": ["$cpu_max_4", "$cpu_max_7"],
+          "rules": [
+            { "threshold": [   -1, 94000], "values": ["1996800", "2131200"] },
+            { "threshold": [94000, 87000], "values": ["2112000", "2361600"] },
+            { "threshold": [86000, 83000], "values": ["2342400", "2476800"] },
+            { "threshold": [82000, 79000], "values": ["2457600", "2592000"] },
+            { "threshold": [78000,    -1], "values": ["2572800", "2822400"] }
+          ]
+        }
+      ],
+      "booster": {
+        "events": ["presets"],
+        "duration": 60000,
+        "idle": 60000,
+        "enter": [
+          ["$uclamp_fg_max", "max"],
+          ["$uclamp_top_max", "max"],
+          ["$uclamp_bg_max", "max"]
+        ],
+        "exit": [
+          ["$uclamp_fg_max", "1.00"],
+          ["$uclamp_top_max", "1.00"],
+          ["$uclamp_bg_max", "0.00"]
+        ]
+      }
+    },
+    {
+      "mode": ["fast"],
+      "call": [
+        ["@cpu_freq", "cpu0", "1056000", "1689600"],
+        ["@cpu_freq", "cpu4", "1113600", "2745600"],
+        ["@cpu_freq", "cpu7", "1036800", "2918400"],
+        ["@sched_limit", "0 4000", "0 8000", "0 8000"]
+      ],
+      "sensors": [
+        {
+          "sensor": "cpu",
+          "interval": 100,
+          "props": ["$cpu_max_4", "$cpu_max_7"],
+          "rules": [
+            { "threshold": [   -1, 95500], "values": ["2112000", "1996800"] },
+            { "threshold": [95000, 92000], "values": ["2227200", "2246400"] },
+            { "threshold": [92000, 88000], "values": ["2342400", "2476800"] },
+            { "threshold": [88000, 83000], "values": ["2457600", "2592000"] },
+            { "threshold": [83000, 80000], "values": ["2572800", "2918400"] },
+            { "threshold": [80000,    -1], "values": ["2745600", "3187200"] }
+          ]
+        }
+      ]
+    },
+    {
+      "mode": ["pedestal"],
+      "call": [
+        ["@cpu_freq", "cpu0", "1075200", "1804800"],
+        ["@cpu_freq", "cpu4", "1113600", "2745600"],
+        ["@cpu_freq", "cpu7", "1036800", "3187200"],
+        ["@classical", "cpu0", "70", "60", "6", "1"],
+        ["@classical", "cpu4", "84", "72", "5", "1"],
+        ["@classical", "cpu7", "85", "75", "4", "1"]
+      ]
+    }
+  ]
+}

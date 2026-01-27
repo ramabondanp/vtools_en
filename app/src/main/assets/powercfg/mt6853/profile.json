@@ -1,0 +1,140 @@
+{
+  "platform": "mt6853",
+  "platform_name": "MTK d720&800U",
+  "framework": 130,
+  "alias": {
+  },
+  "schemes": {
+    "powersave": {
+      "call": [
+        ["@cpu_freq", "policy0", "min", "-300MHz"],
+        ["@cpu_freq", "policy6", "min", "-500MHz"],
+        ["@gpu_freq", "min", "400MHz"],
+        ["@set_priority", "top-app", "normal"],
+        ["@set_priority", "foreground", "low"],
+        ["@set_priority", "background", "min"]
+      ]
+    },
+    "balance": {
+      "call": [
+        ["@cpu_freq", "policy0", "min", "-200MHz"],
+        ["@cpu_freq", "policy6", "min", "-300MHz"],
+        ["@gpu_freq", "min", "500MHz"],
+        ["@set_priority", "top-app", "normal"],
+        ["@set_priority", "foreground", "normal"],
+        ["@set_priority", "background", "low"]
+      ]
+    },
+    "performance": {
+      "call": [
+        ["@cpu_freq", "policy0", "min", "max"],
+        ["@cpu_freq", "policy6", "min", "max"],
+        ["@gpu_freq", "min", "700MHz"],
+        ["@set_priority", "top-app", "high"],
+        ["@set_priority", "foreground", "normal"],
+        ["@set_priority", "background", "low"]
+      ]
+    },
+    "fast": {
+      "call": [
+        ["@cpu_freq", "policy0", "max", "max"],
+        ["@cpu_freq", "policy6", "max", "max"],
+        ["@gpu_freq", "min", "900MHz"],
+        ["@set_priority", "top-app", "max"],
+        ["@set_priority", "foreground", "high"],
+        ["@set_priority", "background", "normal"]
+      ]
+    },
+    "pedestal": {
+      "call": [
+        ["@cpu_freq", "policy0", "max", "max"],
+        ["@cpu_freq", "policy6", "max", "max"],
+        ["@gpu_freq", "min", "900MHz"],
+        ["@set_priority", "top-app", "max"],
+        ["@set_priority", "foreground", "high"],
+        ["@set_priority", "background", "normal"]
+      ]
+    }
+  },
+  "apps": [
+    {
+      "friendly": "原神",
+      "packages": [
+        "com.miHoYo.Yuanshen",
+        "com.miHoYo.ys.mi",
+        "com.miHoYo.ys.bilibili",
+        "com.miHoYo.GenshinImpact"
+      ],
+      "stop_on": ["leave", "scene"],
+      "sensors": [],
+      "modes": [
+        {
+          "mode": ["powersave", "balance", "performance"],
+          "affinity": {
+            "comm": {
+              "C0": ["UnityMain"],
+              "40": ["UnityGfx"],
+              "20": ["UnityMultiRende"],
+              "1C": ["Worker Thread"]
+            },
+            "other": "3F"
+          }
+        },
+        {
+          "mode": ["fast", "pedestal"],
+          "affinity": {
+            "comm": {
+              "C0": ["UnityMain"],
+              "40": ["UnityGfx", "UnityMultiRende"]
+            },
+            "other": "ff"
+          }
+        }
+      ]
+    },
+    {
+      "friendly": "王者荣耀",
+      "packages": ["com.tencent.tmgp.sgame"],
+      "stop_on": ["leave", "scene"],
+      "sensors": [],
+      "affinity": {
+        "interval": 1000,
+        "comm": {
+          "C0": ["UnityGfx", "UnityMain", "UnityPreload", "Thread-"],
+          "38": ["Worker Thread", "NativeThread", "Audio", "NDK Media", "GVoice", "FMOD mixer", "FMOD stream", "ff_read"]
+        },
+        "other": "FF"
+      }
+    },
+    {
+      "friendly": "和平精英",
+      "packages": ["com.tencent.tmgp.pubgmhd",  "com.tencent.ig"],
+      "stop_on": ["leave", "scene"],
+      "sensors": [],
+      "affinity": {
+        "interval": 1000,
+        "comm": {
+          "80": ["RenderThread"],
+          "70": ["Thread-", "TaskGraphNP"]
+        },
+        "other": "3F"
+      },
+      "modes": [
+        {
+          "mode": ["fast"],
+          "logger": false,
+          "booster": {
+            "events": ["presets"],
+            "duration": 2000,
+            "enter": [
+              ["$stune_top_boost", "60"]
+            ],
+            "exit": [
+              ["$sched_boost", "0"]
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,83 @@
+{
+  "friendly": "提高滑动性能",
+  "packages": [
+    "com.taobao.idlefish",
+    "com.taobao.taobao",
+    "com.android.browser",
+    "com.baidu.tieba_mini",
+    "com.baidu.tieba",
+    "com.jingdong.app.mall",
+    "com.tmall.wireless",
+    "com.sankuai.meituan",
+    "com.pupumall.customer",
+    "com.eg.android.AlipayGphone",
+    "com.android.vending",
+    "cn.xiaochuankeji.tieba",
+    "com.mfw.roadbook"
+  ],
+  "modes": [{
+    "mode": ["powersave"],
+    "call": [
+      ["@classical", "cpu0", "70", "60", "3", "1"],
+      ["@classical", "cpu4", "85", "68", "3", "1"],
+      ["@classical", "cpu7", "80", "70", "3", "1"]
+    ],
+    "booster": {
+      "events": ["presets"],
+      "duration": 2000,
+      "idle_delay": 2000,
+      "enter": [
+        ["$core_ctl_4", "0"],
+        ["$core_ctl_7", "0"],
+        ["$cpuset_top", "0-7"],
+        ["@uclamp", "0.00~max", "1.00~max", "1.00~max"],
+        ["@high_rate", "on"]
+      ],
+      "exit": [
+        ["@uclamp", "0.00~1.00", "0.00~1.00", "0.00~10.00"],
+        ["@high_rate", "off"]
+      ]
+    }
+  },{
+    "mode": ["balance"],
+    "booster": {
+      "events": ["presets"],
+      "duration": 2000,
+      "idle_delay": 3000,
+      "enter": [
+        ["$cpu_min_0", "1708800"],
+        ["$cpu_min_4", "1670400"],
+        ["$cpu_min_7", "1670400"],
+        ["$cpuset_top", "0-7"],
+        ["@uclamp", "0.00~max", "1.00~max", "1.00~max"],
+        ["@high_rate", "on"]
+      ],
+      "exit": [
+        ["@uclamp", "0.00~1.00", "0.00~1.00", "0.00~10.00"],
+        ["$cpu_min_0", "300000"],
+        ["$cpu_min_4", "710400"],
+        ["$cpu_min_7", "844800"],
+        ["@high_rate", "off"]
+      ]
+    }
+  },{
+    "mode": ["performance", "fast"],
+    "booster": {
+      "events": ["presets"],
+      "duration": 2000,
+      "idle_delay": 4000,
+      "enter": [
+        ["$cpuset_top", "0-7"],
+        ["$stune_top_boost", "100"],
+        ["$stune_top_perf", "1"],
+        ["$sched_boost", "2"],
+        ["@uclamp", "5.00~max", "max~max", "max~max"],
+        ["@high_rate", "on"]
+      ],
+      "exit": [
+        ["@uclamp", "0.00~max", "0.00~max", "0.00~max"],
+        ["@high_rate", "off"]
+      ]
+    }
+  }]
+}

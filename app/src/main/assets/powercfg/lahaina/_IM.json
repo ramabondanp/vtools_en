@@ -1,0 +1,109 @@
+{
+  "friendly": "社交APP",
+  "packages": [
+    "com.tencent.mobileqq",
+    "com.tencent.mm",
+    "com.tencent.tim",
+    "org.telegram.messenger"
+  ],
+  "modes": [{
+    "mode": ["powersave"],
+    "call": [
+      ["@classical", "cpu0", "70", "60", "3", "1"],
+      ["@classical", "cpu4", "85", "68", "3", "1"],
+      ["@classical", "cpu7", "80", "70", "3", "1"]
+    ],
+    "booster": {
+      "events": ["presets"],
+      "duration": 2000,
+      "idle_delay": 3000,
+      "enter": [
+        ["$core_ctl_4", "0"],
+        ["$core_ctl_7", "0"],
+        ["$cpuset_top", "0-7"],
+        ["$cpuset_fg", "0-7"],
+        ["@cpufreq", "cpu0", "960000", "1708800"],
+        ["@cpufreq", "cpu4", "844800", "1555200"],
+        ["@cpufreq", "cpu7", "844800", "1708800"],
+        ["@uclamp", "0.00~5.00", "0.10~max", "0.25~max"],
+        ["@high_rate", "on"]
+      ],
+      "batter": 4,
+      "infinite": [
+        ["@uclamp", "0.00~20.00", "1.00~max", "1.00~max"],
+        ["$stune_top_perf", "1"]
+      ],
+      "exit": [
+        ["$core_ctl_4", "1"],
+        ["$core_ctl_7", "1"],
+        ["$stune_top_boost", "0"],
+        ["$stune_top_perf", "0"],
+        ["$cpuset_top", "0-6"],
+        ["$cpuset_fg", "0-6"],
+        ["@cpufreq", "cpu0", "300000", "1708800"],
+        ["@cpufreq", "cpu4", "710400", "1209600"],
+        ["@cpufreq", "cpu7", "844800", "1708800"],
+        ["@uclamp", "0.00~0.00", "0.00~1.00", "0.00~10.00"],
+        ["@high_rate", "off"]
+      ]
+    }
+  },{
+    "mode": ["balance"],
+    "call": [
+      ["@classical", "cpu0", "70", "60", "3", "1"],
+      ["@classical", "cpu4", "80", "65", "5", "1"],
+      ["@classical", "cpu7", "80", "67", "5", "1"]
+    ],
+    "booster": {
+      "events": ["presets"],
+      "duration": 2500,
+      "idle_delay": 3000,
+      "enter": [
+        ["$core_ctl_4", "0"],
+        ["$core_ctl_7", "0"],
+        ["$cpuset_top", "0-7"],
+        ["$cpuset_fg", "0-7"],
+        ["@cpufreq", "cpu0", "960000", "1708800"],
+        ["@cpufreq", "cpu4", "844800", "1766400"],
+        ["@cpufreq", "cpu7", "844800", "1900800"],
+        ["@classical", "cpu4", "73", "65", "5", "1"],
+        ["@classical", "cpu7", "73", "63", "5", "1"],
+        ["@uclamp", "0.00~20.00", "1.00~max", "1.00~max"],
+        ["@high_rate", "on"]
+      ],
+      "batter": 4,
+      "infinite": [
+        ["@uclamp", "0.00~40.00", "1.00~max", "1.00~max"],
+        ["$stune_top_perf", "1"]
+      ],
+      "exit": [
+        ["$core_ctl_4", "1"],
+        ["$core_ctl_7", "1"],
+        ["$cpuset_top", "0-6"], ["$cpuset_fg", "0-6"],
+        ["@cpufreq", "cpu0", "300000", "1708800"],
+        ["@cpufreq", "cpu4", "710400", "1440000"],
+        ["@cpufreq", "cpu7", "844800", "1670400"],
+        ["@classical", "cpu4", "80", "65", "5", "1"],
+        ["@classical", "cpu7", "80", "67", "5", "1"],
+        ["@uclamp", "0.00~0.00", "0.00~10.00", "0.00~20.00"],
+        ["@high_rate", "off"]
+      ]
+    }
+  },{
+    "mode": ["performance", "fast"],
+    "booster": {
+      "events": ["presets"],
+      "duration": 1500,
+      "idle_delay": 4000,
+      "enter": [
+        ["$cpuset_top", "0-7"],
+        ["@uclamp", "0.00~max", "1.00~max", "1.00~max"],
+        ["@high_rate", "on"]
+      ],
+      "exit": [
+        ["@uclamp", "0.00~1.00", "0.00~max", "0.00~max"],
+        ["@high_rate", "off"]
+      ]
+    }
+  }]
+}

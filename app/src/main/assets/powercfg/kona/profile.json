@@ -1,0 +1,363 @@
+{
+  "platform": "kona",
+  "platform_name": "865/865+/870",
+  "framework": 130,
+  "alias": {
+    "mi_thermal": "/sys/class/thermal/thermal_message/sconfig",
+    "charge_limit": "/sys/class/power_supply/battery/charge_control_limit",
+    "night_charging": "/sys/class/power_supply/battery/night_charging",
+    "msm_min_freq": "/sys/module/msm_performance/parameters/cpu_min_freq",
+    "msm_max_freq": "/sys/module/msm_performance/parameters/cpu_max_freq"
+  },
+  "features": {
+    "high_rate": {
+      "enable": true,
+      "enable_control": "/data/local/tmp/scene_refresh_rate",
+      "device_policy": [
+        { "device": "cmi", "name": "Mi 10Pro", "enable": true, "mode_high_rate": "1", "mode_low_rate": "0"},
+        { "device": "thyme", "name": "Mi 10S", "enable": true, "mode_high_rate": "1", "mode_low_rate": "0"},
+        { "device": "umi", "name": "Mi 10", "enable": true, "mode_high_rate": "1", "mode_low_rate": "0" },
+        { "device": "cas", "name": "Mi 10Ultra", "enable": true, "mode_high_rate": "1", "mode_low_rate": "0" },
+        { "device": "OnePlus9R", "enable": true, "mode_high_rate": "1", "mode_low_rate": "0" },
+        { "device": "OnePlus8T", "enable": true, "mode_high_rate": "1", "mode_low_rate": "0" },
+        { "device": "OnePlus8Pro", "enable": false, "mode_high_rate": "1", "mode_low_rate": "0" },
+        { "device": "kebab", "name": "OnePlus8T", "enable": true, "mode_high_rate": "1", "mode_low_rate": "0" },
+        { "device": "psyche", "name": "Mi 12X",  "enable": true, "mode_high_rate": "1", "mode_low_rate": "0" },
+        { "device": "munch", "name": "K40S",  "enable": true, "mode_high_rate": "1", "mode_low_rate": "0" },
+        { "device": "meizu17", "name": "meizu17",  "enable": true, "mode_high_rate": "1", "mode_low_rate": "2" },
+        { "device": "RMX2071CN", "name": "Realme RMX2071CN",  "enable": true, "mode_high_rate": "1", "mode_low_rate": "0" },
+        { "device": "RE5473", "name": "Realme GTNEO2",  "enable": true, "mode_high_rate": "0", "mode_low_rate": "2", "mode_middle_rate": "1" },
+        { "device": "PFEM10", "name": "OPPO PFEM10",  "enable": true, "mode_high_rate": "1", "mode_low_rate": "0" },
+        { "device": "RE546F", "name": "Realme GT Master Explorer Edition",  "enable": true, "mode_high_rate": "0", "mode_low_rate": "2", "mode_middle_rate": "1" },
+        {
+          "device": "alioth", "name": "Redmi K40", "enable": true,
+          "mode_high_rate": "1", "mode_low_rate": "0",
+          "1080P120Hz": "1",  "1080P90Hz": "2", "1080P60Hz": "0"
+        }
+      ]
+    },
+    "processes": [
+      {
+        "app": "com.miui.home", "group": "top-app",
+        "delay": 2000, "interval": 5000, "repeat": 3
+      }
+    ],
+    "charge_control": {
+      "enable": false,
+      "enable_control": "/data/local/tmp/scene_charge_control",
+      "suspend": [
+        ["$charge_limit", "15"],
+        ["$night_charging", "1"]
+      ],
+      "normal": [
+        ["$charge_limit", "0"],
+        ["$night_charging", "0"]
+      ]
+    }
+  },
+  "presets": {
+    "reset": [
+      ["$msm_max_freq", "#0:4294967295 1:4294967295 2:4294967295 3:4294967295 4:4294967295 5:4294967295 6:4294967295 7:4294967295"],
+      ["$msm_min_freq", "#0:0 1:0 2:0 3:0 4:0 5:0 6:0 7:0"],
+      ["$msm_max_freq", "#0:4294967295 1:4294967295 2:4294967295 3:4294967295 4:4294967295 5:4294967295 6:4294967295 7:4294967295"]
+    ]
+  },
+  "schemes": {
+    "powersave": {
+      "call": [
+        ["@preset", "reset"],
+        ["$core_ctl_4", "1"],  ["$core_ctl_7", "1"],
+        ["@high_rate", "off", "3000"],
+        ["@gpu_freq", "min", "500000"],
+        ["@charge", "normal"]
+      ]
+    },
+    "balance": {
+      "call": [
+        ["@preset", "reset"],
+        ["$core_ctl_4", "0"],  ["$core_ctl_7", "0"],
+        ["@high_rate", "on"],
+        ["@gpu_freq", "min", "630000"],
+        ["@charge", "normal"]
+      ]
+    },
+    "performance": {
+      "call": [
+        ["@preset", "reset"],
+        ["$core_ctl_4", "0"],  ["$core_ctl_7", "0"],
+        ["$mi_thermal", "10"],
+        ["@high_rate", "on"],
+        ["@gpu_freq", "min", "730000"],
+        ["@charge", "normal"]
+      ]
+    },
+    "fast": {
+      "call": [
+        ["@preset", "reset"],
+        ["$core_ctl_4", "0"],  ["$core_ctl_7", "0"],
+        ["$mi_thermal", "10"],
+        ["@high_rate", "on"],
+        ["@gpu_freq", "300000", "max"],
+        ["@charge", "normal"]
+      ]
+    },
+    "pedestal": {
+      "call": [
+        ["@preset", "reset"],
+        ["$core_ctl_4", "0"], ["$core_ctl_7", "0"],
+        ["$mi_thermal", "10"],
+        ["@high_rate", "on"],
+        ["@gpu_freq", "470000", "max"],
+        ["@charge", "suspend"]
+      ]
+    }
+  },
+  "apps": [
+    {
+      "friendly": "原神",
+      "packages": [
+        "com.miHoYo.Yuanshen",
+        "com.miHoYo.ys.mi",
+        "com.miHoYo.ys.bilibili",
+        "com.miHoYo.GenshinImpact"
+      ],
+      "import": "_GenshinImpact.json"
+    },
+    {
+      "friendly": "幻塔",
+      "packages": [
+        "com.dw.h5yvzr.yt",
+        "com.pwrd.hotta.laohu",
+        "com.hottagames.hotta.bilibili",
+        "com.hottagames.hotta.mi"
+      ],
+      "call": [
+        ["@cpuset", "0", "0", "0-7", "0-7"]
+      ],
+      "affinity": {
+        "interval": 1000,
+        "comm": {
+          "80": ["GameThread"],
+          "F0": ["RenderThread", "RHIThread"]
+        },
+        "other": "7f"
+      }
+    },
+    {
+      "friendly": "和平精英",
+      "packages": ["com.tencent.tmgp.pubgmhd",  "com.tencent.ig"],
+      "import": "_PUBG.json"
+    },
+    {
+      "friendly": "QQ飞车",
+      "packages": ["com.tencent.tmgp.speedmobile", "com.garena.game.fctw"],
+      "import": "_SpeedMobile.json"
+    },
+    {
+      "friendly": "王者荣耀/LOL/传说对决",
+      "packages": ["com.tencent.tmgp.sgame", "com.garena.game.kgtw", "com.tencent.lolm"],
+      "import": "_SGAME.json"
+    },
+    {
+      "friendly": "APEX",
+      "packages": ["com.levelinfinite.apexlegendsmobile", "com.ea.gp.apexlegendsmobilefps", "com.tw.fivexgames.apexlegendsmobile"],
+      "import": "_APEX.json"
+    },
+    {
+      "friendly": "抖音、西瓜、快手",
+      "packages": ["com.ss.android.ugc.aweme", "com.ss.android.ugc.aweme.lite", "com.ss.android.article.video", "com.smile.gifmaker"],
+      "import": "_ShortVideo.json"
+    },
+    {
+      "friendly": "视频应用",
+      "packages": [
+        "tv.danmaku.bili", "com.bilibili.app.in",
+        "com.google.android.youtube",
+        "com.tencent.qqlive",
+        "com.ss.android.article.video",
+        "com.qiyi.video",
+        "com.qiyi.video.lite",
+        "com.qiyi.video.sdkplayer",
+        "com.dianshijia.newlive",
+        "com.duowan.kiwi",
+        "air.tv.douyu.android",
+        "com.douyu.rush",
+        "com.youku.phone",
+        "org.telegram.messenger",
+        "com.hunantv.imgo.activity"
+      ],
+      "import": "_Video.json"
+    },
+    {
+      "friendly": "提高滑动性能",
+      "packages": [
+        "com.taobao.idlefish",
+        "com.taobao.taobao",
+        "com.android.browser",
+        "com.baidu.tieba_mini",
+        "com.baidu.tieba",
+        "com.jingdong.app.mall",
+        "com.tmall.wireless",
+        "com.sankuai.meituan",
+        "com.pupumall.customer",
+        "com.eg.android.AlipayGphone",
+        "com.android.vending",
+        "cn.xiaochuankeji.tieba",
+        "com.mfw.roadbook"
+      ],
+      "import": "_ScrollOpt.json"
+    },
+    {
+      "friendly": "极速响应",
+      "packages": [
+        "com.miui.home",
+        "com.meizu.flyme.launcher",
+        "net.oneplus.launcher",
+        "com.oppo.launcher",
+        "ch.deletescape.lawnchair.ci",
+        "com.mi.android.globallauncher",
+        "com.teslacoilsw.launcher",
+        "com.android.quicksearchbox",
+        "net.oneplus.h2launcher",
+        "com.oneplus.hydrogen.launcher",
+        "com.microsoft.launcher",
+        "org.lineageos.trebuchet",
+        "org.mokee.lawnchair",
+        "com.google.android.apps.nexuslauncher"
+      ],
+      "import": "_Launcher.json"
+    },
+    {
+      "friendly": "泰拉瑞亚",
+      "packages": ["com.moren.games505.TerrariaPaid", "com.xd.terraria"],
+      "call": [
+        ["$cpuset_top", "0-6"],
+        ["$cpuset_fg", "0-6"],
+        ["@high_rate", "off", "3000"]
+      ]
+    },
+    {
+      "friendly": "扫码",
+      "packages": [
+        "com.tencent.mm.plugin.scanner.ui.BaseScanUI",
+        "com.tencent.mobileqq.olympic.activity.ScanTorchActivity",
+        "com.tencent.mobileqq.olympic.activity.ScanTorchActivity",
+        "com.alipay.mobile.scan.as.main.MainCaptureActivity",
+        "com.jd.lib.scan.lib.zxing.client.android.CaptureActivity",
+        "com.etao.feimagesearch.capture.CaptureActivity"
+      ],
+      "import": "_Scanner.json"
+    },
+    {
+      "friendly": "相机",
+      "packages": [
+        "com.tencent.mm.plugin.recordvideo.activity.MMRecordUI",
+        "com.tencent.aelight.camera.aebase.QIMCameraCaptureActivity",
+        "dov.com.qq.im.QIMCameraCaptureActivity",
+        "com.googleCamera.Wichaya8",
+        "com.accordion.analogcam.cn",
+        "org.codeaurora.snapcam",
+        "com.android.camera",
+        "com.xiaomi.scanner",
+        "com.blink.academy.protake",
+        "com.benqu.wuta",
+        "com.gorgeous.lite",
+        "com.kwai.m2u",
+        "com.meitu.meiyancamera",
+        "com.yiruike.sodacn.android",
+        "com.lemon.faceu",
+        "com.mt.mtxx.mtxx"
+      ],
+      "import": "_Camera.json"
+    },
+    {
+      "friendly": "狗屎/毒瘤",
+      "packages": [
+        "com.tencent.mm:appbrand",
+        "com.tencent.mm:toolsmp"
+      ],
+      "modes": [{
+        "mode": ["powersave", "balance"],
+        "call": [
+          ["$core_ctl_0", "0"],
+          ["$core_ctl_4", "0"],
+          ["$core_ctl_7", "0"],
+          ["@cpuset", "0", "0-4", "0-7", "0-7"],
+          ["@cpu_freq", "policy0", "1.4Ghz", "max"],
+          ["@cpu_freq", "policy4", "1Ghz", "2.4Ghz"],
+          ["@cpu_freq", "policy7", "min", "2.4Ghz"],
+          ["$mi_thermal", "10"]
+        ]
+      }]
+    },
+    {
+      "friendly": "社交APP",
+      "packages": [
+        "com.tencent.mobileqq",
+        "com.tencent.tim",
+        "com.tencent.mm",
+        "org.telegram.messenger"
+      ],
+      "import": "_IM.json"
+    },
+    {
+      "friendly": "待机",
+      "packages": ["standby"],
+      "import": "_Standby.json"
+    },
+    {
+      "friendly": "备份还原",
+      "packages": ["com.miui.huanji", "com.miui.backup"],
+      "call": [
+        ["@uclamp", "0.00~max", "0.00~max", "0.00~max"],
+        ["@high_rate", "off", "2000"]
+      ]
+    },
+    {
+      "friendly": "All",
+      "packages": ["*"],
+      "modes": [{
+        "mode": ["powersave"],
+        "booster": {
+          "events": ["presets"],
+          "duration": 2000,
+          "idle_delay": 2000,
+          "enter": [
+            ["$core_ctl_4", "0"],
+            ["@high_rate", "on"]
+          ],
+          "exit": [
+            ["@high_rate", "off"]
+          ]
+        }
+      },{
+        "mode": ["balance"],
+        "disable": true,
+        "booster": {
+          "events": ["presets"],
+          "duration": 2000,
+          "enter": [
+            ["$sched_group_up", "10"],
+            ["$stune_top_perf", "1"]
+          ],
+          "exit": []
+        }
+      },{
+        "mode": ["performance", "fast"],
+        "disable": true,
+        "booster": {
+          "events": ["presets"],
+          "duration": 2000,
+          "enter": [
+            ["$stune_top_boost", "100"],
+            ["$stune_top_perf", "1"],
+            ["$sched_boost", "2"]
+          ],
+          "exit": [
+            ["$sched_boost", "0"]
+          ]
+        }
+      }]
+    }
+  ]
+}

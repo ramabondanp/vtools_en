@@ -1,0 +1,28 @@
+{
+  "friendly": "Geekbench5",
+  "packages": [
+    "com.primatelabs.geekbench5c",
+    "com.primatelabs.geekbench5"
+  ],
+  "call": [
+    ["@perf_turbo", "mt6983", "perf", "0"],
+    ["$dcs_mode", "1"],
+    ["$ged_kpi", "1"],
+    ["@preset", "perf_fg_opt"],
+    ["@cpu_freq", "cpu0", "max", "max"],
+    ["@cpu_freq", "cpu4", "max", "max"],
+    ["@cpu_freq", "cpu7", "max", "max"],
+    ["@cpuset", "0-2", "3-4", "0-7", "0-7"],
+    ["$ddr_freq_min", "#6400000000"],
+    ["$mi_thermal", "10"],
+    ["@high_rate", "off"]
+  ],
+  "modes": [{
+    "mode": ["fast"],
+    "call": [
+      ["@cpu_freq", "cpu0", "1000000", "max"],
+      ["@cpu_freq", "cpu4", "1500000", "max"],
+      ["@cpu_freq", "cpu7", "1800000", "max"]
+    ]
+  }]
+}

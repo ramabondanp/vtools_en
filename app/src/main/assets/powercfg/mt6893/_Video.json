@@ -1,0 +1,97 @@
+{
+  "friendly": "视频应用",
+  "packages": [
+    "tv.danmaku.bili", "com.bilibili.app.in",
+    "com.google.android.youtube",
+    "com.tencent.qqlive",
+    "com.ss.android.article.video",
+    "com.qiyi.video",
+    "com.qiyi.video.lite",
+    "com.qiyi.video.sdkplayer",
+    "com.dianshijia.newlive",
+    "com.duowan.kiwi",
+    "air.tv.douyu.android",
+    "com.douyu.rush",
+    "com.youku.phone",
+    "org.telegram.messenger",
+    "com.hunantv.imgo.activity"
+  ],
+  "stop_on": [],
+  "sensors": [],
+  "modes": [{
+    "mode": ["powersave"],
+    "booster": {
+      "events": ["presets"],
+      "duration": 2000,
+      "idle_delay": 2000,
+      "enter": [
+        ["$max_cpu_freq", "0 1725000|1 1622000|2 1632000"],
+        ["$min_cpu_freq", "0 1450000|1 1162000|2 1258000"],
+        ["$cpuset_top", "0-7"],
+        ["$cpuset_fg", "0-7"],
+        ["$util_max_fg", "1024"],
+        ["$util_min_fg", "0"],
+        ["$util_max_top", "1024"],
+        ["$util_min_top", "0"],
+        ["$util_min_bg", "1024"],
+        ["$util_max_bg", "0"],
+        ["@high_rate", "on"]
+      ],
+      "exit": [
+        ["$util_max_fg", "100"],
+        ["$util_min_fg", "0"],
+        ["$util_max_top", "1024"],
+        ["$util_min_top", "0"],
+        ["$max_cpu_freq", "0 1725000|1 1162000|2 659000"],
+        ["$min_cpu_freq", "0 1350000|1 437000|2 659000"],
+        ["$stune_top_boost", "0"],
+        ["$stune_top_perf", "0"],
+        ["$cpuset_top", "0-6"],
+        ["$cpuset_fg", "0-6"],
+        ["@high_rate", "off"]
+      ]
+    }
+  }, {
+    "mode": ["balance"],
+    "booster": {
+      "events": ["presets"],
+      "duration": 2000,
+      "idle_delay": 2000,
+      "enter": [
+        ["$max_cpu_freq", "0 1800000|1 1985000|2 2284000"],
+        ["$min_cpu_freq", "0 1450000|1 1335000|2 1370000"],
+        ["$cpuset_top", "0-7"],
+        ["$cpuset_fg", "0-7"],
+        ["$util_max_fg", "1024"],
+        ["$util_min_fg", "0"],
+        ["$util_max_top", "1024"],
+        ["$util_min_top", "0"],
+        ["$util_min_bg", "1024"],
+        ["$util_max_bg", "0"],
+        ["@high_rate", "on"]
+      ],
+      "exit": [
+        ["$util_max_fg", "200"],
+        ["$util_min_fg", "0"],
+        ["$util_max_top", "1024"],
+        ["$util_min_top", "0"],
+        ["$max_cpu_freq", "0 1725000|1 1624000|2 659000"],
+        ["$min_cpu_freq", "0 1450000|1 437000|2 659000"],
+        ["$stune_top_boost", "0"],
+        ["$stune_top_perf", "0"],
+        ["$cpuset_top", "0-6"],
+        ["$cpuset_fg", "0-6"],
+        ["@high_rate", "off"]
+      ]
+    }
+  }, {
+    "mode": ["*"],
+    "booster": {
+      "events": ["presets"],
+      "duration": 2000,
+      "idle_delay": 2000,
+      "enter": [ ["@high_rate", "on"] ],
+      "exit": [ ["@high_rate", "off"] ]
+    }
+  }]
+}

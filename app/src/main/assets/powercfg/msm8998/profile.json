@@ -1,0 +1,260 @@
+{
+  "platform": "mt6893",
+  "platform_name": "D1200",
+  "framework": 130,
+  "alias": {
+    "cpu0_target_loads": "/sys/devices/system/cpu/cpu0/cpufreq/interactive/target_loads",
+    "cpu4_target_loads": "/sys/devices/system/cpu/cpu4/cpufreq/interactive/target_loads",
+    "cpu0_io_is_busy": "/sys/devices/system/cpu/cpu0/cpufreq/interactive/io_is_busy",
+    "cpu4_io_is_busy": "/sys/devices/system/cpu/cpu4/cpufreq/interactive/io_is_busy",
+    "cpu0_hispeed_freq": "/sys/devices/system/cpu/cpu0/cpufreq/interactive/hispeed_freq",
+    "cpu4_hispeed_freq": "/sys/devices/system/cpu/cpu4/cpufreq/interactive/hispeed_freq"
+  },
+  "schemes": {
+    "powersave": {
+      "call": [
+        ["@gpu_freq_min", "100MHz"]
+      ]
+    },
+    "balance": {
+      "call": [
+        ["@gpu_freq_min", "200MHz"]
+      ]
+    },
+    "performance": {
+      "call": [
+        ["@gpu_freq_min", "300MHz"]
+      ]
+    },
+    "fast": {
+      "call": [
+        ["@gpu_freq_min", "400MHz"]
+      ]
+    },
+    "pedestal": {
+      "call": [
+        ["@gpu_freq_min", "500MHz"]
+      ]
+    }
+  },
+  "apps": [
+    {
+      "friendly": "原神",
+      "packages": [
+        "com.miHoYo.Yuanshen",
+        "com.miHoYo.ys.mi",
+        "com.miHoYo.ys.bilibili",
+        "com.miHoYo.GenshinImpact"
+      ],
+      "sensors": [],
+      "call": [
+        ["@gpu_freq_min", "500MHz"]
+      ],
+      "modes": [
+        {
+          "mode": ["*"],
+          "affinity": {
+            "comm": {
+              "80": ["UnityMain"],
+              "40": ["UnityGfx"],
+              "60": ["UnityMultiRende", "Worker Thread"],
+              "3": ["Timer", "Thread-", "Audio", "MIHOYO_NETWORK", "tp_schedule"],
+              "F": []
+            },
+            "other": "3f"
+          }
+        }
+      ]
+    },
+    {
+      "friendly": "王者荣耀",
+      "packages": ["com.tencent.tmgp.sgame", "com.garena.game.kgtw", "com.tencent.lolm"],
+      "affinity": {
+        "unity_main": "80",
+        "heavy_thread": "Thread-",
+        "heavy_mask": "40",
+        "comm": {
+          "40": ["UnityGfx"],
+          "30": ["CoreThread", "UnityPreload"],
+          "3F": ["MIHOYO_NETWORK", "FMOD", "UnityChoreograp", "NativeThread", "AsyncReadManage", "Worker Thread"],
+          "F": ["Audio", "tp_schedule"]
+        },
+        "other": "3F"
+      }
+    },
+    {
+      "friendly": "极速响应",
+      "packages": [
+        "com.miui.home",
+        "com.meizu.flyme.launcher",
+        "net.oneplus.launcher",
+        "com.oppo.launcher",
+        "ch.deletescape.lawnchair.ci",
+        "com.mi.android.globallauncher",
+        "com.teslacoilsw.launcher",
+        "com.android.quicksearchbox",
+        "net.oneplus.h2launcher",
+        "com.oneplus.hydrogen.launcher",
+        "com.microsoft.launcher",
+        "org.lineageos.trebuchet",
+        "org.mokee.lawnchair",
+        "com.google.android.apps.nexuslauncher"
+      ],
+      "sensors": [],
+      "modes": [{
+        "mode": ["powersave"],
+        "booster": {
+          "events": ["presets"],
+          "duration": 3000,
+          "enter": [
+            ["$stune_top_perf", "1"],
+            ["$sched_boost", "2"],
+            ["$cpuset_top", "0-7"],
+            ["$cpuset_fg", "0-7"],
+            ["$msm_cpu_max", "0:1824000 1:1824000 2:1824000 3:1824000 4:2265600 5:2265600 6:2265600 7:2265600"],
+            ["$cpu_max_0", "1824000"],
+            ["$cpu_max_4", "2265600"]
+          ]
+        },
+        "exit": [
+          ["$cpu_min_0", "300000"],
+          ["$cpu_min_4", "300000"]
+        ]
+      },{
+        "mode": ["balance"],
+        "booster": {
+          "events": ["presets"],
+          "duration": 3000,
+          "enter": [
+            ["$stune_top_perf", "1"],
+            ["$sched_boost", "2"],
+            ["$cpuset_top", "0-7"],
+            ["$cpuset_fg", "0-7"],
+            ["$cpu_min_0", "1670400"],
+            ["$cpu_min_4", "1804800"],
+            ["$msm_cpu_max", "0:1900800 1:1900800 2:1900800 3:1900800 4:2457600 5:2457600 6:2457600 7:2457600"],
+            ["$cpu_max_0", "1900800"],
+            ["$cpu_max_4", "2457600"]
+          ],
+          "exit": [
+            ["$cpu_min_0", "300000"],
+            ["$cpu_min_4", "300000"]
+          ]
+        }
+      },{
+        "mode": ["performance", "fast"],
+        "booster": {
+          "events": ["presets"],
+          "duration": 3000,
+          "enter": [
+            ["$cpuset_top", "0-7"],
+            ["$cpuset_fg", "0-7"],
+            ["$sched_boost", "2"],
+            ["$stune_top_boost", "70"],
+            ["$stune_top_perf", "1"],
+            ["$cpu_min_0", "1824000"],
+            ["$cpu_min_4", "2112000"],
+            ["$msm_cpu_max", "0:1900800 1:1900800 2:1900800 3:1900800 4:3300000 5:3300000 6:3300000 7:3300000"],
+            ["$cpu_max_0", "1900800"],
+            ["$cpu_max_4", "3300000"]
+          ]
+        }
+      }]
+    },
+    {
+      "friendly": "视频应用",
+      "packages": [
+        "tv.danmaku.bili", "com.bilibili.app.in",
+        "com.google.android.youtube",
+        "com.tencent.qqlive",
+        "com.ss.android.article.video",
+        "com.qiyi.video",
+        "com.qiyi.video.lite",
+        "com.qiyi.video.sdkplayer",
+        "com.dianshijia.newlive",
+        "com.duowan.kiwi",
+        "air.tv.douyu.android",
+        "com.douyu.rush",
+        "com.youku.phone",
+        "org.telegram.messenger",
+        "com.hunantv.imgo.activity"
+      ],
+      "modes": [{
+        "mode": ["powersave", "balance"],
+        "booster": {
+          "events": ["presets"],
+          "duration": 3000,
+          "idle_delay": 3000,
+          "enter": [
+            ["$cpu0_target_loads", "70"],
+            ["$cpu4_target_loads", "70"],
+            ["$cpu0_hispeed_freq", "1670400"],
+            ["$cpu4_hispeed_freq", "1267200"]
+          ],
+          "exit": [
+            ["$cpu0_target_loads", "90"],
+            ["$cpu4_target_loads", "90"],
+            ["$cpu0_hispeed_freq", "960000"],
+            ["$cpu4_hispeed_freq", "806400"]
+          ]
+        }
+      }]
+    },
+    {
+      "friendly": "All",
+      "packages": ["*"],
+      "sensors": [],
+      "modes": [{
+        "mode": ["powersave", "balance"],
+        "booster": {
+          "events": ["touch", "buttons", "synaptics", "uinput-fpc", "gpio-keys"],
+          "duration": 2000,
+          "enter": [
+            ["$stune_top_boost", "10"],
+            ["$stune_top_perf", "1"],
+            ["$cpu0_target_loads", "30"],
+            ["$cpu4_target_loads", "30"],
+            ["$cpu0_io_is_busy", "1"],
+            ["$cpu4_io_is_busy", "1"]
+          ],
+          "exit": [
+          ]
+        }
+      },{
+        "mode": ["performance"],
+        "booster": {
+          "events": ["touch", "buttons", "synaptics", "uinput-fpc", "gpio-keys"],
+          "duration": 2000,
+          "enter": [
+            ["$stune_top_boost", "100"],
+            ["$stune_top_perf", "1"],
+            ["$cpu0_target_loads", "20"],
+            ["$cpu4_target_loads", "20"],
+            ["$cpu0_io_is_busy", "1"],
+            ["$cpu4_io_is_busy", "1"],
+            ["$sched_boost", "2"]
+          ],
+          "exit": [
+          ]
+        }
+      },{
+        "mode": ["fast"],
+        "booster": {
+          "events": ["touch", "buttons", "synaptics", "uinput-fpc", "gpio-keys"],
+          "duration": 2000,
+          "enter": [
+            ["$stune_top_boost", "100"],
+            ["$stune_top_perf", "1"],
+            ["$cpu0_target_loads", "15"],
+            ["$cpu4_target_loads", "15"],
+            ["$cpu0_io_is_busy", "1"],
+            ["$cpu4_io_is_busy", "1"],
+            ["$sched_boost", "2"]
+          ],
+          "exit": [
+          ]
+        }
+      }]
+    }
+  ]
+}

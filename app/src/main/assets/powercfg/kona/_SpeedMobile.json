@@ -1,0 +1,29 @@
+{
+  "friendly": "QQ飞车",
+  "packages": ["com.tencent.tmgp.speedmobile", "com.garena.game.fctw"],
+  "affinity": {
+    "interval": 3000,
+    "comm": {
+      "80": ["UnityMain"]
+    },
+    "other": ""
+  },
+  "call": [ ["@high_rate", "on"], ["@cpuset", "0", "0", "0-6", "0-7"] ],
+  "modes": [
+    {
+      "mode": ["balance"],
+      "enter": [
+        ["$cpu_min_0", "1708800"], ["$cpu_min_4", "1766400"], ["$cpu_min_7", "1747200"]
+      ],
+      "exit": [ ["$cpu_min_4", "825600"] ]
+    },
+    {
+      "mode": ["performance"],
+      "enter": [
+        ["$cpu_min_0", "1708800"], ["$cpu_min_4", "1766400"], ["$cpu_min_7", "1747200"],
+        ["$stune_top_boost", "10"], ["$stune_top_perf", "1"]
+      ],
+      "exit": [ ["$cpu_min_4", "825600"] ]
+    }
+  ]
+}

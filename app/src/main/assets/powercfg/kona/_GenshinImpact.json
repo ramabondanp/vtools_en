@@ -1,0 +1,49 @@
+{
+  "friendly": "原神",
+  "packages": [
+    "com.miHoYo.Yuanshen",
+    "com.miHoYo.ys.mi",
+    "com.miHoYo.ys.bilibili",
+    "com.miHoYo.GenshinImpact"
+  ],
+  "call": [
+    ["@high_rate", "off", "3000"]
+  ],
+  "affinity": {
+    "unity_main": "80",
+    "comm": {
+      "40": ["UnityGfx"],
+      "30": ["UnityMultiRende", "UnityPreload"],
+      "3F": ["MIHOYO_NETWORK", "FMOD", "UnityChoreograp", "NativeThread", "AsyncReadManage", "Worker Thread"],
+      "F": ["Audio", "tp_schedule"]
+    },
+    "other": "3F"
+  },
+  "modes": [
+    {
+      "mode": ["powersave"],
+      "booster": {
+        "events": ["presets"],
+        "duration": 20000,
+        "enter": [
+          ["$core_ctl_4", "0"], ["$core_ctl_7", "0"],
+          ["$cpuset_top", "0-7"], ["$cpuset_fg", "0-7"],
+          ["$cpu_min_0", "1612800"], ["$cpu_max_0", "1804800"],
+          ["$cpu_min_4", "825600"], ["$cpu_max_4", "1766400"],
+          ["$cpu_min_7", "1075200"], ["$cpu_max_7", "2457600"]
+        ],
+        "exit": [
+          ["$cpuset_top", "0-6"], ["$cpuset_fg", "0-6"],
+          ["$stune_top_boost", "0"], ["$stune_top_perf", "0"],
+          ["$cpu_min_0", "979200"], ["$cpu_max_0", "1516800"],
+          ["$cpu_min_4", "710400"], ["$cpu_max_4", "825600"],
+          ["$cpu_min_7", "844800"], ["$cpu_max_7", "960000"]
+        ]
+      }
+    },
+    {
+      "mode": ["balance", "performance", "fast", "pedestal"],
+      "call": [ ["$stune_top_boost", "0"], ["$stune_top_perf", "0"] ]
+    }
+  ]
+}

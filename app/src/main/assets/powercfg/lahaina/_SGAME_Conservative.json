@@ -1,0 +1,159 @@
+{
+  "friendly": "王者荣耀/LOL",
+  "packages": ["com.tencent.tmgp.sgame", "com.garena.game.kgtw", "com.tencent.lolm"],
+  "sensors": [],
+  "affinity": {
+    "interval": 1000,
+    "cpuset_mode": "coexist",
+    "heavy_thread": "Thread-",
+    "heavy_mask": "40",
+    "unity_main": "80",
+    "comm": {
+      "F0": ["UnityPreload"],
+      "40": ["UnityGfx"],
+      "30": ["CoreThread"],
+      "3F": ["Worker Thread", "NativeThread", "Audio", "NDK Media", "GVoice", "FMOD mixer", "FMOD stream", "ff_read"]
+    },
+    "other": "3F"
+  },
+  "call": [
+    ["@thermal_disguise", "true"],
+    ["$mi_thermal", "13"],
+    ["@high_rate", "on"],
+    ["@uclamp", "0.00~1.00", "0.00~max", "1.00~max"]
+  ],
+  "modes": [{
+    "mode": ["powersave"],
+    "call": [
+      ["@classical", "cpu0", "70", "60", "4", "1"],
+      ["@classical", "cpu4", "74", "67", "2", "1"],
+      ["@classical", "cpu7", "73", "63", "2", "1"],
+      ["$core_ctl_4", "0"], ["$core_ctl_7", "0"],
+      ["@gpu_freq", "min", "315000"]
+    ],
+    "sensors": [{
+      "sensor": "fps",
+      "interval": 5000,
+      "props": ["$cpu_min_0", "$cpu_min_4", "$cpu_min_7",  "$cpu_max_0", "$cpu_max_4", "$cpu_max_7"],
+      "rules": [
+        { "threshold": [-1, 100], "values": ["1094400", "1075200", "960000",    "1612800", "1996800", "2150400"] },
+        { "threshold": [99, 75], "values": ["1094400", "1075200", "844800",    "1612800", "1881600", "1900800"] },
+        { "threshold": [70, -1], "values": ["902400", "844800", "844800",    "1612800", "1766400", "1900800"] }
+      ]
+    }]
+  }, {
+    "mode": ["balance"],
+    "call": [
+      ["@gpu_freq", "min", "379000"],
+      ["@classical", "cpu0", "69", "57", "4", "1"],
+      ["@classical", "cpu4", "73", "63", "2", "1"],
+      ["@classical", "cpu7", "71", "61", "3", "1"]
+    ],
+    "sensors": [
+      {
+        "sensor": "fps",
+        "interval": 5000,
+        "props": ["$cpu_min_0", "$cpu_min_4", "$cpu_min_7"],
+        "rules": [
+          { "threshold": [-1, 100], "values": ["1209600", "1075200", "1075200"] },
+          { "threshold": [99, 75], "values": ["1209600", "1075200", "960000"] },
+          { "threshold": [70, -1], "values": ["1094400", "844800", "844800"] }
+        ]
+      },
+      {
+        "sensor": "battery",
+        "interval": 5000,
+        "props": ["$gpu_max_khz", "$cpu_max_0", "$cpu_max_4", "$cpu_max_7"],
+        "rules": [
+          { "threshold": [-1, 40100], "values": ["315000000", "1612800", "1996800", "2150400"] },
+          { "threshold": [40000, 38100], "values": ["315000000", "1612800", "2112000", "2380800"] },
+          { "threshold": [38000, -100], "values": ["379000000", "1708800", "2265600", "2496000"] }
+        ]
+      }
+    ]
+  },  {
+    "mode": ["performance"],
+    "call": [
+      ["$sched_boost", "0"],
+      ["@gpu_freq", "min", "540000"],
+      ["@classical", "cpu0", "70", "52", "5", "1"],
+      ["@classical", "cpu4", "70", "60", "2", "1"],
+      ["@classical", "cpu7", "68", "56", "3", "1"]
+    ],
+    "sensors": [
+      {
+        "sensor": "fps",
+        "interval": 5000,
+        "props": ["$cpu_min_0", "$cpu_min_4", "$cpu_min_7"],
+        "rules": [
+          { "threshold": [-1, 100], "values": ["1209600", "1075200", "1305600"] },
+          { "threshold": [99, 75], "values": ["1209600", "960000", "1305600"] },
+          { "threshold": [70, -1], "values": ["1094400", "844800", "960000"] }
+        ]
+      },
+      {
+        "sensor": "battery",
+        "interval": 5000,
+        "props": ["$gpu_max_khz", "$cpu_max_0", "$cpu_max_4", "$cpu_max_7"],
+        "rules": [
+          { "threshold": [   -1, 44000], "values": ["315000000", "1612800", "1996800", "2265600"] },
+          { "threshold": [44000, 41000], "values": ["379000000", "1612800", "2112000", "2380800"] },
+          { "threshold": [41000, 39000], "values": ["491000000", "1708800", "2265600", "2496000"] },
+          { "threshold": [39000,    -1], "values": ["491000000", "1708800", "2342400", "2841600"] }
+        ]
+      }
+    ]
+  }, {
+    "mode": ["fast"],
+    "call": [
+      ["$sched_boost", "0"],
+      ["@gpu_freq", "min", "608000"],
+      ["@classical", "cpu0", "70", "60", "5", "1"],
+      ["@classical", "cpu4", "70", "60", "2", "1"],
+      ["@classical", "cpu7", "68", "56", "3", "1"]
+    ],
+    "sensors": [
+      {
+        "sensor": "fps",
+        "interval": 5000,
+        "props": ["$cpu_min_0", "$cpu_min_4", "$cpu_min_7"],
+        "rules": [
+          { "threshold": [-1, 100], "values": ["1209600", "1075200", "1305600"] },
+          { "threshold": [99, 75], "values": ["1209600", "1075200", "1305600"] },
+          { "threshold": [70, -1], "values": ["1094400", "1075200", "1075200"] }
+        ]
+      },
+      {
+        "sensor": "battery",
+        "interval": 5000,
+        "props": ["$gpu_max_khz", "$cpu_max_0", "$cpu_max_4", "$cpu_max_7"],
+        "rules": [
+          { "threshold": [-1, 45100], "values": ["315000000", "1612800", "1996800", "2265600"] },
+          { "threshold": [45100, 43100], "values": ["379000000", "1612800", "2227200", "2496000"] },
+          { "threshold": [43000, -1], "values": ["491000000", "1708800", "2419200", "2841600"] }
+        ]
+      }
+    ]
+  }, {
+    "mode": ["pedestal"],
+    "call": [
+      ["$sched_boost", "0"],
+      ["@gpu_freq", "min", "608000"],
+      ["@classical", "cpu0", "68", "54", "6", "1"],
+      ["@classical", "cpu4", "67", "54", "7", "2"],
+      ["@classical", "cpu7", "63", "50", "7", "2"]
+    ],
+    "sensors": [
+      {
+        "sensor": "fps",
+        "interval": 5000,
+        "props": ["$cpu_min_0", "$cpu_min_4", "$cpu_min_7"],
+        "rules": [
+          { "threshold": [-1, 100], "values": ["1209600", "1670400", "1670400"] },
+          { "threshold": [99, 75], "values": ["1209600", "1555200", "1670400"] },
+          { "threshold": [70, -1], "values": ["1094400", "1209600", "1305600"] }
+        ]
+      }
+    ]
+  }]
+}

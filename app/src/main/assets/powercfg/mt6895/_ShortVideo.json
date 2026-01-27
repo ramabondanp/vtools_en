@@ -1,0 +1,124 @@
+{
+  "friendly": "抖音、西瓜、快手",
+  "packages": ["com.ss.android.ugc.aweme", "com.ss.android.ugc.aweme.lite", "com.ss.android.article.video", "com.smile.gifmaker"],
+  "call": [
+    ["$ddr_freq_min", "800000000"]
+  ],
+  "modes": [{
+    "mode": ["powersave"],
+    "call": [
+      ["$boost_affinity", "0"]
+    ],
+    "affinity": {
+      "interval": 500,
+      "comm": {
+        "F": ["HeapTaskDaemon", "bg_loop", "Log", "looper", "TRThread"],
+        "80": ["RenderThread", "mali-"]
+      }
+    },
+    "booster": {
+      "events": ["presets", "NVTCapacitiveTouchScreen"],
+      "duration": 1500,
+      "idle_delay": 3500,
+      "enter": [
+        ["@preset", "governor_normal"],
+        ["@uclamp", "0.00~max", "0.10~max", "1.00~max"],
+        ["$cpu_min_0", "#1700000"],
+        ["$cpu_min_4", "#1500000"],
+        ["$cpu_min_7", "#1500000"],
+        ["@high_rate", "on"]
+      ],
+      "exit": [
+        ["$cpu_min_0", "#1300000"],
+        ["$cpu_min_4", "#500000"],
+        ["$cpu_min_7", "#500000"],
+        ["@uclamp", "0.00~0.00", "0.00~15.00", "0.00~30.00"],
+        ["@high_rate", "off"],
+        ["@preset", "governor_idle"]
+      ]
+    }
+  },{
+    "mode": ["balance"],
+    "affinity": {
+      "interval": 500,
+      "comm": {
+        "F": ["HeapTaskDaemon", "bg_loop", "Log", "looper", "TRThread"],
+        "80": ["RenderThread", "mali-"]
+      }
+    },
+    "booster": {
+      "events": ["presets", "NVTCapacitiveTouchScreen"],
+      "duration": 2000,
+      "idle_delay": 3500,
+      "enter": [
+        ["@preset", "governor_normal"],
+        ["$cpu_min_0", "#1100000"],
+        ["$cpu_min_4", "#1000000"],
+        ["@uclamp", "0.00~10.00", "0.10~max", "2.00~max"],
+        ["@high_rate", "on"]
+      ],
+      "exit": [
+        ["$cpu_min_0", "#450000"],
+        ["$cpu_min_4", "#200000"],
+        ["@uclamp", "0.00~0.00", "0.00~max", "0.00~max"],
+        ["@high_rate", "off"],
+        ["@preset", "governor_idle"]
+      ]
+    }
+  }, {
+    "mode": ["pedestal"],
+    "sensors": [{
+      "disable": false,
+      "sensor": "/sys/class/power_supply/battery/temp",
+      "interval": 15000,
+      "rules": [
+        { "threshold": [-1, 440], "enter": [["@charge", "suspend"]] },
+        { "threshold": [440, 310], "enter": [["@charge", "suspend"]] },
+        { "threshold": [410, 380], "enter": [["@charge", "normal"]] },
+        { "threshold": [380, -10], "enter": [["@charge", "normal"]] }
+      ]
+    }],
+    "booster": {
+      "events": ["presets", "NVTCapacitiveTouchScreen"],
+      "duration": 2000,
+      "enter": [ ["@preset", "touch_boost_pedestal"] ],
+      "exit": [ ["@preset", "exit_boost_pedestal"] ]
+    }
+  }, {
+    "mode": ["performance"],
+    "booster": {
+      "events": ["presets", "NVTCapacitiveTouchScreen"],
+      "duration": 2000,
+      "idle_delay": 3000,
+      "enter": [
+        ["$cpu_min_0", "#1400000"],
+        ["$cpu_min_4", "#900000"],
+        ["$cpu_min_7", "#900000"],
+        ["$uclamp_fg_min", "3.00"],
+        ["$uclamp_top_min", "7.00"],
+        ["@high_rate", "on"]
+      ],
+      "exit": [
+        ["$cpu_min_0", "#450000"],
+        ["$cpu_min_4", "#400000"],
+        ["$cpu_min_7", "#500000"],
+        ["@high_rate", "off"]
+      ]
+    }
+  }, {
+    "mode": ["fast"],
+    "booster": {
+      "events": ["presets", "NVTCapacitiveTouchScreen"],
+      "duration": 2000,
+      "idle_delay": 2000,
+      "enter": [
+        ["@high_rate", "on"],
+        ["@preset", "touch_boost_fast"]
+      ],
+      "exit": [
+        ["@high_rate", "off", "1000"],
+        ["@preset", "exit_boost_fast"]
+      ]
+    }
+  }]
+}

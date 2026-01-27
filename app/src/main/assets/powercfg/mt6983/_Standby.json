@@ -1,0 +1,44 @@
+{
+  "friendly": "待机",
+  "packages": ["standby"],
+  "call": [
+    ["@perf_turbo", "mt6983", "daily", "5"],
+    ["@charge", "normal"],
+    ["@preset", "perf_active"]
+  ],
+  "booster": {
+    "events": ["presets"],
+    "duration": 3500,
+    "idle_delay": 2000,
+    "enter": [
+      ["$core_ctl_4", "0"],
+      ["$core_ctl_7", "0"],
+      ["@cpuset", "0-3", "0-3", "0-7", "0-7"],
+      ["@cpu_freq", "cpu0", "800000", "1800MHz"],
+      ["@cpu_freq", "cpu4", "1000MHz", "2200MHz"],
+      ["@cpu_freq", "cpu7", "1300MHz", "2200MHz"],
+      ["@preset", "perf_active"],
+      ["@high_rate", "on"]
+    ],
+    "burst": [
+      ["$core_ctl_4", "0"],
+      ["$core_ctl_7", "0"],
+      ["@cpuset", "0-3", "0-3", "0-7", "0-7"],
+      ["@cpu_freq", "cpu0", "800000", "1800MHz"],
+      ["@cpu_freq", "cpu4", "1200MHz", "2200MHz"],
+      ["@cpu_freq", "cpu7", "1500MHz", "2200MHz"],
+      ["@preset", "perf_boost"],
+      ["@high_rate", "on"]
+    ],
+    "exit": [
+      ["$core_ctl_4", "1"],
+      ["$core_ctl_7", "1"],
+      ["@cpuset", "0-3", "0-3", "0-3", "0-6"],
+      ["@cpu_freq", "cpu0", "min", "1800MHz"],
+      ["@cpu_freq", "cpu4", "min", "1800MHz"],
+      ["@cpu_freq", "cpu7", "1300000", "1800MHz"],
+      ["@preset", "perf_fg_opt"],
+      ["@high_rate", "off"]
+    ]
+  }
+}

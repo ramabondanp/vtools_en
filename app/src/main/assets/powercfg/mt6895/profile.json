@@ -1,0 +1,402 @@
+{
+  "platform": "mt6895",
+  "platform_name": "D8100",
+  "framework": 130,
+  "alias": {
+    "gpu_fixed": "/proc/gpufreqv2/fix_target_opp_index",
+    "gpu_freq": "/sys/kernel/ged/hal/custom_upbound_gpu_freq",
+    "boost_affinity": "/sys/module/mtk_fpsgo/parameters/boost_affinity",
+    "uclamp_heavy": "/dev/cpuctl/heavy/cpu.uclamp.min",
+    "uclamp_heavy_max": "/dev/cpuctl/heavy/cpu.uclamp.max",
+    "ddr_freq_min": "/sys/devices/platform/soc/1c00f000.dvfsrc/mtk-dvfsrc-devfreq/devfreq/mtk-dvfsrc-devfreq/min_freq",
+    "ddr_freq_max": "/sys/devices/platform/soc/1c00f000.dvfsrc/mtk-dvfsrc-devfreq/devfreq/mtk-dvfsrc-devfreq//max_freq",
+    "dcs_mode": "/sys/kernel/ged/hal/dcs_mode",
+    "ged_kpi": "/sys/module/sspm_v3/holders/ged/parameters/is_GED_KPI_enabled",
+    "fpsgo": "/sys/kernel/fpsgo/common/fpsgo_enable",
+    "gpu_dvfs_margin": "/sys/kernel/ged/hal/timer_base_dvfs_margin",
+    "gpu_dvfs_step": "/sys/kernel/ged/hal/loading_base_dvfs_step",
+    "charge_limit": "/sys/class/power_supply/battery/charge_control_limit",
+    "night_charging": "/sys/class/power_supply/battery/night_charging",
+    "cpufreq": "/proc/cpudvfs/cpufreq_debug"
+  },
+  "features": {
+    "high_rate": {
+      "enable": true,
+      "enable_control": "/data/local/tmp/scene_refresh_rate",
+      "device_policy": [{
+        "device": "rubens", "name": "K50", "enable": true,
+        "mode_high_rate": "1", "mode_low_rate": "0", "mode_standby": "0",
+        "1440P60Hz": "0", "1440P120Hz": "1", "1080P120Hz": "2", "1080P60Hz": "3"
+      }, {
+        "device": "OP5565", "name": "OnePlus ACE", "enable": true,
+        "mode_high_rate": "1", "mode_low_rate": "0"
+      }]
+    },
+    "processes": [
+      {
+        "app": "com.miui.home", "group": "top-app", "cpuctl": "heavy",
+        "delay": 2000, "interval": 5000, "repeat": 3
+      }
+    ],
+    "charge_control": {
+      "enable": true,
+      "enable_control": "/data/local/tmp/scene_charge_control",
+      "suspend": [
+        ["$charge_limit", "15"],
+        ["$night_charging", "1"]
+      ],
+      "normal": [
+        ["$charge_limit", "0"],
+        ["$night_charging", "0"]
+      ]
+    }
+  },
+  "presets": {
+    "reset_modes": [
+      ["$cpufreq", "0 450000 2000000"], ["$cpufreq", "4 200000 2850000"], ["$cpufreq", "7 500000 2850000"],
+      ["$core_ctl_4", "0"], ["$core_ctl_7", "0"]
+    ],
+    "perf_active": [
+      ["$uclamp_heavy", "2"],
+      ["@uclamp", "0.00~max", "0.00~max", "2.00~max"]
+    ],
+    "perf_gaming": [
+      ["@uclamp", "0.00~1.00", "0.00~max", "2.00~max"]
+    ],
+    "perf_fg_opt": [
+      ["$uclamp_heavy", "0"],
+      ["@uclamp", "0.00~1.00", "0.00~max", "0.00~max"]
+    ],
+    "perf_normal": [
+      ["$uclamp_heavy", "0"],
+      ["@uclamp", "0.00~max", "0.00~max", "0.00~max"]
+    ],
+    "perf_idle": [
+      ["$uclamp_heavy", "0"],
+      ["@uclamp", "0.00~10.0", "0.00~20.0", "0.00~30.0"]
+    ],
+    "governor_normal": [
+      ["@governor", "schedutil"]
+    ],
+    "governor_durable": [
+      ["@classical", "cpu0", "80", "70", "4", "1"],
+      ["@classical", "cpu4", "85", "75", "4", "1"],
+      ["@classical", "cpu7", "85", "73", "3", "1"]
+    ],
+    "governor_overheating": [
+      ["@classical", "cpu0", "80", "70", "4", "1"],
+      ["@classical", "cpu4", "86", "76", "3", "1"],
+      ["@classical", "cpu7", "88", "75", "3", "1"]
+    ],
+    "governor_idle": [
+      ["@classical", "cpu0", "93", "87", "4", "1"],
+      ["@classical", "cpu4", "99", "95", "2", "1"],
+      ["@classical", "cpu7", "93", "83", "2", "1"]
+    ],
+    "touch_boost_fast": [
+      ["$uclamp_fg_min", "1.00"],
+      ["$uclamp_top_min", "20.00"],
+      ["@cpu_freq", "cpu0", "1400000", "2000000"],
+      ["@cpu_freq", "cpu4", "1400000", "2850000"],
+      ["@cpu_freq", "cpu7", "1400000", "2850000"]
+    ],
+    "exit_boost_fast": [
+      ["$uclamp_fg_min", "0.00"],
+      ["$uclamp_top_min", "0.00"],
+      ["@cpu_freq", "cpu0", "900000", "2000000"],
+      ["@cpu_freq", "cpu4", "400000", "2850000"],
+      ["@cpu_freq", "cpu7", "500000", "2850000"]
+    ],
+    "touch_boost_pedestal": [
+      ["$uclamp_fg_min", "max"],
+      ["$uclamp_top_min", "max"],
+      ["@cpu_freq", "cpu0", "1700000", "2000000"],
+      ["@cpu_freq", "cpu4", "2100000", "2850000"],
+      ["@cpu_freq", "cpu7", "2300000", "2850000"]
+    ],
+    "exit_boost_pedestal": [
+      ["@cpu_freq", "cpu0", "1400000", "2000000"],
+      ["@cpu_freq", "cpu4", "1200000", "2850000"],
+      ["@cpu_freq", "cpu7", "1400000", "2850000"]
+    ]
+  },
+  "schemes": {
+    "powersave": {
+      "call": [
+        ["@preset", "reset_modes"],
+        ["$uclamp_heavy", "0"], ["$uclamp_heavy_max", "max"],
+        ["@classical", "cpu0", "70", "60", "5", "1"],
+        ["@classical", "cpu4", "74", "60", "3", "2"],
+        ["@classical", "cpu7", "75", "60", "3", "2"],
+        ["@perf_turbo", "mt6895", "daily", "7"],
+        ["$ddr_freq_min", "#800000000"],
+        ["@cpuset", "2-3", "0-3", "0-6", "0-7"],
+        ["@cpu_freq", "policy0", "450000", "1700000"],
+        ["@cpu_freq", "policy4", "400000", "1700000"],
+        ["@cpu_freq", "policy7", "500000", "1900000"],
+        ["@uclamp", "0.00~10.00", "0.00~max", "0.00~max"],
+        ["@high_rate", "off", "3000"],
+        ["@charge", "normal"]
+      ]
+    },
+    "balance": {
+      "call": [
+        ["@preset", "reset_modes"],
+        ["$uclamp_heavy", "0"], ["$uclamp_heavy_max", "max"],
+        ["@governor", "schedutil"],
+        ["@perf_turbo", "mt6895", "daily", "7"],
+        ["$ddr_freq_min", "#800000000"],
+        ["@cpuset", "2-3", "0-3", "0-6", "0-7"],
+        ["@cpu_freq", "policy0", "450000", "1800000"],
+        ["@cpu_freq", "policy4", "400000", "2150000"],
+        ["@cpu_freq", "policy7", "500000", "2350000"],
+        ["@uclamp", "0.00~max", "0.00~max", "0.00~max"],
+        ["@high_rate", "on"],
+        ["@charge", "normal"]
+      ]
+    },
+    "performance": {
+      "call": [
+        ["@preset", "reset_modes"],
+        ["$uclamp_heavy", "1.00"], ["$uclamp_heavy_max", "max"],
+        ["@governor", "schedutil"],
+        ["@perf_turbo", "mt6895", "silent", "0"],
+        ["@cpuset", "2-3", "0-3", "0-7", "0-7"],
+        ["@cpu_freq", "policy0", "450000", "max"],
+        ["@cpu_freq", "policy4", "400000", "2650000"],
+        ["@cpu_freq", "policy7", "500000", "max"],
+        ["@uclamp", "0.00~max", "0.00~max", "0.10~max"],
+        ["@high_rate", "on"],
+        ["@charge", "normal"]
+      ]
+    },
+    "fast": {
+      "call": [
+        ["@preset", "reset_modes"],
+        ["$uclamp_heavy", "1.00"], ["$uclamp_heavy_max", "max"],
+        ["@governor", "schedutil"],
+        ["@perf_turbo", "mt6895", "perf", "0"],
+        ["@cpuset", "2-3", "0-3", "0-7", "0-7"],
+        ["@cpu_freq", "policy0", "1200000", "max"],
+        ["@cpu_freq", "policy4", "1600000", "max"],
+        ["@cpu_freq", "policy7", "1600000", "max"],
+        ["@uclamp", "0.00~max", "0.00~max", "1.00~max"],
+        ["$mi_thermal", "10"],
+        ["@high_rate", "on"],
+        ["@charge", "normal"]
+      ]
+    },
+    "pedestal": {
+      "call": [
+        ["@preset", "reset_modes"],
+        ["$uclamp_heavy", "1.00"], ["$uclamp_heavy_max", "max"],
+        ["@governor", "schedutil"],
+        ["@perf_turbo", "mt6895", "extreme", "0"],
+        ["@cpuset", "2-3", "0-3", "0-7", "0-7"],
+        ["@cpu_freq", "policy0", "1700000", "max"],
+        ["@cpu_freq", "policy4", "1800000", "max"],
+        ["@cpu_freq", "policy7", "2100000", "max"],
+        ["@uclamp", "0.00~max", "1.00~max", "10.00~max"],
+        ["$mi_thermal", "10"],
+        ["@high_rate", "on"],
+        ["@charge", "suspend"]
+      ]
+    }
+  },
+  "apps": [
+    {
+      "friendly": "原神",
+      "packages": [
+        "com.miHoYo.Yuanshen",
+        "com.miHoYo.ys.mi",
+        "com.miHoYo.ys.bilibili",
+        "com.miHoYo.GenshinImpact"
+      ],
+      "import": "_GenshinImpact.json"
+    },
+    {
+      "friendly": "王者荣耀/LOL",
+      "packages": ["com.tencent.tmgp.sgame", "com.garena.game.kgtw", "com.tencent.lolm"],
+      "import": "_SGAME.json"
+    },
+    {
+      "friendly": "APEX",
+      "packages": ["com.levelinfinite.apexlegendsmobile", "com.ea.gp.apexlegendsmobilefps", "com.tw.fivexgames.apexlegendsmobile"],
+      "import": "_APEX.json"
+    },
+    {
+      "friendly": "极速响应",
+      "packages": [
+        "com.miui.home",
+        "com.meizu.flyme.launcher",
+        "net.oneplus.launcher",
+        "com.oppo.launcher",
+        "ch.deletescape.lawnchair.ci",
+        "com.mi.android.globallauncher",
+        "com.teslacoilsw.launcher",
+        "com.android.quicksearchbox",
+        "net.oneplus.h2launcher",
+        "com.oneplus.hydrogen.launcher",
+        "com.microsoft.launcher",
+        "org.lineageos.trebuchet",
+        "org.mokee.lawnchair",
+        "com.google.android.apps.nexuslauncher"
+      ],
+      "import": "_Launcher.json"
+    },
+    {
+      "friendly": "社交APP",
+      "packages": [
+        "com.tencent.mobileqq",
+        "com.tencent.mm",
+        "com.tencent.tim",
+        "org.telegram.messenger"
+      ],
+      "import": "_IM.json"
+    },
+    {
+      "friendly": "极限节能",
+      "packages": [
+        "tv.danmaku.bili", "com.bilibili.app.in",
+        "com.google.android.youtube",
+        "com.tencent.qqlive",
+        "com.qiyi.video",
+        "com.qiyi.video.lite",
+        "com.qiyi.video.sdkplayer",
+        "com.dianshijia.newlive",
+        "com.duowan.kiwi",
+        "air.tv.douyu.android",
+        "com.douyu.rush",
+        "com.youku.phone",
+        "org.telegram.messenger",
+        "com.hunantv.imgo.activity",
+
+        "com.ss.android.ugc.aweme", "com.ss.android.ugc.aweme.lite", "com.ss.android.article.video", "com.smile.gifmaker",
+
+        "com.coolapk.market",
+
+        "com.netease.cloudmusic",
+        "com.kugou.android",
+        "com.kugou.android.lite",
+
+        "io.legado.app.release",
+        "com.duokan.reader",
+        "com.ruguoapp.jike",
+        "com.ruanmei.ithome"
+      ],
+      "import": "_EnergySaving.json"
+    },
+    {
+      "friendly": "提高滑动性能",
+      "packages": [
+        "com.taobao.idlefish",
+        "com.taobao.taobao",
+        "com.android.browser",
+        "com.baidu.tieba_mini",
+        "com.baidu.tieba",
+        "com.jingdong.app.mall",
+        "com.tmall.wireless",
+        "com.sankuai.meituan",
+        "com.pupumall.customer",
+        "com.eg.android.AlipayGphone",
+        "com.android.vending",
+        "cn.xiaochuankeji.tieba",
+        "com.mfw.roadbook",
+        "com.tencent.news",
+        "com.sina.weibo",
+        "com.android.vending",
+        "com.android.chrome",
+        "com.chrome.beta"
+      ],
+      "import": "_ScrollOpt.json"
+    },
+    {
+      "friendly": "抖音、西瓜、快手",
+      "packages": ["com.ss.android.ugc.aweme", "com.ss.android.ugc.aweme.lite", "com.ss.android.article.video", "com.smile.gifmaker"],
+      "import": "_ShortVideo.json"
+    },
+    {
+      "friendly": "Benchmark",
+      "packages": [
+        "com.glbenchmark.glbenchmark27",
+        "com.primatelabs.geekbench5c",
+        "com.primatelabs.geekbench5",
+        "com.antutu.ABenchMark"
+      ],
+      "import": "_CPUBenchmark.json"
+    },
+    {
+      "friendly": "Benchmark",
+      "packages": [
+        "com.futuremark.dmandroid.application",
+        "com.antutu.benchmark.full"
+      ],
+      "import": "_GPUBenchmark.json"
+    },
+    {
+      "friendly": "待机",
+      "packages": ["standby"],
+      "import": "_Standby.json"
+    },
+    {
+      "friendly": "扫码",
+      "packages": [
+        "com.tencent.mm.plugin.scanner.ui.BaseScanUI",
+        "com.tencent.mobileqq.olympic.activity.ScanTorchActivity",
+        "com.tencent.mobileqq.olympic.activity.ScanTorchActivity",
+        "com.alipay.mobile.scan.as.main.MainCaptureActivity",
+        "com.jd.lib.scan.lib.zxing.client.android.CaptureActivity",
+        "com.etao.feimagesearch.capture.CaptureActivity"
+      ],
+      "import": "_Scanner.json"
+    },
+    {
+      "friendly": "相机",
+      "packages": [
+        "com.tencent.mm.plugin.recordvideo.activity.MMRecordUI",
+        "com.tencent.aelight.camera.aebase.QIMCameraCaptureActivity",
+        "dov.com.qq.im.QIMCameraCaptureActivity",
+        "com.googleCamera.Wichaya8",
+        "com.accordion.analogcam.cn",
+        "org.codeaurora.snapcam",
+        "com.android.camera",
+        "com.xiaomi.scanner",
+        "com.blink.academy.protake",
+        "com.benqu.wuta",
+        "com.gorgeous.lite",
+        "com.kwai.m2u",
+        "com.meitu.meiyancamera",
+        "com.yiruike.sodacn.android",
+        "com.lemon.faceu",
+        "com.mt.mtxx.mtxx"
+      ],
+      "import": "_Camera.json"
+    },
+    {
+      "friendly": "狗屎/毒瘤",
+      "packages": [
+        "com.tencent.mm:appbrand",
+        "com.tencent.mm:toolsmp"
+      ],
+      "import": "_MiniProgram.json"
+    },
+    {
+      "friendly": "备份还原",
+      "packages": ["com.miui.huanji", "com.miui.backup"],
+      "call": [
+        ["@uclamp", "0.00~max", "0.00~max", "0.00~max"],
+        ["@high_rate", "off", "2000"]
+      ]
+    },
+    {
+      "friendly": "白名单应用",
+      "packages": ["com.android.providers.downloads.ui", "android.process.mediaui"],
+      "import": "_WhiteList.json"
+    },
+    {
+      "friendly": "All",
+      "packages": ["*"],
+      "import": "_General.json"
+    }
+  ]
+}

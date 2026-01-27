@@ -1,0 +1,56 @@
+{
+  "friendly": "王者荣耀/LOL",
+  "packages": ["com.tencent.tmgp.sgame", "com.garena.game.kgtw", "com.tencent.lolm"],
+  "call": [
+    ["$uclamp_bg_max", "2.00"],
+    ["@cpuset", "1", "0-4", "0-5", "0-7"],
+    ["@high_rate", "on"],
+    ["$core_ctl_7", "0"]
+  ],
+  "sensors": [],
+  "affinity": {
+    "interval": 1000,
+    "unity_main": "80",
+    "heavy_thread": "Thread-",
+    "heavy_mask": "70",
+    "comm": {
+      "80": ["UnityPreload"],
+      "70": ["NativeThread", "UnityGfx", "Worker Thread"],
+      "7F": ["Audio", "NDK Media", "GVoice", "FMOD mixer", "FMOD stream", "ff_read"]
+    },
+    "other": "7F"
+  },
+  "modes": [
+    {
+      "mode": ["powersave"],
+      "booster": {
+        "events": ["presets"],
+        "duration": 3000,
+        "idle_delay": 3000,
+        "enter": [
+          ["@uclamp", "0.00~10.00", "0.00~max", "0.00~max"]
+        ],
+        "exit": [
+          ["@uclamp", "0.00~0.00", "0.00~25.00", "0.00~max"]
+        ]
+      }
+    },
+    {
+      "mode": ["balance"]
+    },
+    {
+      "mode": ["performance"],
+      "booster": {
+        "events": ["presets"],
+        "duration": 3000,
+        "idle_delay": 3000,
+        "enter": [
+          ["@uclamp", "0.00~max", "1.00~max", "1.00~max"]
+        ],
+        "exit": [
+          ["@uclamp", "0.00~max", "0.00~max", "0.00~max"]
+        ]
+      }
+    }
+  ]
+}

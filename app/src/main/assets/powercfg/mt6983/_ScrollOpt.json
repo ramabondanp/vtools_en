@@ -1,0 +1,99 @@
+{
+  "friendly": "提高滑动性能",
+  "packages": [
+    "com.taobao.idlefish",
+    "com.taobao.taobao",
+    "com.android.browser",
+    "com.baidu.tieba_mini",
+    "com.baidu.tieba",
+    "com.jingdong.app.mall",
+    "com.tmall.wireless",
+    "com.sankuai.meituan",
+    "com.pupumall.customer",
+    "com.eg.android.AlipayGphone",
+    "com.android.vending",
+    "cn.xiaochuankeji.tieba",
+    "com.mfw.roadbook",
+    "com.tencent.news"
+  ],
+  "modes": [{
+    "mode": ["powersave"],
+    "cpuset": {
+      "interval": 2000,
+      "comm": {
+        "7": ["RenderThread"]
+      }
+    },
+    "call": [
+      ["$dcs_mode", "1"],
+      ["$ged_kpi", "1"],
+      ["$fpsgo", "0"]
+    ],
+    "booster": {
+      "events": ["presets"],
+      "duration": 2000,
+      "idle_delay": 3500,
+      "enter": [
+        ["$dcs_mode", "0"],
+        ["$boost_affinity", "#1"],
+        ["$cpu_min_0", "#500000"], ["$cpu_min_4", "#700000"],
+        ["@preset", "perf_fg_opt"],
+        ["@high_rate", "on"],
+        ["@cpuset", "1-3", "1-3", "1-7", "0-7"],
+        ["@classical", "cpu0", "90", "80", "1", "1"],
+        ["@classical", "cpu4", "83", "73", "2", "1"],
+        ["@classical", "cpu7", "75", "66", "2", "1"]
+      ],
+      "exit": [
+        ["$dcs_mode", "1"],
+        ["$boost_affinity", "#0"],
+        ["$cpu_min_0", "#200000"], ["$cpu_min_4", "#400000"],
+        ["@preset", "perf_idle"],
+        ["@high_rate", "off"],
+        ["@cpuset", "1", "1-3", "1-6", "4-7"],
+        ["@classical", "cpu0", "99", "92", "1", "1"],
+        ["@classical", "cpu4", "95", "88", "2", "1"],
+        ["@classical", "cpu7", "93", "85", "2", "1"]
+      ]
+    }
+  }, {
+    "mode": ["balance"],
+    "call": [
+      ["$dcs_mode", "1"],
+      ["$ged_kpi", "1"],
+      ["$fpsgo", "0"]
+    ],
+    "booster": {
+      "events": ["presets"],
+      "duration": 2000,
+      "idle_delay": 1000,
+      "enter": [
+        ["$dcs_mode", "0"],
+        ["$boost_affinity", "#1"],
+        ["$cpu_min_0", "#500000"], ["$cpu_min_4", "#700000"],
+        ["@preset", "perf_normal"],
+        ["@high_rate", "on"]
+      ],
+      "exit": [
+        ["$dcs_mode", "1"],
+        ["$boost_affinity", "#0"],
+        ["$cpu_min_0", "#200000"], ["$cpu_min_4", "#400000"],
+        ["@preset", "perf_fg_opt"],
+        ["@high_rate", "off"]
+      ]
+    }
+  }, {
+    "mode": ["*"],
+    "booster": {
+      "events": ["presets"],
+      "duration": 2000,
+      "idle_delay": 1000,
+      "enter": [
+        ["@high_rate", "on"]
+      ],
+      "exit": [
+        ["@high_rate", "off"]
+      ]
+    }
+  }]
+}

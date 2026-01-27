@@ -1,0 +1,42 @@
+{
+  "friendly": "待机",
+  "packages": ["standby"],
+  "modes": [{
+    "mode": ["*"],
+    "call": [
+      ["@charge", "normal"]
+    ],
+    "booster": {
+      "events": ["presets"],
+      "duration": 3500,
+      "idle_delay": 2000,
+      "enter": [
+        ["$core_ctl_4", "0"],
+        ["$core_ctl_7", "0"],
+        ["@cpuset", "0-6", "0-6", "0-7", "0-7"],
+        ["@cpu_freq", "policy0", "1500MHz", "max"],
+        ["@cpu_freq", "policy4", "1500MHz", "2300MHz"],
+        ["@cpu_freq", "policy7", "1400MHz", "2500MHz"],
+        ["@high_rate", "on"]
+      ],
+      "burst": [
+        ["$core_ctl_4", "0"],
+        ["$core_ctl_7", "0"],
+        ["@cpuset", "0-6", "0-6", "0-7", "0-7"],
+        ["@cpu_freq", "policy0", "1500MHz", "max"],
+        ["@cpu_freq", "policy4", "1500MHz", "max"],
+        ["@cpu_freq", "policy7", "1400MHz", "max"],
+        ["@high_rate", "on"]
+      ],
+      "exit": [
+        ["$core_ctl_4", "1"],
+        ["$core_ctl_7", "1"],
+        ["@cpuset", "0-3", "0-6", "0-6", "0-6"],
+        ["@cpu_freq", "policy0", "min", "1600MHz"],
+        ["@cpu_freq", "policy4", "min", "1400MHz"],
+        ["@cpu_freq", "policy7", "min", "1400MHz"],
+        ["@high_rate", "off"]
+      ]
+    }
+  }]
+}

@@ -1,0 +1,63 @@
+{
+  "friendly": "小说阅读",
+  "packages": [
+    "io.legado.app.release",
+    "com.duokan.reader",
+    "com.ruguoapp.jike",
+    "com.ruanmei.ithome"
+  ],
+  "sensors": [],
+  "modes": [{
+    "mode": ["powersave", "balance"],
+    "affinity": {
+      "comm": {
+        "F0": ["RenderThread", "hwuiTask", "GLThread"]
+      },
+      "other": "7f"
+    },
+    "booster": {
+      "events": ["presets"],
+      "duration": 1500,
+      "enter": [
+        ["$core_ctl_7", "0"],
+        ["$cpuset_top", "0-7"],
+        ["@uclamp", "0.00~0.00", "0.00~max", "1.00~max"],
+        ["@high_rate", "on"]
+      ],
+      "exit": [
+        ["/sys/devices/system/cpu/cpu_boost/sched_boost_on_input", "0"],
+        ["$cpuset_top", "0-6"],
+        ["$cpuset_fg", "0-6"],
+        ["$cpu_max_0", "1075200"],
+        ["$cpu_max_4", "1209600"],
+        ["$cpu_max_7", "1286400"],
+        ["@uclamp", "0.00~0.00", "0.00~2.00", "0.00~2.00"],
+        ["@high_rate", "off"]
+      ]
+    }
+  },{
+    "mode": ["performance", "fast"],
+    "affinity": {
+      "comm": {
+        "F0": ["RenderThread", "hwuiTask", "GLThread"]
+      },
+      "other": "7f"
+    },
+    "booster": {
+      "events": ["presets"],
+      "duration": 1500,
+      "enter": [
+        ["$cpuset_top", "0-7"],
+        ["@uclamp", "0.00~max", "1.00~max", "1.00~max"],
+        ["@high_rate", "on"]
+      ],
+      "exit": [
+        ["@uclamp", "0.00~0.00", "1.00~max", "1.00~max"],
+        ["/sys/devices/system/cpu/cpu_boost/sched_boost_on_input", "0"],
+        ["$cpuset_top", "0-6"],
+        ["$cpuset_fg", "0-6"],
+        ["@high_rate", "off"]
+      ]
+    }
+  }]
+}

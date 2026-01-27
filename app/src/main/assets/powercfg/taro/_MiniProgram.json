@@ -1,0 +1,25 @@
+{
+  "friendly": "狗屎/毒瘤",
+  "packages": [
+    "com.tencent.mm:appbrand",
+    "com.tencent.mm:toolsmp"
+  ],
+  "booster": {
+    "events": ["presets"],
+    "duration": 2000,
+    "idle_delay": 2000,
+    "enter": [ ["@high_rate", "on"] ],
+    "exit": [ ["@high_rate", "off"] ]
+  },
+  "modes": [{
+    "mode": ["powersave", "balance"],
+    "call": [
+      ["@uclamp", "0.00~max", "0.00~max", "0.00~max"],
+      ["@cpuset", "1", "0-4", "0-7", "0-7"],
+      ["@cpu_freq", "policy0", "1075200", "1574400"],
+      ["@cpu_freq", "policy4", "min", "2227200"],
+      ["@cpu_freq", "policy7", "min", "2284800"],
+      ["$mi_thermal", "10"]
+    ]
+  }]
+}

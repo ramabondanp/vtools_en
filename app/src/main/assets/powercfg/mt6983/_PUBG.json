@@ -1,0 +1,64 @@
+{
+  "friendly": "和平精英",
+  "packages": ["com.tencent.tmgp.pubgmhd",  "com.tencent.ig"],
+  "affinity": {
+    "interval": 1000,
+    "heavy_thread": "Thread-",
+    "heavy_mask": "80",
+    "comm": {
+      "70": ["RenderThread", "TaskGraphNP"]
+    },
+    "other": "7f"
+  },
+  "call": [
+    ["@preset", "perf_fg_opt"],
+    ["$boost_affinity", "#0"],
+    ["@governor", "schedutil"],
+    ["@cpuset", "0", "3-4", "0-5", "0-7"],
+    ["$dcs_mode", "#0"],
+    ["$mi_thermal", "13"]
+  ],
+  "modes": [{
+    "mode": ["powersave"],
+    "call": [
+      ["@classical", "cpu0", "77", "65", "4", "1"],
+      ["@classical", "cpu4", "82", "70", "4", "1"],
+      ["@classical", "cpu7", "82", "70", "3", "1"],
+      ["@perf_turbo", "mt6983", "silent", "12"],
+      ["$ddr_freq_min", "2133000000"],
+      ["@cpu_freq", "cpu0", "800000", "1400000"],
+      ["@cpu_freq", "cpu4", "900000", "2300000"],
+      ["@cpu_freq", "cpu7", "1300000", "2300000"]
+    ]
+  }, {
+    "mode": ["balance"],
+    "call": [
+      ["@classical", "cpu0", "73", "60", "5", "1"],
+      ["@classical", "cpu4", "78", "65", "5", "1"],
+      ["@classical", "cpu7", "78", "65", "5", "1"],
+      ["@perf_turbo", "mt6983", "silent", "11"],
+      ["$ddr_freq_min", "2667000000"],
+      ["@cpu_freq", "cpu0", "800000", "1400000"],
+      ["@cpu_freq", "cpu4", "900000", "2300000"],
+      ["@cpu_freq", "cpu7", "1300000", "2300000"]
+    ]
+  }, {
+    "mode": ["performance"],
+    "call": [
+      ["@perf_turbo", "mt6983", "perf", "7"],
+      ["$ddr_freq_min", "3200000000"],
+      ["@cpu_freq", "cpu0", "800000", "1400000"],
+      ["@cpu_freq", "cpu4", "1100000", "2650000"],
+      ["@cpu_freq", "cpu7", "1300000", "2650000"]
+    ]
+  }, {
+    "mode": ["fast"],
+    "call": [
+      ["@perf_turbo", "mt6983", "perf", "7"],
+      ["$ddr_freq_min", "3200000000"],
+      ["@cpu_freq", "cpu0", "800000", "1400000"],
+      ["@cpu_freq", "cpu4", "1300000", "2650000"],
+      ["@cpu_freq", "cpu7", "1300000", "2800000"]
+    ]
+  }]
+}

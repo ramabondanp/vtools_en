@@ -8,6 +8,12 @@ init () {
     sh /data/powercfg-base.sh
   fi
 }
+scene_scheduler() {
+  SCDIR=${0%/*}
+  killall 'scene-scheduler' 2>/dev/null
+  # echo $SCDIR/scene-scheduler -c="$SCDIR/profile.json" -p="$1" -m="$2" > /cache/scene-scheduler.log
+  $SCDIR/scene-scheduler -p="$1" -m="$2" -c="$SCDIR/profile.json" >/dev/null 2>&1 &
+}
 
 if [[ "$action" == "init" ]]; then
   init
@@ -21,19 +27,13 @@ if [[ "$top_app" != "" ]]; then
 fi
 
 if [[ "$action" = "powersave" ]]; then
-    #powersave
-
-  exit 0
+  echo "powersave"
 elif [[ "$action" = "balance" ]]; then
-  #balance
-
-  exit 0
+  echo "balance"
 elif [[ "$action" = "performance" ]]; then
-  #performance
-
-  exit 0
+  echo "performance"
 elif [[ "$action" = "fast" ]]; then
-  #fast
-
-  exit 0
+  echo "fast"
 fi
+
+scene_scheduler "$top_app" "$1"

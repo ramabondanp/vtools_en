@@ -1,0 +1,60 @@
+{
+  "friendly": "和平精英",
+  "packages": ["com.tencent.tmgp.pubgmhd",  "com.tencent.ig"],
+  "call": [
+    ["$mi_thermal", "13"],
+    ["@high_rate", "on"]
+  ],
+  "sensors": [],
+  "cpuset": {
+    "interval": 1000,
+    "comm": {
+      "7": ["RenderThread"],
+      "4-6": ["Thread-", "TaskGraphNP"]
+    },
+    "other": "0-6"
+  },
+  "modes": [
+    {
+      "mode": ["powersave"],
+      "call": [
+      ],
+      "cpuset": {
+        "interval": 1000,
+        "comm": {
+          "4-7": ["RenderThread"],
+          "4-6": ["Thread-", "TaskGraphNP"]
+        },
+        "other": "0-6"
+      }
+    },
+    {
+      "mode": ["performance"],
+      "booster": {
+        "os_blacklist": ["Android12_130"],
+        "events": ["presets"],
+        "duration": 2000,
+        "enter": [
+          ["$stune_top_boost", "10"]
+        ],
+        "exit": [
+          ["$sched_boost", "0"]
+        ]
+      }
+    },
+    {
+      "mode": ["fast"],
+      "booster": {
+        "os_blacklist": ["Android12_130"],
+        "events": ["presets"],
+        "duration": 2000,
+        "enter": [
+          ["$stune_top_boost", "60"]
+        ],
+        "exit": [
+          ["$sched_boost", "0"]
+        ]
+      }
+    }
+  ]
+}

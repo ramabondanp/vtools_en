@@ -1,0 +1,43 @@
+{
+  "friendly": "模拟器",
+  "packages": ["xyz.aethersx2.android", "com.aiwu.dolphinemu"],
+  "sensors": [],
+  "call": [
+    ["@high_rate", "off"],
+    ["@uclamp", "0.00~10.00", "0.00~max", "1.00~max"]
+  ],
+  "cpuset": {
+    "interval": 3000,
+    "unity_main": "7",
+    "other": "0-6"
+  },
+  "modes": [
+    {
+      "mode": ["performance"],
+      "enter": [
+        ["$cpu_min_0", "1075200"],
+        ["$cpu_min_4", "1209600"],
+        ["$cpu_min_7", "1286400"],
+        ["$cpu_max_0", "1689600"],
+        ["$cpu_max_4", "2227200"],
+        ["$cpu_max_7", "2400000"]
+      ]
+    },
+    {
+      "mode": ["fast"],
+      "enter": [
+        ["$cpu_min_0", "1075200"],
+        ["$cpu_min_4", "1209600"],
+        ["$cpu_min_7", "1286400"]
+      ]
+    },
+    {
+      "mode": ["pedestal"],
+      "enter": [
+        ["$cpu_min_0", "1075200"],
+        ["$cpu_min_4", "1651200"],
+        ["$cpu_min_7", "1612800"]
+      ]
+    }
+  ]
+}

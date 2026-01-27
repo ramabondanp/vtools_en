@@ -1,0 +1,64 @@
+{
+  "friendly": "APEX",
+  "packages": ["com.levelinfinite.apexlegendsmobile", "com.ea.gp.apexlegendsmobilefps", "com.tw.fivexgames.apexlegendsmobile"],
+  "call": [
+    ["$mi_thermal", "13"]
+  ],
+  "affinity": {
+    "heavy_thread": "Thread-",
+    "heavy_mask": "80",
+    "comm": {
+      "70": ["RHIThread", "RenderThread", "TaskGraphNP", "NativeThread", "MainThread-UE4"]
+    },
+    "other": "7F"
+  },
+  "modes": [{
+    "mode": ["powersave"],
+    "call": [
+      ["@cpu_freq", "policy0", "1.2Ghz", "max"],
+      ["@cpu_freq", "policy4", "800MHz", "1900000"],
+      ["@cpu_freq", "policy7", "800MHz", "2200000"],
+      ["@perf_turbo", "mt6895", "daily", "11"],
+      ["@uclamp", "0.00~9.00", "0.00~max", "0.00~max"],
+      ["$boost_affinity", "0"],
+      ["$ddr_freq_min", "2133000000"]
+    ]
+  }, {
+    "mode": ["balance"],
+    "call": [
+      ["@cpu_freq", "policy0", "1.2Ghz", "max"],
+      ["@cpu_freq", "policy4", "0.8Ghz", "2350000"],
+      ["@cpu_freq", "policy7", "1.0Ghz", "2550000"],
+      ["@perf_turbo", "mt6895", "daily", "7"],
+      ["$ddr_freq_min", "3200000000"],
+      ["@uclamp", "0.00~max", "0.00~max", "0.00~max"],
+      ["$boost_affinity", "0"]
+    ]
+  },{
+    "mode": ["performance"],
+    "call": [
+      ["@cpu_freq", "policy0", "1.2Ghz", "max"],
+      ["@cpu_freq", "policy4", "1.1Ghz", "max"],
+      ["@cpu_freq", "policy7", "1.2Ghz", "max"],
+      ["@perf_turbo", "mt6895", "perf", "7"],
+      ["@uclamp", "0.00~max", "0.00~max", "0.00~max"]
+    ]
+  },{
+    "mode": ["fast"],
+    "call": [
+      ["@cpu_freq", "policy0", "1.4Ghz", "max"],
+      ["@cpu_freq", "policy4", "1.7Ghz", "max"],
+      ["@cpu_freq", "policy7", "1.7Ghz", "max"],
+      ["@perf_turbo", "mt6895", "perf", "5"],
+      ["@uclamp", "0.00~max", "0.00~max", "2.0~max"]
+    ]
+  },{
+    "mode": ["pedestal"],
+    "call": [
+      ["@cpu_freq", "policy4", "2.2Ghz", "max"],
+      ["@cpu_freq", "policy7", "2.4Ghz", "max"],
+      ["@perf_turbo", "mt6895", "perf", "0"],
+      ["@uclamp", "0.00~max", "0.0~max", "9.0~max"]
+    ]
+  }]
+}

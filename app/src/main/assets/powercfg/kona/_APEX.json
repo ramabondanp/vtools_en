@@ -1,0 +1,44 @@
+{
+  "friendly": "APEX",
+  "packages": ["com.levelinfinite.apexlegendsmobile", "com.ea.gp.apexlegendsmobilefps", "com.tw.fivexgames.apexlegendsmobile"],
+  "call": [
+    ["$mi_thermal", "13"], ["@gpu_freq", "min", "730MHz"]
+  ],
+  "affinity": {
+    "heavy_thread": "Thread-",
+    "heavy_mask": "80",
+    "comm": {
+      "70": ["RHIThread", "RenderThread", "TaskGraphNP", "NativeThread", "MainThread-UE4"]
+    },
+    "other": "7F"
+  },
+  "modes": [{
+    "mode": ["powersave"],
+    "call": [
+      ["@cpu_freq", "policy0", "1248000", "max"],
+      ["@cpu_freq", "policy4", "710400", "1958400"],
+      ["@cpu_freq", "policy7", "844800", "2169600"]
+    ]
+  }, {
+    "mode": ["balance"],
+    "call": [
+      ["@cpu_freq", "policy0", "1420800", "max"],
+      ["@cpu_freq", "policy4", "1056000", "2227200"],
+      ["@cpu_freq", "policy7", "1305600", "2457600"]
+    ]
+  },{
+    "mode": ["performance"],
+    "call": [
+      ["@cpu_freq", "policy0", "1420800", "max"],
+      ["@cpu_freq", "policy4", "1286400", "2419200"],
+      ["@cpu_freq", "policy7", "1401600", "2841600"]
+    ]
+  },{
+    "mode": ["fast"],
+    "call": [
+      ["@cpu_freq", "policy0", "1612800", "max"],
+      ["@cpu_freq", "policy4", "1670400", "max"],
+      ["@cpu_freq", "policy7", "1862400", "max"]
+    ]
+  }]
+}

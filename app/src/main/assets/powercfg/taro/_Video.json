@@ -1,0 +1,76 @@
+{
+  "friendly": "视频应用",
+  "packages": [
+    "tv.danmaku.bili", "com.bilibili.app.in",
+    "com.google.android.youtube",
+    "com.tencent.qqlive",
+    "com.ss.android.article.video",
+    "com.qiyi.video",
+    "com.qiyi.video.lite",
+    "com.qiyi.video.sdkplayer",
+    "com.dianshijia.newlive",
+    "com.duowan.kiwi",
+    "air.tv.douyu.android",
+    "com.douyu.rush",
+    "com.youku.phone",
+    "org.telegram.messenger",
+    "com.hunantv.imgo.activity",
+    "com.ss.android.article.video"
+  ],
+  "sensors": [],
+  "modes": [{
+    "mode": ["powersave"],
+    "booster": {
+      "events": ["presets"],
+      "duration": 2000,
+      "idle": 2000,
+      "enter": [
+        ["$core_ctl_7", "0"],
+        ["$cpuset_top", "0-7"],
+        ["$cpuset_fg", "0-7"],
+        ["$cpu_max_0", "1478400"],
+        ["@uclamp", "0.00~5.00", "0.00~max", "1.00~max"],
+        ["@high_rate", "on"]
+      ],
+      "exit": [
+        ["$core_ctl_7", "1"],
+        ["@uclamp", "0.00~0.00", "0.00~5.00", "1.00~10.00"],
+        ["$cpu_max_0", "1171200"],
+        ["$cpuset_top", "0-6"],
+        ["$cpuset_fg", "0-6"],
+        ["@high_rate", "off"]
+      ]
+    }
+  }, {
+    "mode": ["balance"],
+    "booster": {
+      "events": ["presets"],
+      "duration": 2000,
+      "enter": [
+        ["$cpuset_top", "0-7"],
+        ["$cpuset_fg", "0-7"],
+        ["@uclamp", "0.00~10.00", "0.00~max", "1.00~max"],
+        ["@high_rate", "on"]
+      ],
+      "exit": [
+        ["@uclamp", "0.00~15.00", "0.00~20.00", "1.00~max"],
+        ["$cpuset_top", "0-6"],
+        ["$cpuset_fg", "0-6"],
+        ["@high_rate", "off"]
+      ]
+    }
+  }, {
+    "mode": ["performance", "fast"],
+    "booster": {
+      "events": ["presets"],
+      "duration": 2000,
+      "enter": [
+        ["$cpuset_top", "0-7"],
+        ["@uclamp", "0.00~max", "0.00~max", "1.00~max"]
+      ],
+      "exit": [
+        ["@uclamp", "0.00~10.00", "0.00~70.00", "0.00~max"]
+      ]
+    }
+  }]
+}

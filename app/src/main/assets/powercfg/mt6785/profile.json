@@ -1,0 +1,110 @@
+{
+  "platform": "mt6768",
+  "platform_name": "MTK P65&G80&G85",
+  "framework": 130,
+  "alias": {
+  },
+  "schemes": {
+    "powersave": {
+      "call": [
+      ]
+    },
+    "balance": {
+      "call": [
+      ]
+    },
+    "performance": {
+      "call": [
+      ]
+    },
+    "fast": {
+      "call": [
+      ]
+    },
+    "pedestal": {
+      "call": [
+      ]
+    }
+  },
+  "apps": [
+    {
+      "friendly": "原神",
+      "packages": [
+        "com.miHoYo.Yuanshen",
+        "com.miHoYo.ys.mi",
+        "com.miHoYo.ys.bilibili",
+        "com.miHoYo.GenshinImpact"
+      ],
+      "stop_on": ["leave", "scene"],
+      "sensors": [],
+      "modes": [
+        {
+          "mode": ["powersave", "balance", "performance"],
+          "affinity": {
+            "comm": {
+              "C0": ["UnityMain"],
+              "40": ["UnityGfx"],
+              "20": ["UnityMultiRende"],
+              "1C": ["Worker Thread"]
+            },
+            "other": "3F"
+          }
+        },
+        {
+          "mode": ["fast", "pedestal"],
+          "affinity": {
+            "comm": {
+              "C0": ["UnityMain"],
+              "40": ["UnityGfx", "UnityMultiRende"]
+            },
+            "other": "ff"
+          }
+        }
+      ]
+    },
+    {
+      "friendly": "王者荣耀",
+      "packages": ["com.tencent.tmgp.sgame"],
+      "stop_on": ["leave", "scene"],
+      "sensors": [],
+      "affinity": {
+        "interval": 1000,
+        "comm": {
+          "C0": ["UnityGfx", "UnityMain", "UnityPreload", "Thread-"],
+          "38": ["Worker Thread", "NativeThread", "Audio", "NDK Media", "GVoice", "FMOD mixer", "FMOD stream", "ff_read"]
+        },
+        "other": "FF"
+      }
+    },
+    {
+      "friendly": "和平精英",
+      "packages": ["com.tencent.tmgp.pubgmhd",  "com.tencent.ig"],
+      "stop_on": ["leave", "scene"],
+      "sensors": [],
+      "affinity": {
+        "interval": 1000,
+        "comm": {
+          "80": ["RenderThread"],
+          "70": ["Thread-", "TaskGraphNP"]
+        },
+        "other": "3F"
+      },
+      "modes": [
+        {
+          "mode": ["fast"],
+          "logger": false,
+          "booster": {
+            "events": ["presets"],
+            "duration": 2000,
+            "enter": [
+              ["$stune_top_boost", "60"]
+            ],
+            "exit": [
+              ["$sched_boost", "0"]
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

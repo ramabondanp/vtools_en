@@ -49,8 +49,9 @@ echo 3 > /proc/sys/vm/page-cluster
 echo 4000 > /proc/sys/vm/dirty_expire_centisecs
 echo 6000 > /proc/sys/vm/dirty_writeback_centisecs
 
-echo 2048 > /sys/block/sda/queue/read_ahead_kb
-echo 0 > /sys/block/sda/queue/iostats
+# echo 2048 > /sys/block/sda/queue/read_ahead_kb
+# Meizu 16th Data is damaged
+# echo 0 > /sys/block/sda/queue/iostats
 
 echo "0:1324800" > /sys/module/cpu_boost/parameters/input_boost_freq
 echo 40 > /sys/module/cpu_boost/parameters/input_boost_ms
@@ -59,7 +60,7 @@ echo "40" > /sys/module/cpu_boost/parameters/powerkey_input_boost_ms
 echo 'Y' > /sys/module/cpu_boost/parameters/sched_boost_on_powerkey_input
 #echo 'Y' > /sys/module/cpu_boost/parameters/sched_boost_on_input
 
-echo 0 > /sys/module/lowmemorykiller/parameters/enable_adaptive_lmk
+# echo 0 > /sys/module/lowmemorykiller/parameters/enable_adaptive_lmk
 
 #stop woodpeckerd
 #stop debuggerd
@@ -80,6 +81,21 @@ echo 0 > /proc/sys/kernel/sched_boost
 
 echo 1 > /proc/sys/kernel/sched_prefer_sync_wakee_to_waker
 
+move_to_top(){
+  pidof $1 | while read pid
+  do
+    echo $1 > /dev/cpuset/top-app/cgroup.procs
+  done
+}
+move_to_top vendor.qti.hardware.display.composer-service
+move_to_top com.android.systemui
+move_to_top com.miui.home
+move_to_top surfaceflinger
+move_to_top system_server
+move_to_top com.omarea.vtools
+move_to_top com.omarea.gesture
+move_to_top android.hardware.graphics.composer@2.1-service
+
 # set_task_affinity $pid $use_cores[cpu7~cpu0]
 set_task_affinity() {
   pid=$1
@@ -90,4 +106,4 @@ set_task_affinity() {
   taskset -p "$mask" "$pid" 1>/dev/null
 }
 
-set_task_affinity `pgrep com.miui.home` 11111111
+set_task_affinity `pidof com.miui.home` 11111111

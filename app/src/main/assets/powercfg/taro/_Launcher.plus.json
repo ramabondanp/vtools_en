@@ -1,0 +1,88 @@
+{
+  "friendly": "极速响应",
+  "packages": [
+    "com.miui.home",
+    "com.meizu.flyme.launcher",
+    "net.oneplus.launcher",
+    "com.oppo.launcher",
+    "ch.deletescape.lawnchair.ci",
+    "com.mi.android.globallauncher",
+    "com.teslacoilsw.launcher",
+    "com.android.quicksearchbox",
+    "net.oneplus.h2launcher",
+    "com.oneplus.hydrogen.launcher",
+    "com.microsoft.launcher",
+    "org.lineageos.trebuchet",
+    "org.mokee.lawnchair",
+        "com.google.android.apps.nexuslauncher",
+        "ch.deletescape.lawnchair.plah"
+      ],
+  "call": [
+    ["$core_ctl_7", "0"]
+  ],
+  "sensors": [],
+  "modes": [{
+    "mode": ["powersave"],
+    "booster": {
+      "events": ["presets"],
+      "duration": 3000,
+      "idle_delay": 1000,
+      "enter": [
+        ["$cpuset_top", "0-7"],
+        ["$cpuset_fg", "0-7"],
+        ["@uclamp", "0.00~0.00", "1.00~max", "max~max"],
+        ["$cpu_max_0", "1555200"],
+        ["$cpu_max_4", "2342400"],
+        ["$cpu_max_7", "2822400"],
+        ["$max_cpus_cpu7", "1"],
+        ["@high_rate", "on"]
+      ],
+      "exit": [
+        ["@uclamp", "0.00~0.00", "0.00~9.00", "0.00~15.00"],
+        ["$max_cpus_cpu7", "0"],
+        ["@high_rate", "off"]
+      ]
+    }
+  },{
+    "mode": ["balance"],
+    "booster": {
+      "events": ["presets"],
+      "duration": 3000,
+      "idle_delay": 1000,
+      "enter": [
+        ["$cpu_min_0", "1075200"],
+        ["@uclamp", "0.00~10.00", "1.00~max", "max~max"],
+        ["$cpu_max_0", "1804800"],
+        ["$cpu_max_4", "2457600"],
+        ["$cpu_max_7", "2995200"],
+        ["$max_cpus_cpu7", "1"],
+        ["@high_rate", "on"]
+      ],
+      "exit": [
+        ["@uclamp", "0.00~0.00", "0.00~max", "0.00~max"],
+        ["$cpu_min_0", "307200"],
+        ["$max_cpus_cpu7", "0"],
+        ["@high_rate", "off"]
+      ]
+    }
+  },{
+    "mode": ["performance", "fast"],
+    "booster": {
+      "events": ["presets"],
+      "duration": 3000,
+      "enter": [
+        ["@uclamp", "0.00~max", "max~max", "max~max"],
+        ["$cpuset_top", "0-7"],
+        ["$cpuset_fg", "0-7"],
+        ["$cpu_max_0", "2016000"],
+        ["$cpu_max_4", "2745600"],
+        ["$cpu_max_7", "3187200"],
+        ["@high_rate", "on"]
+      ],
+      "exit": [
+        ["@uclamp", "0.00~20.00", "0.00~max", "0.00~max"],
+        ["@high_rate", "off"]
+      ]
+    }
+  }]
+}

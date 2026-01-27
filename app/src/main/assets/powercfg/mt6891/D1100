@@ -1,0 +1,50 @@
+# /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_frequencies
+2000000,1800000,1725000,1625000,1525000,1450000,1350000,1250000,1075000,1000000,925000,850000,750000,675000,600000,500000
+
+# /sys/devices/system/cpu/cpu4/cpufreq/scaling_available_frequencies
+2600000,2507000,2354000,2200000,1985000,1855000,1740000,1624000,1537000,1451000,1335000,1162000,1046000,902000,700000,437000
+
+# /sys/devices/system/cpu/cpu7/cpufreq/scaling_available_frequencies
+2600000,2529000,2410000,2292000,2127000,2032000,1938000,1820000,1745000,1632000,1482000,1370000,1258000,1108000,921000,659000
+
+# dump_cluster_0_dvfs_table
+# 2000000 1800000 1725000 1625000 1525000 1450000 1350000 1250000 1075000 1000000 925000 850000 750000 675000 600000 500000
+# dump_cluster_1_dvfs_table
+# 2600000 2507000 2354000 2200000 1985000 1855000 1740000 1624000 1537000 1451000 1335000 1162000 1046000 902000 700000 437000
+# dump_cluster_2_dvfs_table
+# 2600000,2529000,2410000,2292000,2127000,2032000,1938000,1820000,1745000,1632000,1482000,1370000,1258000,1108000,921000,659000
+
+# GPU
+[00] freq = 836000, vgpu = 68125, vsram = 75000, posdiv = 4, gpu_power = 873, aging = 1875
+[01] freq = 825000, vgpu = 68125, vsram = 75000, posdiv = 4, gpu_power = 844, aging = 1875
+[02] freq = 815000, vgpu = 68125, vsram = 75000, posdiv = 4, gpu_power = 815, aging = 1875
+[03] freq = 805000, vgpu = 67500, vsram = 75000, posdiv = 4, gpu_power = 806, aging = 1875
+[04] freq = 795000, vgpu = 66875, vsram = 75000, posdiv = 4, gpu_power = 778, aging = 1875
+[05] freq = 785000, vgpu = 66250, vsram = 75000, posdiv = 4, gpu_power = 751, aging = 1875
+[06] freq = 775000, vgpu = 65625, vsram = 75000, posdiv = 4, gpu_power = 742, aging = 1875
+[07] freq = 765000, vgpu = 65625, vsram = 75000, posdiv = 4, gpu_power = 716, aging = 1875
+[08] freq = 755000, vgpu = 65625, vsram = 75000, posdiv = 4, gpu_power = 683, aging = 1875
+[09] freq = 745000, vgpu = 65000, vsram = 75000, posdiv = 4, gpu_power = 674, aging = 1875
+[10] freq = 735000, vgpu = 64375, vsram = 75000, posdiv = 4, gpu_power = 650, aging = 1875
+[11] freq = 725000, vgpu = 63750, vsram = 75000, posdiv = 4, gpu_power = 627, aging = 1875
+[12] freq = 715000, vgpu = 63125, vsram = 75000, posdiv = 4, gpu_power = 619, aging = 1875
+[13] freq = 705000, vgpu = 63125, vsram = 75000, posdiv = 4, gpu_power = 595, aging = 1250
+[14] freq = 695000, vgpu = 62500, vsram = 75000, posdiv = 4, gpu_power = 573, aging = 1250
+[15] freq = 685000, vgpu = 61875, vsram = 75000, posdiv = 4, gpu_power = 552, aging = 1250
+[16] freq = 675000, vgpu = 61250, vsram = 75000, posdiv = 4, gpu_power = 544, aging = 1250
+[17] freq = 654000, vgpu = 61250, vsram = 75000, posdiv = 4, gpu_power = 510, aging = 1250
+[18] freq = 634000, vgpu = 60625, vsram = 75000, posdiv = 4, gpu_power = 483, aging = 1250
+[19] freq = 614000, vgpu = 60625, vsram = 75000, posdiv = 4, gpu_power = 471, aging = 1250
+[20] freq = 593000, vgpu = 60000, vsram = 75000, posdiv = 4, gpu_power = 439, aging = 1250
+[21] freq = 573000, vgpu = 60000, vsram = 75000, posdiv = 4, gpu_power = 415, aging = 1250
+[22] freq = 553000, vgpu = 59375, vsram = 75000, posdiv = 4, gpu_power = 402, aging = 1250
+[23] freq = 532000, vgpu = 59375, vsram = 75000, posdiv = 4, gpu_power = 380, aging = 1250
+[24] freq = 512000, vgpu = 58750, vsram = 75000, posdiv = 4, gpu_power = 352, aging = 625
+[25] freq = 492000, vgpu = 58750, vsram = 75000, posdiv = 4, gpu_power = 331, aging = 625
+[26] freq = 471000, vgpu = 58125, vsram = 75000, posdiv = 4, gpu_power = 320, aging = 625
+[27] freq = 451000, vgpu = 58125, vsram = 75000, posdiv = 4, gpu_power = 300, aging = 625
+[28] freq = 431000, vgpu = 57500, vsram = 75000, posdiv = 4, gpu_power = 275, aging = 625
+[29] freq = 410000, vgpu = 56875, vsram = 75000, posdiv = 4, gpu_power = 264, aging = 625
+[30] freq = 390000, vgpu = 56250, vsram = 75000, posdiv = 4, gpu_power = 247, aging = 625
+[31] freq = 370000, vgpu = 55625, vsram = 75000, posdiv = 8, gpu_power = 230, aging = 625
+[32] freq = 350000, vgpu = 55000, vsram = 75000, posdiv = 8, gpu_power = 214, aging = 625

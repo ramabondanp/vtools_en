@@ -1,0 +1,70 @@
+{
+  "friendly": "王者荣耀/LOL/传说对决",
+  "packages": ["com.tencent.tmgp.sgame", "com.garena.game.kgtw", "com.tencent.lolm"],
+  "call": [
+    ["$core_ctl_4", "0"],
+    ["$core_ctl_7", "0"],
+    ["@high_rate", "on"]
+  ],
+  "affinity": {
+    "unity_main": "80",
+    "heavy_thread": "Thread-",
+    "heavy_mask": "40",
+    "cpuset_mode": "coexist",
+    "comm": {
+      "40": ["UnityGfx"],
+      "30": ["CoreThread", "UnityPreload", "Worker Thread"],
+      "3F": ["MIHOYO_NETWORK", "FMOD", "UnityChoreograp", "NativeThread", "AsyncReadManage"],
+      "F": ["Audio", "tp_schedule"]
+    },
+    "other": "3F"
+  },
+  "modes": [{
+    "mode": ["powersave"],
+    "call": [
+      ["@cpu_freq", "policy0", "614400", "1708800"],
+      ["@cpu_freq", "policy4", "710400", "1862400"],
+      ["@cpu_freq", "policy7", "844800", "2073600"],
+      ["@gpu_freq", "min", "730MHz"]
+    ]
+  }, {
+    "mode": ["balance"],
+    "call": [
+      ["@cpu_freq", "policy0", "1075200", "1708800"],
+      ["@cpu_freq", "policy4", "1056000", "2054400"],
+      ["@cpu_freq", "policy7", "1075200", "2361600"],
+      ["@gpu_freq", "min", "730MHz"]
+    ]
+  }, {
+    "mode": ["performance"],
+    "call": [
+      ["@cpu_freq", "policy0", "1075200", "1804800"],
+      ["@cpu_freq", "policy4", "1286400", "2419200"],
+      ["@cpu_freq", "policy7", "1305600", "2841600"],
+      ["@gpu_freq", "min", "730MHz"]
+    ]
+  }, {
+    "mode": ["fast"],
+    "call": [
+      ["@cpu_freq", "policy0", "1248000", "1804800"],
+      ["@cpu_freq", "policy4", "1478400", "2419200"],
+      ["@cpu_freq", "policy7", "1747200", "3200000"],
+      ["@gpu_freq", "300MHz", "730MHz"]
+    ],
+    "sensors": [{
+      "sensor": "fps",
+      "interval": 5000,
+      "props": ["$cpu_min_0", "$cpu_min_4", "$cpu_min_7",  "$cpu_max_0", "$cpu_max_4", "$cpu_max_7"],
+      "rules": [{
+        "threshold": [-1, 100],
+        "values": ["1248000", "1478400", "1862400",    "1804800", "2600000", "3200000"]
+      }, {
+        "threshold": [99, 75],
+        "values": ["1248000", "1478400", "1516800",    "1612800", "1996800", "1900800"]
+      }, {
+        "threshold": [70, -1],
+        "values": ["1248000", "1478400", "1516800",    "1612800", "1881600", "1900800"]
+      }]
+    }]
+  }]
+}

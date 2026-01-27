@@ -1,0 +1,14 @@
+{
+  "name": "SCENE Official",
+  "version": "classical",
+  "versionCode": 20221012001,
+  "author": "SCENE5",
+  "project_url": "http://vtools.omarea.com/",
+  "features": {
+    "strict": true,
+    "pedestal": true
+  },
+  "current": "vtools.powercfg",
+  "files": [],
+  "entry": "conservative.sh"
+}

@@ -25,7 +25,7 @@ if [[ "$action" == "init" ]]; then
   exit 0
 fi
 
-if [[ "$action" == "fast" ]]; then
+if [[ "$action" == "fast" || "$action" == "pedestal" ]]; then
   devfreq_performance
 else
   devfreq_restore
@@ -42,54 +42,74 @@ reset_basic_governor
 # echo 100 > /proc/sys/kernel/sched_group_upmigrate
 
 
-if [ "$action" = "powersave" ]; then
+if [[ "$action" = "powersave" ]]; then
   set_cpu_freq 5000 1612800 5000 1555200
   set_input_boost_freq 0 0 0
   set_hispeed_freq 1248000 806400
   sched_boost 0 0
   stune_top_app 0 0
-  ctl_on cpu0
-  ctl_on cpu6
+  cpu0_core_ctl off
+  cpu6_core_ctl on
   sched_config 75 92 380 500
   sched_limit 0 0 500 1000
   cpuset '0-1' '0-3' '0-3' '0-7'
+  ufshc_perf off
 
-elif [ "$action" = "balance" ]; then
+elif [[ "$action" = "balance" ]]; then
   set_cpu_freq 5000 1708800 5000 1843200
   set_input_boost_freq 0 0 0
   set_hispeed_freq 1248000 1209600
   sched_boost 1 0
   stune_top_app 0 0
-  ctl_off cpu0
-  ctl_on cpu6
+  cpu0_core_ctl off
+  cpu6_core_ctl off
   sched_config 68 82 300 400
   sched_limit 0 0 0 0
   cpuset '0-1' '0-3' '0-5' '0-7'
+  ufshc_perf off
 
-elif [ "$action" = "performance" ]; then
+elif [[ "$action" = "performance" ]]; then
   set_cpu_freq 300000 2500000 300000 2750000
   set_input_boost_freq 1804800 1939200 120
-  set_hispeed_freq 1708800 1209600
+  set_hispeed_freq 0 0
   gpu_pl_up 1
   sched_boost 1 0
   stune_top_app 0 0
-  ctl_off
-  ctl_off
+  cpu0_core_ctl off
+  cpu6_core_ctl off
   sched_config 60 78 300 400
   sched_limit 2000 1000 0 0
   cpuset '0-1' '0-3' '0-5' '0-7'
+  ufshc_perf on
 
-elif [ "$action" = "fast" ]; then
+elif [[ "$action" = "fast" ]]; then
   set_cpu_freq 1708800 2500000 1209600 2750000
   set_input_boost_freq 1804800 1939200 500
-  set_hispeed_freq 300000 300000
+  set_hispeed_freq 0 0
   gpu_pl_up 2
-  sched_boost 1 1
+  sched_boost 1 2
   stune_top_app 1 20
-  ctl_off
-  ctl_off
+  cpu0_core_ctl off
+  cpu6_core_ctl off
   sched_config 50 75 300 400
   sched_limit 5000 2000 0 0
   cpuset '0-1' '0-3' '0-5' '0-7'
+  ufshc_perf on
+
+elif [[ "$action" = "pedestal" ]]; then
+  set_cpu_freq 1804800 2500000 2208000 2750000
+  set_input_boost_freq 0 0 0
+  set_hispeed_freq 0 0
+  gpu_pl_up 4
+  sched_boost 1 2
+  stune_top_app 1 100
+  cpu0_core_ctl off
+  cpu6_core_ctl off
+  sched_config 57 75 300 400
+  sched_limit 8000 8000 0 0
+  cpuset '0-1' '0-3' '0-7' '0-7'
+  ufshc_perf on
 
 fi
+
+adjustment_by_top_app

@@ -1,0 +1,64 @@
+{
+  "platform": "msmnile",
+  "platform_name": "骁龙855",
+  "framework": 130,
+  "alias": {
+  },
+  "schemes": {
+    "powersave": {
+      "call": [
+        ["@cpu_freq", "policy0", "min", "-300MHz"],
+        ["@cpu_freq", "policy4", "min", "-900MHz"],
+        ["@cpu_freq", "policy7", "min", "-1200MHz"],
+        ["@gpu_freq", "min", "400MHz"],
+        ["@set_priority", "top-app", "normal"],
+        ["@set_priority", "foreground", "low"],
+        ["@set_priority", "background", "min"]
+      ]
+    },
+    "balance": {
+      "call": [
+        ["@cpu_freq", "policy0", "min", "-100MHz"],
+        ["@cpu_freq", "policy4", "min", "-400MHz"],
+        ["@cpu_freq", "policy7", "min", "-700MHz"],
+        ["@gpu_freq", "min", "500MHz"],
+        ["@set_priority", "top-app", "normal"],
+        ["@set_priority", "foreground", "normal"],
+        ["@set_priority", "background", "low"]
+      ]
+    },
+    "performance": {
+      "call": [
+        ["@cpu_freq", "policy0", "min", "max"],
+        ["@cpu_freq", "policy4", "min", "-100MHz"],
+        ["@cpu_freq", "policy7", "min", "-300MHz"],
+        ["@gpu_freq", "min", "700MHz"],
+        ["@set_priority", "top-app", "high"],
+        ["@set_priority", "foreground", "normal"],
+        ["@set_priority", "background", "low"]
+      ]
+    },
+    "fast": {
+      "call": [
+        ["@cpu_freq", "policy0", "1.4Ghz", "max"],
+        ["@cpu_freq", "policy4", "1.4Ghz", "max"],
+        ["@cpu_freq", "policy7", "1.6Ghz", "max"],
+        ["@gpu_freq", "min", "900MHz"],
+        ["@set_priority", "top-app", "max"],
+        ["@set_priority", "foreground", "high"],
+        ["@set_priority", "background", "normal"]
+      ]
+    },
+    "pedestal": {
+      "call": [
+        ["@cpu_freq", "policy0", "max", "max"],
+        ["@cpu_freq", "policy4", "max", "max"],
+        ["@cpu_freq", "policy7", "max", "max"],
+        ["@gpu_freq", "min", "900MHz"],
+        ["@set_priority", "top-app", "max"],
+        ["@set_priority", "foreground", "high"],
+        ["@set_priority", "background", "normal"]
+      ]
+    }
+  }
+}

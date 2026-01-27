@@ -1,0 +1,44 @@
+{
+  "friendly": "待机",
+  "packages": ["standby"],
+  "call": [
+  ],
+  "booster": {
+    "events": ["presets"],
+    "duration": 3500,
+    "idle_delay": 2000,
+    "enter": [
+      ["@cpuset", "0-6", "0-6", "0-7", "0-7"],
+      ["@cpu_freq", "cpu0", "940800", "1804800"],
+      ["@cpu_freq", "cpu4", "1209600", "2457600"],
+      ["@cpu_freq", "cpu7", "787200", "2822400"],
+      ["$uclamp_bg_max", "max"],
+      ["$uclamp_fg_max", "max"],
+      ["$uclamp_top_max", "max"],
+      ["@high_rate", "on"]
+    ],
+    "burst": [
+      ["@cpuset", "0-6", "0-6", "0-7", "0-7"],
+      ["@cpu_freq", "cpu0", "1056000", "2016000"],
+      ["@cpu_freq", "cpu4", "1555200", "2745600"],
+      ["@cpu_freq", "cpu7", "1401600", "2918400"],
+      ["$uclamp_bg_min", "max"],
+      ["$uclamp_fg_min", "max"],
+      ["$uclamp_top_min", "max"],
+      ["$uclamp_bg_max", "max"],
+      ["@high_rate", "on"]
+    ],
+    "exit": [
+      ["$core_ctl_4", "1"],
+      ["$core_ctl_7", "1"],
+      ["@cpuset", "0-2", "0-3", "0-3", "0-6"],
+      ["@cpu_freq", "cpu0", "307200", "1440000"],
+      ["@cpu_freq", "cpu4", "633600", "1651200"],
+      ["@cpu_freq", "cpu7", "787200", "1286400"],
+      ["$uclamp_bg_max", "9.00"],
+      ["$uclamp_fg_max", "max"],
+      ["$uclamp_top_max", "max"],
+      ["@high_rate", "off"]
+    ]
+  }
+}

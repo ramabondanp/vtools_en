@@ -1,0 +1,54 @@
+{
+  "friendly": "社交APP",
+  "packages": [
+    "com.tencent.mobileqq",
+    "com.tencent.tim",
+    "com.tencent.mm",
+    "org.telegram.messenger"
+  ],
+  "modes": [{
+    "mode": ["powersave"],
+    "booster": {
+      "events": ["presets"],
+      "duration": 1500,
+      "idle_delay": 1500,
+      "enter": [
+        ["$core_ctl_4", "0"],
+        ["@high_rate", "on"]
+      ],
+      "exit": [
+        ["@high_rate", "off"]
+      ]
+    }
+  },{
+    "mode": ["balance"],
+    "booster": {
+      "events": ["presets"],
+      "duration": 2000,
+      "idle_delay": 2000,
+      "enter": [
+        ["$sched_group_up", "10"],
+        ["$stune_top_perf", "1"],
+        ["@high_rate", "on"]
+      ],
+      "exit": [
+        ["@high_rate", "off"]
+      ]
+    }
+  },{
+    "mode": ["performance", "fast"],
+    "disable": true,
+    "booster": {
+      "events": ["presets"],
+      "duration": 2000,
+      "enter": [
+        ["$stune_top_boost", "100"],
+        ["$stune_top_perf", "1"],
+        ["$sched_boost", "2"]
+      ],
+      "exit": [
+        ["$sched_boost", "0"]
+      ]
+    }
+  }]
+}

@@ -1,0 +1,53 @@
+{
+  "friendly": "音乐APP",
+  "packages": [
+    "com.netease.cloudmusic",
+    "com.kugou.android",
+    "com.kugou.android.lite"
+  ],
+  "stop_on": [],
+  "sensors": [],
+  "modes": [{
+    "mode": ["powersave", "balance"],
+    "booster": {
+      "events": ["presets"],
+      "duration": 1500,
+      "idle_delay": 3000,
+      "enter": [
+        ["$core_ctl_4", "0"],
+        ["$core_ctl_7", "0"],
+        ["$cpuset_top", "0-7"],
+        ["$cpuset_fg", "0-7"],
+        ["@uclamp", "0.00~max", "1.00~max", "1.00~max"],
+        ["@high_rate", "on"]
+      ],
+      "exit": [
+        ["$cpuset_top", "0-6"],
+        ["$cpuset_fg", "0-6"],
+        ["$cpu_max_0", "1708800"],
+        ["$cpu_max_4", "1555200"],
+        ["$cpu_max_7", "1555200"],
+        ["@uclamp", "0.00~1.00", "0.00~20.00", "0.00~max"],
+        ["@high_rate", "off"]
+      ]
+    }
+  },{
+    "mode": ["performance", "fast"],
+    "booster": {
+      "events": ["presets"],
+      "duration": 1500,
+      "idle_delay": 4000,
+      "enter": [
+        ["$cpuset_top", "0-7"],
+        ["@uclamp", "0.00~max", "1.00~max", "1.00~max"],
+        ["@high_rate", "on"]
+      ],
+      "exit": [
+        ["@uclamp", "0.00~20.00", "0.00~max", "0.00~max"],
+        ["$cpuset_top", "0-6"],
+        ["$cpuset_fg", "0-6"],
+        ["@high_rate", "off"]
+      ]
+    }
+  }]
+}

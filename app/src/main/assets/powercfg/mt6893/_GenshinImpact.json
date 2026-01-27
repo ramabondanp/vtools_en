@@ -1,0 +1,168 @@
+{
+  "friendly": "原神",
+  "call": [["@high_rate", "on"]],
+  "packages": [
+    "com.miHoYo.Yuanshen",
+    "com.miHoYo.ys.mi",
+    "com.miHoYo.ys.bilibili",
+    "com.miHoYo.GenshinImpact"
+  ],
+  "affinity": {
+    "cpuset_mode": "coexist",
+    "comm": {
+      "80": ["UnityGfx"],
+      "70": ["UnityPreload", "UnityMultiRende", "UnityMain"],
+      "3F": ["Thread-", "FMOD", "UnityChoreograp", "ged-swd", "AsyncReadManage", "Worker Thread", "NativeThread"],
+      "F": ["MIHOYO_NETWORK", "mali-cmar-backe", "mali-event-", "mali-cpu-", "mali-mem-", "Audio", "tp_schedule"]
+    },
+    "other": "3F"
+  },
+  "modes": [
+    {
+      "mode": ["powersave"],
+      "booster": {
+        "events": ["presets"],
+        "duration": 20000,
+        "enter": [
+          ["$min_cpu_freq", "0 1525000|1 902000|2 659000"],
+          ["$max_cpu_freq", "0 2000000|1 1624000|2 1985000"],
+          ["$gpu_max_opp", "32"],
+          ["$util_max_top", "1024"],
+          ["$util_max_bg", "100"],
+          ["$util_max_fg", "1024"],
+          ["$deisolation", "4|5|6|7"]
+        ],
+        "exit": [
+          ["$min_cpu_freq", "0 500000|1 437000|2 659000"],
+          ["$max_cpu_freq", "0 1525000|1 902000|2 921000"],
+          ["$gpu_max_opp", "40"],
+          ["$util_max_top", "0"],
+          ["$util_max_bg", "0"],
+          ["$util_max_fg", "0"],
+          ["$deisolation", "4|5|6|7"]
+        ]
+      }
+    },
+    {
+      "mode": ["balance"],
+      "booster": {
+        "events": ["presets"],
+        "duration": 30000,
+        "enter": [
+          ["$min_cpu_freq", "0 1525000|1 902000|2 659000"],
+          ["$max_cpu_freq", "0 2000000|1 1855000|2 2284000"],
+          ["$gpu_max_opp", "27"],
+          ["$util_max_top", "1024"],
+          ["$util_max_bg", "100"],
+          ["$util_max_fg", "1024"],
+          ["$deisolation", "4|5|6|7"]
+        ],
+        "exit": [
+          ["$min_cpu_freq", "0 500000|1 437000|2 659000"],
+          ["$max_cpu_freq", "0 1525000|1 902000|2 921000"],
+          ["$gpu_max_opp", "40"],
+          ["$util_max_top", "0"],
+          ["$util_max_bg", "0"],
+          ["$util_max_fg", "0"],
+          ["$deisolation", "4|5|6|7"]
+        ]
+      }
+    },
+    {
+      "mode": ["performance"],
+      "Call": [
+      ],
+      "sensors": [
+        {
+          "sensor": "mtktscpu",
+          "disable": false,
+          "interval": 100,
+          "rules": [
+            {
+              "threshold": [-1, 108000],
+              "enter": [ ["$gpu_max_opp", "35"], ["$max_cpu_freq", "1 1451000|2 1482000"] ]
+            },
+            {
+              "threshold": [107000, 103500],
+              "enter": [ ["$gpu_max_opp", "32"], ["$max_cpu_freq", "1 1740000|2 1998000"] ]
+            },
+            {
+              "threshold": [103000, 98500],
+              "enter": [ ["$gpu_max_opp", "28"], ["$max_cpu_freq", "1 1985000|2 2284000"] ]
+            },
+            {
+              "threshold": [98000, 94500],
+              "enter": [ ["$gpu_max_opp", "28"], ["$max_cpu_freq", "1 2200000|2 2463000"] ]
+            },
+            {
+              "threshold": [94000, 86000],
+              "enter": [ ["$gpu_max_opp", "25"], ["$max_cpu_freq", "1 2600000|2 2600000"] ]
+            },
+            {
+              "threshold": [80000, -1],
+              "enter": [ ["$gpu_max_opp", "21"], ["$max_cpu_freq", "1 2600000|2 2713000"] ]
+            }
+          ]
+        }
+      ],
+      "booster": {
+        "events": ["presets"],
+        "duration": 30000,
+        "enter": [
+          ["$deisolation", "4|5|6|7"]
+        ],
+        "exit": [
+          ["$deisolation", "4|5|6|7"]
+        ]
+      }
+    },
+    {
+      "mode": ["fast", "pedestal"],
+      "sensors": [
+        {
+          "sensor": "mtktscpu",
+          "disable": false,
+          "interval": 200,
+          "rules": [
+            {
+              "threshold": [-1, 110000],
+              "enter": [["$gpu_max_opp", "35"], ["$max_cpu_freq", "1 1451000|2 1482000"]]
+            },
+            {
+              "threshold": [110000, 105000],
+              "enter": [["$gpu_max_opp", "32"], ["$max_cpu_freq", "1 1740000|2 1998000"]]
+            },
+            {
+              "threshold": [105000, 100000],
+              "enter": [["$gpu_max_opp", "32"], ["$max_cpu_freq", "1 1985000|2 2284000"]]
+            },
+            {
+              "threshold": [100000, 95000],
+              "enter": [["$gpu_max_opp", "28"], ["$max_cpu_freq", "1 2354000|2 2600000"]]
+            },
+            {
+              "threshold": [95000, 90000],
+              "enter": [["$gpu_max_opp", "21"], ["$max_cpu_freq", "1 2600000|2 2713000"]]
+            },
+            {
+              "threshold": [83000, -1],
+              "enter": [["$gpu_max_opp", "07"], ["$max_cpu_freq", "1 2600000|2 3000000"]]
+            }
+          ]
+        }
+      ],
+      "Call": [
+      ],
+      "booster": {
+        "events": ["presets"],
+        "duration": 30000,
+        "enter": [
+          ["$deisolation", "4|5|6|7"]
+        ],
+        "exit": [
+          ["$deisolation", "4|5|6|7"]
+        ]
+      }
+    }
+  ]
+}

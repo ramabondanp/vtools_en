@@ -1,0 +1,28 @@
+{
+  "friendly": "扫码",
+  "packages": [
+    "com.tencent.mm.plugin.scanner.ui.BaseScanUI",
+    "com.tencent.mobileqq.olympic.activity.ScanTorchActivity",
+    "com.tencent.mobileqq.olympic.activity.ScanTorchActivity",
+    "com.alipay.mobile.scan.as.main.MainCaptureActivity",
+    "com.jd.lib.scan.lib.zxing.client.android.CaptureActivity",
+    "com.etao.feimagesearch.capture.CaptureActivity"
+  ],
+  "call": [
+    ["$uclamp_heavy", "1"],
+    ["@cpuset", "1", "0-4", "0-7", "0-7"],
+    ["@cpu_freq", "policy0", "1555200", "max"],
+    ["@cpu_freq", "policy4", "2112000", "max"],
+    ["@cpu_freq", "policy7", "2131200", "max"],
+    ["@uclamp", "0.00~max", "1.0~max", "2.00~max"],
+    ["$max_cpus_cpu7", "1"],
+    ["$mi_thermal", "10"]
+  ],
+  "booster": {
+    "events": ["presets"],
+    "duration": 2000,
+    "idle_delay": 2000,
+    "enter": [ ["@high_rate", "on"] ],
+    "exit": [ ["@high_rate", "off"] ]
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "friendly": "和平精英",
+  "packages": ["com.tencent.tmgp.pubgmhd",  "com.tencent.ig"],
+  "call": [["@high_rate", "on"]],
+  "sensors": [],
+  "affinity": {
+    "interval": 1000,
+    "comm": {
+      "80": ["RenderThread"],
+      "70": ["Thread-", "TaskGraphNP"]
+    },
+    "other": "7f"
+  },
+  "modes": [
+    {
+      "mode": ["powersave"],
+      "affinity": {
+        "interval": 1000,
+        "comm": {
+          "F0": ["RenderThread"],
+          "70": ["Thread-", "TaskGraphNP"]
+        },
+        "other": "7f"
+      }
+    },
+    {
+      "mode": ["performance"],
+      "booster": {
+        "events": ["presets"],
+        "duration": 2000,
+        "enter": [ ["$stune_top_boost", "10"] ],
+        "exit": [ ["$sched_boost", "0"] ]
+      }
+    },
+    {
+      "mode": ["fast"],
+      "booster": {
+        "events": ["presets"],
+        "duration": 2000,
+        "enter": [ ["$stune_top_boost", "60"] ],
+        "exit": [ ["$sched_boost", "0"] ]
+      }
+    }
+  ]
+}

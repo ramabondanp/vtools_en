@@ -1,0 +1,86 @@
+{
+  "friendly": "社交APP",
+  "packages": [
+    "com.tencent.mobileqq",
+    "com.tencent.mm",
+    "com.tencent.tim",
+    "org.telegram.messenger"
+  ],
+  "modes": [{
+    "mode": ["powersave"],
+    "call": [
+      ["@sched_limit", "0 2000", "0 8000", "0 8000"],
+      ["$fpsgo_enable", "0"]
+    ],
+    "booster": {
+      "events": ["presets"],
+      "duration": 2000,
+      "idle_delay": 2000,
+      "enter": [
+        ["$max_cpu_freq", "0 1725000|1 1622000|2 1632000"],
+        ["$min_cpu_freq", "0 1250000|1 902000|2 659000"],
+        ["$cpuset_top", "0-7"],
+        ["$cpuset_fg", "0-7"],
+        ["$util_max_fg", "1024"],
+        ["$util_min_fg", "0"],
+        ["$util_max_top", "1024"],
+        ["$util_min_top", "0"],
+        ["$util_min_bg", "1024"],
+        ["$util_max_bg", "0"],
+        ["@high_rate", "on"]
+      ],
+      "exit": [
+        ["$util_max_fg", "100"],
+        ["$util_min_fg", "0"],
+        ["$util_max_top", "1024"],
+        ["$util_min_top", "0"],
+        ["$max_cpu_freq", "0 1725000|1 1162000|2 659000"],
+        ["$min_cpu_freq", "0 500000|1 437000|2 659000"],
+        ["$stune_top_boost", "0"],
+        ["$stune_top_perf", "0"],
+        ["$cpuset_top", "0-6"],
+        ["$cpuset_fg", "0-6"],
+        ["@high_rate", "off"]
+      ]
+    }
+  }, {
+    "mode": ["balance"],
+    "call": [
+      ["@sched_limit", "0 1000", "0 6000", "0 6000"],
+      ["$fpsgo_enable", "0"]
+    ],
+    "booster": {
+      "events": ["presets"],
+      "duration": 2000,
+      "idle_delay": 2000,
+      "enter": [
+        ["$max_cpu_freq", "0 1800000|1 1985000|2 2284000"],
+        ["$min_cpu_freq", "0 1250000|1 1046000|2 659000"],
+        ["$cpuset_fg", "0-7"],
+        ["$util_max_fg", "1024"], ["$util_min_fg", "0"],
+        ["$util_max_top", "1024"], ["$util_min_top", "0"],
+        ["$util_min_bg", "1024"], ["$util_max_bg", "0"],
+        ["@high_rate", "on"]
+      ],
+      "exit": [
+        ["$util_max_fg", "200"], ["$util_min_fg", "0"],
+        ["$util_max_top", "1024"], ["$util_min_top", "0"],
+        ["$max_cpu_freq", "0 1725000|1 1624000|2 659000"],
+        ["$min_cpu_freq", "0 500000|1 437000|2 659000"],
+        ["$stune_top_boost", "0"],
+        ["$stune_top_perf", "0"],
+        ["$cpuset_fg", "0-6"],
+        ["@high_rate", "off"]
+      ]
+    }
+  }, {
+    "mode": ["*"],
+    "booster": {
+      "events": ["presets"],
+      "duration": 2000,
+      "idle_delay": 2000,
+      "enter": [ ["@high_rate", "on"] ],
+      "exit": [ ["@high_rate", "off"] ]
+    }
+  }]
+}

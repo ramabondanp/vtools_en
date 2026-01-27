@@ -1,0 +1,54 @@
+{
+  "friendly": "All",
+  "packages": ["*"],
+  "stop_on": [],
+  "modes": [{
+    "mode": ["powersave"],
+    "booster": {
+      "events": ["presets"],
+      "duration": 2000,
+      "idle_delay": 2000,
+      "enter": [
+        ["$cpuset_top", "0-7"],
+        ["$cpu_min_0", "902400"],
+        ["$cpu_min_4", "844800"],
+        ["@uclamp", "0.00~max", "1.00~max", "1.00~max"],
+        ["$core_ctl_4", "0"],
+        ["@high_rate", "on"]
+      ],
+      "exit": [
+        ["@uclamp", "0.00~0.00", "0.00~1.00", "0.00~2.00"],
+        ["$cpu_min_0", "300000"],
+        ["$cpu_min_4", "710400"],
+        ["@high_rate", "off"]
+      ]
+    }
+  },{
+    "mode": ["balance"],
+    "booster": {
+      "events": ["presets"],
+      "duration": 2000,
+      "enter": [
+        ["$cpuset_top", "0-7"],
+        ["@uclamp", "0.00~max", "1.00~max", "1.00~max"]
+      ],
+      "exit": [
+        ["@uclamp", "0.00~max", "0.00~max", "0.00~max"]
+      ]
+    }
+  },{
+    "mode": ["performance", "fast"],
+    "disable": true,
+    "booster": {
+      "events": ["presets"],
+      "duration": 2000,
+      "enter": [
+        ["$cpuset_top", "0-7"],
+        ["@uclamp", "0.00~max", "0.00~max", "1.00~max"]
+      ],
+      "exit": [
+        ["@uclamp", "0.00~max", "0.00~max", "0.00~max"]
+      ]
+    }
+  }]
+}

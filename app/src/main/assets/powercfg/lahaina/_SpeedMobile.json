@@ -1,0 +1,60 @@
+{
+  "friendly": "QQ飞车",
+  "packages": ["com.tencent.tmgp.speedmobile", "com.garena.game.fctw"],
+  "call": [
+    ["$mi_thermal", "13"],
+    ["@high_rate", "on"],
+    ["@uclamp", "0.00~max", "1.00~max", "1.00~max"]
+  ],
+  "sensors": [],
+  "modes": [
+    {
+      "mode": ["balance"],
+      "affinity": {
+        "interval": 3000,
+        "comm": {
+          "80": ["UnityMain"]
+        },
+        "other": ""
+      },
+      "booster": {
+        "os_blacklist": ["Android12_130"],
+        "events": ["presets"],
+        "duration": 2000,
+        "enter": [
+          ["$cpu_min_0", "1708800"],
+          ["$cpu_min_4", "1766400"],
+          ["$cpu_min_7", "1785600"]
+        ],
+        "exit": [
+          ["$cpu_min_4", "825600"]
+        ]
+      }
+    },
+    {
+      "mode": ["performance"],
+      "affinity": {
+        "interval": 1000,
+        "comm": {
+          "80": ["UnityMain"]
+        },
+        "other": ""
+      },
+      "booster": {
+        "os_blacklist": ["Android12_130"],
+        "events": ["presets"],
+        "duration": 2000,
+        "enter": [
+          ["$cpu_min_0", "1708800"],
+          ["$cpu_min_4", "1766400"],
+          ["$cpu_min_7", "1785600"],
+          ["$stune_top_boost", "10"],
+          ["$stune_top_perf", "1"]
+        ],
+        "exit": [
+          ["$cpu_min_4", "825600"]
+        ]
+      }
+    }
+  ]
+}

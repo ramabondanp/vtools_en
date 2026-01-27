@@ -1,0 +1,41 @@
+{
+  "friendly": "3DMark",
+  "packages": [
+    "com.futuremark.dmandroid.application"
+  ],
+  "call": [
+    ["@preset", "perf_fg_opt"],
+    ["$ddr_freq_min", "#6400000000"],
+    ["$max_cpus_cpu7", "0"],
+    ["@cpu_freq", "cpu0", "500MHz", "1000MHz"],
+    ["@cpu_freq", "cpu4", "800MHz", "1500MHz"],
+    ["@cpu_freq", "cpu7", "1300000", "min"],
+    ["$mi_thermal", "10"],
+    ["@high_rate", "off"]
+  ],
+  "modes": [{
+    "mode": ["powersave"],
+    "call": [
+      ["@perf_turbo", "mt6983", "perf", "3"],
+      ["@cpuset", "0-2", "3-4", "0-7", "0-7"]
+    ]
+  }, {
+    "mode": ["balance"],
+    "call": [
+      ["@perf_turbo", "mt6983", "perf", "1"],
+      ["@cpuset", "0-2", "3-4", "0-7", "0-7"]
+    ]
+  }, {
+    "mode": ["performance"],
+    "call": [
+      ["@perf_turbo", "mt6983", "perf", "0"],
+      ["@cpuset", "0-2", "3-4", "0-7", "0-7"]
+    ]
+  }, {
+    "mode": ["*"],
+    "call": [
+      ["@perf_turbo", "mt6983", "perf", "0"],
+      ["@cpuset", "0-2", "3-4", "4-7", "4-7"]
+    ]
+  }]
+}

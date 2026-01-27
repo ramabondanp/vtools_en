@@ -1,0 +1,22 @@
+{
+  "friendly": "幻塔",
+  "packages": [
+    "com.dw.h5yvzr.yt",
+    "com.pwrd.hotta.laohu",
+    "com.hottagames.hotta.bilibili",
+    "com.hottagames.hotta.mi"
+  ],
+  "call": [
+    ["@cpuset", "0", "0", "0-7", "0-7"],
+    ["$mi_thermal", "13"]
+  ],
+  "sensors": [],
+  "affinity": {
+    "interval": 1000,
+    "comm": {
+      "80": ["GameThread"],
+      "F0": ["RenderThread", "RHIThread"]
+    },
+    "other": "7f"
+  }
+}

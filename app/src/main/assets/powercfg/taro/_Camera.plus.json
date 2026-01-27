@@ -1,0 +1,54 @@
+{
+  "friendly": "相机",
+  "packages": [
+    "com.tencent.mm.plugin.recordvideo.activity.MMRecordUI",
+    "com.tencent.aelight.camera.aebase.QIMCameraCaptureActivity",
+    "dov.com.qq.im.QIMCameraCaptureActivity",
+    "com.googleCamera.Wichaya8",
+    "com.accordion.analogcam.cn",
+    "org.codeaurora.snapcam",
+    "com.android.camera",
+    "com.xiaomi.scanner",
+    "com.blink.academy.protake",
+    "com.benqu.wuta",
+    "com.gorgeous.lite",
+    "com.kwai.m2u",
+    "com.meitu.meiyancamera",
+    "com.yiruike.sodacn.android",
+    "com.lemon.faceu",
+    "com.mt.mtxx.mtxx"
+  ],
+  "call": [
+    ["@uclamp", "0.00~max", "0.00~max", "0.00~max"],
+    ["@cpuset", "0-1", "0-4", "0-7", "0-7"]
+  ],
+  "booster": {
+    "events": ["presets"],
+    "duration": 2000,
+    "idle_delay": 2000,
+    "enter": [ ["@high_rate", "on"] ],
+    "exit": [ ["@high_rate", "off"] ]
+  },
+  "modes": [{
+    "mode": ["powersave", "balance"],
+    "booster": {
+      "events": ["presets"],
+      "duration": 3000,
+      "idle_delay": 8000,
+      "enter": [
+        ["@cpu_freq", "policy0", "1228800", "1804800"],
+        ["@cpu_freq", "policy4", "1651200", "2572800"],
+        ["@cpu_freq", "policy7", "1651200", "2918400"],
+        ["$max_cpus_cpu7", "1"],
+        ["@high_rate", "on"]
+      ],
+      "exit": [
+        ["@cpu_freq", "policy0", "307200", "max"],
+        ["@cpu_freq", "policy4", "633600", "2227200"],
+        ["@cpu_freq", "policy7", "787200", "1996800"],
+        ["$max_cpus_cpu7", "0"],
+        ["@high_rate", "off"]
+      ]
+    }
+  }]
+}

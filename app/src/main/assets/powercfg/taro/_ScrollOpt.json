@@ -1,0 +1,70 @@
+{
+  "friendly": "提高滑动性能",
+  "packages": [
+    "com.taobao.idlefish",
+    "com.taobao.taobao",
+    "com.android.browser",
+    "com.baidu.tieba_mini",
+    "com.baidu.tieba",
+    "com.jingdong.app.mall",
+    "com.tmall.wireless",
+    "com.sankuai.meituan",
+    "com.pupumall.customer",
+    "com.eg.android.AlipayGphone",
+    "com.android.vending",
+    "cn.xiaochuankeji.tieba",
+    "com.mfw.roadbook"
+  ],
+  "sensors": [],
+  "modes": [{
+    "mode": ["powersave"],
+    "booster": {
+      "events": ["presets"],
+      "duration": 3000,
+      "enter": [
+        ["$core_ctl_7", "0"],
+        ["$cpuset_top", "0-7"],
+        ["@uclamp", "0.00~10.00", "1.00~max", "1.00~max"],
+        ["@high_rate", "on"]
+      ],
+      "exit": [
+        ["@uclamp", "0.00~0.00", "0.00~10.00", "0.00~15.00"],
+        ["@high_rate", "off"]
+      ]
+    }
+  },{
+    "mode": ["balance"],
+    "booster": {
+      "events": ["presets"],
+      "duration": 2000,
+      "enter": [
+        ["$cpu_min_0", "1075200"],
+        ["$cpu_min_4", "1113600"],
+        ["$cpuset_top", "0-7"],
+        ["@uclamp", "0.00~max", "1.00~max", "1.00~max"],
+        ["@high_rate", "on"]
+      ],
+      "exit": [
+        ["$cpu_min_0", "307200"],
+        ["$cpu_min_4", "633600"],
+        ["@uclamp", "0.00~0.00", "0.00~15.00", "0.00~25.00"],
+        ["@high_rate", "off"]
+      ]
+    }
+  },{
+    "mode": ["performance", "fast"],
+    "booster": {
+      "events": ["presets"],
+      "duration": 2000,
+      "enter": [
+        ["$cpuset_top", "0-7"],
+        ["@uclamp", "0.00~max", "1.00~max", "1.00~max"],
+        ["@high_rate", "on"]
+      ],
+      "exit": [
+        ["@uclamp", "0.00~10.00", "0.00~max", "0.00~max"],
+        ["@high_rate", "off"]
+      ]
+    }
+  }]
+}

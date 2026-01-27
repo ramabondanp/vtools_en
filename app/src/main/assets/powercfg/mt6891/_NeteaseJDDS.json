@@ -1,0 +1,54 @@
+{
+      "friendly": "机动都市阿尔法",
+  "packages": ["com.netease.jddsaef"],
+  "cpuset": {
+    "heavy_thread": "Thread-",
+    "heavy_cores": "7",
+    "other": "0-6"
+  },
+  "call": [ ["$dram_boost", "1"] ],
+  "booster": {
+    "events": ["presets"],
+    "duration": 3000,
+    "enter": [ ["$deisolation", "4|5|6|7"] ],
+    "exit": [ ["$deisolation", "4|5|6|7"] ]
+  },
+  "modes": [{
+    "mode": ["powersave"],
+    "call": [
+      ["$min_cpu_freq", "0 1450000|1 1537000|2 1632000"],
+      ["$max_cpu_freq", "0 2000000|1 2200000|2 2284000"],
+      ["@sched_limit", "16000 0", "16000 0", "16000 0"],
+      ["$gpu_dvfs_margin", "17"]
+    ]
+  }, {
+    "mode": ["balance"],
+    "call": [
+      ["$min_cpu_freq", "0 1625000|1 1537000|2 1632000"],
+      ["$max_cpu_freq", "0 2000000|1 2600000|2 2600000"],
+      ["@sched_limit", "16000 0", "16000 0", "16000 0"],
+      ["$gpu_dvfs_margin", "20"]
+    ]
+  }, {
+    "mode": ["performance"],
+    "call": [
+      ["$min_cpu_freq", "0 1800000|1 1855000|2 1820000"],
+      ["$max_cpu_freq", "0 2000000|1 2600000|2 2713000"],
+      ["$util_min_top", "0"],
+      ["$stune_boost", "30"],
+      ["@sched_limit", "16000 0", "16000 0", "16000 0"],
+      ["$gpu_dvfs_margin", "25"]
+    ]
+  }, {
+    "mode": ["fast"],
+    "logger": true,
+    "call": [
+      ["$min_cpu_freq", "0 1800000|1 2200000|2 2292000"],
+      ["$max_cpu_freq", "0 2000000|1 2600000|2 2600000"],
+      ["$util_min_top", "0"],
+      ["$stune_boost", "70"],
+      ["@sched_limit", "16000 0", "16000 0", "16000 0"],
+      ["$gpu_dvfs_margin", "28"]
+    ]
+  }]
+}

@@ -1,0 +1,59 @@
+{
+  "friendly": "抖音、西瓜、快手",
+  "packages": ["com.ss.android.ugc.aweme", "com.ss.android.ugc.aweme.lite", "com.ss.android.article.video", "com.smile.gifmaker"],
+  "modes": [{
+    "mode": ["powersave"],
+    "call": [ ["$core_ctl_4", "0"] ],
+    "booster": {
+      "events": ["presets"],
+      "duration": 2000,
+      "idle_delay": 2000,
+      "enter": [
+        ["$cpuset_top", "0-7"], ["$cpuset_fg", "0-7"],
+        ["$core_ctl_4", "0"], ["$core_ctl_7", "0"],
+        ["$cpu_max_0", "1708800"], ["$cpu_max_4", "1670400"], ["$cpu_max_7", "1632000"],
+        ["$stune_top_perf", "1"],
+        ["@high_rate", "on"]
+      ],
+      "exit": [
+        ["$cpuset_top", "0-7"], ["$cpuset_fg", "1-4"],
+        ["$cpu_max_0", "1708800"], ["$cpu_max_4", "1286400"], ["$cpu_max_7", "960000"],
+        ["$stune_top_boost", "0"], ["$stune_top_perf", "0"],
+        ["@high_rate", "off"]
+      ]
+    }
+  }, {
+    "mode": ["balance"],
+    "booster": {
+      "events": ["presets"],
+      "duration": 2000,
+      "idle_delay": 2000,
+      "enter": [
+        ["$cpuset_top", "0-7"],
+        ["$cpu_max_0", "1804800"], ["$cpu_max_4", "1766400"], ["$cpu_max_7", "1862400"],
+        ["$stune_top_boost", "1"], ["$stune_top_perf", "1"],
+        ["@high_rate", "on"]
+      ],
+      "exit": [
+        ["$cpuset_top", "0-7"],
+        ["$cpu_max_0", "1708800"], ["$cpu_max_4", "1670400"], ["$cpu_max_7", "1632000"],
+        ["$stune_top_boost", "0"], ["$stune_top_perf", "0"],
+        ["@high_rate", "off"]
+      ]
+    }
+  }, {
+    "mode": ["performance", "fast"],
+    "booster": {
+      "events": ["presets"],
+      "duration": 2000,
+      "enter": [
+        ["$cpuset_top", "0-7"],
+        ["$stune_top_boost", "10"], ["$stune_top_perf", "1"],
+        ["@high_rate", "on"]
+      ],
+      "exit": [
+        ["@high_rate", "off"]
+      ]
+    }
+  }]
+}

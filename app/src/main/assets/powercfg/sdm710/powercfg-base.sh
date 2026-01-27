@@ -27,7 +27,7 @@ chmod 0755 /sys/devices/system/cpu/cpu7/online
 # Enable input boost configuration
 echo "0:1324800" > /sys/module/cpu_boost/parameters/input_boost_freq
 echo 40 > /sys/module/cpu_boost/parameters/input_boost_ms
-echo "0:0 1:0 2:0 3:0 4:0 5:0 6:2208000 7:0" > /sys/module/cpu_boost/parameters/powerkey_input_boost_freq
+echo "0:1708800 1:1708800 2:1708800 3:1708800 4:1708800 5:1708800 6:2208000 7:2208000" > /sys/module/cpu_boost/parameters/powerkey_input_boost_freq
 echo 400 > /sys/module/cpu_boost/parameters/powerkey_input_boost_ms
 echo 'Y' > /sys/module/cpu_boost/parameters/sched_boost_on_powerkey_input
 #echo 'Y' > /sys/module/cpu_boost/parameters/sched_boost_on_input
@@ -58,8 +58,8 @@ echo 3 > /proc/sys/vm/page-cluster
 echo 4000 > /proc/sys/vm/dirty_expire_centisecs
 echo 6000 > /proc/sys/vm/dirty_writeback_centisecs
 
-echo 256 > /sys/block/sda/queue/read_ahead_kb
-echo 0 > /sys/block/sda/queue/iostats
+# echo 256 > /sys/block/sda/queue/read_ahead_kb
+# echo 0 > /sys/block/sda/queue/iostats
 
 echo 0 > /sys/module/lowmemorykiller/parameters/enable_adaptive_lmk
 echo 5 > /proc/sys/vm/dirty_background_ratio
@@ -89,3 +89,8 @@ echo 0-7 > /dev/cpuset/foreground/cpus
 echo 0-7 > /dev/cpuset/top-app/cpus
 
 echo 1 > /proc/sys/kernel/sched_prefer_sync_wakee_to_waker
+stop perfd
+
+echo 0 > /sys/module/msm_thermal/core_control/enabled
+echo 0 > /sys/module/msm_thermal/vdd_restriction/enabled
+echo N > /sys/module/msm_thermal/parameters/enabled

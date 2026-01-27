@@ -1,0 +1,37 @@
+{
+  "friendly": "幻塔",
+  "packages": [
+    "com.dw.h5yvzr.yt",
+    "com.pwrd.hotta.laohu",
+    "com.hottagames.hotta.bilibili",
+    "com.hottagames.hotta.mi"
+  ],
+  "sensors": [],
+  "affinity": {
+    "interval": 1000,
+    "comm": {
+      "80": ["GameThread"],
+      "70": ["RenderThread", "RHIThread"]
+    },
+    "other": "ff"
+  },
+  "modes": [
+    {
+      "mode": ["*"],
+      "booster": {
+        "events": ["presets"],
+        "duration": 20000,
+        "enter": [
+          ["$util_max_top", "1024"],
+          ["$util_max_bg", "100"],
+          ["$util_max_fg", "1024"],
+          ["$deisolation", "4|5|6|7"]
+        ],
+        "exit": [
+          ["$util_max_bg", "0"],
+          ["$deisolation", "4|5|6|7"]
+        ]
+      }
+    }
+  ]
+}

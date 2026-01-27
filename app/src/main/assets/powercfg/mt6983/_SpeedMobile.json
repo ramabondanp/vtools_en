@@ -1,0 +1,29 @@
+{
+  "friendly": "QQ飞车",
+  "packages": ["com.tencent.tmgp.speedmobile", "com.garena.game.fctw"],
+  "sensors": [],
+  "call": [ ["@high_rate", "on"] ],
+  "cpuset": {
+    "interval": 3000,
+    "unity_main": "7",
+    "other": "0-6"
+  },
+  "modes": [
+    {
+      "mode": ["powersave"],
+      "booster": {
+        "events": ["presets"],
+        "duration": 5000,
+        "idle_delay": 2000,
+        "enter": [
+          ["@preset", "perf_gaming"],
+          ["@high_rate", "on"]
+        ],
+        "exit": [
+          ["@preset", "perf_fg_opt"],
+          ["@high_rate", "off"]
+        ]
+      }
+    }
+  ]
+}

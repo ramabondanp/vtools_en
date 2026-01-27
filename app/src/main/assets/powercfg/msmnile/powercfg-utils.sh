@@ -93,24 +93,14 @@ restore_core_online() {
   done
 }
 
-
 reset_basic_governor() {
   set_core_online
 
   # CPU
-  governor0=`cat /sys/devices/system/cpu/cpufreq/policy0/scaling_governor`
-  governor4=`cat /sys/devices/system/cpu/cpufreq/policy4/scaling_governor`
-  governor7=`cat /sys/devices/system/cpu/cpufreq/policy7/scaling_governor`
-
-  if [[ ! "$governor0" = "schedutil" ]]; then
-    echo 'schedutil' > /sys/devices/system/cpu/cpufreq/policy0/scaling_governor
-  fi
-  if [[ ! "$governor4" = "schedutil" ]]; then
-    echo 'schedutil' > /sys/devices/system/cpu/cpufreq/policy4/scaling_governor
-  fi
-  if [[ ! "$governor7" = "schedutil" ]]; then
-    echo 'schedutil' > /sys/devices/system/cpu/cpufreq/policy7/scaling_governor
-  fi
+  policy=/sys/devices/system/cpu/cpufreq/
+  ls $policy | while read cluster; do
+    set_value schedutil ${policy}${cluster}/scaling_governor
+  done
 
   # GPU
   gpu_governor=`cat /sys/class/kgsl/kgsl-3d0/devfreq/governor`
@@ -238,6 +228,14 @@ set_value() {
   fi;
 }
 
+lock_value() {
+  if [[ -f $2 ]];then
+    chmod 644 $2
+    echo $1 > $2
+    chmod 444 $2
+  fi
+}
+
 set_input_boost_freq() {
   local c0="$1"
   local c1="$2"
@@ -251,10 +249,13 @@ set_cpu_freq() {
   echo "0:$2 1:$2 2:$2 3:$2 4:$4 5:$4 6:$4 7:$6" > /sys/module/msm_performance/parameters/cpu_max_freq
   echo $1 > /sys/devices/system/cpu/cpufreq/policy0/scaling_min_freq
   echo $2 > /sys/devices/system/cpu/cpufreq/policy0/scaling_max_freq
+  echo $1 > /sys/devices/system/cpu/cpufreq/policy0/scaling_min_freq
   echo $3 > /sys/devices/system/cpu/cpufreq/policy4/scaling_min_freq
   echo $4 > /sys/devices/system/cpu/cpufreq/policy4/scaling_max_freq
+  echo $3 > /sys/devices/system/cpu/cpufreq/policy4/scaling_min_freq
   echo $5 > /sys/devices/system/cpu/cpufreq/policy7/scaling_min_freq
   echo $6 > /sys/devices/system/cpu/cpufreq/policy7/scaling_max_freq
+  echo $5 > /sys/devices/system/cpu/cpufreq/policy7/scaling_min_freq
 }
 
 sched_config() {
@@ -655,19 +656,19 @@ adjustment_by_top_app() {
       if [[ "$action" == "powersave" ]]; then
         sched_boost 1 1
         stune_top_app 1 0
-        sched_config "50 55" "70 70" "85" "100"
+        # sched_config "50 55" "70 70" "85" "100"
       elif [[ "$action" == "balance" ]]; then
         sched_boost 1 1
         stune_top_app 1 0
-        sched_config "50 52" "65 68" "85" "100"
+        # sched_config "50 52" "65 68" "85" "100"
       elif [[ "$action" == "performance" ]]; then
         sched_boost 1 1
         stune_top_app 1 0
-        sched_config "45 52" "55 65" "85" "100"
+        # sched_config "45 52" "55 65" "85" "100"
       else
         sched_boost 1 1
         stune_top_app 1 10
-        sched_config "45 48" "55 60" "85" "100"
+        # sched_config "45 48" "55 60" "85" "100"
       fi
     ;;
 
@@ -776,7 +777,7 @@ adjustment_by_top_app() {
     ;;
 
     # DouYin, BiliBili
-    "com.ss.android.ugc.aweme" | "tv.danmaku.bili")
+    "com.ss.android.ugc.aweme" | "tv.danmaku.bili"|"com.bilibili.app.in")
       ctl_on cpu4
       ctl_on cpu7
       set_ctl cpu4 85 45 0

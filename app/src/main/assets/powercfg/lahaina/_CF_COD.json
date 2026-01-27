@@ -1,0 +1,19 @@
+{
+  "friendly": "穿越火线，使命召唤",
+  "packages": ["com.tencent.tmgp.cf", "com.tencent.tmgp.cod"],
+  "call": [
+    ["$mi_thermal", "13"],
+    ["@high_rate", "on"]
+  ],
+  "sensors": [],
+  "affinity": {
+    "interval": 500,
+    "unity_main": "80",
+    "comm": {
+      "80": ["Apollo-Source", "Apollo-File", "UnityMain"],
+      "F0": ["UnityGfx", "UnityCCeograp"],
+      "7f": ["ace_worker"]
+    },
+    "other": "7f"
+  }
+}

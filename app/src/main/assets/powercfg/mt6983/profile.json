@@ -1,0 +1,447 @@
+{
+  "platform": "mt6983",
+  "platform_name": "D9000",
+  "framework": 130,
+  "alias": {
+    "gpu_fixed": "/proc/gpufreqv2/fix_target_opp_index",
+    "gpu_freq": "/sys/kernel/ged/hal/custom_upbound_gpu_freq",
+    "boost_affinity": "/sys/module/mtk_fpsgo/parameters/boost_affinity",
+    "max_cpus_cpu0": "/sys/devices/system/cpu/cpu0/core_ctl/max_cpus",
+    "max_cpus_cpu4": "/sys/devices/system/cpu/cpu4/core_ctl/max_cpus",
+    "max_cpus_cpu7": "/sys/devices/system/cpu/cpu7/core_ctl/max_cpus",
+    "uclamp_heavy": "/dev/cpuctl/heavy/cpu.uclamp.min",
+    "ddr_freq_min": "/sys/devices/platform/1c00f000.dvfsrc/mtk-dvfsrc-devfreq/devfreq/mtk-dvfsrc-devfreq/min_freq",
+    "ddr_freq_max": "/sys/devices/platform/1c00f000.dvfsrc/mtk-dvfsrc-devfreq/devfreq/mtk-dvfsrc-devfreq/max_freq",
+    "dcs_mode": "/sys/kernel/ged/hal/dcs_mode",
+    "gpu_dvfs_margin": "/sys/kernel/ged/hal/timer_base_dvfs_margin",
+    "mi_thermal": "/sys/class/thermal/thermal_message/sconfig",
+    "load_scaling_x": "/sys/module/mtk_fpsgo/parameters/load_scaling_x",
+    "pcie_aspm": "/sys/module/pcie_aspm/parameters/policy",
+    "ged_kpi": "/sys/module/sspm_v3/holders/ged/parameters/is_GED_KPI_enabled",
+    "fpsgo": "/sys/kernel/fpsgo/common/fpsgo_enable",
+    "charge_limit": "/sys/class/power_supply/battery/charge_control_limit",
+    "night_charging": "/sys/class/power_supply/battery/night_charging",
+    "cpufreq": "/proc/cpudvfs/cpufreq_debug",
+    "gpu_min": "/sys/devices/platform/soc/13000000.mali/devfreq/13000000.mali/min_freq",
+    "gpu_max": "/sys/devices/platform/soc/13000000.mali/devfreq/13000000.mali/max_freq",
+    "ged_loading_mode": "/sys/kernel/ged/hal/dvfs_loading_mode",
+    "ddr_force_opp": "/sys/devices/platform/1c00f000.dvfsrc/1c00f000.dvfsrc:dvfsrc-helper/dvfsrc_force_vcore_dvfs_opp"
+  },
+  "features": {
+    "high_rate": {
+      "enable": true,
+      "enable_control": "/data/local/tmp/scene_refresh_rate",
+      "device_policy": [{
+        "device": "matisse", "name": "K50Pro", "enable": true,
+        "mode_high_rate": "1", "mode_low_rate": "0", "mode_standby": "0",
+        "1440P60Hz": "0", "1440P120Hz": "1", "1080P120Hz": "2", "1080P60Hz": "3"
+      }]
+    },
+    "processes": [
+      {
+        "app": "com.miui.home", "group": "top-app", "cpuctl": "heavy",
+        "delay": 2000, "interval": 5000, "repeat": 3
+      },
+      {
+        "app": "com.android.systemui", "group": "top-app", "cpuctl": "heavy",
+        "delay": 2000, "interval": 5000, "repeat": 0
+      }
+    ],
+    "charge_control": {
+      "enable": true,
+      "enable_control": "/data/local/tmp/scene_charge_control",
+      "suspend": [
+        ["$charge_limit", "15"],
+        ["$night_charging", "1"]
+      ],
+      "normal": [
+        ["$charge_limit", "0"],
+        ["$night_charging", "0"]
+      ]
+    }
+  },
+  "presets": {
+    "reset": [
+      ["$cpufreq", "0 200000 1800000"], ["$cpufreq", "4 400000 2850000"], ["$cpufreq", "7 1300000 3200000"],
+      ["$max_cpus_cpu0", "4"], ["$max_cpus_cpu4", "3"], ["$max_cpus_cpu7", "1"],
+      ["$ddr_force_opp", "999"],
+      ["$core_ctl_0", "0"], ["$core_ctl_4", "0"], ["$core_ctl_7", "0"]
+    ],
+    "kpi_on": [
+      ["$ged_kpi", "#1"],
+      ["$fpsgo", "#1"]
+    ],
+    "kpi_off": [
+      ["$fpsgo", "#0"],
+      ["$ged_kpi", "#0"]
+    ],
+    "perf_normal": [
+      ["@uclamp", "0.00~max", "0.00~max", "0.00~max"]
+    ],
+    "perf_fg_opt": [
+      ["@uclamp", "0.00~1.00", "0.00~max", "0.00~max"]
+    ],
+    "perf_gaming": [
+      ["@uclamp", "0.00~1.00", "0.00~max", "2.00~max"]
+    ],
+    "perf_active": [
+      ["@uclamp", "0.00~max", "0.00~max", "2.00~max"]
+    ],
+    "perf_boost": [
+      ["@uclamp", "0.00~max", "10.00~max", "max~max"]
+    ],
+    "perf_idle": [
+      ["@uclamp", "0.00~0.00", "0.00~15.00", "0.00~25.00"]
+    ],
+    "perf_doze": [
+      ["@uclamp", "0.00~0.00", "0.00~1.00", "0.00~10.00"]
+    ],
+    "governor_normal": [
+      ["@governor", "schedutil"]
+    ],
+    "governor_durable": [
+      ["@classical", "cpu0", "83", "70", "4", "1"],
+      ["@classical", "cpu4", "85", "75", "4", "1"],
+      ["@classical", "cpu7", "85", "73", "3", "1"]
+    ],
+    "governor_overheating": [
+      ["@classical", "cpu0", "84", "72", "4", "1"],
+      ["@classical", "cpu4", "86", "76", "3", "1"],
+      ["@classical", "cpu7", "88", "75", "3", "1"]
+    ],
+    "governor_idle": [
+      ["@classical", "cpu0", "99", "95", "2", "1"],
+      ["@classical", "cpu4", "99", "95", "2", "1"],
+      ["@classical", "cpu7", "90", "78", "3", "1"]
+    ]
+  },
+  "schemes": {
+    "powersave": {
+      "call": [
+        ["@preset", "reset"],
+        ["$uclamp_heavy", "0"],
+        ["@classical", "cpu0", "78", "67", "3", "1"],
+        ["@classical", "cpu4", "78", "68", "3", "1"],
+        ["@classical", "cpu7", "78", "68", "3", "1"],
+        ["@perf_turbo", "mt6983", "daily", "20"],
+        ["$dcs_mode", "0"],
+        ["$ddr_freq_min", "#800000000"],
+        ["@cpuset", "1-3", "1-3", "1-6", "0-7"],
+        ["@cpu_freq", "cpu0", "200000", "1200000"],
+        ["@cpu_freq", "cpu4", "400000", "1800000"],
+        ["@cpu_freq", "cpu7", "1300000", "1800000"],
+        ["@preset", "perf_fg_opt"],
+        ["@high_rate", "off", "3000"],
+        ["@charge", "normal"]
+      ]
+    },
+    "balance": {
+      "call": [
+        ["@preset", "reset"],
+        ["$uclamp_heavy", "0"],
+        ["@governor", "schedutil"],
+        ["@perf_turbo", "mt6983", "daily", "15"],
+        ["$dcs_mode", "0"],
+        ["$ddr_freq_min", "#800000000"],
+        ["@cpuset", "1-3", "1-3", "1-6", "0-7"],
+        ["@cpu_freq", "cpu0", "200000", "1600000"],
+        ["@cpu_freq", "cpu4", "400000", "2300000"],
+        ["@cpu_freq", "cpu7", "1300000", "2300000"],
+        ["@preset", "perf_fg_opt"],
+        ["@high_rate", "on"],
+        ["@charge", "normal"]
+      ]
+    },
+    "performance": {
+      "call": [
+        ["@preset", "reset"],
+        ["$uclamp_heavy", "1"],
+        ["@governor", "schedutil"],
+        ["@perf_turbo", "mt6983", "silent", "0"],
+        ["$dcs_mode", "0"],
+        ["@cpuset", "1-3", "1-3", "1-6", "0-7"],
+        ["@cpu_freq", "cpu0", "400000", "1800000"],
+        ["@cpu_freq", "cpu4", "400000", "2650000"],
+        ["@cpu_freq", "cpu7", "1300000", "2800000"],
+        ["@preset", "perf_normal"],
+        ["@high_rate", "on"],
+        ["@charge", "normal"]
+      ]
+    },
+    "fast": {
+      "call": [
+        ["@preset", "reset"],
+        ["$uclamp_heavy", "1"],
+        ["@governor", "schedutil"],
+        ["@perf_turbo", "mt6983", "perf", "0"],
+        ["$dcs_mode", "0"],
+        ["@cpuset", "1-3", "1-3", "1-6", "0-7"],
+        ["@cpu_freq", "cpu0", "1000000", "max"],
+        ["@cpu_freq", "cpu4", "1500000", "max"],
+        ["@cpu_freq", "cpu7", "1500000", "3000000"],
+        ["@preset", "perf_active"],
+        ["$mi_thermal", "10"],
+        ["@high_rate", "on"],
+        ["@charge", "normal"]
+      ]
+    },
+    "pedestal": {
+      "call": [
+        ["@preset", "reset"],
+        ["$uclamp_heavy", "1"],
+        ["@governor", "schedutil"],
+        ["@perf_turbo", "mt6983", "extreme", "0"],
+        ["$dcs_mode", "0"],
+        ["$ddr_force_opp", "3"],
+        ["@cpuset", "0-2", "3-4", "1-6", "0-7"],
+        ["@cpu_freq", "cpu0", "1400000", "max"],
+        ["@cpu_freq", "cpu4", "2200000", "max"],
+        ["@cpu_freq", "cpu7", "2000000", "max"],
+        ["@preset", "perf_active"],
+        ["$mi_thermal", "10"],
+        ["@high_rate", "on"],
+        ["@charge", "suspend"]
+      ]
+    }
+  },
+  "apps": [
+    {
+      "friendly": "原神",
+      "packages": ["com.miHoYo.Yuanshen", "com.miHoYo.ys.mi", "com.miHoYo.ys.bilibili", "com.miHoYo.GenshinImpact"],
+      "import": "_GenshinImpact.json"
+    },
+    {
+      "friendly": "机动都市阿尔法",
+      "packages": ["com.netease.jddsaef", "com.netease.g93na", "com.netease.g93natw"],
+      "import": "_JDDS_AEF.json"
+    },
+    {
+      "friendly": "和平精英",
+      "packages": ["com.tencent.tmgp.pubgmhd",  "com.tencent.ig"],
+      "import": "_PUBG.json"
+    },
+    {
+      "friendly": "王者荣耀/LOL",
+      "packages": ["com.tencent.tmgp.sgame", "com.garena.game.kgtw", "com.tencent.lolm"],
+      "import": "_SGAME.json"
+    },
+    {
+      "friendly": "QQ飞车",
+      "packages": ["com.tencent.tmgp.speedmobile", "com.garena.game.fctw"],
+      "import": "_SpeedMobile.json"
+    },
+    {
+      "friendly": "APEX",
+      "packages": ["com.levelinfinite.apexlegendsmobile", "com.ea.gp.apexlegendsmobilefps", "com.tw.fivexgames.apexlegendsmobile"],
+      "import": "_APEX.json"
+    },
+    {
+      "friendly": "暗区突围",
+      "packages": ["com.tencent.mf.uam"],
+      "import": "_UAM.json"
+    },
+    {
+      "friendly": "香肠派对",
+      "packages": ["com.sofunny.Sausage"],
+      "call": [
+        ["@cpuset", "0-1", "1-3", "1-4", "0-6"],
+        ["$max_cpus_cpu7", "0"],
+        ["@cpu_freq", "cpu0", "500000", "1500000"]
+      ],
+      "cpuset": {
+        "unity_main": "7",
+        "comm": {
+          "1": ["RequestRece"]
+        }
+      }
+    },
+    {
+      "friendly": "极速响应",
+      "packages": [
+        "com.miui.home",
+        "com.meizu.flyme.launcher",
+        "net.oneplus.launcher",
+        "com.oppo.launcher",
+        "ch.deletescape.lawnchair.ci",
+        "com.mi.android.globallauncher",
+        "com.teslacoilsw.launcher",
+        "com.android.quicksearchbox",
+        "net.oneplus.h2launcher",
+        "com.oneplus.hydrogen.launcher",
+        "com.microsoft.launcher",
+        "org.lineageos.trebuchet",
+        "org.mokee.lawnchair",
+        "com.google.android.apps.nexuslauncher"
+      ],
+      "import": "_Launcher.json"
+    },
+    {
+      "friendly": "社交APP",
+      "packages": [
+        "com.tencent.mobileqq",
+        "com.tencent.tim",
+        "com.tencent.mm",
+        "org.telegram.messenger"
+      ],
+      "import": "_IM.json"
+    },
+    {
+      "friendly": "极限节能",
+      "packages": [
+        "tv.danmaku.bili", "com.bilibili.app.in",
+        "com.google.android.youtube",
+        "com.tencent.qqlive",
+        "com.qiyi.video",
+        "com.qiyi.video.lite",
+        "com.qiyi.video.sdkplayer",
+        "com.dianshijia.newlive",
+        "com.duowan.kiwi",
+        "air.tv.douyu.android",
+        "com.douyu.rush",
+        "com.youku.phone",
+        "org.telegram.messenger",
+        "com.hunantv.imgo.activity",
+
+        "com.ss.android.ugc.aweme", "com.ss.android.ugc.aweme.lite", "com.ss.android.article.video", "com.smile.gifmaker",
+
+        "com.coolapk.market",
+
+        "com.netease.cloudmusic",
+        "com.kugou.android",
+        "com.kugou.android.lite",
+
+        "io.legado.app.release",
+        "com.duokan.reader",
+        "com.ruguoapp.jike",
+        "com.ruanmei.ithome"
+      ],
+      "import": "_Energy_New.json"
+    },
+    {
+      "friendly": "提高滑动性能",
+      "packages": [
+        "com.taobao.idlefish",
+        "com.taobao.taobao",
+        "com.android.browser",
+        "com.baidu.tieba_mini",
+        "com.baidu.tieba",
+        "com.jingdong.app.mall",
+        "com.tmall.wireless",
+        "com.sankuai.meituan",
+        "com.pupumall.customer",
+        "com.eg.android.AlipayGphone",
+        "com.android.vending",
+        "cn.xiaochuankeji.tieba",
+        "com.mfw.roadbook",
+        "com.tencent.news"
+      ],
+      "import": "_ScrollOpt.json"
+    },
+    {
+      "friendly": "Benchmark",
+      "packages": [
+        "com.glbenchmark.glbenchmark27",
+        "com.antutu.ABenchMark",
+        "com.antutu.benchmark.full"
+      ],
+      "call": [
+        ["@perf_turbo", "mt6983", "perf", "0"],
+        ["@preset", "perf_fg_opt"],
+        ["@cpuset", "0-2", "3-4", "0-7", "0-7"],
+        ["$ddr_freq_min", "#5500000000"],
+        ["$mi_thermal", "10"],
+        ["@high_rate", "off"]
+      ]
+    },
+    {
+      "friendly": "Geekbench5",
+      "packages": [
+        "com.primatelabs.geekbench5c",
+        "com.primatelabs.geekbench5"
+      ],
+      "import": "_Geekbench5.json"
+    },
+    {
+      "friendly": "3DMark",
+      "packages": [
+        "com.futuremark.dmandroid.application"
+      ],
+      "import": "_3DMark.json"
+    },
+    {
+      "friendly": "待机",
+      "packages": ["standby"],
+      "import": "_Standby.json"
+    },
+    {
+      "friendly": "扫码",
+      "packages": [
+        "com.tencent.mm.plugin.scanner.ui.BaseScanUI",
+        "com.tencent.mobileqq.olympic.activity.ScanTorchActivity",
+        "com.tencent.mobileqq.olympic.activity.ScanTorchActivity",
+        "com.alipay.mobile.scan.as.main.MainCaptureActivity",
+        "com.jd.lib.scan.lib.zxing.client.android.CaptureActivity",
+        "com.etao.feimagesearch.capture.CaptureActivity"
+      ],
+      "import": "_Scanner.json"
+    },
+    {
+      "friendly": "相机",
+      "packages": [
+        "com.tencent.mm.plugin.recordvideo.activity.MMRecordUI",
+        "com.tencent.aelight.camera.aebase.QIMCameraCaptureActivity",
+        "dov.com.qq.im.QIMCameraCaptureActivity",
+        "com.googleCamera.Wichaya8",
+        "com.accordion.analogcam.cn",
+        "org.codeaurora.snapcam",
+        "com.android.camera",
+        "com.xiaomi.scanner",
+        "com.blink.academy.protake",
+        "com.benqu.wuta",
+        "com.gorgeous.lite",
+        "com.kwai.m2u",
+        "com.meitu.meiyancamera",
+        "com.yiruike.sodacn.android",
+        "com.lemon.faceu",
+        "com.mt.mtxx.mtxx"
+      ],
+      "import": "_Camera.json"
+    },
+    {
+      "friendly": "狗屎/毒瘤",
+      "packages": [
+        "com.tencent.mm:appbrand",
+        "com.tencent.mm:toolsmp"
+      ],
+      "modes": [{
+        "mode": ["powersave", "balance"],
+        "call": [
+          ["@preset", "perf_fg_opt"],
+          ["@cpuset", "0", "3-4", "0-7", "0-7"],
+          ["@cpu_freq", "cpu0", "1000000", "1700000"],
+          ["@cpu_freq", "cpu4", "400000", "2300000"],
+          ["@cpu_freq", "cpu7", "1300000", "2300000"],
+          ["$mi_thermal", "10"]
+        ]
+      }]
+    },
+    {
+      "friendly": "备份还原",
+      "packages": ["com.miui.huanji", "com.miui.backup"],
+      "call": [
+        ["@preset", "perf_active"],
+        ["@high_rate", "off", "2000"]
+      ]
+    },
+    {
+      "friendly": "白名单应用",
+      "packages": ["com.android.providers.downloads.ui", "android.process.mediaUI"],
+      "import": "_WhiteList.json"
+    },
+    {
+      "friendly": "All",
+      "packages": ["*"],
+      "import": "_General.json"
+    }
+  ]
+}

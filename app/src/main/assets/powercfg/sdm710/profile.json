@@ -1,0 +1,275 @@
+{
+  "platform": "sdm710",
+  "platform_name": "710",
+  "framework": 130,
+  "schema": {
+    "vendor": "msm",
+    "cores": 8,
+    "clusters": [0, 6]
+  },
+  "alias": {},
+  "apps": [
+    {
+      "friendly": "原神",
+      "packages": [
+        "com.miHoYo.Yuanshen",
+        "com.miHoYo.ys.mi",
+        "com.miHoYo.ys.bilibili",
+        "com.miHoYo.GenshinImpact"
+      ],
+      "stop_on": ["leave", "scene"],
+      "sensors": [],
+      "modes": [
+        {
+          "mode": ["powersave", "balance", "performance"],
+          "affinity": {
+            "comm": {
+              "C0": ["UnityMain"],
+              "40": ["UnityGfx"],
+              "20": ["UnityMultiRende"],
+              "1C": ["Worker Thread"]
+            },
+            "other": "3F"
+          }
+        },
+        {
+          "mode": ["fast", "pedestal"],
+          "affinity": {
+            "comm": {
+              "C0": ["UnityMain"],
+              "40": ["UnityGfx", "UnityMultiRende"]
+            },
+            "other": "ff"
+          }
+        }
+      ]
+    },
+    {
+      "friendly": "王者荣耀",
+      "packages": ["com.tencent.tmgp.sgame"],
+      "stop_on": ["leave", "scene"],
+      "sensors": [],
+      "affinity": {
+        "interval": 1000,
+        "comm": {
+          "C0": ["UnityGfx", "UnityMain", "UnityPreload", "Thread-"],
+          "38": ["Worker Thread", "NativeThread", "Audio", "NDK Media", "GVoice", "FMOD mixer", "FMOD stream", "ff_read"]
+        },
+        "other": "FF"
+      }
+    },
+    {
+      "friendly": "和平精英",
+      "packages": ["com.tencent.tmgp.pubgmhd",  "com.tencent.ig"],
+      "stop_on": ["leave", "scene"],
+      "sensors": [],
+      "affinity": {
+        "interval": 1000,
+        "comm": {
+          "80": ["RenderThread"],
+          "70": ["Thread-", "TaskGraphNP"]
+        },
+        "other": "3F"
+      },
+      "modes": [
+        {
+          "mode": ["fast"],
+          "booster": {
+            "events": ["presets"],
+            "duration": 2000,
+            "enter": [
+              ["$stune_top_boost", "60"]
+            ],
+            "exit": [
+              ["$sched_boost", "0"]
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "friendly": "抖音、西瓜、快手",
+      "packages": ["com.ss.android.ugc.aweme", "com.ss.android.ugc.aweme.lite", "com.ss.android.article.video", "com.smile.gifmaker"],
+      "stop_on": [],
+      "sensors": [],
+      "modes": [{
+        "mode": ["powersave"],
+        "booster": {
+          "events": ["presets"],
+          "duration": 2000,
+          "enter": [
+            ["$cpu_max_0", "1708800"],
+            ["$core_ctl_6", "0"],
+            ["$cpuset_top", "0-7"],
+            ["$cpuset_fg", "0-7"]
+          ],
+          "exit": [
+            ["$cpu_max_0", "1209600"],
+            ["$core_ctl_6", "1"],
+            ["$cpuset_top", "0-5"],
+            ["$cpuset_fg", "0-5"]
+          ]
+        }
+      }, {
+        "mode": ["balance"],
+        "booster": {
+          "events": ["presets"],
+          "duration": 2000,
+          "enter": [
+            ["$cpu_max_0", "1708800"],
+            ["$core_ctl_6", "0"],
+            ["$cpuset_top", "0-7"],
+            ["$cpuset_fg", "0-7"]
+          ],
+          "exit": [
+            ["$cpu_max_0", "1324800"],
+            ["$core_ctl_6", "1"],
+            ["$cpuset_top", "0-5"],
+            ["$cpuset_fg", "0-5"]
+          ]
+        }
+      }]
+    },
+    {
+      "friendly": "视频应用",
+      "packages": [
+        "tv.danmaku.bili", "com.bilibili.app.in",
+        "com.google.android.youtube",
+        "com.tencent.qqlive",
+        "com.ss.android.article.video",
+        "com.qiyi.video",
+        "com.qiyi.video.lite",
+        "com.qiyi.video.sdkplayer",
+        "com.dianshijia.newlive"
+      ],
+      "stop_on": [],
+      "sensors": [],
+      "modes": [{
+        "mode": ["powersave", "balance"],
+        "logger": true,
+        "booster": {
+          "events": ["presets"],
+          "duration": 2000,
+          "enter": [
+            ["$cpu_max_0", "1708800"],
+            ["$core_ctl_6", "0"],
+            ["$cpuset_top", "0-7"],
+            ["$cpuset_fg", "0-7"]
+          ],
+          "exit": [
+            ["$cpu_max_0", "1209600"],
+            ["$core_ctl_6", "1"],
+            ["$cpuset_top", "0-5"],
+            ["$cpuset_fg", "0-5"]
+          ]
+        }
+      }, {
+        "mode": ["balance"],
+        "booster": {
+          "events": ["presets"],
+          "duration": 2000,
+          "enter": [
+            ["$cpu_max_0", "1708800"],
+            ["$core_ctl_6", "0"],
+            ["$cpuset_top", "0-7"],
+            ["$cpuset_fg", "0-7"]
+          ],
+          "exit": [
+            ["$cpu_max_0", "1324800"],
+            ["$core_ctl_6", "1"],
+            ["$cpuset_top", "0-5"],
+            ["$cpuset_fg", "0-5"]
+          ]
+        }
+      }]
+    },
+    {
+      "friendly": "极速响应",
+      "packages": [
+        "com.miui.home",
+        "com.meizu.flyme.launcher",
+        "net.oneplus.launcher",
+        "com.oppo.launcher",
+        "ch.deletescape.lawnchair.ci",
+        "com.mi.android.globallauncher",
+        "com.teslacoilsw.launcher",
+        "com.android.quicksearchbox",
+        "net.oneplus.h2launcher",
+        "com.oneplus.hydrogen.launcher",
+        "com.microsoft.launcher",
+        "org.lineageos.trebuchet",
+        "org.mokee.lawnchair",
+        "com.google.android.apps.nexuslauncher"
+      ],
+      "stop_on": [],
+      "sensors": [],
+      "modes": [{
+        "mode": ["powersave"],
+        "booster": {
+          "events": ["presets"],
+          "duration": 3000,
+          "enter": [
+            ["/sys/devices/platform/soc/1d84000.ufshc/clkscale_enable", "0"],
+            ["/sys/devices/platform/soc/1d84000.ufshc/clkgate_enable", "0"],
+            ["/sys/devices/platform/soc/1d84000.ufshc/hibern8_on_idle_enable", "0"],
+            ["/sys/class/devfreq/1d84000.ufshc/min_freq", "300000000"],
+            ["$sched_down", "45 52"],
+            ["$sched_up", "65 65"],
+            ["$sched_group_down", "65"],
+            ["$sched_group_up", "80"],
+            ["$core_ctl_6", "0"],
+            ["$stune_top_perf", "1"],
+            ["$stune_top_boost", "10"],
+            ["$cpuset_top", "0-7"],
+            ["$cpuset_fg", "0-7"],
+            ["$cpu_min_0", "1651200"],
+            ["$msm_cpu_max", "0:1708800 1:1708800 2:1708800 3:1708800 4:1708800 5:1708800 6:1939200 7:1939200"],
+            ["$cpu_max_0", "1708800"],
+            ["$cpu_max_6", "1939200"]
+          ]
+        }
+      },{
+        "mode": ["balance"],
+        "booster": {
+          "events": ["presets"],
+          "duration": 3000,
+          "enter": [
+            ["/sys/devices/platform/soc/1d84000.ufshc/clkscale_enable", "0"],
+            ["/sys/devices/platform/soc/1d84000.ufshc/clkgate_enable", "0"],
+            ["/sys/devices/platform/soc/1d84000.ufshc/hibern8_on_idle_enable", "0"],
+            ["/sys/class/devfreq/1d84000.ufshc/min_freq", "300000000"],
+            ["$sched_down", "40 52"],
+            ["$sched_up", "55 65"],
+            ["$sched_group_down", "65"],
+            ["$sched_group_up", "80"],
+            ["$stune_top_perf", "1"],
+            ["$stune_top_boost", "10"],
+            ["$cpuset_top", "0-7"],
+            ["$cpuset_fg", "0-7"],
+            ["$cpu_min_0", "1651200"],
+            ["$cpu_min_6", "1478400"],
+            ["$cpu_min_7", "1401600"],
+            ["$msm_cpu_max", "0:1708800 1:1708800 2:1708800 3:1708800 4:1708800 5:1708800 6:2208000 7:2208000"],
+            ["$cpu_max_0", "1708800"],
+            ["$cpu_max_6", "2208000"]
+          ]
+        }
+      },{
+        "mode": ["performance", "fast"],
+        "booster": {
+          "events": ["presets"],
+          "duration": 3000,
+          "enter": [
+            ["$cpuset_top", "0-7"],
+            ["$cpuset_fg", "0-7"],
+            ["$stune_top_boost", "100"],
+            ["$stune_top_perf", "1"],
+            ["$msm_cpu_max", "0:1708800 1:1708800 2:1708800 3:1708800 4:1708800 5:1708800 6:2900000 7:2900000"],
+            ["$cpu_max_0", "1708800"],
+            ["$cpu_max_6", "2900000"]
+          ]
+        }
+      }]
+    }
+  ]
+}

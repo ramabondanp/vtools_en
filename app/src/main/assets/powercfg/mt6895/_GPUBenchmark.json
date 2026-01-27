@@ -1,0 +1,25 @@
+{
+  "friendly": "Benchmark",
+  "packages": [
+    "com.futuremark.dmandroid.application",
+    "com.antutu.benchmark.full"
+  ],
+  "call": [
+    ["@perf_turbo", "mt6895", "perf", "0"],
+    ["@uclamp", "0.00~1.00", "0.00~max", "0.00~max"],
+    ["@cpuset", "0-2", "0-4", "4-7", "4-7"],
+    ["$ddr_freq_min", "#6400000000"],
+    ["$mi_thermal", "10"]
+  ],
+  "booster": {
+    "events": ["touch", "buttons"],
+    "duration": 2000,
+    "idle_delay": 2000,
+    "enter": [
+      ["@high_rate", "on"]
+    ],
+    "exit": [
+      ["@high_rate", "off"]
+    ]
+  }
+}

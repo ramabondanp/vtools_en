@@ -1,0 +1,70 @@
+{
+  "friendly": "APEX",
+  "packages": ["com.levelinfinite.apexlegendsmobile", "com.ea.gp.apexlegendsmobilefps", "com.tw.fivexgames.apexlegendsmobile"],
+  "call": [
+    ["$dcs_mode", "0"],
+    ["$mi_thermal", "13"]
+  ],
+  "affinity": {
+    "heavy_thread": "Thread-",
+    "heavy_mask": "80",
+    "comm": {
+      "70": ["RHIThread", "RenderThread", "TaskGraphNP", "NativeThread", "MainThread-UE4"]
+    },
+    "other": "7F"
+  },
+  "modes": [{
+    "mode": ["powersave"],
+    "call": [
+      ["@cpu_freq", "cpu0", "800000", "1.5Ghz"],
+      ["@cpu_freq", "cpu4", "900000", "2050000"],
+      ["@cpu_freq", "cpu7", "1300000", "2100000"],
+      ["@perf_turbo", "mt6983", "silent", "11"],
+      ["@preset", "perf_normal"],
+      ["$boost_affinity", "#0"],
+      ["$ddr_freq_min", "2133000000"],
+      ["$dcs_mode", "0"]
+    ]
+  }, {
+    "mode": ["balance"],
+    "call": [
+      ["@cpu_freq", "cpu0", "1000000", "1.6Ghz"],
+      ["@cpu_freq", "cpu4", "1000000", "2300000"],
+      ["@cpu_freq", "cpu7", "1300000", "2400000"],
+      ["@perf_turbo", "mt6983", "perf", "7"],
+      ["$ddr_freq_min", "3200000000"],
+      ["$dcs_mode", "0"],
+      ["@preset", "perf_normal"],
+      ["$boost_affinity", "#0"]
+    ]
+  },{
+    "mode": ["performance"],
+    "call": [
+      ["@cpu_freq", "cpu0", "1000000", "1.6Ghz"],
+      ["@cpu_freq", "cpu4", "1200000", "2650000"],
+      ["@cpu_freq", "cpu7", "1300000", "2800000"],
+      ["@perf_turbo", "mt6983", "perf", "7"],
+      ["$dcs_mode", "0"],
+      ["@preset", "perf_normal"]
+    ]
+  },{
+    "mode": ["fast"],
+    "call": [
+      ["@cpu_freq", "cpu0", "1200000", "1700000"],
+      ["@cpu_freq", "cpu4", "1600000", "2850000"],
+      ["@cpu_freq", "cpu7", "1600000", "3000000"],
+      ["@perf_turbo", "mt6983", "perf", "5"],
+      ["$dcs_mode", "0"],
+      ["@preset", "perf_active"]
+    ]
+  },{
+    "mode": ["pedestal"],
+    "call": [
+      ["@cpu_freq", "cpu0", "1.4Ghz", "max"],
+      ["@cpu_freq", "cpu4", "1.8Ghz", "max"],
+      ["@cpu_freq", "cpu7", "1.8Ghz", "3000000"],
+      ["@perf_turbo", "mt6983", "perf", "0"],
+      ["@preset", "perf_active"]
+    ]
+  }]
+}

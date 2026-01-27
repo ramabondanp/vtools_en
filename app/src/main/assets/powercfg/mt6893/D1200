@@ -1,0 +1,256 @@
+# /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_frequencies
+# 2000000 1800000 1725000 1625000 1525000 1450000 1350000 1250000 1075000 1000000 925000 850000 750000 675000 600000 500000
+
+# /sys/devices/system/cpu/cpu4/cpufreq/scaling_available_frequencies
+# 2600000 2507000 2354000 2200000 1985000 1855000 1740000 1624000 1537000 1451000 1335000 1162000 1046000 902000 700000 437000
+
+# /sys/devices/system/cpu/cpu7/cpufreq/scaling_available_frequencies
+# 3000000 2892000 2713000 2600000 2463000 2284000 2141000 1998000 1820000 1632000 1482000 1370000 1258000 1108000 921000 659000
+
+# cat /proc/gpufreq/gpufreq_opp_dump | awk '{printf $4 "\n"}' | cut -f1 -d ","
+886000 879000 873000 867000 861000 854000 848000 842000 836000 825000 815000 805000 795000 785000 775000 765000 755000 745000 735000 725000 715000 705000 695000685000 675000 654000 634000 614000 593000 573000 553000 532000 512000 492000 471000 451000 431000 410000 390000 370000 350000
+
+# /proc/gpufreq/gpufreq_limit_table
+echo [id][up_enable][low_enable] > /proc/gpufreq/gpufreq_limit_table
+ex: echo 3 0 0 > /proc/gpufreq/gpufreq_limit_table
+means disable THERMAL upper_limit_idx & lower_limit_idx
+         [name]  [id]     [prio]   [up_idx] [up_enable]  [low_idx] [low_enable]
+         STRESS     0          8         -1          1         -1          1
+           PROC     1          7         -1          1         -1          1
+          PTPOD     2          6         -1          1         -1          1
+        THERMAL     3          5         -1          1         -1          1
+        BATT_OC     4          5         -1          1         -1          1
+       BATT_LOW     5          5         -1          0         -1          0
+   BATT_PERCENT     6          5         -1          1         -1          1
+            PBM     7          5         -1          1         -1          1
+         POLICY     8          4         -1          1         -1          1
+
+for i in 1 2 3 4 5 6 7 8; do
+  echo $i 1 1 > /proc/gpufreq/gpufreq_limit_table
+done
+
+# /proc/gpufreq/gpufreq_opp_dump
+[00] freq = 886000, vgpu = 70000, vsram = 75000, posdiv = 4, gpu_power = 1126, aging = 1875
+[01] freq = 879000, vgpu = 68750, vsram = 75000, posdiv = 4, gpu_power = 1113, aging = 1875
+[02] freq = 873000, vgpu = 67500, vsram = 75000, posdiv = 4, gpu_power = 1089, aging = 1875
+[03] freq = 867000, vgpu = 66250, vsram = 75000, posdiv = 4, gpu_power = 1056, aging = 1875
+[04] freq = 861000, vgpu = 65000, vsram = 75000, posdiv = 4, gpu_power = 1044, aging = 1875
+[05] freq = 854000, vgpu = 63750, vsram = 75000, posdiv = 4, gpu_power = 1012, aging = 1875
+[06] freq = 848000, vgpu = 62500, vsram = 75000, posdiv = 4, gpu_power = 990, aging = 1875
+[07] freq = 842000, vgpu = 61250, vsram = 75000, posdiv = 4, gpu_power = 979, aging = 1875
+[08] freq = 836000, vgpu = 59375, vsram = 75000, posdiv = 4, gpu_power = 948, aging = 1875
+[09] freq = 825000, vgpu = 59375, vsram = 75000, posdiv = 4, gpu_power = 918, aging = 1875
+[10] freq = 815000, vgpu = 59375, vsram = 75000, posdiv = 4, gpu_power = 888, aging = 1875
+[11] freq = 805000, vgpu = 58750, vsram = 75000, posdiv = 4, gpu_power = 878, aging = 1875
+[12] freq = 795000, vgpu = 58125, vsram = 75000, posdiv = 4, gpu_power = 848, aging = 1875
+[13] freq = 785000, vgpu = 57500, vsram = 75000, posdiv = 4, gpu_power = 820, aging = 1875
+[14] freq = 775000, vgpu = 56875, vsram = 75000, posdiv = 4, gpu_power = 810, aging = 1875
+[15] freq = 765000, vgpu = 56875, vsram = 75000, posdiv = 4, gpu_power = 783, aging = 1875
+[16] freq = 755000, vgpu = 56875, vsram = 75000, posdiv = 4, gpu_power = 749, aging = 1875
+[17] freq = 745000, vgpu = 56250, vsram = 75000, posdiv = 4, gpu_power = 739, aging = 1875
+[18] freq = 735000, vgpu = 56250, vsram = 75000, posdiv = 4, gpu_power = 714, aging = 1875
+[19] freq = 725000, vgpu = 55625, vsram = 75000, posdiv = 4, gpu_power = 690, aging = 1875
+[20] freq = 715000, vgpu = 55000, vsram = 75000, posdiv = 4, gpu_power = 681, aging = 1875
+[21] freq = 705000, vgpu = 55000, vsram = 75000, posdiv = 4, gpu_power = 656, aging = 1250
+[22] freq = 695000, vgpu = 55000, vsram = 75000, posdiv = 4, gpu_power = 634, aging = 1250
+[23] freq = 685000, vgpu = 55000, vsram = 75000, posdiv = 4, gpu_power = 611, aging = 1250
+[24] freq = 675000, vgpu = 55000, vsram = 75000, posdiv = 4, gpu_power = 602, aging = 1250
+[25] freq = 654000, vgpu = 55000, vsram = 75000, posdiv = 4, gpu_power = 568, aging = 1250
+[26] freq = 634000, vgpu = 55000, vsram = 75000, posdiv = 4, gpu_power = 540, aging = 1250
+[27] freq = 614000, vgpu = 55000, vsram = 75000, posdiv = 4, gpu_power = 527, aging = 1250
+[28] freq = 593000, vgpu = 55000, vsram = 75000, posdiv = 4, gpu_power = 494, aging = 1250
+[29] freq = 573000, vgpu = 55000, vsram = 75000, posdiv = 4, gpu_power = 469, aging = 1250
+[30] freq = 553000, vgpu = 55000, vsram = 75000, posdiv = 4, gpu_power = 456, aging = 1250
+[31] freq = 532000, vgpu = 55000, vsram = 75000, posdiv = 4, gpu_power = 432, aging = 1250
+[32] freq = 512000, vgpu = 55000, vsram = 75000, posdiv = 4, gpu_power = 404, aging = 625
+[33] freq = 492000, vgpu = 55000, vsram = 75000, posdiv = 4, gpu_power = 382, aging = 625
+[34] freq = 471000, vgpu = 55000, vsram = 75000, posdiv = 4, gpu_power = 370, aging = 625
+[35] freq = 451000, vgpu = 55000, vsram = 75000, posdiv = 4, gpu_power = 349, aging = 625
+[36] freq = 431000, vgpu = 55000, vsram = 75000, posdiv = 4, gpu_power = 324, aging = 625
+[37] freq = 410000, vgpu = 55000, vsram = 75000, posdiv = 4, gpu_power = 312, aging = 625
+[38] freq = 390000, vgpu = 55000, vsram = 75000, posdiv = 4, gpu_power = 294, aging = 625
+[39] freq = 370000, vgpu = 55000, vsram = 75000, posdiv = 8, gpu_power = 276, aging = 625
+[40] freq = 350000, vgpu = 55000, vsram = 75000, posdiv = 8, gpu_power = 260, aging = 625
+
+# GPU Max Freq
+echo 39 > /sys/kernel/ged/hal/custom_upbound_gpu_freq
+cat /sys/kernel/ged/hal/current_freqency
+echo 40 > /sys/kernel/ged/hal/custom_boost_gpu_freq
+
+# /proc/cpufreq/cpufreq_cci_map_table
+CCI MAP Normal Mode:
+{1, 2, 3, 4, 5, 6, 7, 8, 8, 8, 8, 8, 8, 8, 8, 8},
+{1, 2, 3, 4, 5, 6, 7, 8, 10, 10, 10, 10, 10, 10, 10, 10},
+{1, 2, 3, 4, 5, 6, 7, 8, 10, 10, 10, 10, 10, 10, 10, 10},
+{1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 11, 11, 11, 11, 11, 11},
+{1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 12, 12, 12, 12, 12},
+{1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 13, 13, 13, 13, 13, 13},
+{1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 13, 13, 13, 13, 13, 13},
+{1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 13, 13, 14, 14, 14, 14},
+{1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 13, 13, 14, 15, 15, 15},
+{1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 13, 13, 14, 15, 15, 15},
+{1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 13, 13, 14, 15, 15, 15},
+{1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 13, 13, 14, 15, 15, 15},
+{1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 13, 13, 14, 15, 15, 15},
+{1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 13, 13, 14, 15, 15, 15},
+{1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 13, 13, 14, 15, 15, 15},
+{1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 13, 13, 14, 15, 15, 15},
+CCI MAP Perf Mode:
+{0, 0, 0, 0, 0, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2},
+{0, 0, 0, 0, 0, 1, 1, 2, 4, 5, 5, 5, 5, 5, 5, 5},
+{0, 0, 0, 0, 0, 1, 1, 2, 4, 6, 6, 6, 6, 6, 6, 6},
+{0, 0, 0, 0, 0, 1, 1, 2, 4, 6, 6, 6, 6, 6, 6, 6},
+{0, 0, 0, 0, 0, 1, 1, 2, 4, 6, 7, 7, 7, 7, 7, 7},
+{0, 0, 0, 0, 0, 1, 1, 2, 4, 6, 8, 8, 8, 8, 8, 8},
+{0, 0, 0, 0, 0, 1, 1, 2, 4, 6, 8, 9, 9, 9, 9, 9},
+{0, 0, 0, 0, 0, 1, 1, 2, 4, 6, 8, 9, 10, 10, 10, 10},
+{0, 0, 0, 0, 0, 1, 1, 2, 4, 6, 8, 9, 10, 12, 12, 12},
+{0, 0, 0, 0, 0, 1, 1, 2, 4, 6, 8, 9, 10, 12, 13, 13},
+{0, 0, 0, 0, 0, 1, 1, 2, 4, 6, 8, 9, 10, 12, 14, 14},
+{0, 0, 0, 0, 0, 1, 1, 2, 4, 6, 8, 9, 10, 12, 14, 14},
+{0, 0, 0, 0, 0, 1, 1, 2, 4, 6, 8, 9, 10, 12, 14, 15},
+{0, 0, 0, 0, 0, 1, 1, 2, 4, 6, 8, 9, 10, 12, 14, 15},
+{0, 0, 0, 0, 0, 1, 1, 2, 4, 6, 8, 9, 10, 12, 14, 15},
+{0, 0, 0, 0, 0, 1, 1, 2, 4, 6, 8, 9, 10, 12, 14, 15},
+
+echo 0 > /proc/cpufreq/cpufreq_cci_mode
+echo 1 > /proc/cpufreq/cpufreq_cci_mode
+
+# /proc/cpufreq/cpufreq_power_mode
+0 Default(Normal) mode
+1 Low Power mode
+2 Just Make mode
+3 Performance(Sports) mode
+echo 3 > /proc/cpufreq/cpufreq_power_mode
+
+# DRAM Boost
+# echo (1|0) > /sys/devices/platform/boot_dramboost/dramboost/dramboost
+
+# DRAM OPP
+# /sys/devices/platform/10012000.dvfsrc/helio-dvfsrc/dvfsrc_opp_table
+= [OPP0 ]: 750000   uv 4266000  khz
+= [OPP1 ]: 750000   uv 3733000  khz
+= [OPP2 ]: 725000   uv 3733000  khz
+= [OPP3 ]: 725000   uv 3068000  khz
+- [OPP4 ]: 650000   uv 3068000  khz
+= [OPP5 ]: 725000   uv 2366000  khz
+- [OPP6 ]: 650000   uv 2366000  khz
+- [OPP7 ]: 600000   uv 2366000  khz
+= [OPP8 ]: 725000   uv 1866000  khz
+- [OPP9 ]: 650000   uv 1866000  khz
+- [OPP10]: 600000   uv 1866000  khz
+- [OPP11]: 575000   uv 1866000  khz
+= [OPP12]: 725000   uv 1534000  khz
+- [OPP13]: 650000   uv 1534000  khz
+- [OPP14]: 600000   uv 1534000  khz
+- [OPP15]: 575000   uv 1534000  khz
+= [OPP16]: 725000   uv 1200000  khz
+- [OPP17]: 650000   uv 1200000  khz
+- [OPP18]: 600000   uv 1200000  khz
+- [OPP19]: 575000   uv 1200000  khz
+= [OPP20]: 725000   uv 800000   khz
+- [OPP21]: 650000   uv 800000   khz
+- [OPP22]: 600000   uv 800000   khz
+- [OPP23]: 575000   uv 800000   khz
+
+echo 7 > /sys/devices/platform/10012000.dvfsrc/helio-dvfsrc/dvfsrc_force_vcore_dvfs_opp
+cat /sys/devices/platform/10012000.dvfsrc/helio-dvfsrc/dvfsrc_dump
+
+
+
+
+thermal_gt(){
+echo 95 70 > /proc/driver/thermal/clatm_gpu_threshold
+echo '' > /proc/mtkcooler/mtktscpu-sysrst
+echo 'EXIT 6000' > /proc/mtkcooler/cpu_adaptive_0
+
+echo 'mtktsAP 74000 EXIT 5000' > /proc/mtkcooler/cpu_adaptive_1
+echo '' > /proc/mtkcooler/mtktspmic-sysrst
+echo '' > /proc/mtkcooler/mtk-cl-kshutdown00
+echo '' > /proc/mtkcooler/mtktscharger-sysrst
+echo '' > /proc/mtkcooler/mtktswmt-sysrst
+echo '' > /proc/mtkcooler/mtktsAP-sysrst
+echo '' > /proc/mtkcooler/mtk-cl-kshutdown03
+
+echo 'EXIT 6000' > /proc/mtkcooler/mtk-cl-cam00
+echo 'EXIT 999' > /proc/mtkcooler/abcct_lcmoff
+echo 'EXIT 999' > /proc/mtkcooler/abcct
+echo '' > /proc/mtkcooler/mtk-cl-kshutdown01
+echo '' > /proc/mtkcooler/mtk-cl-kshutdown02
+
+echo 'PUP_R 100000 PUP_VOLT 1800 OVER_CRITICAL_L 4397119 NTC_TABLE 7 0' > /proc/driver/thermal/tzbts_param
+echo 'PUP_R 100000 PUP_VOLT 1800 OVER_CRITICAL_L 4397119 NTC_TABLE 7 1' > /proc/driver/thermal/tzbtspa_param
+echo 'PUP_R 100000 PUP_VOLT 1800 OVER_CRITICAL_L 4397119 NTC_TABLE 7 2' > /proc/driver/thermal/tzbtsnrpa_param
+
+echo '0 2000 10 15 1 570 0 200 0' > /proc/driver/thermal/clatm_setting
+echo '1 1000 10 15 1 280 0 170 0' > /proc/driver/thermal/clatm_setting
+echo '0 550 350 150' > /proc/driver/thermal/clbcct
+echo '0 70000 70000 8 12 16 8 12 16' > /proc/driver/thermal/clmutt_setting
+echo '2 100000 90000 80000 85000 93000 85000 235000 2000 230000 2000 500 500 13500' > /proc/driver/thermal/clctm
+echo '51000 1000 200000 5 2000 0 0 3000 0 1' > /proc/driver/thermal/clabcct
+echo '1 53000 1000 200000 5 2000 600' > /proc/driver/thermal/clabcct_lcmoff
+echo '0 3 4 11 3 15 1 15' > /proc/driver/thermal/clatm_cpu_min_opp
+echo '1 3 4 5 0 0 0 0' > /proc/driver/thermal/clatm_cpu_min_opp
+echo '1 0 4 0 85000 5000 1000 50 200 5000 200 200 10000 10000' > /proc/driver/thermal/wifi_in_soc
+echo 0 > /proc/driver/thermal/sspm_thermal_throttle
+
+echo '3 117000 0 mtktscpu-sysrst 77000 0 cpu_adaptive_0 70000 0 cpu_adaptive_1 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 200' > /proc/driver/thermal/tzcpu
+echo '1 136000 0 mtktspmic-sysrst 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 1000' > /proc/driver/thermal/tzpmic
+echo '1 120000 0 mtk-cl-kshutdown00 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 2000' > /proc/driver/thermal/tzpa
+echo '1 120000 0 mtktscharger-sysrst 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 2000' > /proc/driver/thermal/tzcharger
+echo '1 120000 0 mtktswmt-sysrst 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 1000' > /proc/driver/thermal/tzwmt
+echo '5 100000 0 mtktsAP-sysrst 90000 0 mtk-cl-kshutdown03 58000 0 mtk-cl-cam00 52000 0 abcct_lcmoff 50000 0 abcct 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 1000' > /proc/driver/thermal/tzbts
+echo '4 120000 0 mtk-cl-kshutdown01 110000 0 no-cooler 100000 0 no-cooler 68000 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 1000' > /proc/driver/thermal/tzbtsnrpa
+echo '4 120000 0 mtk-cl-kshutdown02 110000 0 no-cooler 100000 0 no-cooler 90000 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 1000' > /proc/driver/thermal/tzbtspa
+
+echo 'ma_len 1' > /proc/mtktz/mtktscpu
+echo 'ma_len 4' > /proc/mtktz/mtktspmic
+# echo 'ma_len 4' > /proc/mtktz/mtktsbattery
+echo 'ma_len 1' > /proc/mtktz/mtktspa
+echo 'ma_len 1' > /proc/mtktz/mtktscharger
+echo 'ma_len 1' > /proc/mtktz/mtktswmt
+echo 'ma_len 1' > /proc/mtktz/mtktsAP
+echo 'ma_len 1' > /proc/mtktz/mtktsbtsnrpa
+echo 'ma_len 1' > /proc/mtktz/mtktsbtsmdpa
+}
+
+thermal_ht(){
+echo 95 70 > /proc/driver/thermal/clatm_gpu_threshold
+echo '' > /proc/mtkcooler/mtktscpu-sysrst
+echo '' > /proc/mtkcooler/mtktspmic-sysrst
+echo '' > /proc/mtkcooler/mtktsbattery-sysrst
+echo '' > /proc/mtkcooler/mtk-cl-kshutdown00
+echo '' > /proc/mtkcooler/mtktscharger-sysrst
+echo '' > /proc/mtkcooler/mtktswmt-sysrst
+echo '' > /proc/mtkcooler/mtktsAP-sysrst
+echo '' > /proc/mtkcooler/mtk-cl-kshutdown01
+echo '' > /proc/mtkcooler/mtk-cl-kshutdown02
+
+echo 'PUP_R 100000 PUP_VOLT 1800 OVER_CRITICAL_L 4397119 NTC_TABLE 7 0' > /proc/driver/thermal/tzbts_param
+echo 'PUP_R 100000 PUP_VOLT 1800 OVER_CRITICAL_L 4397119 NTC_TABLE 7 1' > /proc/driver/thermal/tzbtspa_param
+echo 'PUP_R 100000 PUP_VOLT 1800 OVER_CRITICAL_L 4397119 NTC_TABLE 7 2' > /proc/driver/thermal/tzbtsnrpa_param
+
+if [[ "$1" == "1" ]]; then
+  echo 1 > /proc/driver/thermal/sspm_thermal_throttle
+fi
+
+echo '3 117000 0 mtktscpu-sysrst 85000 0 cpu_adaptive_0 76000 0 cpu_adaptive_1 0 0 no-cooler 0 0' > /proc/driver/thermal/tzcpu
+echo '1 136000 0 mtktspmic-sysrst 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 1000' > /proc/driver/thermal/tzpmic
+echo '1 60000 0 mtktsbattery-sysrst 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 1000' > /proc/driver/thermal/tzbattery
+echo '1 120000 0 mtk-cl-kshutdown00 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 2000' > /proc/driver/thermal/tzpa
+echo '1 120000 0 mtktscharger-sysrst 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 2000' > /proc/driver/thermal/tzcharger
+echo '1 120000 0 mtktswmt-sysrst 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 1000' > /proc/driver/thermal/tzwmt
+echo '1 100000 0 mtktsAP-sysrst 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 1000' > /proc/driver/thermal/tzbts
+echo '1 120000 0 mtk-cl-kshutdown01 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 1000' > /proc/driver/thermal/tzbtsnrpa
+echo '1 120000 0 mtk-cl-kshutdown02 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 0 0 no-cooler 1000' > /proc/driver/thermal/tzbtspa
+
+echo 'ma_len 1' > /proc/mtktz/mtktscpu
+echo 'ma_len 4'  > /proc/mtktz/mtktspmic
+echo 'ma_len 4' > /proc/mtktz/mtktsbattery
+echo 'ma_len 1' > /proc/mtktz/mtktspa
+echo 'ma_len 1' > /proc/mtktz/mtktscharger
+echo 'ma_len 1' > /proc/mtktz/mtktswmt
+echo 'ma_len 1'  => /proc/mtktz/mtktsAP
+echo 'ma_len 1' > /proc/mtktz/mtktsbtsnrpa
+echo 'ma_len 1' > /proc/mtktz/mtktsbtsmdpa
+}

@@ -1,0 +1,111 @@
+{
+  "friendly": "All",
+  "packages": ["*"],
+  "modes": [{
+    "mode": ["powersave"],
+    "booster": {
+      "events": ["presets", "NVTCapacitiveTouchScreen"],
+      "duration": 1500,
+      "idle_delay": 4500,
+      "enter": [
+        ["$cpu_min_0", "900000"],
+        ["$cpu_min_4", "700000"],
+        ["$cpu_min_7", "700000"],
+        ["@uclamp", "0.00~20.00", "0.00~max", "0.00~max"],
+        ["@high_rate", "on"],
+        ["$ddr_freq_min", "1866000000"]
+      ],
+      "exit": [
+        ["$cpu_min_0", "#450000"],
+        ["$cpu_min_4", "#200000"],
+        ["$cpu_min_4", "#500000"],
+        ["@uclamp", "0.00~2.00", "0.00~15.00", "0.00~35.00"],
+        ["@high_rate", "off"],
+        ["$ddr_freq_min", "800000000"]
+      ]
+    },
+    "sensors": [{
+      "disable": true,
+      "sensor": "/sys/kernel/ged/hal/gpu_utilization:0",
+      "interval": 5000,
+      "props": ["$dcs_mode", "$ged_kpi"],
+      "rules": [
+        { "threshold": [-1, 50], "values": ["1", "1"] },
+        { "threshold": [40, -1], "values": ["0", "0"] }
+      ]
+    }]
+  },{
+    "mode": ["balance"],
+    "booster": {
+      "events": ["presets", "NVTCapacitiveTouchScreen"],
+      "duration": 2000,
+      "idle_delay": 2500,
+      "enter": [
+        ["$cpu_min_0", "900000"],
+        ["$cpu_min_4", "800000"],
+        ["$cpu_min_7", "800000"],
+        ["@uclamp", "0.00~30.00", "0.00~max", "0.20~max"],
+        ["$ddr_freq_min", "1866000000"]
+      ],
+      "exit": [
+        ["$cpu_min_0", "#450000"],
+        ["$cpu_min_4", "#200000"],
+        ["$cpu_min_7", "#500000"],
+        ["@uclamp", "0.00~5.00", "0.00~max", "0.00~max"],
+        ["$ddr_freq_min", "800000000"]
+      ]
+    },
+    "sensors": [{
+      "disable": true,
+      "sensor": "/sys/kernel/ged/hal/gpu_utilization:0",
+      "interval": 5000,
+      "props": ["$dcs_mode", "$ged_kpi"],
+      "rules": [
+        { "threshold": [-1, 50], "values": ["1", "1"] },
+        { "threshold": [40, -1], "values": ["0", "0"] }
+      ]
+    }]
+  },{
+    "mode": ["performance"],
+    "booster": {
+      "events": ["presets", "NVTCapacitiveTouchScreen"],
+      "duration": 2000,
+      "idle_delay": 3000,
+      "enter": [
+        ["$uclamp_fg_min", "0.05"],
+        ["$uclamp_top_min", "0.25"]
+      ]
+    }
+  }, {
+    "mode": ["fast"],
+    "booster": {
+      "events": ["presets", "NVTCapacitiveTouchScreen"],
+      "duration": 2000,
+      "idle_delay": 3000,
+      "enter": [
+        ["$uclamp_fg_min", "max"],
+        ["$uclamp_top_min", "max"]
+      ]
+    }
+  }, {
+    "mode": ["pedestal"],
+    "sensors": [{
+      "disable": false,
+      "sensor": "/sys/class/power_supply/battery/temp",
+      "interval": 15000,
+      "rules": [
+        { "threshold": [-1, 440], "enter": [["@charge", "suspend"]] },
+        { "threshold": [440, 310], "enter": [["@charge", "suspend"]] },
+        { "threshold": [410, 380], "enter": [["@charge", "normal"]] },
+        { "threshold": [380, -10], "enter": [["@charge", "normal"]] }
+      ]
+    }],
+    "booster": {
+      "events": ["presets", "NVTCapacitiveTouchScreen"],
+      "duration": 2000,
+      "idle_delay": 3000,
+      "enter": [ ["@preset", "touch_boost_pedestal"] ],
+      "exit": [ ["@preset", "exit_boost_pedestal"] ]
+    }
+  }]
+}

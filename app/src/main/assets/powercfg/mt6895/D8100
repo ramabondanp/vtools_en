@@ -1,0 +1,47 @@
+2000000 1900000 1800000 1700000 1600000 1500000 1400000 1300000 1250000 1200000 1150000 1100000 1050000 1000000 950000 900000 850000 800000 750000 700000 650000 600000 550000 500000 450000
+2850000 2750000 2650000 2550000 2450000 2400000 2350000 2300000 2250000 2200000 2150000 2100000 2050000 2000000 1900000 1800000 1700000 1600000 1500000 1400000 1300000 1200000 1100000 1000000 900000 800000 700000 600000 500000 400000 300000 200000
+2850000 2750000 2650000 2550000 2450000 2400000 2350000 2300000 2250000 2200000 2150000 2100000 2050000 2000000 1900000 1800000 1700000 1600000 1500000 1400000 1300000 1200000 1100000 1000000 900000 800000 700000 600000 500000
+
+[sugov_ext] conservative powersave performance schedutil
+
+
+[00*] freq: 852000, volt: 68750, vsram: 75000, posdiv: 2, vaging: 0, power: 1728
+[01*] freq: 845000, volt: 68125, vsram: 75000, posdiv: 2, vaging: 0, power: 1674
+[02*] freq: 837000, volt: 68125, vsram: 75000, posdiv: 2, vaging: 0, power: 1658
+[03*] freq: 830000, volt: 67500, vsram: 75000, posdiv: 2, vaging: 0, power: 1641
+[04*] freq: 822000, volt: 67500, vsram: 75000, posdiv: 2, vaging: 0, power: 1624
+[05*] freq: 815000, volt: 66875, vsram: 75000, posdiv: 2, vaging: 0, power: 1589
+[06*] freq: 807000, volt: 66875, vsram: 75000, posdiv: 2, vaging: 0, power: 1573
+[07*] freq: 800000, volt: 66250, vsram: 75000, posdiv: 2, vaging: 0, power: 1522
+[08*] freq: 773000, volt: 66250, vsram: 75000, posdiv: 2, vaging: 0, power: 1475
+[09*] freq: 747000, volt: 65625, vsram: 75000, posdiv: 2, vaging: 0, power: 1396
+[10*] freq: 721000, volt: 65000, vsram: 75000, posdiv: 2, vaging: 0, power: 1319
+[11*] freq: 695000, volt: 64375, vsram: 75000, posdiv: 2, vaging: 0, power: 1230
+[12*] freq: 668000, volt: 64375, vsram: 75000, posdiv: 2, vaging: 0, power: 1185
+[13*] freq: 642000, volt: 63750, vsram: 75000, posdiv: 2, vaging: 0, power: 1141
+[14*] freq: 616000, volt: 63125, vsram: 75000, posdiv: 2, vaging: 0, power: 1071
+[15*] freq: 590000, volt: 62500, vsram: 75000, posdiv: 2, vaging: 0, power: 1004
+[16*] freq: 572000, volt: 61875, vsram: 75000, posdiv: 2, vaging: 0, power: 953
+[17*] freq: 555000, volt: 61250, vsram: 75000, posdiv: 2, vaging: 0, power: 904
+[18*] freq: 538000, volt: 60625, vsram: 75000, posdiv: 2, vaging: 0, power: 856
+[19*] freq: 521000, volt: 60000, vsram: 75000, posdiv: 2, vaging: 0, power: 830
+[20*] freq: 504000, volt: 59375, vsram: 75000, posdiv: 2, vaging: 0, power: 785
+[21*] freq: 487000, volt: 58750, vsram: 75000, posdiv: 2, vaging: 0, power: 741
+[22*] freq: 470000, volt: 58125, vsram: 75000, posdiv: 2, vaging: 0, power: 698
+[23*] freq: 453000, volt: 57500, vsram: 75000, posdiv: 2, vaging: 0, power: 657
+[24*] freq: 436000, volt: 56875, vsram: 75000, posdiv: 2, vaging: 0, power: 618
+[25*] freq: 419000, volt: 56250, vsram: 75000, posdiv: 2, vaging: 0, power: 595
+[26*] freq: 402000, volt: 55625, vsram: 75000, posdiv: 2, vaging: 0, power: 557
+[27*] freq: 385000, volt: 55000, vsram: 75000, posdiv: 2, vaging: 0, power: 521
+[28*] freq: 368000, volt: 54375, vsram: 75000, posdiv: 3, vaging: 0, power: 487
+[29*] freq: 351000, volt: 53750, vsram: 75000, posdiv: 3, vaging: 0, power: 453
+[30*] freq: 334000, volt: 53125, vsram: 75000, posdiv: 3, vaging: 0, power: 421
+[31*] freq: 317000, volt: 52500, vsram: 75000, posdiv: 3, vaging: 0, power: 401
+[32*] freq: 304000, volt: 52500, vsram: 75000, posdiv: 3, vaging: 0, power: 381
+[33*] freq: 292000, volt: 51875, vsram: 75000, posdiv: 3, vaging: 0, power: 362
+[34*] freq: 280000, volt: 51250, vsram: 75000, posdiv: 3, vaging: 0, power: 342
+[35*] freq: 268000, volt: 50625, vsram: 75000, posdiv: 3, vaging: 0, power: 315
+[36*] freq: 255000, volt: 50625, vsram: 75000, posdiv: 3, vaging: 0, power: 306
+[37*] freq: 243000, volt: 50000, vsram: 75000, posdiv: 3, vaging: 0, power: 280
+[38*] freq: 231000, volt: 49375, vsram: 75000, posdiv: 3, vaging: 0, power: 263
+[39*] freq: 219000, volt: 48750, vsram: 75000, posdiv: 3, vaging: 0, power: 246

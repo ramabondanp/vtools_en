@@ -1,0 +1,127 @@
+{
+  "friendly": "极速响应",
+  "packages": [
+    "com.miui.home",
+    "com.meizu.flyme.launcher",
+    "net.oneplus.launcher",
+    "com.oppo.launcher",
+    "ch.deletescape.lawnchair.ci",
+    "com.mi.android.globallauncher",
+    "com.teslacoilsw.launcher",
+    "com.android.quicksearchbox",
+    "net.oneplus.h2launcher",
+    "com.oneplus.hydrogen.launcher",
+    "com.microsoft.launcher",
+    "org.lineageos.trebuchet",
+    "org.mokee.lawnchair",
+    "com.google.android.apps.nexuslauncher",
+    "ch.deletescape.lawnchair.plah"
+  ],
+  "call": [["$dcs_mode", "0"]],
+  "modes": [{
+    "mode": ["powersave"],
+    "call": [
+      ["@perf_turbo", "mt6895", "off", "15"],
+      ["$cpu_max_0", "#1800000"], ["$cpu_max_4", "#2000000"], ["$cpu_max_7", "#2200000"],
+      ["$gpu_dvfs_margin", "40"],
+      ["$gpu_dvfs_step", "10"]
+    ],
+    "booster": {
+      "events": ["presets", "NVTCapacitiveTouchScreen"],
+      "duration": 3000,
+      "idle_delay": 1000,
+      "enter": [
+        ["@cpuset", "1-2", "0-4", "0-7", "0-7"],
+        ["@uclamp", "0.00~2.00", "0.00~max", "3.00~max"],
+        ["@cpu_freq", "policy0", "900000", "2000000"],
+        ["@cpu_freq", "policy4", "500000", "2600000"],
+        ["@cpu_freq", "policy7", "500000", "2600000"],
+        ["@high_rate", "on"],
+        ["$ddr_freq_min", "1866000000"]
+      ],
+      "exit": [
+        ["@cpuset", "1", "0-3", "0-6", "0-7"],
+        ["@uclamp", "0.00~0.00", "0.00~max", "0.00~max"],
+        ["@cpu_freq", "policy0", "450000", "1800000"],
+        ["@cpu_freq", "policy4", "200000", "2600000"],
+        ["@cpu_freq", "policy7", "500000", "2600000"],
+        ["@high_rate", "off"],
+        ["$ddr_freq_min", "800000000"]
+      ]
+    }
+  },{
+    "mode": ["balance"],
+    "call": [
+      ["@cpu_freq", "policy0", "450000", "2000000"],
+      ["@cpu_freq", "policy4", "200000", "2850000"],
+      ["@cpu_freq", "policy7", "500000", "2850000"],
+      ["$gpu_dvfs_margin", "40"],
+      ["$gpu_dvfs_step", "10"]
+    ],
+    "booster": {
+      "events": ["presets", "NVTCapacitiveTouchScreen"],
+      "duration": 3000,
+      "idle_delay": 1500,
+      "enter": [
+        ["@cpuset", "1-2", "0-4", "0-7", "0-7"],
+        ["@uclamp", "0.00~10.00", "2.00~max", "3.0~max"],
+        ["@cpu_freq", "policy0", "1000000", "2000000"],
+        ["@cpu_freq", "policy4", "800000", "2850000"],
+        ["@cpu_freq", "policy7", "500000", "2850000"],
+        ["@high_rate", "on"],
+        ["$ddr_freq_min", "2133000000"]
+      ],
+      "exit": [
+        ["@cpuset", "1", "0-3", "0-6", "0-7"],
+        ["@uclamp", "0.00~30.00", "0.00~max", "0.0~max"],
+        ["@cpu_freq", "policy0", "450000", "1800000"],
+        ["@cpu_freq", "policy4", "200000", "2850000"],
+        ["@cpu_freq", "policy7", "500000", "2850000"],
+        ["@high_rate", "off"],
+        ["$ddr_freq_min", "800000000"]
+      ]
+    }
+  },{
+    "mode": ["performance", "fast"],
+    "call": [
+      ["$gpu_dvfs_margin", "45"],
+      ["$gpu_dvfs_step", "10"]
+    ],
+    "booster": {
+      "events": ["presets", "NVTCapacitiveTouchScreen"],
+      "duration": 3000,
+      "idle_delay": 2000,
+      "enter": [
+        ["@cpuset", "1-4", "0-4", "0-7", "0-7"],
+        ["$uclamp_bg_min", "0.00"],
+        ["$uclamp_fg_min", "10.00"],
+        ["$uclamp_top_min", "max"],
+        ["@high_rate", "on"]
+      ],
+      "exit": [
+        ["@cpuset", "2-3", "0-3", "0-6", "0-7"],
+        ["@high_rate", "off", "5000"]
+      ]
+    }
+  }, {
+    "mode": ["pedestal"],
+    "sensors": [{
+      "disable": false,
+      "sensor": "/sys/class/power_supply/battery/temp",
+      "interval": 15000,
+      "rules": [
+        { "threshold": [-1, 440], "enter": [["@charge", "suspend"]] },
+        { "threshold": [440, 310], "enter": [["@charge", "suspend"]] },
+        { "threshold": [410, 380], "enter": [["@charge", "normal"]] },
+        { "threshold": [380, -10], "enter": [["@charge", "normal"]] }
+      ]
+    }],
+    "booster": {
+      "events": ["presets", "NVTCapacitiveTouchScreen"],
+      "duration": 2000,
+      "idle_delay": 3000,
+      "enter": [ ["@preset", "touch_boost_pedestal"] ],
+      "exit": [ ["@preset", "exit_boost_pedestal"] ]
+    }
+  }]
+}

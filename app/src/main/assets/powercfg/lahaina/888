@@ -1,0 +1,43 @@
+# /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_frequencies
+# 300000 403200 499200 595200 691200 806400 902400 998400 1094400 1209600 1305600 1401600 1497600 1612800 1708800 1804800
+
+# /sys/devices/system/cpu/cpu4/cpufreq/scaling_available_frequencies
+# 710400 844800 960000 1075200 1209600 1324800 1440000 1555200 1670400 1766400 1881600 1996800 2112000 2227200 2342400 2419200
+
+# /sys/devices/system/cpu/cpu7/cpufreq/scaling_available_frequencies
+# 844800 960000 1075200 1190400 1305600 1420800 1555200 1670400 1785600 1900800 2035200 2150400 2265600 2380800 2496000 2592000 2688000 2764800 2841600
+
+# /sys/class/kgsl/kgsl-3d0/devfreq/available_frequencies
+# 840000000 778000000 738000000 676000000 608000000 540000000 491000000 443000000 379000000 315000000
+
+disable_mi_opt() {
+  if [[ "$manufacturer" == "Xiaomi" ]]; then
+    # pm disable com.xiaomi.gamecenter.sdk.service/.PidService 2>/dev/null
+    pm disable com.xiaomi.joyose/.smartop.gamebooster.receiver.BoostRequestReceiver >/dev/null 2>&1
+    pm disable com.xiaomi.joyose/.smartop.SmartOpService >/dev/null 2>&1
+    # pm disable com.xiaomi.joyose.smartop.smartp.SmartPAlarmReceiver >/dev/null 2>&1
+    pm disable com.xiaomi.joyose.sysbase.MetokClService >/dev/null 2>&1
+
+    pm disable com.miui.daemon/.performance.cloudcontrol.CloudControlSyncService >/dev/null 2>&1
+    pm disable com.miui.daemon/.performance.statistics.services.GraphicDumpService >/dev/null 2>&1
+    pm disable com.miui.daemon/.performance.statistics.services.AtraceDumpService >/dev/null 2>&1
+    pm disable com.miui.daemon/.performance.SysoptService >/dev/null 2>&1
+    pm disable com.miui.daemon/.performance.MiuiPerfService >/dev/null 2>&1
+    pm disable com.miui.daemon/.performance.server.ExecutorService >/dev/null 2>&1
+    pm disable com.miui.daemon/.mqsas.jobs.EventUploadService >/dev/null 2>&1
+    pm disable com.miui.daemon/.mqsas.jobs.FileUploadService >/dev/null 2>&1
+    pm disable com.miui.daemon/.mqsas.jobs.HeartBeatUploadService >/dev/null 2>&1
+    pm disable com.miui.daemon/.mqsas.providers.MQSProvider >/dev/null 2>&1
+    pm disable com.miui.daemon/.performance.provider.PerfTurboProvider >/dev/null 2>&1
+    pm disable com.miui.daemon/.performance.system.am.SysoptjobService >/dev/null 2>&1
+    pm disable com.miui.daemon/.performance.system.am.MemCompactService >/dev/null 2>&1
+    pm disable com.miui.daemon/.performance.statistics.services.FreeFragDumpService >/dev/null 2>&1
+    pm disable com.miui.daemon/.performance.statistics.services.DefragService >/dev/null 2>&1
+    pm disable com.miui.daemon/.performance.statistics.services.MeminfoService >/dev/null 2>&1
+    pm disable com.miui.daemon/.performance.statistics.services.IonService >/dev/null 2>&1
+    pm disable com.miui.daemon/.performance.statistics.services.GcBoosterService >/dev/null 2>&1
+    pm disable com.miui.daemon/.mqsas.OmniTestReceiver >/dev/null 2>&1
+    pm disable com.miui.daemon/.performance.MiuiPerfService >/dev/null 2>&1
+    killall -9 com.miui.daemon >/dev/null 2>&1
+  fi
+}

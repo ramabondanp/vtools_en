@@ -11,11 +11,13 @@ fi
 source "$cfg_dir/powercfg-utils.sh"
 
 init () {
+  echo '[Scene PerfConfig Init] ...'
   if [[ -f "$cfg_dir/powercfg-base.sh" ]]; then
-    source "$cfg_dir/powercfg-base.sh"
+    nohup "$cfg_dir/powercfg-base.sh" >/dev/null 2>&1 &
   elif [[ -f '/data/powercfg-base.sh' ]]; then
-    source /data/powercfg-base.sh
+    nohup /data/powercfg-base.sh >/dev/null 2>&1 &
   fi
+  echo '[Scene PerfConfig Init] √'
 }
 
 if [[ "$action" == "init" ]]; then
@@ -35,13 +37,12 @@ if [[ "$action" = "powersave" ]]; then
   ctl_on cpu4
   ctl_on cpu7
   set_cpu_freq 300000 1708800 710400 1401600 825600 1497600
-  gpu_pl_up 0
   sched_boost 0 0
   stune_top_app 0 0
-  sched_config "85 85" "96 96" "160" "260"
+  # sched_config "85 85" "96 96" "160" "260"
   sched_limit 0 0 0 5000 0 5000
-  set_hispeed_freq 1209600 825600 940800
-  set_hispeed_load 80 90 90
+  # set_hispeed_freq 1209600 825600 940800
+  # set_hispeed_load 80 90 90
   cpuset '0-2' '0-3' '0-3' '0-7'
   bw_min
   bw_down 2
@@ -52,10 +53,9 @@ elif [[ "$action" = "balance" ]]; then
   ctl_on cpu4
   ctl_on cpu7
   set_cpu_freq 300000 1708800 710400 1708800 825600 1920000
-  gpu_pl_up 0
   sched_boost 1 0
   stune_top_app 0 0
-  sched_config "78 85" "89 96" "120" "200"
+  # sched_config "78 85" "89 96" "120" "200"
   sched_limit 0 0 0 500 0 500
   set_hispeed_freq 1478400 1056000 1286400
   set_hispeed_load 80 90 90
@@ -69,10 +69,9 @@ elif [[ "$action" = "performance" ]]; then
   ctl_off cpu4
   ctl_off cpu7
   set_cpu_freq 300000 1785600 710400 2419200 825600 2841600
-  gpu_pl_up 1
   sched_boost 1 0
   stune_top_app 0 0
-  sched_config "62 78" "72 85" "85" "100"
+  # sched_config "62 78" "72 85" "85" "100"
   sched_limit 0 0 0 0 0 0
   set_hispeed_freq 1632000 1708800 2016000
   set_hispeed_load 60 70 80
@@ -86,7 +85,6 @@ elif [[ "$action" = "fast" ]]; then
   ctl_off cpu4
   ctl_off cpu7
   set_cpu_freq 1209600 1785600 1497600 2600000 1497600 3200000
-  gpu_pl_up 2
   sched_boost 1 0
   stune_top_app 1 0
   sched_config "55 70" "68 79" "300" "400"

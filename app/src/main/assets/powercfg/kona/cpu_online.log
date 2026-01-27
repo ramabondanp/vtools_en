@@ -1,0 +1,14 @@
+
+core_online=(1 1 1 1 1 1 1 1)
+set_core_online() {
+  for index in 0 1 2 3 4 5 6 7; do
+    core_online[$index]=`cat /sys/devices/system/cpu/cpu$index/online`
+    echo 1 > /sys/devices/system/cpu/cpu$index/online
+  done
+}
+
+restore_core_online() {
+  for i in "${!core_online[@]}"; do
+     echo ${core_online[i]} > /sys/devices/system/cpu/cpu$i/online
+  done
+}

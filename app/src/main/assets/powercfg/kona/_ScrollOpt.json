@@ -1,0 +1,87 @@
+{
+  "friendly": "提高滑动性能",
+  "packages": [
+    "com.taobao.idlefish",
+    "com.taobao.taobao",
+    "com.android.browser",
+    "com.baidu.tieba_mini",
+    "com.baidu.tieba",
+    "com.jingdong.app.mall",
+    "com.tmall.wireless",
+    "com.sankuai.meituan",
+    "com.pupumall.customer",
+    "com.eg.android.AlipayGphone",
+    "com.android.vending",
+    "cn.xiaochuankeji.tieba",
+    "com.mfw.roadbook"
+  ],
+  "modes": [{
+    "mode": ["powersave"],
+    "booster": {
+      "events": ["presets"],
+      "duration": 2000,
+      "idle_delay": 5000,
+      "enter": [
+        ["$core_ctl_4", "0"], ["$core_ctl_7", "0"],
+        ["$stune_top_perf", "1"], ["$stune_top_boost", "10"],
+        ["$cpuset_top", "0-7"], ["$cpuset_fg", "0-7"],
+        ["$cpu_min_0", "1708800"],
+        ["$cpu_max_0", "1804800"],
+        ["$cpu_max_4", "1958400"],
+        ["$cpu_max_7", "2169600"],
+        ["@high_rate", "on"]
+      ],
+      "exit": [
+        ["$cpu_min_0", "300000"],
+        ["@high_rate", "off"]
+      ]
+    }
+  },{
+    "mode": ["balance"],
+    "booster": {
+      "events": ["presets"],
+      "duration": 2000,
+      "idle_delay": 5000,
+      "enter": [
+        ["$stune_top_perf", "1"],
+        ["$stune_top_boost", "10"],
+        ["$cpuset_top", "0-7"],
+        ["$cpuset_fg", "0-7"],
+        ["$cpu_min_0", "1708800"],
+        ["$cpu_min_4", "1574400"],
+        ["$cpu_min_7", "1632000"],
+        ["$cpu_max_0", "1804800"],
+        ["$cpu_max_4", "2246400"],
+        ["$cpu_max_7", "2361600"],
+        ["@high_rate", "on"]
+      ],
+      "exit": [
+        ["$cpu_min_0", "300000"],
+        ["$cpu_min_4", "710400"],
+        ["$cpu_min_7", "844800"],
+        ["@high_rate", "off"]
+      ]
+    }
+  },{
+    "mode": ["performance", "fast"],
+    "booster": {
+      "events": ["presets"],
+      "duration": 2000,
+      "idle_delay": 5000,
+      "enter": [
+        ["$cpuset_top", "0-7"],
+        ["$cpuset_fg", "0-7"],
+        ["$stune_top_boost", "100"],
+        ["$stune_top_perf", "1"],
+        ["$sched_boost", "2"],
+        ["$cpu_max_0", "1804800"],
+        ["$cpu_max_4", "2419200"],
+        ["$cpu_max_7", "3300000"],
+        ["@high_rate", "on"]
+      ],
+      "exit": [
+        ["@high_rate", "off"]
+      ]
+    }
+  }]
+}

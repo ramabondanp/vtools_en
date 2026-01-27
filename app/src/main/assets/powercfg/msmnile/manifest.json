@@ -1,0 +1,13 @@
+{
+  "version": "Scene4 Core",
+  "versionCode": 20211011,
+  "author": "SCENE5",
+  "project_url": "http://vtools.omarea.com/",
+  "features": {
+    "strict": true,
+    "pedestal": false
+  },
+  "current": "vtools.powercfg",
+  "files": [],
+  "entry": "conservative.sh"
+}

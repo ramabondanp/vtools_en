@@ -1,0 +1,52 @@
+{
+  "friendly": "QQ飞车",
+  "packages": ["com.tencent.tmgp.speedmobile", "com.garena.game.fctw"],
+  "sensors": [],
+  "call": [ ["@high_rate", "on"] ],
+  "cpuset": {
+    "interval": 3000,
+    "unity_main": "7",
+    "other": "0-6"
+  },
+  "modes": [
+    {
+      "mode": ["balance"],
+      "enter": [
+        ["@uclamp", "0.00~20.00", "1.00~max", "1.00~max"],
+        ["$cpu_min_0", "1075200"],
+        ["$cpu_min_4", "1766400"],
+        ["$cpu_min_7", "1996800"]
+      ],
+      "exit": [
+        ["@uclamp", "0.00~5.00", "0.00~max", "1.00~max"],
+        ["$cpu_min_4", "806400"]
+      ]
+    },
+    {
+      "mode": ["performance"],
+      "enter": [
+        ["@uclamp", "0.00~max", "1.00~max", "1.00~max"],
+        ["$cpu_min_0", "1267200"],
+        ["$cpu_min_4", "1766400"],
+        ["$cpu_min_7", "2131200"]
+      ],
+      "exit": [
+        ["@uclamp", "0.00~5.0", "0.00~max", "0.00~max"],
+        ["$cpu_min_4", "806400"]
+      ]
+    },
+    {
+      "mode": ["fast"],
+      "enter": [
+        ["@uclamp", "0.00~max", "1.00~max", "1.00~max"],
+        ["$cpu_min_0", "1267200"],
+        ["$cpu_min_4", "1766400"],
+        ["$cpu_min_7", "2361600"]
+      ],
+      "exit": [
+        ["@uclamp", "0.00~5.0", "0.00~max", "0.00~max"],
+        ["$cpu_min_4", "806400"]
+      ]
+    }
+  ]
+}

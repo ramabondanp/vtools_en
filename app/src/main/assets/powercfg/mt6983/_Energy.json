@@ -1,0 +1,118 @@
+{
+  "friendly": "极限节能",
+  "call": [
+    ["$dcs_mode", "1"],
+    ["$ged_kpi", "1"]
+  ],
+  "packages": [
+    "tv.danmaku.bili", "com.bilibili.app.in",
+    "com.google.android.youtube",
+    "com.tencent.qqlive",
+    "com.qiyi.video",
+    "com.qiyi.video.lite",
+    "com.qiyi.video.sdkplayer",
+    "com.dianshijia.newlive",
+    "com.duowan.kiwi",
+    "air.tv.douyu.android",
+    "com.douyu.rush",
+    "com.youku.phone",
+    "org.telegram.messenger",
+    "com.hunantv.imgo.activity",
+
+    "com.ss.android.ugc.aweme", "com.ss.android.ugc.aweme.lite", "com.ss.android.article.video", "com.smile.gifmaker",
+
+    "com.coolapk.market",
+
+    "com.netease.cloudmusic",
+    "com.kugou.android",
+    "com.kugou.android.lite",
+
+    "io.legado.app.release",
+    "com.duokan.reader",
+    "com.ruguoapp.jike",
+    "com.ruanmei.ithome"
+  ],
+  "affinity": {
+    "interval": 1000,
+    "comm": {
+      "F": ["HeapTaskDaemon", "Timer-"]
+    }
+  },
+  "modes": [{
+    "mode": ["powersave"],
+    "call": [
+      ["@classical", "cpu0", "82", "70", "5", "1"],
+      ["@classical", "cpu4", "90", "75", "10", "1"],
+      ["@classical", "cpu7", "90", "78", "10", "1"]
+    ],
+    "booster": {
+      "events": ["presets"],
+      "duration": 2000,
+      "idle_delay": 3000,
+      "enter": [
+        ["$dcs_mode", "0"],
+        ["@cpuset", "1-3", "1-4", "1-6", "0-7"],
+        ["$cpu_max_0", "#1500000"], ["$cpu_min_0", "#800000"], ["$cpu_min_4", "#800000"],
+        ["$core_ctl_4", "0"], ["$core_ctl_7", "0"],
+        ["@classical", "cpu0", "82", "70", "5", "1"],
+        ["@classical", "cpu4", "90", "75", "10", "1"],
+        ["$uclamp_bg_max", "max"], ["$uclamp_fg_max", "max"], ["$uclamp_top_max", "max"],
+        ["$max_cpus_cpu7", "1"],
+        ["@high_rate", "on"]
+      ],
+      "exit": [
+        ["$dcs_mode", "1"],
+        ["@cpuset", "1", "0-3", "1-6", "0-6"],
+        ["$cpu_min_0", "#200000"], ["$cpu_max_0", "#800000"], ["$cpu_min_4", "#400000"],
+        ["$core_ctl_4", "1"], ["$core_ctl_7", "1"],
+        ["@classical", "cpu0", "98", "92", "2", "1"],
+        ["@classical", "cpu4", "99", "95", "2", "1"],
+        ["$uclamp_bg_max", "2.00"], ["$uclamp_fg_max", "10.00"], ["$uclamp_top_max", "25.00"],
+        ["$max_cpus_cpu7", "0"],
+        ["@high_rate", "off"]
+      ]
+    }
+  },{
+    "mode": ["balance"],
+    "call": [
+      ["@classical", "cpu0", "82", "70", "5", "1"],
+      ["@classical", "cpu4", "90", "75", "10", "1"],
+      ["@classical", "cpu7", "90", "78", "10", "1"]
+    ],
+    "booster": {
+      "events": ["presets"],
+      "duration": 2000,
+      "idle_delay": 3000,
+      "enter": [
+        ["@cpuset", "1-3", "", "0-7", ""],
+        ["$cpu_min_0", "#800000"],
+        ["@classical", "cpu0", "80", "70", "5", "1"],
+        ["@classical", "cpu4", "85", "75", "10", "1"],
+        ["@preset", "perf_active"],
+        ["@high_rate", "on"]
+      ],
+      "exit": [
+        ["@cpuset", "1", "", "0-6", ""],
+        ["@classical", "cpu0", "98", "92", "2", "1"],
+        ["@classical", "cpu4", "99", "95", "2", "1"],
+        ["@preset", "perf_idle"],
+        ["$cpu_min_0", "#20000"],
+        ["@high_rate", "off"]
+      ]
+    }
+  },{
+    "mode": ["performance"],
+    "booster": {
+      "events": ["presets"],
+      "duration": 2000,
+      "enter": [ ["$uclamp_fg_min", "0.05"], ["$uclamp_top_min", "0.25"] ]
+    }
+  }, {
+    "mode": ["fast"],
+    "booster": {
+      "events": ["presets"],
+      "duration": 2000,
+      "enter": [ ["$uclamp_fg_min", "max"], ["$uclamp_top_min", "max"] ]
+    }
+  }]
+}

@@ -1,0 +1,54 @@
+{
+  "friendly": "待机",
+  "packages": ["standby"],
+  "call": [
+    ["@perf_turbo", "mt6895", "daily", "5"],
+    ["@charge", "normal"]
+  ],
+  "modes": [{
+    "mode": ["*"],
+    "call": [
+      ["@high_rate", "on"],
+      ["$charge_limit", "0"],
+      ["$night_charging", "0"],
+      ["$core_ctl_4", "1"],
+      ["$core_ctl_7", "1"],
+      ["@cpuset", "0-3", "0-3", "0-7", "1-7"],
+      ["@cpu_freq", "policy0", "min", "1800MHz"],
+      ["@cpu_freq", "policy4", "min", "1800MHz"],
+      ["@cpu_freq", "policy7", "min", "1800MHz"]
+    ],
+    "booster": {
+      "events": ["presets", "NVTCapacitiveTouchScreen"],
+      "duration": 3500,
+      "idle_delay": 5000,
+      "enter": [
+        ["$uclamp_heavy", "1.00"], ["$uclamp_heavy_max", "max"],
+        ["@cpuset", "0-4", "1-6", "1-7", "1-7"],
+        ["@cpu_freq", "policy0", "1500MHz", "1800MHz"],
+        ["@cpu_freq", "policy4", "1500MHz", "2200MHz"],
+        ["@cpu_freq", "policy7", "1400MHz", "2200MHz"],
+        ["@uclamp", "0.00~max", "1.0~max", "2.00~max"],
+        ["@high_rate", "on"]
+      ],
+      "burst": [
+        ["$uclamp_heavy", "1.00"], ["$uclamp_heavy_max", "max"],
+        ["@cpuset", "0-4", "1-6", "1-7", "1-7"],
+        ["@cpu_freq", "policy0", "1500MHz", "1800MHz"],
+        ["@cpu_freq", "policy4", "1500MHz", "2200MHz"],
+        ["@cpu_freq", "policy7", "1400MHz", "2200MHz"],
+        ["@uclamp", "9.00~max", "9.0~max", "max~max"],
+        ["@high_rate", "on"]
+      ],
+      "exit": [
+        ["$uclamp_heavy", "0.00"], ["$uclamp_heavy_max", "10.00"],
+        ["@cpuset", "0-3", "0-3", "0-7", "0-7"],
+        ["@cpu_freq", "policy0", "min", "1800MHz"],
+        ["@cpu_freq", "policy4", "min", "1800MHz"],
+        ["@cpu_freq", "policy7", "min", "1800MHz"],
+        ["@uclamp", "0.00~0.00", "0.00~0.00", "0.00~max"],
+        ["@high_rate", "off"]
+      ]
+    }
+  }]
+}

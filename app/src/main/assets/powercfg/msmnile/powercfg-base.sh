@@ -38,13 +38,38 @@ echo 1 > /sys/devices/system/cpu/cpu7/core_ctl/nr_prev_assist_thresh
 # Disable Core control on silver
 echo 0 > /sys/devices/system/cpu/cpu0/core_ctl/enable
 
-# Setting b.L scheduler parameters
-echo 95 95 > /proc/sys/kernel/sched_upmigrate
-echo 85 85 > /proc/sys/kernel/sched_downmigrate
-echo 100 > /proc/sys/kernel/sched_group_upmigrate
-echo 95 > /proc/sys/kernel/sched_group_downmigrate
-echo 1 > /proc/sys/kernel/sched_walt_rotate_big_tasks
-
+# hide_value /sys/module/task_turbo/parameters/feats [write_value]
+hide_value() {
+  if [[ -e "$1" ]]; then
+    umount "$1" 2>/dev/null
+    c_path="/cache${1}"
+    if [[ ! -f "$c_path" ]]; then
+      mkdir -p "$c_path"
+      rm -r "$c_path"
+      cat "$1" > "$c_path"
+    fi
+    if [[ "$2" != "" ]]; then
+      lock_value "$2" "$1"
+    fi
+    mount "$c_path" "$1"
+  fi
+}
+sdk_version=$(getprop ro.build.version.sdk)
+if [[ $sdk_version -gt 29 ]] || [[ $(getprop ro.product.vendor.brand) == "google" ]] || [[ ! -f /proc/sys/kernel/sched_group_upmigrate ]]; then
+  # Setting b.L scheduler parameters
+  hide_value /proc/sys/kernel/sched_upmigrate
+  hide_value /proc/sys/kernel/sched_downmigrate
+  hide_value /proc/sys/kernel/sched_group_upmigrate
+  hide_value /proc/sys/kernel/sched_group_downmigrate
+  hide_value /proc/sys/kernel/sched_walt_rotate_big_tasks
+else
+  # Setting b.L scheduler parameters
+  echo 95 95 > /proc/sys/kernel/sched_upmigrate
+  echo 85 85 > /proc/sys/kernel/sched_downmigrate
+  echo 100 > /proc/sys/kernel/sched_group_upmigrate
+  echo 95 > /proc/sys/kernel/sched_group_downmigrate
+  echo 1 > /proc/sys/kernel/sched_walt_rotate_big_tasks
+fi
 # cpuset parameters
 echo 0-2     > /dev/cpuset/background/cpus
 echo 0-3     > /dev/cpuset/system-background/cpus
@@ -57,34 +82,6 @@ echo 0 > /proc/sys/kernel/sched_boost
 
 # Turn on scheduler boost for top app main
 echo 1 > /proc/sys/kernel/sched_boost_top_app
-
-# configure governor settings for silver cluster
-echo "schedutil" > /sys/devices/system/cpu/cpufreq/policy0/scaling_governor
-echo 0 > /sys/devices/system/cpu/cpufreq/policy0/schedutil/rate_limit_us
-echo 1209600 > /sys/devices/system/cpu/cpufreq/policy0/schedutil/hispeed_freq
-echo 576000 > /sys/devices/system/cpu/cpufreq/policy0/scaling_min_freq
-echo 1 > /sys/devices/system/cpu/cpufreq/policy0/schedutil/pl
-
-# configure governor settings for gold cluster
-echo "schedutil" > /sys/devices/system/cpu/cpufreq/policy4/scaling_governor
-echo 0 > /sys/devices/system/cpu/cpufreq/policy4/schedutil/rate_limit_us
-echo 1612800 > /sys/devices/system/cpu/cpufreq/policy4/schedutil/hispeed_freq
-echo 1 > /sys/devices/system/cpu/cpufreq/policy4/schedutil/pl
-
-# configure governor settings for gold+ cluster
-echo "schedutil" > /sys/devices/system/cpu/cpufreq/policy7/scaling_governor
-echo 0 > /sys/devices/system/cpu/cpufreq/policy7/schedutil/rate_limit_us
-echo 1612800 > /sys/devices/system/cpu/cpufreq/policy7/schedutil/hispeed_freq
-echo 1 > /sys/devices/system/cpu/cpufreq/policy7/schedutil/pl
-
-# configure input boost settings
-echo "0:1324800" > /sys/module/cpu_boost/parameters/input_boost_freq
-echo 120 > /sys/module/cpu_boost/parameters/input_boost_ms
-echo "0:0 1:0 2:0 3:0 4:2323200 5:0 6:0 7:2323200" > /sys/module/cpu_boost/parameters/powerkey_input_boost_freq
-echo 400 > /sys/module/cpu_boost/parameters/powerkey_input_boost_ms
-
-# limt the GPU max frequency
-echo 585000000 > /sys/class/kgsl/kgsl-3d0/devfreq/max_freq
 
 echo 1 > /sys/devices/system/cpu/cpu0/online
 echo 1 > /sys/devices/system/cpu/cpu1/online
