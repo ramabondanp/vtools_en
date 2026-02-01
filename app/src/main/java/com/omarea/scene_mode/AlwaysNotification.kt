@@ -24,11 +24,22 @@ internal class AlwaysNotification(
         notify: Boolean = false,
         override val isAsync: Boolean = false) : ModeSwitcher(), IEventReceiver {
     override fun eventFilter(eventType: EventType): Boolean {
-        return eventType == EventType.SCENE_MODE_ACTION
+        return when (eventType) {
+            EventType.SCENE_MODE_ACTION,
+            EventType.BATTERY_CHANGED,
+            EventType.BATTERY_CAPACITY_CHANGED,
+            EventType.POWER_CONNECTED,
+            EventType.POWER_DISCONNECTED -> true
+            else -> false
+        }
     }
 
     override fun onReceive(eventType: EventType, data: HashMap<String, Any>?) {
-        notify()
+        if (eventType == EventType.SCENE_MODE_ACTION) {
+            notify()
+        } else if (showNofity) {
+            notify()
+        }
     }
 
     override fun onSubscribe() {
