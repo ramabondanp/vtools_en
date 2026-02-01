@@ -100,7 +100,6 @@ internal class AlwaysNotification(
             return
         }
 
-        var batteryImage: Bitmap? = null
         var batteryIO: String? = ""
         var batteryTemp = ""
         var modeImage = BitmapFactory.decodeResource(context.resources, getModImage(mode))
@@ -109,11 +108,6 @@ internal class AlwaysNotification(
             batteryIO = "${GlobalStatus.batteryCurrentNow}mA"
             batteryTemp = "${GlobalStatus.temperatureCurrent}°C"
 
-            if (GlobalStatus.batteryStatus == BatteryManager.BATTERY_STATUS_DISCHARGING) {
-                batteryImage = BitmapFactory.decodeResource(context.resources, getBatteryIcon(GlobalStatus.batteryCapacity))
-            } else {
-                batteryImage = BitmapFactory.decodeResource(context.resources, R.drawable.b_4)
-            }
             modeImage = BitmapFactory.decodeResource(context.resources, getModImage(mode))
         } catch (ex: Exception) {
         }
@@ -122,9 +116,6 @@ internal class AlwaysNotification(
             setTextViewText(R.id.notify_title, getAppName(packageName))
             setTextViewText(R.id.notify_text, getModName(mode))
             setTextViewText(R.id.notify_battery_text, "$batteryIO ${GlobalStatus.batteryCapacity}% $batteryTemp")
-            if (batteryImage != null) {
-                setImageViewBitmap(R.id.notify_battery_icon, batteryImage)
-            }
         }
 
         val clickIntent = PendingIntent.getBroadcast(
