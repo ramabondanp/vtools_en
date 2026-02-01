@@ -9,6 +9,7 @@ import com.omarea.vtools.R
 import com.omarea.vtools.databinding.ActivityCustomCommandBinding
 import java.io.File
 import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 import java.nio.charset.Charset
 
 class ActivityCustomCommand : ActivityBase() {
@@ -44,7 +45,7 @@ class ActivityCustomCommand : ActivityBase() {
 
     private fun saveCommand(title: String, script: String, replace: Boolean = false) {
         val fileContent = script.replace(Regex("\r\n"), "\n").replace(Regex("\r\t"), "\t").toByteArray(Charset.defaultCharset())
-        val fileName = "custom-command/" + URLEncoder.encode(title) + ".sh"
+        val fileName = "custom-command/" + URLEncoder.encode(title, StandardCharsets.UTF_8.name()) + ".sh"
         val fullPath = FileWrite.getPrivateFilePath(context, fileName)
 
         if (File(fullPath).exists() && !replace) {

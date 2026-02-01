@@ -1,3 +1,5 @@
+@file:OptIn(DelicateCoroutinesApi::class)
+
 package com.omarea.ui.power
 
 import android.content.Context
@@ -13,6 +15,7 @@ import com.omarea.library.basic.AppInfoLoader
 import com.omarea.model.BatteryAvgStatus
 import com.omarea.scene_mode.ModeSwitcher
 import com.omarea.vtools.R
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch

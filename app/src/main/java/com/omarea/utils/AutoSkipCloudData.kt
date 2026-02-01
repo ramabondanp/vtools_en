@@ -1,8 +1,11 @@
+@file:OptIn(DelicateCoroutinesApi::class)
+
 package com.omarea.utils
 
 import android.content.Context
 import com.omarea.Scene
 import com.omarea.store.AutoSkipConfigStore
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch

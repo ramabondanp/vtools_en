@@ -584,7 +584,6 @@ class FpsDataView : View {
             DIMENSION.TEMPERATURE -> drawDimensionTemperature(canvas)
             DIMENSION.CAPACITY -> drawDimensionCapacity(canvas)
             DIMENSION.LOAD -> drawDimensionLoad(canvas)
-            else -> {}
         }
     }
 

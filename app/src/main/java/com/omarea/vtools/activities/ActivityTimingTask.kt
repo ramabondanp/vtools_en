@@ -23,6 +23,7 @@ import com.omarea.vtools.databinding.ActivityTimingTaskBinding
 import java.io.File
 import java.io.FilenameFilter
 import java.net.URLDecoder
+import java.nio.charset.StandardCharsets
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -90,7 +91,7 @@ class ActivityTimingTask : ActivityBase() {
             })
             val fileNames = files?.map {
                 SelectItem().apply {
-                    val name = URLDecoder.decode(it.name)
+                    val name = URLDecoder.decode(it.name, StandardCharsets.UTF_8.name())
                     title = name
                     value = it.absolutePath
                     selected = timingTaskInfo.customTaskActions?.find { it.Name == name } != null

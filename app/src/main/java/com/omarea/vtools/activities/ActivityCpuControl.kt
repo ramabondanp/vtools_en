@@ -228,11 +228,11 @@ class ActivityCpuControl : ActivityBase() {
                         parseGPUFreqList(adrenoFreqs),
                         adrenoFreqs.indexOf(status.adrenoMinFreq),
                         object : PickerCallback {
-                            override fun onSelected(freq: String) {
-                                if (GpuUtils.getMinFreq() != freq) {
-                                    GpuUtils.setMinFreq(freq)
-                                    status.adrenoMinFreq = freq
-                                    setText(it as TextView?, subGPUFreqStr(freq))
+                            override fun onSelected(result: String) {
+                                if (GpuUtils.getMinFreq() != result) {
+                                    GpuUtils.setMinFreq(result)
+                                    status.adrenoMinFreq = result
+                                    setText(it as TextView?, subGPUFreqStr(result))
                                 }
                             }
                         })

@@ -1,3 +1,5 @@
+@file:OptIn(DelicateCoroutinesApi::class)
+
 package com.omarea.vtools.activities
 
 import android.content.Context
@@ -14,6 +16,7 @@ import com.omarea.library.basic.MagiskModulesRepo
 import com.omarea.ui.AdapterModules
 import com.omarea.vtools.R
 import com.omarea.vtools.databinding.ActivtyModulesBinding
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch

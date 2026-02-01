@@ -1,6 +1,7 @@
 package com.omarea.vtools.dialogs
 
 import android.app.Activity
+import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
@@ -260,13 +261,13 @@ class DialogSingleAppOptions(context: Activity, var app: AppInfo, handler: Handl
 
     private fun copyPackageName() {
         val cm = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-        cm.text = app.packageName
+        cm.setPrimaryClip(ClipData.newPlainText("package", app.packageName))
         Toast.makeText(context, "Copied: ${app.packageName}", Toast.LENGTH_LONG).show()
     }
 
     private fun copyInstallPath() {
         val cm = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-        cm.text = app.path
+        cm.setPrimaryClip(ClipData.newPlainText("path", app.path?.toString() ?: ""))
         Toast.makeText(context, "Copied: ${app.path}", Toast.LENGTH_LONG).show()
     }
 
@@ -281,6 +282,10 @@ class DialogSingleAppOptions(context: Activity, var app: AppInfo, handler: Handl
         val sb = StringBuilder()
         sb.append(CommonCmds.MountSystemRW)
         val appDir = File(app.path.toString()).parent
+                ?: run {
+                    DialogHelper.helpInfo(context, "Operation failed.", "Invalid app path.")
+                    return
+                }
         if (appDir == "/data/app") {
             val parent = File(app.path.toString())
             val outPutPath = "/system/app/${parent.name}"
@@ -307,6 +312,10 @@ class DialogSingleAppOptions(context: Activity, var app: AppInfo, handler: Handl
 
     private fun moveToSystemMagisk() {
         val appDir = File(app.path.toString()).parent
+                ?: run {
+                    DialogHelper.helpInfo(context, "Operation failed.", "Invalid app path.")
+                    return
+                }
         val result = if (appDir == "/data/app") { // /data/app/xxx.apk
             val outPutPath = "/system/app/"
             MagiskExtend.createFileReplaceModule(outPutPath, app.path.toString(), app.packageName, app.appName)

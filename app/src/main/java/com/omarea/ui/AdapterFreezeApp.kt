@@ -1,3 +1,5 @@
+@file:OptIn(DelicateCoroutinesApi::class)
+
 package com.omarea.ui
 
 import android.content.Context
@@ -9,6 +11,7 @@ import com.omarea.common.ui.OverScrollGridView
 import com.omarea.library.basic.AppInfoLoader
 import com.omarea.model.AppInfo
 import com.omarea.vtools.R
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -22,8 +25,10 @@ class AdapterFreezeApp(private val context: Context, private var apps: ArrayList
 
     private class ArrayFilter(private var adapter: AdapterFreezeApp) : Filter() {
         override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-            adapter.filterApps = results!!.values as ArrayList<AppInfo>
-            if (results.count > 0) {
+            val values = (results?.values as? List<*>)?.filterIsInstance<AppInfo>()
+                    ?: emptyList()
+            adapter.filterApps = ArrayList(values)
+            if (values.isNotEmpty()) {
                 adapter.notifyDataSetChanged()
             } else {
                 adapter.notifyDataSetInvalidated()
