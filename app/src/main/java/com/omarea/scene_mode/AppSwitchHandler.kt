@@ -336,6 +336,12 @@ class AppSwitchHandler(private var context: AccessibilityScenceMode, override va
     init {
         screenState = ScreenState(context)
 
+        // If the service restarts while the screen is already on, ensure updates resume.
+        screenOn = screenState.isScreenOn()
+        if (screenOn) {
+            lastScreenOnOff = System.currentTimeMillis()
+            startTimer()
+        }
         updateModeNoitfy() // 服务启动后 更新通知
 
         // 禁用SeLinux
