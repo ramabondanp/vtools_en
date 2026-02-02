@@ -2,9 +2,11 @@ package com.omarea.library.shell;
 
 import android.annotation.SuppressLint;
 
+import com.omarea.common.shell.KeepShellPublic;
 import com.omarea.common.shell.KernelProrp;
 
 import java.util.HashMap;
+import java.util.Locale;
 
 /**
  * CPU负载计算器
@@ -14,6 +16,7 @@ public class CpuLoadUtils {
     private static HashMap<Integer, Double> lastCpuStateMap;
     private static String lastCpuStateSum = "";
     private static Long lastCpuStateTime;
+    private static String cpuTempPath = null;
 
     public CpuLoadUtils() {
         lastCpuState = KernelProrp.INSTANCE.getProp("/proc/stat", "^cpu");
@@ -159,5 +162,41 @@ public class CpuLoadUtils {
             }
         }
         return -1d;
+    }
+
+    private String getCpuTempPath() {
+        if (cpuTempPath != null) {
+            return cpuTempPath;
+        }
+
+        String cmd = "for z in /sys/class/thermal/thermal_zone*; do "
+                + "t=$(cat \"$z/type\" 2>/dev/null | tr '[:upper:]' '[:lower:]'); "
+                + "if echo \"$t\" | grep -Eq 'cpu|soc|ap|cluster|little|big'; then "
+                + "if [ -f \"$z/temp\" ]; then echo \"$z/temp\"; break; fi; "
+                + "fi; "
+                + "done";
+        String path = KeepShellPublic.INSTANCE.doCmdSync(cmd).trim();
+        cpuTempPath = path;
+        return cpuTempPath;
+    }
+
+    public String getCpuTemperatureText() {
+        try {
+            String path = getCpuTempPath();
+            if (path == null || path.isEmpty()) {
+                return "--";
+            }
+
+            String raw = KernelProrp.INSTANCE.getProp(path).trim();
+            if (raw.isEmpty() || raw.equals("error")) {
+                return "--";
+            }
+
+            double temp = Double.parseDouble(raw);
+            double celsius = Math.abs(temp) > 1000 ? temp / 1000.0 : temp;
+            return String.format(Locale.getDefault(), "%.1f°C", celsius);
+        } catch (Exception ignored) {
+            return "--";
+        }
     }
 }

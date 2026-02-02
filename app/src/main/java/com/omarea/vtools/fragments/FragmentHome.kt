@@ -135,6 +135,7 @@ class FragmentHome : Fragment() {
         val gpuFreqRangeText: String = "",
         val gpuInfoText: String = "",
         val cpuPlatform: String = "",
+        val cpuTemperatureText: String = "--",
         val cpuTotalLoad: String = "--",
         val deviceName: String = "",
     )
@@ -464,6 +465,7 @@ class FragmentHome : Fragment() {
         val gpuGovernor = GpuUtils.getGovernor()
         val gpuMinFreq = GpuUtils.getMinFreq()
         val gpuMaxFreq = GpuUtils.getMaxFreq()
+        val cpuTemperatureText = cpuLoadUtils.cpuTemperatureText
 
         batteryCurrentNow = batteryManager.getLongProperty(BatteryManager.BATTERY_PROPERTY_CURRENT_NOW)
         val batteryCapacity = batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY)
@@ -517,7 +519,8 @@ class FragmentHome : Fragment() {
                     gpuGovernorText = gpuGovernorText,
                     gpuFreqRangeText = gpuFreqRangeText,
                     cpuTotalLoad = cpuTotalLoadText,
-                    cpuPlatform = platform.uppercase(Locale.getDefault()) + " (" + coreCount + " Cores)"
+                    cpuPlatform = platform.uppercase(Locale.getDefault()) + " (" + coreCount + " Cores)",
+                    cpuTemperatureText = cpuTemperatureText
                 )
 
                 if (gpuLoad > -1) {
@@ -916,6 +919,18 @@ private fun HomeScreen(
                             .combinedClickable(onClick = onCpuClick, onLongClick = null),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 6.dp, top = 6.dp, end = 6.dp, bottom = 0.dp),
+                            horizontalArrangement = Arrangement.End
+                        ) {
+                            Text(
+                                text = state.cpuTemperatureText,
+                                style = MiuixTheme.textStyles.footnote2,
+                                color = MiuixTheme.colorScheme.onSurfaceContainerVariant
+                            )
+                        }
                         Box(
                             modifier = Modifier
                                 .height(85.dp)
