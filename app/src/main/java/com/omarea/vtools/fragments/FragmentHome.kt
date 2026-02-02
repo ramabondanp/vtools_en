@@ -131,6 +131,8 @@ class FragmentHome : Fragment() {
         val batteryTemperature: String = "--",
         val gpuFreq: String = "--",
         val gpuLoadText: String = "--",
+        val gpuGovernorText: String = "",
+        val gpuFreqRangeText: String = "",
         val gpuInfoText: String = "",
         val cpuPlatform: String = "",
         val cpuTotalLoad: String = "--",
@@ -426,6 +428,12 @@ class FragmentHome : Fragment() {
 
     private var batteryCurrentNow = 0L
 
+    private fun gpuFreqToMhz(value: String): String {
+        val v = value.trim()
+        if (v.isEmpty()) return ""
+        return if (v.length > 6) v.substring(0, v.length - 6) else v
+    }
+
     @SuppressLint("SetTextI18n")
     private fun updateInfo() {
         val cores = ArrayList<CpuCoreInfo>()
@@ -453,6 +461,9 @@ class FragmentHome : Fragment() {
 
         val gpuFreq = GpuUtils.getGpuFreq() + "Mhz"
         val gpuLoad = GpuUtils.getGpuLoad()
+        val gpuGovernor = GpuUtils.getGovernor()
+        val gpuMinFreq = GpuUtils.getMinFreq()
+        val gpuMaxFreq = GpuUtils.getMaxFreq()
 
         batteryCurrentNow = batteryManager.getLongProperty(BatteryManager.BATTERY_PROPERTY_CURRENT_NOW)
         val batteryCapacity = batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY)
@@ -482,6 +493,12 @@ class FragmentHome : Fragment() {
                 val batteryTempText = "${temperature}°C"
 
                 val gpuLoadText = getString(R.string.home_utilization) + "$gpuLoad%"
+                val gpuGovernorText = gpuGovernor
+                val gpuFreqRangeText = if (gpuMinFreq.isNotEmpty() && gpuMaxFreq.isNotEmpty()) {
+                    "${gpuFreqToMhz(gpuMinFreq)} - ${gpuFreqToMhz(gpuMaxFreq)} MHz"
+                } else {
+                    ""
+                }
                 val cpuTotalLoadText = if (loads.containsKey(-1)) {
                     getString(R.string.home_utilization) + loads[-1]!!.toInt().toString() + "%"
                 } else {
@@ -497,6 +514,8 @@ class FragmentHome : Fragment() {
                     batteryTemperature = batteryTempText,
                     gpuFreq = gpuFreq,
                     gpuLoadText = gpuLoadText,
+                    gpuGovernorText = gpuGovernorText,
+                    gpuFreqRangeText = gpuFreqRangeText,
                     cpuTotalLoad = cpuTotalLoadText,
                     cpuPlatform = platform.uppercase(Locale.getDefault()) + " (" + coreCount + " Cores)"
                 )
@@ -843,6 +862,21 @@ private fun HomeScreen(
                         style = MiuixTheme.textStyles.footnote1,
                         color = MiuixTheme.colorScheme.onSurfaceContainerVariant
                     )
+                    if (state.gpuGovernorText.isNotEmpty()) {
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text(
+                            text = state.gpuGovernorText,
+                            style = MiuixTheme.textStyles.footnote2,
+                            color = MiuixTheme.colorScheme.onSurfaceContainerVariant
+                        )
+                    }
+                    if (state.gpuFreqRangeText.isNotEmpty()) {
+                        Text(
+                            text = state.gpuFreqRangeText,
+                            style = MiuixTheme.textStyles.footnote2,
+                            color = MiuixTheme.colorScheme.onSurfaceContainerVariant
+                        )
+                    }
                     if (state.gpuInfoText.isNotEmpty()) {
                         Spacer(modifier = Modifier.height(6.dp))
                         Text(

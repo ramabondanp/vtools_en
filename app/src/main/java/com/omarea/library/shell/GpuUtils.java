@@ -22,6 +22,7 @@ public class GpuUtils {
     private static Boolean $isMaliGPU = null;
     private static String gpuParamsDirAdreno = "/sys/class/kgsl/kgsl-3d0";
     private static String gpuParamsDirMali = "/sys/class/devfreq/gpufreq";
+    private static String gpuParamsDirMaliDevfreq = null;
     private static String gpuParamsDir = null;
 
     private static boolean isMTK() {
@@ -150,9 +151,36 @@ public class GpuUtils {
 
     private static boolean isMaliGPU() {
         if ($isMaliGPU == null) {
-            $isMaliGPU = new File(gpuParamsDirMali).exists() || RootFile.INSTANCE.dirExists(gpuParamsDirMali);
+            $isMaliGPU = new File(gpuParamsDirMali).exists()
+                    || RootFile.INSTANCE.dirExists(gpuParamsDirMali)
+                    || !getMaliDevfreqDir().isEmpty();
         }
         return $isMaliGPU;
+    }
+
+    private static String getMaliDevfreqDir() {
+        if (gpuParamsDirMaliDevfreq != null) {
+            return gpuParamsDirMaliDevfreq;
+        }
+
+        if (new File(gpuParamsDirMali).exists() || RootFile.INSTANCE.dirExists(gpuParamsDirMali)) {
+            gpuParamsDirMaliDevfreq = gpuParamsDirMali;
+            return gpuParamsDirMaliDevfreq;
+        }
+
+        String cmd = "for f in /sys/devices/platform/*mali/devfreq/*mali/available_governors "
+                + "/sys/devices/platform/*mali/devfreq/*/available_governors "
+                + "/sys/devices/platform/soc/*mali/devfreq/*mali/available_governors "
+                + "/sys/devices/platform/soc/*mali/devfreq/*/available_governors; do "
+                + "[ -f \"$f\" ] && dirname \"$f\" && break; "
+                + "done";
+        String path = KeepShellPublic.INSTANCE.doCmdSync(cmd).trim();
+        if (!path.isEmpty() && (new File(path).exists() || RootFile.INSTANCE.dirExists(path))) {
+            gpuParamsDirMaliDevfreq = path;
+        } else {
+            gpuParamsDirMaliDevfreq = "";
+        }
+        return gpuParamsDirMaliDevfreq;
     }
 
     private static String getGpuParamsDir() {
@@ -160,7 +188,7 @@ public class GpuUtils {
             if (isAdrenoGPU()) {
                 gpuParamsDir = gpuParamsDirAdreno + "/devfreq";
             } else if (isMaliGPU()) {
-                gpuParamsDir = gpuParamsDirMali;
+                gpuParamsDir = getMaliDevfreqDir();
             } else {
                 gpuParamsDir = "";
             }
@@ -169,7 +197,7 @@ public class GpuUtils {
     }
 
     public static String[] getGovernors() {
-        String g = KernelProrp.INSTANCE.getProp(getGpuParamsDir() + "/available_governors");
+        String g = KernelProrp.INSTANCE.getProp(getAvailableGovernorsPath());
         return g.isEmpty() ? (new String[]{}) : g.split("[ ]+");
     }
 
@@ -196,13 +224,14 @@ public class GpuUtils {
     }
 
     public static String getGovernor() {
-        return KernelProrp.INSTANCE.getProp(getGpuParamsDir() + "/governor");
+        return KernelProrp.INSTANCE.getProp(getGovernorPath());
     }
 
     public static void setGovernor(String value) {
         ArrayList<String> commands = new ArrayList<>();
-        commands.add("chmod 0664 " + getGpuParamsDir() + "/governor;");
-        commands.add("echo " + value + " > " + getGpuParamsDir() + "/governor;");
+        String governorPath = getGovernorPath();
+        commands.add("chmod 0664 " + governorPath + ";");
+        commands.add("echo " + value + " > " + governorPath + ";");
         KeepShellPublic.INSTANCE.doCmdSync(commands);
     }
 
@@ -259,8 +288,9 @@ public class GpuUtils {
         ArrayList<String> commands = new ArrayList<>();
         // governor
         if (!cpuState.adrenoGovernor.equals("")) {
-            commands.add("chmod 0664 " + getGpuParamsDir() + "/governor;");
-            commands.add("echo " + cpuState.adrenoGovernor + " > " + getGpuParamsDir() + "/governor;");
+            String governorPath = getGovernorPath();
+            commands.add("chmod 0664 " + governorPath + ";");
+            commands.add("echo " + cpuState.adrenoGovernor + " > " + governorPath + ";");
         }
         // min feq
         if (!cpuState.adrenoMinFreq.equals("")) {
@@ -289,5 +319,23 @@ public class GpuUtils {
             commands.add("echo " + cpuState.adrenoDefaultPL + " > /sys/class/kgsl/kgsl-3d0/default_pwrlevel;");
         }
         return commands;
+    }
+
+    private static String getAvailableGovernorsPath() {
+        String base = getGpuParamsDir();
+        String p = base + "/available_governors";
+        if (RootFile.INSTANCE.fileExists(p) || new File(p).exists()) {
+            return p;
+        }
+        return p;
+    }
+
+    private static String getGovernorPath() {
+        String base = getGpuParamsDir();
+        String governors = base + "/governors";
+        if (RootFile.INSTANCE.fileExists(governors) || new File(governors).exists()) {
+            return governors;
+        }
+        return base + "/governor";
     }
 }
