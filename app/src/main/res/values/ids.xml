@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="nav_core_control" type="id" />
+    <item name="nav_swap" type="id" />
+    <item name="nav_processes" type="id" />
+    <item name="nav_fps_chart" type="id" />
+    <item name="nav_charge" type="id" />
+    <item name="nav_power_utilization" type="id" />
+    <item name="nav_applictions" type="id" />
+    <item name="nav_img" type="id" />
+    <item name="nav_additional" type="id" />
+    <item name="nav_additional_all" type="id" />
+    <item name="nav_app_magisk" type="id" />
+    <item name="nav_miui_thermal" type="id" />
+    <item name="nav_modules" type="id" />
+</resources>

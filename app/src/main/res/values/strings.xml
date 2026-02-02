@@ -111,6 +111,11 @@
     <string name="menu_menu_title">Feedback</string>
     <string name="menu_share">Share app</string>
     <string name="menu_miui_thermal">MIUI thermal</string>
+    <string name="menu_section_performance">Equipment performance</string>
+    <string name="menu_section_power">Charging power consumption</string>
+    <string name="menu_section_advanced">Advanced Features</string>
+    <string name="home_alive">Alive</string>
+    <string name="home_official_site">Official website</string>
 
     <string name="system">System</string>
 

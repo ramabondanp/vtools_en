@@ -48,7 +48,7 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="cardBg">@color/cardBgDark</item>
+        <item name="cardBg">@color/cardBgDarkCard</item>
         <item name="showHints">gone</item>
         <item name="android:switchStyle">@style/SceneSwitch</item>
         <item name="android:seekBarStyle">@style/SceneSeekBar</item>
@@ -114,7 +114,7 @@
         <item name="windowNoTitle">true</item>
         <item name="android:windowAnimationStyle">@style/activityAnim</item>
         <item name="android:actionBarTheme">@style/AppTheme.AppBarOverlay.Dark</item>
-        <item name="cardBg">@color/cardBgDarkTransparent</item>
+        <item name="cardBg">@color/cardBgDarkCard</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">

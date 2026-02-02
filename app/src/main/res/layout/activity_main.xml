@@ -5,13 +5,15 @@
     android:fitsSystemWindows="false"
     android:keepScreenOn="false">
     <LinearLayout
+        android:id="@+id/tab_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentBottom="false"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingBottom="0dp">
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tab_list"
@@ -66,11 +68,11 @@
     </LinearLayout>
 
     <androidx.viewpager2.widget.ViewPager2
-        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingTop="0dp"
         android:id="@+id/tab_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
-        android:layout_marginTop="?actionBarSize" />
+        android:layout_below="@id/tab_bar" />
 
 </RelativeLayout>
