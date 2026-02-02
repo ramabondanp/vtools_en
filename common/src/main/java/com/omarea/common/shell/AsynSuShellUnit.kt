@@ -17,31 +17,28 @@ class AsynSuShellUnit(var handler: Handler) {
 
             Thread(Runnable {
                 try {
-                    var line: String
                     val reader = process!!.inputStream.bufferedReader()
                     while (true) {
-                        line = reader.readLine()
-                        if (line != null) {
-                            line = line.trim()
-                            if (line.isNotEmpty())
-                                handler.sendMessage(handler.obtainMessage(1, line))
-                        } else {
-                            destroy()
-                            break
+                        val line = reader.readLine() ?: break
+                        val trimmed = line.trim()
+                        if (trimmed.isNotEmpty()) {
+                            handler.sendMessage(handler.obtainMessage(1, trimmed))
                         }
                     }
+                    destroy()
                 } catch (ex: Exception) {
                     print(ex.message)
                 }
             }).start()
             Thread(Runnable {
                 try {
-                    var line: String
                     val reader = process!!.errorStream.bufferedReader()
                     while (true) {
-                        line = reader.readLine().trim()
-                        if (line.isNotEmpty())
-                            handler.sendMessage(handler.obtainMessage(5, line))
+                        val line = reader.readLine() ?: break
+                        val trimmed = line.trim()
+                        if (trimmed.isNotEmpty()) {
+                            handler.sendMessage(handler.obtainMessage(5, trimmed))
+                        }
                     }
                 } catch (ex: Exception) {
                     print(ex.message)

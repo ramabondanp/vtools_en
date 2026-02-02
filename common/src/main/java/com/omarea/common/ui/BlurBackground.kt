@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.omarea.common.ui
 
 import android.app.Activity
@@ -14,6 +16,7 @@ import android.view.Window
 import android.view.WindowManager
 import android.widget.ImageView
 
+@Suppress("DEPRECATION")
 class BlurBackground(private val activity: Activity) {
     private var dialogBg: ImageView? = null
     private var originalW = 0
@@ -103,9 +106,6 @@ class BlurBackground(private val activity: Activity) {
             val captured = captureScreen(activity) ?: return
             val blurred = blur(captured) ?: return
             var bp = blurred
-            if (bp == null) {
-                return
-            }
 
             //将模糊处理后的图恢复到原图尺寸并显示出来
             bp = Bitmap.createScaledBitmap(bp, originalW, originalH, false)

@@ -10,6 +10,7 @@ open class ObjectStorage<T : Serializable>(private val context: Context) {
         return FileWrite.getPrivateFilePath(context, objectStorageDir + configFile)
     }
 
+    @Suppress("UNCHECKED_CAST")
     public open fun load(configFile: String): T? {
         val file = File(getSaveDir(configFile))
         if (file.exists()) {
@@ -18,7 +19,7 @@ open class ObjectStorage<T : Serializable>(private val context: Context) {
             try {
                 fileInputStream = FileInputStream(file)
                 objectInputStream = ObjectInputStream(fileInputStream)
-                return objectInputStream.readObject() as T?
+                return objectInputStream.readObject() as? T
             } catch (ex: Exception) {
             } finally {
                 try {
@@ -38,7 +39,7 @@ open class ObjectStorage<T : Serializable>(private val context: Context) {
     public open fun save(obj: T?, configFile: String): Boolean {
         val file = File(getSaveDir(configFile))
         val parentFile = file.parentFile
-        if (!parentFile.exists()) {
+        if (parentFile != null && !parentFile.exists()) {
             parentFile.mkdirs()
         }
         if (obj != null) {

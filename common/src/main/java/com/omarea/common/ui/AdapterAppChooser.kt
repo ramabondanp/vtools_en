@@ -1,3 +1,5 @@
+@file:OptIn(DelicateCoroutinesApi::class)
+
 package com.omarea.common.ui
 
 import android.content.Context
@@ -7,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import com.omarea.common.R
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.*
 import java.util.*
 
@@ -35,8 +38,10 @@ class AdapterAppChooser(
 
     private class ArrayFilter(private var adapter: AdapterAppChooser) : Filter() {
         override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-            adapter.filterApps = results!!.values as ArrayList<AppInfo>
-            if (results.count > 0) {
+            val values = (results?.values as? List<*>)?.filterIsInstance<AppInfo>()
+                    ?: emptyList()
+            adapter.filterApps = ArrayList(values)
+            if (values.isNotEmpty()) {
                 adapter.notifyDataSetChanged()
             } else {
                 adapter.notifyDataSetInvalidated()

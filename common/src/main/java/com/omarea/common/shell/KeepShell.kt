@@ -1,6 +1,9 @@
+@file:OptIn(DelicateCoroutinesApi::class)
+
 package com.omarea.common.shell
 
 import android.util.Log
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch

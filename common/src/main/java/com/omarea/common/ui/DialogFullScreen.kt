@@ -20,10 +20,6 @@ class DialogAppChooser(private val darkMode: Boolean): DialogFullScreen(R.layout
 
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-    }
-
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
     }
@@ -60,10 +56,6 @@ open class DialogFullScreen(private val layout: Int, private val darkMode: Boole
                 DialogHelper.setWindowBlurBg(this, activity)
             }
         }
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
     }
 
     public fun closeView() {

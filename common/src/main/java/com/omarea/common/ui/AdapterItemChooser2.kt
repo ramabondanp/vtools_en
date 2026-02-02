@@ -23,8 +23,10 @@ class AdapterItemChooser2(
 
     private class ArrayFilter(private var adapter: AdapterItemChooser2) : Filter() {
         override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-            adapter.filterItems = results!!.values as ArrayList<SelectItem>
-            if (results.count > 0) {
+            val values = (results?.values as? List<*>)?.filterIsInstance<SelectItem>()
+                    ?: emptyList()
+            adapter.filterItems = ArrayList(values)
+            if (values.isNotEmpty()) {
                 adapter.notifyDataSetChanged()
             } else {
                 adapter.notifyDataSetInvalidated()

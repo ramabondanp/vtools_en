@@ -248,7 +248,7 @@ class DialogHelper {
             if (onCancel != null) {
                 btnCancel?.text = onCancel.text
             }
-            btnCancel.setOnClickListener {
+            btnCancel?.setOnClickListener {
                 if (onCancel != null) {
                     if (onCancel.dismiss) {
                         dialog.dismiss()
@@ -302,6 +302,7 @@ class DialogHelper {
             return dialogWrap
         }
 
+        @Suppress("DEPRECATION")
         private fun getStatusBarColor(context: Context): Int {
             val defaultColor = Color.WHITE
             val attrsArray = intArrayOf(android.R.attr.statusBarColor)
@@ -363,6 +364,7 @@ class DialogHelper {
             return dialog
         }
 
+        @Suppress("DEPRECATION")
         fun customDialog(context: Context, view: View, cancelable: Boolean = true): DialogWrap {
             val useBlur = (
                         context is Activity &&
