@@ -9,8 +9,12 @@ class SurfaceFlingerFpsUtils2 {
     private var lastTime = -1L
     private var lastFrames = -1
     private val keepShell = KeepShellPublic.getInstance("fps-watch", true)
+    private val gfxInfoFpsUtils = GfxInfoFpsUtils(KeepShellPublic.getInstance("gfxinfo-fps", true))
 
     fun getFps (): Float {
+        gfxInfoFpsUtils.getFps()?.let {
+            return it
+        }
         readFpsgoStatusFps()?.let {
             return it
         }

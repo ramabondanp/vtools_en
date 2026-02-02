@@ -10,6 +10,7 @@ import com.omarea.common.shell.RootFile.fileExists
 class FpsUtils(private val keepShell: KeepShell = KeepShellPublic.secondaryKeepShell) {
     private var fpsFilePath: String? = null
     private var subStrCommand = "| awk '{print \$2}'"
+    private val gfxInfoFpsUtils = GfxInfoFpsUtils(KeepShellPublic.getInstance("gfxinfo-fps", true))
 
     private val fpsgoStatusPath = "/sys/kernel/fpsgo/fstb/fpsgo_status"
 
@@ -19,6 +20,9 @@ class FpsUtils(private val keepShell: KeepShell = KeepShellPublic.secondaryKeepS
 
     val currentFps: String?
         get() {
+            gfxInfoFpsUtils.getFps()?.let {
+                return String.format("%.1f", it)
+            }
             // 优先使用GPU的内核级帧数数据
             if (!fpsFilePath.isNullOrEmpty()) {
                 return keepShell.doCmdSync("cat $fpsFilePath $subStrCommand")
